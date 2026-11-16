@@ -767,7 +767,7 @@
 "es": "dentro de / en",
 "day": 23,
 "s": "The cat runs {into} the house.",
-"ses": "La gata entra corriendo en la casa."
+"ses": "La gata entra corriendo a la casa."
 },
 {
 "w": "year",
@@ -1569,7 +1569,7 @@
 "es": "deber",
 "day": 46,
 "s": "I {must} go to school.",
-"ses": "Debo ir a la escuela."
+"ses": "Tengo que ir a la escuela."
 },
 {
 "w": "home",
@@ -1742,8 +1742,8 @@
 "t": "Präposition",
 "es": "desde",
 "day": 52,
-"s": "I wait {since} the morning.",
-"ses": "Espero desde la mañana."
+"s": "I have been here {since} the morning.",
+"ses": "Estoy aquí desde la mañana."
 },
 {
 "w": "provide",
@@ -1983,7 +1983,7 @@
 "es": "lo menos",
 "day": 59,
 "s": "This cat has the {least} fish.",
-"ses": "Esta gata tiene menos pescado."
+"ses": "Esta gata es la que tiene menos pescado."
 },
 {
 "w": "president",
@@ -2177,7 +2177,7 @@
 "es": "otros",
 "day": 65,
 "s": "One cat plays. The {others} sit.",
-"ses": "Una gata juega. Los otros están sentados."
+"ses": "Una gata juega. Las otras están sentadas."
 },
 {
 "w": "level",

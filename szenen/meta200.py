@@ -6,6 +6,6 @@ SENT2={
 'against':("The cat plays {against} the dog.","La gata juega contra el perro."),'such':("{Such} a beautiful day!","¡Qué día tan hermoso!"),'again':("Throw the ball {again}!","¡Lanza la pelota otra vez!"),
 'each':("{Each} cat has a fish.","Cada gato tiene un pescado."),'during':("I read {during} the night.","Leo durante la noche."),'off':("The light is {off}.","La luz está apagada."),
 'always':("I am {always} happy.","Siempre estoy feliz."),'today':("{Today} I play.","Hoy juego."),'without':("A house {without} a door.","Una casa sin puerta."),
-'before':("I read {before} bed.","Leo antes de ir a la cama."),'must':("I {must} go to school.","Debo ir a la escuela."),'under':("The cat is {under} the table.","La gata está debajo de la mesa."),
+'before':("I read {before} bed.","Leo antes de ir a la cama."),'must':("I {must} go to school.","Tengo que ir a la escuela."),'under':("The cat is {under} the table.","La gata está debajo de la mesa."),
 'though':("I play, {though} it is cold.","Juego, aunque hace frío."),'far':("The house is {far}.","La casa está lejos."),
 }

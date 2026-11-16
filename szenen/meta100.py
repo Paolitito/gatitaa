@@ -16,7 +16,7 @@ SENT={
 'up':("The cat goes {up}.","La gata sube."),'out':("The cat is {out} of the box.","La gata está fuera de la caja."),'if':("{If} I run, I am hot.","Si corro, tengo calor."),
 'about':("A book {about} fish.","Un libro sobre peces."),'who':("{Who} is at the door?","¿Quién está en la puerta?"),'which':("{Which} cup?","¿Cuál taza?"),
 'me':("Give {me} the ball!","¡Dame la pelota!"),'when':("{When} do we eat?","¿Cuándo comemos?"),'can':("I {can} fly!","¡Puedo volar!"),'no':("{No}!","¡No!"),
-'just':("{Just} a small fish.","Solo un pescado pequeño."),'him':("I give {him} the ball.","Le doy la pelota (a él)."),'into':("The cat runs {into} the house.","La gata entra corriendo en la casa."),
+'just':("{Just} a small fish.","Solo un pescado pequeño."),'him':("I give {him} the ball.","Le doy la pelota (a él)."),'into':("The cat runs {into} the house.","La gata entra corriendo a la casa."),
 'your':("This is {your} book.","Este es tu libro."),'some':("I eat {some} fish.","Como algo de pescado."),'could':("{Could} you open the door?","¿Podrías abrir la puerta?"),
 'them':("I see {them}.","Los veo."),'other':("The {other} cup.","La otra taza."),'than':("The house is bigger {than} the car.","La casa es más grande que el coche."),
 'then':("I read, {then} I play.","Leo, luego juego."),'now':("I eat {now}.","Como ahora."),'only':("{Only} the cat is black.","Solo la gata es negra."),

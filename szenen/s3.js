@@ -97,6 +97,6 @@ S.love=`${bg('#ffe9d6')}
 S.heart=`${bg('#fff1c9')}<circle cx="100" cy="100" r="88" fill="#ffe7a3"/>
  ${at(100,100,.64,cat({tail:false,eyes:'happy',mouth:'open'}),'peek')}
  ${heartS(100,128,5.4,RED,'beat')}
- <g transform="translate(100,128) scale(5.4)"><ellipse class="beat" cx="-5.6" cy="-8.4" rx="2" ry="1.2" fill="#fff" opacity=".55" transform="rotate(-30 -5.6 -8.4)"/></g>
+ <g transform="translate(100,128) scale(5.4)"><g class="beat"><ellipse cx="-5.6" cy="-8.4" rx="2" ry="1.2" fill="#fff" opacity=".55" transform="rotate(-30 -5.6 -8.4)"/></g></g>
  <ellipse cx="78" cy="84" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4" transform="rotate(24 78 84)"/><ellipse cx="122" cy="84" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4" transform="rotate(-24 122 84)"/>
  ${heart(26,110,.9,RED,0)}${heart(176,96,.8,'#ff8a7a',1)}${heart(160,150,.7,RED,1.8)}${spark(34,46,6,VIO,.3)}${spark(170,40,6,VIO,1)}`;

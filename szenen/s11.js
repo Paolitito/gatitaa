@@ -87,7 +87,7 @@ S.too=`${bg('#fff1c9')}${floor(160,'#c98a4b')}<rect y="160" width="200" height="
 const face=(x,y,c,m)=>`<circle cx="${x}" cy="${y}" r="13" fill="${c}"/><circle cx="${x-4.500}" cy="${y-2}" r="1.800" fill="${INK}"/><circle cx="${x+4.500}" cy="${y-2}" r="1.800" fill="${INK}"/><path d="M${x-5},${y+5} q5,${m} 10,0" fill="none" stroke="${INK}" stroke-width="1.800" stroke-linecap="round"/>`;
 S.feel=`${bg('#ffe9d6')}<circle cx="100" cy="104" r="80" fill="#ffdcc0"/>${floor(184,'#ffd9bd')}${sh(100,190,38)}
  <g class="float">${face(34,56,SUN,5)}</g><g class="float" style="animation-delay:.6s">${face(166,50,'#9fd4f0',-5)}</g><g class="float" style="animation-delay:1.1s">${face(170,120,'#b7efc8',0)}</g>
- ${at(100,186,1.04,cat({eyes:'closed',armL:-46,armR:46,armsFront:true,mid:`<g transform="translate(0,-30)"><path class="beat" d="${heartP}" fill="${RED}" transform="scale(1.3)"/></g>`}))}`;
+ ${at(100,186,1.04,cat({eyes:'closed',armL:-46,armR:46,armsFront:true,mid:`<g transform="translate(0,-30)"><g class="beat"><path d="${heartP}" fill="${RED}" transform="scale(1.3)"/></g></g>`}))}`;
 
 S.state=`${bg('#e3fbf5')}
  <path d="M30,60 q30,-30 70,-16 q40,-14 66,20 q20,40 -14,70 q-40,30 -84,10 q-50,-20 -38,-84 Z" fill="#b7efc8" stroke="#3aa568" stroke-width="3" stroke-dasharray="8 6"/>

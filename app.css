@@ -1,0 +1,75 @@
+/* Canela – Aussehen der App. Handy zuerst, eine Spalte, große Knöpfe. */
+:root{--bg:#fff8f0;--card:#fff;--ink:#3a2a4a;--soft:#7a6a8c;--line:#efe4d6;--red:#f2453d;--red-d:#c9342d;--sky:#4f9dff;--violet:#9b6bff;--sun:#ffc93c;--mint:#2fc7a8;--mint-d:#1f9c83;
+--display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;--body:"Nunito","Segoe UI",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button,input,textarea{font:inherit;color:inherit}
+.app{max-width:480px;min-height:100dvh;margin:0 auto;padding:16px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px}
+.cargando{margin:auto;color:var(--soft)}
+h1{font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1.05;margin:0;color:var(--red)}
+h2{font-family:var(--display);font-weight:800;font-size:1.3rem;line-height:1.1;margin:0}
+p{margin:0}
+.soft{color:var(--soft)}
+.center{text-align:center}
+.grow{flex:1}
+.scene{display:block;width:100%;height:auto;border-radius:26px;background:#ffe9d6;overflow:hidden}
+.scene.small{max-width:300px;margin:0 auto}
+.scene.tiny{max-width:190px;margin:0 auto;border-radius:20px}
+.btn{display:block;width:100%;border:0;border-radius:18px;padding:14px 18px;font-family:var(--display);font-weight:800;font-size:1.2rem;line-height:1.1;background:var(--red);color:#fff;box-shadow:0 5px 0 var(--red-d);cursor:pointer;transition:transform .05s,box-shadow .05s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--red-d)}
+.btn.sec{background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--line);border:2px solid var(--line)}
+.btn.ok{background:var(--mint);box-shadow:0 5px 0 var(--mint-d)}
+.btn.ok:active{box-shadow:0 1px 0 var(--mint-d)}
+.btn:disabled{opacity:.45;box-shadow:none;transform:none}
+.btn small{display:block;font-family:var(--body);font-weight:700;font-size:.82rem;opacity:.9;margin-top:3px}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.stats{display:flex;gap:10px}
+.stat{flex:1;background:var(--card);border-radius:18px;padding:10px 8px;text-align:center;box-shadow:0 4px 0 var(--line)}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1}
+.stat span{font-size:.8rem;color:var(--soft);font-weight:700}
+.bar{height:14px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--sun);transition:width .3s}
+.bar.red i{background:var(--red)}
+.top{display:flex;align-items:center;gap:12px}
+.top .bar{flex:1}
+.x{border:0;background:none;font-size:1.6rem;line-height:1;padding:4px 8px;color:var(--soft);cursor:pointer}
+.task{font-family:var(--display);font-weight:800;font-size:1.25rem;line-height:1.15}
+.badge{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--k,var(--mint));border-radius:99px;padding:2px 10px}
+.word{font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1;word-break:break-word}
+.es{font-size:1.15rem;font-weight:700}
+.wordrow{display:flex;align-items:center;justify-content:center;gap:12px}
+.audio{flex:none;width:52px;height:52px;border-radius:50%;border:0;background:var(--sky);box-shadow:0 4px 0 #2f6fd0;cursor:pointer;display:grid;place-items:center}
+.audio:active{transform:translateY(3px);box-shadow:0 1px 0 #2f6fd0}
+.audio svg{width:26px;height:26px}
+.reveal{border:2px dashed var(--line);background:#fff;border-radius:16px;padding:12px;text-align:center;font-weight:700;cursor:pointer;width:100%}
+.sent{font-weight:800;font-size:1.05rem}
+.sent b{color:var(--red);background:#ffe9d6;border-radius:6px;padding:0 4px}
+.ses{color:var(--soft);font-size:.95rem}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:16px;padding:14px;font-family:var(--display);font-weight:800;font-size:1.25rem;text-align:center;box-shadow:0 4px 0 var(--line);cursor:pointer}
+.opt.good{border-color:var(--mint);background:#e3fbf5;box-shadow:0 4px 0 var(--mint)}
+.opt.bad{border-color:var(--red);background:#ffe9e6;box-shadow:0 4px 0 var(--red)}
+.field{width:100%;border:3px solid var(--line);border-radius:18px;padding:14px 16px;font-family:var(--display);font-weight:800;font-size:1.6rem;text-align:center;background:#fff;outline:none}
+.field:focus{border-color:var(--sky)}
+.field.good{border-color:var(--mint);background:#e3fbf5}
+.field.bad{border-color:var(--red);background:#ffe9e6}
+.hint{font-family:var(--display);font-weight:800;font-size:1.3rem;letter-spacing:.18em;color:var(--soft);text-align:center}
+.note{border-radius:18px;padding:12px 14px;font-weight:700}
+.note.good{background:#e3fbf5;color:var(--mint-d)}
+.note.bad{background:#ffe9e6;color:var(--red-d)}
+.note .word{font-size:2rem;color:var(--ink);margin-top:4px}
+.items{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.item{background:#fff;border-radius:20px;padding:10px;box-shadow:0 4px 0 var(--line);display:flex;flex-direction:column;gap:6px;text-align:center}
+.item.locked svg{filter:grayscale(1);opacity:.35}
+.item b{font-family:var(--display);font-weight:800;line-height:1.1}
+.item span{font-size:.82rem;color:var(--soft);font-weight:700}
+.item .btn{font-size:.95rem;padding:8px;border-radius:12px;box-shadow:0 3px 0 var(--red-d)}
+.item .btn.sec{box-shadow:0 3px 0 var(--line)}
+textarea.field{font-family:ui-monospace,Consolas,monospace;font-weight:400;font-size:.8rem;text-align:left;min-height:120px;word-break:break-all}
+.testbar{background:var(--ink);color:#fff;border-radius:14px;padding:8px 12px;font-size:.82rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.testbar button{border:0;border-radius:8px;padding:4px 10px;background:#fff;color:var(--ink);font-weight:800;cursor:pointer}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:var(--sun);color:var(--ink);font-family:var(--display);font-weight:800;border-radius:99px;padding:6px 16px;box-shadow:0 4px 0 #e0a83a;animation:toast 1.2s ease-out forwards;pointer-events:none}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-10px)}15%{opacity:1;transform:translate(-50%,0)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-10px)}}
+@media (prefers-reduced-motion:reduce){.toast{animation-duration:.01s}}

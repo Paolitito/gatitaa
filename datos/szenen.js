@@ -1,0 +1,5450 @@
+const INK='#3a2a4a', RED='#f2453d', SUN='#ffc93c', MINT='#2fc7a8', SKY='#4f9dff', VIO='#9b6bff', ORA='#ff9a3c';
+function arm(side,ang,o,prop,cls){
+  const x=side==='L'?-20:20;
+  return `<g transform="translate(${x},-42) rotate(${ang})"><g class="${cls||''}"><ellipse cx="0" cy="12" rx="7" ry="14" fill="${o.fur}" stroke="${o.out}" stroke-width="1.6"/>${prop?`<g transform="translate(0,26) rotate(${-ang})">${prop}</g>`:''}</g></g>`;
+}
+function cat(o){
+  o=Object.assign({fur:'#2f2b3d',out:'#1b1825',belly:'#454059',line:'#ffffff',plain:false,eyes:'open',mouth:'w',armL:18,armR:-18,armsFront:false,bow:true,prop:'',propL:'',armRcls:'',armLcls:'',headCls:'',mid:'',extra:'',tail:true,feet:'',hat:''},o);
+  const S=`stroke="${o.out}" stroke-width="1.6"`, L=o.line;
+  const arms=arm('L',o.armL,o,o.propL,o.armLcls)+arm('R',o.armR,o,o.prop,o.armRcls);
+  const eye=x=>o.plain?`<ellipse cx="${x}" cy="-74" rx="6" ry="7.5" fill="${INK}"/><circle cx="${x+2}" cy="-77.5" r="2.4" fill="#fff"/>`:`<ellipse cx="${x}" cy="-74" rx="7" ry="8.5" fill="#ffd94d"/><ellipse cx="${x}" cy="-73.5" rx="3.6" ry="6" fill="#1b1825"/><circle cx="${x+2.4}" cy="-77.5" r="2.3" fill="#fff"/><circle cx="${x-2}" cy="-70.5" r="1" fill="#fff"/>`;
+  let eyes='';
+  if(o.eyes==='open') eyes=`<g class="blink">${eye(-14)}${eye(14)}</g>`;
+  if(o.eyes==='happy') eyes=`<path d="M-20,-72 q6,-8 12,0 M8,-72 q6,-8 12,0" fill="none" stroke="${L}" stroke-width="2.8" stroke-linecap="round"/>`;
+  if(o.eyes==='closed') eyes=`<path d="M-20,-74 q6,6 12,0 M8,-74 q6,6 12,0" fill="none" stroke="${L}" stroke-width="2.8" stroke-linecap="round"/>`;
+  if(o.eyes==='wide') eyes=`<circle cx="-14" cy="-75" r="8" fill="${o.plain?'#fff':'#ffd94d'}" ${o.plain?`stroke="${INK}" stroke-width="2"`:''}/><circle cx="-14" cy="-75" r="3" fill="#1b1825"/><circle cx="14" cy="-75" r="8" fill="${o.plain?'#fff':'#ffd94d'}" ${o.plain?`stroke="${INK}" stroke-width="2"`:''}/><circle cx="14" cy="-75" r="3" fill="#1b1825"/>`;
+  if(o.eyes==='spark') eyes=`${eye(-14)}${eye(14)}<path d="M-18,-80 l1.5,3 3,1.5 -3,1.5 -1.5,3 -1.5,-3 -3,-1.5 3,-1.5 Z M10,-80 l1.5,3 3,1.5 -3,1.5 -1.5,3 -1.5,-3 -3,-1.5 3,-1.5 Z" fill="#fff" class="twinkle"/>`;
+  let mouth=`<path d="M-6,-61 q3,4 6,0 q3,4 6,0" fill="none" stroke="${L}" stroke-width="1.8" stroke-linecap="round"/>`;
+  if(o.mouth==='open') mouth=`<g class="${o.mouthCls||''}"><ellipse cx="0" cy="-58" rx="4.5" ry="5.5" fill="#5a2a4a"/><ellipse cx="0" cy="-55.5" rx="2.6" ry="2.2" fill="#ff9a6b"/></g>`;
+  if(o.mouth==='big') mouth=`<path d="M-9,-62 q9,16 18,0 Z" fill="#5a2a4a"/><path d="M-5,-56 q5,5 10,0 Z" fill="#ff9a6b"/>`;
+  if(o.mouth==='o') mouth=`<ellipse cx="0" cy="-58" rx="3" ry="3.6" fill="#5a2a4a"/>`;
+  if(o.mouth==='wavy') mouth=`<path d="M-8,-59 q2,-3 4,0 q2,3 4,0 q2,-3 4,0 q2,3 4,0" fill="none" stroke="${L}" stroke-width="1.8" stroke-linecap="round"/>`;
+  if(o.mouth==='tongue') mouth=`<path d="M-6,-61 q3,4 6,0 q3,4 6,0" fill="none" stroke="${L}" stroke-width="1.8" stroke-linecap="round"/><path d="M-2.6,-59 h5.2 v4 a2.6,2.6 0 0 1 -5.2,0 Z" fill="#ff9a6b"/>`;
+  const bow=o.bow?`<g transform="translate(-24,-104) rotate(-18)"><path d="M0,0 L-11,-7 V7 Z M0,0 L11,-7 V7 Z" fill="${RED}"/><circle r="3.4" fill="#ff8a7a"/></g>`:'';
+  const fa=o.feet==='run'?['footA','footB']:o.feet==='walk'?['stepA','stepB']:['',''];
+  return `
+  ${o.tail?`<path class="tail" d="M18,-14 C50,-10 54,-44 40,-54" fill="none" stroke="${o.out}" stroke-width="11.5" stroke-linecap="round"/><path class="tail" d="M18,-14 C50,-10 54,-44 40,-54" fill="none" stroke="${o.fur}" stroke-width="8.5" stroke-linecap="round"/>`:''}
+  <g class="${fa[0]}"><ellipse cx="-12" cy="-3" rx="10" ry="5.5" fill="${o.fur}" ${S}/></g><g class="${fa[1]}"><ellipse cx="12" cy="-3" rx="10" ry="5.5" fill="${o.fur}" ${S}/></g>
+  <ellipse cx="0" cy="-28" rx="24" ry="27" fill="${o.fur}" ${S}/>
+  <ellipse cx="0" cy="-24" rx="14" ry="17" fill="${o.belly}"/>
+  ${o.armsFront?'':arms}
+  ${o.mid}
+  <g class="${o.headCls}">
+    <polygon points="-32,-86 -27,-117 -6,-100" fill="${o.fur}" ${S} stroke-linejoin="round"/><polygon points="-27,-92 -25,-108 -13,-99" fill="#ffc2a3"/>
+    <polygon points="32,-86 27,-117 6,-100" fill="${o.fur}" ${S} stroke-linejoin="round"/><polygon points="27,-92 25,-108 13,-99" fill="#ffc2a3"/>
+    <ellipse cx="0" cy="-74" rx="36" ry="31" fill="${o.fur}" ${S}/>
+    ${eyes}
+    <ellipse cx="-25" cy="-62" rx="6.5" ry="4" fill="#ff7a59" opacity=".7"/><ellipse cx="25" cy="-62" rx="6.5" ry="4" fill="#ff7a59" opacity=".7"/>
+    <path d="M-3.2,-67 h6.4 l-3.2,3.6 z" fill="#ff8a7a"/>
+    ${mouth}
+    <path d="M-31,-67 l-15,-3 M-31,-62 l-15,2 M31,-67 l15,-3 M31,-62 l15,2" stroke="${L}" stroke-opacity="${o.plain?.4:.75}" stroke-width="1.4" stroke-linecap="round"/>
+    ${bow}${o.hat}
+  </g>
+  ${o.armsFront?arms:''}
+  ${o.extra}`;
+}
+const FUR={orange:{fur:'#ffb347',out:'#e08a2e',belly:'#fff3dc'},grey:{fur:'#b9bdd4',out:'#8a8fb0',belly:'#eef0fa'},white:{fur:'#ffffff',out:'#cbc2e6',belly:'#fff8ef'},cream:{fur:'#ffe2b8',out:'#e0b98a',belly:'#fff6e6'}};
+const K=(n,o)=>cat(Object.assign({line:INK,plain:true,bow:false},FUR[n],o||{}));
+const at=(x,y,s,inner,cls)=>`<g transform="translate(${x},${y}) scale(${s})"><g class="${cls||''}">${inner}</g></g>`;
+const flipAt=(x,y,s,inner,cls)=>`<g transform="translate(${x},${y}) scale(${-s},${s})"><g class="${cls||''}">${inner}</g></g>`;
+const bg=c=>`<rect width="200" height="200" fill="${c}"/>`;
+const floor=(y,c)=>`<rect y="${y}" width="200" height="${200-y}" fill="${c}"/>`;
+const sh=(x,y,rx,cls)=>`<ellipse class="${cls||''}" cx="${x}" cy="${y}" rx="${rx}" ry="${rx/6}" fill="${INK}" opacity=".14"/>`;
+const spark=(x,y,r,c,d)=>`<path class="twinkle" style="animation-delay:${d||0}s" d="M${x},${y-r} l${r*.28},${r*.72} ${r*.72},${r*.28} ${-r*.72},${r*.28} ${-r*.28},${r*.72} ${-r*.28},${-r*.72} ${-r*.72},${-r*.28} ${r*.72},${-r*.28} Z" fill="${c}"/>`;
+const star5=(x,y,R,c,extra)=>{let p=[];for(let i=0;i<10;i++){const r=i%2?R*.45:R,a=-Math.PI/2+i*Math.PI/5;p.push((x+r*Math.cos(a)).toFixed(1)+','+(y+r*Math.sin(a)).toFixed(1));}return `<polygon points="${p.join(' ')}" fill="${c}" stroke-linejoin="round" ${extra||''}/>`;};
+const heartP=`M0,6 C-12,-6 -6,-15 0,-7.5 C6,-15 12,-6 0,6 Z`;
+const heart=(x,y,s,c,d)=>`<g transform="translate(${x},${y}) scale(${s})"><path class="rise" style="animation-delay:${d||0}s" d="${heartP}" fill="${c}"/></g>`;
+const heartS=(x,y,s,c,cls)=>`<g transform="translate(${x},${y}) scale(${s})"><path class="${cls||''}" d="${heartP}" fill="${c}"/></g>`;
+const note=(x,y,c,d)=>`<g transform="translate(${x},${y})"><g class="rise" style="animation-delay:${d||0}s"><ellipse cx="0" cy="0" rx="4.5" ry="3.4" fill="${c}" transform="rotate(-20)"/><path d="M4,-1 v-15 l7,2 v4 l-7,-2" fill="${c}" stroke="${c}" stroke-width="1.5" stroke-linejoin="round"/></g></g>`;
+const cloud=(x,y,s,cls)=>`<g transform="translate(${x},${y}) scale(${s})"><g class="${cls===undefined?'cloud':cls}"><ellipse cx="0" cy="0" rx="22" ry="10" fill="#fff"/><ellipse cx="16" cy="-6" rx="17" ry="11" fill="#fff"/><ellipse cx="-12" cy="-5" rx="12" ry="8" fill="#fff"/></g></g>`;
+const sun=(x,y,r)=>`<g transform="translate(${x},${y})"><g class="spin" stroke="${SUN}" stroke-width="${r*.26}" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>`<path transform="rotate(${a})" d="M0,${-r*1.35} v${-r*.5}"/>`).join('')}<circle r="${r*1.9}" fill="none" stroke="none"/></g><circle r="${r}" fill="${SUN}"/></g>`;
+const hills=(c1,c2,y)=>{y=y||170;return `<path d="M0,${y} q50,-22 100,0 t100,0 v${200-y} h-200 Z" fill="${c1}"/><path d="M0,${y+14} q50,-12 100,0 t100,0 v${200-y} h-200 Z" fill="${c2}"/>`;};
+const flower=(x,y,c,d)=>`<g class="flower" style="animation-delay:${d||0}s"><path d="M${x},${y} v-18" stroke="${MINT}" stroke-width="3" stroke-linecap="round"/><circle cx="${x}" cy="${y-22}" r="6" fill="${c}"/><circle cx="${x}" cy="${y-22}" r="2.4" fill="#fff"/></g>`;
+const tree=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="-4" y="-22" width="8" height="24" rx="2" fill="#b07a45"/><circle cx="0" cy="-36" r="20" fill="#4fc27f"/><circle cx="-12" cy="-28" r="12" fill="#62d08f"/><circle cx="12" cy="-28" r="12" fill="#62d08f"/></g>`;
+const thermo=(x,y,lvl,c)=>`<rect x="${x-7}" y="${y}" width="14" height="76" rx="7" fill="#fff" stroke="#b9c9dd" stroke-width="2"/><circle cx="${x}" cy="${y+80}" r="12" fill="${c}" stroke="#b9c9dd" stroke-width="2"/><rect x="${x-3}" y="${y+78-lvl}" width="6" height="${lvl}" fill="${c}"/>`;
+const S={};
+
+/* Bausteine für Requisiten: alle mit Ursprung unten in der Mitte, per at(x,y,s,...) platzieren */
+const T=(x,y,str,size,c,anchor,cls)=>`<text class="${cls||''}" x="${x}" y="${y}" text-anchor="${anchor||'middle'}" font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" font-size="${size}" fill="${c}">${str}</text>`;
+const arrow=(x1,y1,x2,y2,c,w,cls)=>{w=w||4;const a=Math.atan2(y2-y1,x2-x1),h=w*2.6;const p=(d)=>`${(x2-h*Math.cos(a+d)).toFixed(1)},${(y2-h*Math.sin(a+d)).toFixed(1)}`;return `<g class="${cls||''}"><path d="M${x1},${y1} L${x2},${y2} M${p(.5)} L${x2},${y2} L${p(-.5)}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></g>`;};
+const arcArrow=(x1,y1,x2,y2,hgt,c,w,dash,cls)=>{w=w||4;const cx=(x1+x2)/2,cy=Math.min(y1,y2)-hgt;const a=Math.atan2(y2-cy,x2-cx),h=w*2.6;const p=(d)=>`${(x2-h*Math.cos(a+d)).toFixed(1)},${(y2-h*Math.sin(a+d)).toFixed(1)}`;return `<g class="${cls||''}"><path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" ${dash?`stroke-dasharray="${dash}"`:''}/><path d="M${p(.5)} L${x2},${y2} L${p(-.5)}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></g>`;};
+const think=(x,y,rx,ry,inner,dir)=>{dir=dir||-1;return `<circle cx="${x+dir*rx*.75}" cy="${y+ry+10}" r="5" fill="#fff"/><circle cx="${x+dir*rx*.95}" cy="${y+ry+20}" r="3" fill="#fff"/><ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#fff"/><ellipse cx="${x-rx*.5}" cy="${y-ry*.5}" rx="${rx*.55}" ry="${ry*.6}" fill="#fff"/><ellipse cx="${x+rx*.5}" cy="${y-ry*.4}" rx="${rx*.6}" ry="${ry*.65}" fill="#fff"/>${inner||''}`;};
+const speech=(x,y,w,h,inner,tx,ty)=>`<path d="M${x-w/2+8},${y-h/2} h${w-16} q8,0 8,8 v${h-16} q0,8 -8,8 h${-(w-16)} q-8,0 -8,-8 v${-(h-16)} q0,-8 8,-8 Z" fill="#fff"/><path d="M${x-6},${y+h/2-1} L${tx},${ty} L${x+8},${y+h/2-1} Z" fill="#fff"/>${inner||''}`;
+const cross=(x,y,r,w)=>`<path d="M${x-r},${y-r} L${x+r},${y+r} M${x+r},${y-r} L${x-r},${y+r}" stroke="${RED}" stroke-width="${w||6}" stroke-linecap="round"/>`;
+const check=(x,y,r,w)=>`<path d="M${x-r},${y} l${r*.7},${r*.8} L${x+r},${y-r*.8}" fill="none" stroke="${MINT}" stroke-width="${w||6}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const ring=(x,y,r,c,cls)=>`<g class="${cls||'spin'}"><circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${c||RED}" stroke-width="4" stroke-dasharray="10 9" stroke-linecap="round"/></g>`;
+const P={};
+P.fish=`<path d="M-9,0 l-8,-6 v12 Z" fill="#ff8a3c"/><ellipse cx="0" cy="0" rx="10" ry="6.5" fill="#ffa53c"/><circle cx="5" cy="-1.5" r="1.6" fill="${INK}"/>`;
+P.ball=(c1,c2)=>`<circle cx="0" cy="-12" r="12" fill="${c1||RED}"/><path d="M-12,-12 q12,-9 24,0 M-12,-12 q12,9 24,0" fill="none" stroke="${c2||'#fff'}" stroke-width="2.4"/><circle cx="-4" cy="-17" r="2.6" fill="#fff" opacity=".6"/>`;
+P.boxBack=(w)=>`<rect x="${-w/2}" y="-12" width="${w}" height="14" fill="#8a5a30"/>`;
+P.boxFront=(w,h)=>`<path d="M${-w/2},0 l-18,-16 h18 l12,16 Z" fill="#e4b77a"/><path d="M${w/2},0 l18,-16 h-18 l-12,16 Z" fill="#e4b77a"/><rect x="${-w/2}" y="0" width="${w}" height="${h}" rx="3" fill="#d9a56a"/><rect x="-7" y="0" width="14" height="${h}" fill="#c98a4b" opacity=".6"/>`;
+P.boxClosed=(w,h)=>`<rect x="${-w/2}" y="${-h}" width="${w}" height="${h}" rx="3" fill="#d9a56a"/><rect x="-7" y="${-h}" width="14" height="${h}" fill="#c98a4b" opacity=".6"/><rect x="${-w/2}" y="${-h}" width="${w}" height="7" fill="#e4b77a"/>`;
+P.house=(roof,wall)=>`<rect x="24" y="-78" width="10" height="22" rx="2" fill="#c98a4b"/><rect x="-36" y="-52" width="72" height="52" rx="4" fill="${wall||'#ffd166'}"/><path d="M-44,-50 L0,-88 L44,-50 Z" fill="${roof||RED}" stroke="${roof||RED}" stroke-width="5" stroke-linejoin="round"/><rect x="-26" y="-30" width="18" height="30" rx="8" fill="${VIO}"/><circle cx="-12" cy="-14" r="1.8" fill="${SUN}"/><rect x="4" y="-40" width="22" height="20" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/>`;
+P.school=`<rect x="-14" y="-92" width="28" height="34" fill="#ffd98a"/><path d="M-19,-90 L0,-108 L19,-90 Z" fill="${RED}" stroke="${RED}" stroke-width="3" stroke-linejoin="round"/><circle cx="0" cy="-78" r="8" fill="#fff" stroke="#b07a45" stroke-width="2"/><path d="M0,-78 v-5 M0,-78 h4" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/><rect x="-46" y="-60" width="92" height="60" rx="3" fill="#ffd98a"/><rect x="-50" y="-66" width="100" height="10" rx="4" fill="${RED}"/><rect x="-38" y="-46" width="16" height="16" rx="3" fill="#bfe9ff" stroke="#fff" stroke-width="2.5"/><rect x="22" y="-46" width="16" height="16" rx="3" fill="#bfe9ff" stroke="#fff" stroke-width="2.5"/><path d="M-11,0 v-24 a11,11 0 0 1 22,0 v24 Z" fill="${VIO}"/>${T(0,-36,'ABC',10,RED)}`;
+P.dog=(o)=>{o=o||{};const c=o.c||'#e8b06a',d=o.d||'#d99a52',e=o.e||'#b9773a';return `<path class="wiggle" d="M34,-38 q18,-6 15,-28" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round"/><rect x="12" y="-28" width="11" height="26" rx="5.5" fill="${d}"/><rect x="-16" y="-26" width="11" height="24" rx="5.5" fill="${d}"/><ellipse cx="4" cy="-34" rx="36" ry="24" fill="${c}"/><ellipse cx="16" cy="-42" rx="11" ry="8" fill="${d}"/><rect x="24" y="-26" width="12" height="26" rx="6" fill="${c}"/><rect x="-28" y="-24" width="12" height="24" rx="6" fill="${c}"/><path d="M-42,-44 q14,8 28,0" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><circle cx="-28" cy="-37" r="4" fill="${SUN}"/><g class="tilt" style="transform-origin:-28px -44px"><ellipse cx="-48" cy="-68" rx="9" ry="17" fill="${e}" transform="rotate(18 -48 -68)"/><ellipse cx="-8" cy="-70" rx="9" ry="17" fill="${e}" transform="rotate(-18 -8 -70)"/><circle cx="-28" cy="-66" r="25" fill="${c}"/><ellipse cx="-30" cy="-56" rx="14" ry="11" fill="#fff3dc"/><ellipse cx="-30" cy="-62" rx="5" ry="3.8" fill="${INK}"/>${o.happy?`<path d="M-44,-73 q4.500,-5 9,0 M-23,-73 q4.500,-5 9,0" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`:`<circle cx="-39" cy="-74" r="3.4" fill="${INK}"/><circle cx="-38" cy="-75" r="1.2" fill="#fff"/><circle cx="-18" cy="-74" r="3.4" fill="${INK}"/><circle cx="-17" cy="-75" r="1.2" fill="#fff"/>`}<path d="M-36,-54 q6,5 12,0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/><path class="chew" d="M-33,-52 h6 v6 a3,3 0 0 1 -6,0 Z" fill="#ff7a59"/></g>`;};
+P.person=(o)=>{o=Object.assign({shirt:SUN,stripe:ORA,pants:'#2f6fd0',hair:'#7a4a21',skin:'#ffcf9e',shoes:RED,long:false,beard:false,wave:true,hat:'',skirt:false,happy:false},o||{});
+ return `<rect x="-14" y="-40" width="11" height="34" rx="5" fill="${o.skin}"/><rect x="3" y="-40" width="11" height="34" rx="5" fill="${o.skin}"/><ellipse cx="-11" cy="-4" rx="11" ry="6" fill="${o.shoes}"/><ellipse cx="11" cy="-4" rx="11" ry="6" fill="${o.shoes}"/>
+ ${o.skirt?`<path d="M-22,-58 h44 l8,26 h-60 Z" fill="${o.pants}"/>`:`<rect x="-20" y="-56" width="40" height="24" rx="7" fill="${o.pants}"/>`}
+ ${o.long?`<path d="M-27,-124 q-6,34 -2,54 h58 q4,-20 -2,-54 Z" fill="${o.hair}"/>`:''}
+ <rect x="-34" y="-88" width="11" height="36" rx="5.5" fill="${o.skin}" transform="rotate(12 -29 -86)"/>
+ ${o.wave?`<g transform="translate(24,-84)"><g class="wave"><rect x="-5.500" y="-36" width="11" height="38" rx="5.500" fill="${o.skin}" transform="rotate(28)"/><circle cx="19" cy="-36" r="7" fill="${o.skin}"/></g></g>`:`<rect x="23" y="-88" width="11" height="36" rx="5.500" fill="${o.skin}" transform="rotate(-12 29 -86)"/>`}
+ <rect x="-24" y="-94" width="48" height="46" rx="12" fill="${o.shirt}"/><rect x="-24" y="-78" width="48" height="8" fill="${o.stripe}"/>
+ <circle cx="-26" cy="-116" r="5.500" fill="${o.skin}"/><circle cx="26" cy="-116" r="5.500" fill="${o.skin}"/><circle cx="0" cy="-118" r="26" fill="${o.skin}"/>
+ <path d="M-26,-120 q-2,-30 26,-30 q28,0 26,30 q-8,-14 -20,-14 q-6,6 -18,4 q-8,0 -14,10 Z" fill="${o.hair}"/>
+ ${o.happy?`<path d="M-14,-113 q4,-5 8,0 M6,-113 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`:`<circle cx="-10" cy="-114" r="3.200" fill="${INK}"/><circle cx="10" cy="-114" r="3.200" fill="${INK}"/><circle cx="-9" cy="-115" r="1.100" fill="#fff"/><circle cx="11" cy="-115" r="1.100" fill="#fff"/>`}
+ ${o.beard?`<path d="M-12,-106 q6,-5 12,0 q6,-5 12,0 q-2,7 -12,3 q-10,4 -12,-3 Z" fill="${o.hair}"/>`:`<path d="M-8,-104 q8,7 16,0" fill="none" stroke="${INK}" stroke-width="2.200" stroke-linecap="round"/>`}
+ <ellipse cx="-16" cy="-106" rx="5" ry="3" fill="#ff7a59" opacity=".5"/><ellipse cx="16" cy="-106" rx="5" ry="3" fill="#ff7a59" opacity=".5"/>${o.hat}`;};
+P.cup=(c)=>`<path d="M14,-20 q12,0 10,9 q-2,7 -10,6" fill="none" stroke="${c||RED}" stroke-width="4.500"/><path d="M-15,-26 h30 v16 q0,10 -10,10 h-10 q-10,0 -10,-10 Z" fill="${c||RED}"/><ellipse cx="0" cy="-26" rx="15" ry="4" fill="#7a4a21"/>`;
+P.book=(c)=>`<rect x="-14" y="-36" width="28" height="36" rx="3" fill="${c||SKY}"/><rect x="-14" y="-36" width="6" height="36" fill="#00000022"/><rect x="-4" y="-28" width="14" height="8" rx="2" fill="#fff" opacity=".85"/>`;
+P.table=(w,c)=>`<rect x="${-w/2+8}" y="-44" width="10" height="44" rx="4" fill="#8a5a30"/><rect x="${w/2-18}" y="-44" width="10" height="44" rx="4" fill="#8a5a30"/><rect x="${-w/2}" y="-56" width="${w}" height="14" rx="7" fill="${c||'#c98a4b'}"/>`;
+P.door=(c)=>`<rect x="-30" y="-104" width="60" height="104" rx="6" fill="#b07a45"/><rect x="-24" y="-98" width="48" height="98" fill="${c||SKY}"/><rect x="-17" y="-90" width="34" height="34" rx="5" fill="#ffffff44"/><rect x="-17" y="-48" width="34" height="38" rx="5" fill="#ffffff44"/><circle cx="16" cy="-50" r="4" fill="${SUN}"/>`;
+P.gift=(c,r)=>`<rect x="-13" y="-22" width="26" height="22" rx="3" fill="${c||VIO}"/><rect x="-3" y="-22" width="6" height="22" fill="${r||SUN}"/><rect x="-13" y="-14" width="26" height="5" fill="${r||SUN}"/><path d="M0,-22 q-10,-12 -12,-2 q2,4 12,2 Z M0,-22 q10,-12 12,-2 q-2,4 -12,2 Z" fill="${r||SUN}"/>`;
+P.clock=(r,h,m)=>`<circle cx="0" cy="${-r}" r="${r}" fill="#fff" stroke="${INK}" stroke-width="${r*.14}"/>${[0,90,180,270].map(a=>`<path transform="rotate(${a} 0 ${-r})" d="M0,${-r*1.82} v${r*.18}" stroke="${INK}" stroke-width="${r*.09}" stroke-linecap="round"/>`).join('')}<path transform="rotate(${h||60} 0 ${-r})" d="M0,${-r} v${-r*.45}" stroke="${INK}" stroke-width="${r*.12}" stroke-linecap="round"/><g class="spin" style="animation-duration:6s"><circle cx="0" cy="${-r}" r="${r*.8}" fill="none"/><path d="M0,${-r} v${-r*.68}" stroke="${RED}" stroke-width="${r*.08}" stroke-linecap="round"/></g><circle cx="0" cy="${-r}" r="${r*.1}" fill="${INK}"/>`;
+P.car=(c)=>`<path d="M-34,-24 q5,-28 22,-28 h22 q16,0 22,28 Z" fill="${c||RED}"/><path d="M-27,-26 q4,-20 16,-20 h20 q11,0 16,20 Z" fill="#bfe9ff"/><rect x="-52" y="-28" width="104" height="24" rx="10" fill="${c||RED}"/><rect x="44" y="-22" width="9" height="7" rx="3" fill="${SUN}"/><circle cx="-28" cy="-4" r="11" fill="${INK}"/><circle cx="-28" cy="-4" r="5" fill="#dfe6f2"/><circle cx="28" cy="-4" r="11" fill="${INK}"/><circle cx="28" cy="-4" r="5" fill="#dfe6f2"/>`;
+P.bed=`<rect x="-52" y="-52" width="14" height="52" rx="6" fill="#b07a45"/><rect x="40" y="-30" width="12" height="30" rx="5" fill="#b07a45"/><rect x="-48" y="-26" width="96" height="18" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="1.4"/><ellipse cx="-24" cy="-28" rx="18" ry="8" fill="#fff" stroke="#cbc2e6" stroke-width="1.4"/><path d="M-8,-24 q26,-14 56,0 v16 h-56 Z" fill="${SKY}"/>`;
+P.phone=`<rect x="-11" y="-38" width="22" height="38" rx="5" fill="${INK}"/><rect x="-8" y="-34" width="16" height="28" rx="2" fill="#bfe9ff"/>`;
+P.plate=(w)=>`<ellipse cx="0" cy="-5" rx="${w}" ry="${w*.24}" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><ellipse cx="0" cy="-5" rx="${w*.72}" ry="${w*.15}" fill="#f4f1fb"/>`;
+P.bulb=`<g class="glow"><circle cx="0" cy="-22" r="22" fill="#fff6c8" opacity=".7"/></g><path d="M-10,-12 q-8,-22 10,-24 q18,2 10,24 Z" fill="${SUN}"/><rect x="-6" y="-12" width="12" height="8" rx="2" fill="#9aa8c0"/>`;
+P.hatChef=`<path d="M-24,-100 q-14,-26 10,-28 q14,-16 28,0 q24,2 10,28 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><rect x="-24" y="-104" width="48" height="10" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>`;
+P.hatHard=`<path d="M-30,-98 q0,-34 30,-34 q30,0 30,34 Z" fill="${SUN}"/><rect x="-36" y="-102" width="72" height="8" rx="4" fill="#e0a83a"/>`;
+
+/* Tag 1 */
+S.house=`${bg('#cdeeff')}${sun(162,36,14)}${cloud(42,34,1)}${hills('#8fe0a8','#6fd08f')}
+ <rect x="126" y="52" width="14" height="30" rx="2" fill="#c98a4b"/>
+ <circle class="smoke" cx="133" cy="48" r="6" fill="#fff"/><circle class="smoke" style="animation-delay:1s" cx="135" cy="44" r="5" fill="#fff"/><circle class="smoke" style="animation-delay:2s" cx="131" cy="46" r="4.5" fill="#fff"/>
+ <rect x="50" y="92" width="100" height="86" rx="6" fill="#ffd166"/>
+ <path d="M38,96 L100,44 L162,96 Z" fill="${RED}" stroke="${RED}" stroke-width="6" stroke-linejoin="round"/>
+ <circle cx="100" cy="74" r="8" fill="#fff" opacity=".85"/>
+ <rect x="62" y="130" width="28" height="48" rx="12" fill="${VIO}"/><circle cx="83" cy="156" r="2.6" fill="${SUN}"/>
+ <clipPath id="hwin"><rect x="102" y="104" width="38" height="36" rx="6"/></clipPath>
+ <rect x="102" y="104" width="38" height="36" rx="6" fill="#bfe9ff"/>
+ <g clip-path="url(#hwin)">${at(119,172,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open',tail:false}))}</g>
+ <rect x="102" y="104" width="38" height="36" rx="6" fill="none" stroke="#fff" stroke-width="5"/>
+ <rect x="98" y="139" width="46" height="6" rx="3" fill="#5fd3c0"/>
+ <path d="M70,178 q6,12 -4,22 h28 q-6,-10 0,-22 Z" fill="#f3d9a4"/>
+ ${flower(22,186,ORA,0)}${flower(38,186,SUN,.6)}${flower(166,186,VIO,.3)}${flower(182,186,ORA,.9)}`;
+
+const snack=`<path d="M-9,0 l-8,-6 v12 Z" fill="#ff8a3c"/><ellipse cx="0" cy="0" rx="10" ry="6.5" fill="#ffa53c"/><circle cx="5" cy="-1.5" r="1.6" fill="${INK}"/>`;
+S.eat=`${bg('#fff1c9')}
+ <path d="M0,40 h200 M0,80 h200 M0,120 h200 M40,0 v150 M80,0 v150 M120,0 v150 M160,0 v150" stroke="#ffe39a" stroke-width="2"/>
+ <rect x="14" y="16" width="52" height="48" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="5"/><path d="M40,16 v48 M14,40 h52" stroke="#fff" stroke-width="4"/><circle cx="54" cy="28" r="6" fill="${SUN}"/>
+ <path d="M150,20 h34 M150,20 v-6 M184,20 v-6" stroke="#c98a4b" stroke-width="4" stroke-linecap="round"/><rect x="154" y="6" width="9" height="14" rx="3" fill="${MINT}"/><rect x="168" y="2" width="9" height="18" rx="3" fill="${VIO}"/>
+ ${at(104,178,1,cat({armL:40,armR:-140,armRcls:'munch',armsFront:true,mouth:'open',mouthCls:'chew',prop:snack,tail:false}))}
+ ${floor(150,'#5fd3c0')}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ <g fill="#fff" opacity=".7"><circle cx="20" cy="172" r="4"/><circle cx="60" cy="186" r="4"/><circle cx="100" cy="172" r="4"/><circle cx="140" cy="186" r="4"/><circle cx="180" cy="172" r="4"/></g>
+ <ellipse cx="50" cy="152" rx="30" ry="8" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><path d="M22,150 q28,22 56,0" fill="${SKY}"/>
+ <g transform="translate(42,142)">${snack}</g><g transform="translate(60,144) rotate(12)">${snack}</g>
+ <rect x="150" y="128" width="20" height="26" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="2.5"/><rect x="152" y="138" width="16" height="14" rx="2" fill="#fff"/>
+ ${heart(140,72,1,RED,0)}${heart(152,88,.7,'#ff8a7a',1)}${heart(130,92,.6,SUN,1.8)}`;
+
+S.happy=`${bg('#fff3cf')}
+ ${[RED,SUN,MINT,SKY,VIO].map((c,i)=>`<path d="M${22+i*9},190 a${78-i*9},${78-i*9} 0 0 1 ${156-i*18},0" fill="none" stroke="${c}" stroke-width="9"/>`).join('')}
+ ${floor(178,'#ffe08a')}${sh(100,186,40,'shadow')}
+ ${at(100,184,1,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open'}),'jump')}
+ ${spark(26,60,7,RED,0)}${spark(172,52,7,RED,.7)}${spark(150,110,6,VIO,1.2)}${spark(36,120,6,VIO,.4)}
+ ${[[20,RED,0],[48,SUN,.9],[76,MINT,1.7],[124,SKY,.4],[152,VIO,1.3],[180,ORA,2.2],[100,SUN,2.5]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.5" fill="${c}"/>`).join('')}`;
+
+const tear=(x,y,c)=>`M${x},${y} q-5,8 0,11 q5,-3 0,-11 Z`;
+S.water=`${bg('#d6f1ff')}
+ <circle cx="26" cy="40" r="30" fill="#e6f7ff"/><circle cx="178" cy="96" r="26" fill="#e6f7ff"/>
+ ${floor(152,'#9fd4f0')}<rect y="152" width="200" height="7" fill="#c3e6f8"/>
+ <path d="M134,0 v22 q0,12 -12,12 h-12" fill="none" stroke="#9aa8c0" stroke-width="12" stroke-linecap="round"/><rect x="100" y="28" width="14" height="16" rx="4" fill="#b9c4d8"/>
+ <rect x="126" y="6" width="16" height="8" rx="4" fill="${RED}"/>
+ <path class="drip" d="${tear(107,46)}" fill="${SKY}"/><path class="drip" style="animation-delay:.55s" d="${tear(107,46)}" fill="${SKY}"/>
+ <path d="M82,96 h50 l-5,58 h-40 Z" fill="#f3fbff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M85,114 q5.5,-4 11,0 t11,0 t11,0 t11,0 l-3.4,37 h-37.2 Z" fill="#5cc3ff" opacity=".9"/>
+ <ellipse class="ripple" cx="107" cy="114" rx="14" ry="3.5" fill="none" stroke="#fff" stroke-width="2"/>
+ <circle class="bubble" cx="98" cy="144" r="2.4" fill="#fff"/><circle class="bubble" style="animation-delay:1.2s" cx="116" cy="146" r="2" fill="#fff"/>
+ <path d="M92,104 v40" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+ <path d="${tear(150,140)}" fill="${SKY}"/><path d="${tear(164,146)}" fill="#5cc3ff"/><ellipse cx="158" cy="160" rx="16" ry="4" fill="#5cc3ff" opacity=".7"/>
+ ${sh(42,190,30)}${at(42,188,.82,cat({armR:-100,armRcls:'bob',mouth:'tongue'}))}`;
+
+S.dog=`${bg('#e3fbf5')}${cloud(40,36,.9)}${cloud(150,54,.7)}${hills('#8fe0a8','#6fd08f',166)}
+ ${sh(114,184,46)}
+ <path class="wiggle" d="M146,146 q18,-6 15,-28" fill="none" stroke="#e8b06a" stroke-width="9" stroke-linecap="round"/>
+ <rect x="124" y="156" width="11" height="26" rx="5.5" fill="#d99a52"/><rect x="96" y="158" width="11" height="24" rx="5.5" fill="#d99a52"/>
+ <ellipse cx="116" cy="150" rx="36" ry="24" fill="#e8b06a"/><ellipse cx="128" cy="142" rx="11" ry="8" fill="#d99a52"/>
+ <rect x="136" y="158" width="12" height="26" rx="6" fill="#e8b06a"/><rect x="84" y="160" width="12" height="24" rx="6" fill="#e8b06a"/>
+ <path d="M70,140 q14,8 28,0" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><circle cx="84" cy="147" r="4" fill="${SUN}"/>
+ <g class="tilt" style="transform-origin:84px 140px">
+  <ellipse cx="64" cy="116" rx="9" ry="17" fill="#b9773a" transform="rotate(18 64 116)"/><ellipse cx="104" cy="114" rx="9" ry="17" fill="#b9773a" transform="rotate(-18 104 114)"/>
+  <circle cx="84" cy="118" r="25" fill="#e8b06a"/>
+  <ellipse cx="82" cy="128" rx="14" ry="11" fill="#fff3dc"/>
+  <ellipse cx="82" cy="122" rx="5" ry="3.8" fill="${INK}"/>
+  <circle cx="73" cy="110" r="3.4" fill="${INK}"/><circle cx="74" cy="109" r="1.2" fill="#fff"/><circle cx="94" cy="110" r="3.4" fill="${INK}"/><circle cx="95" cy="109" r="1.2" fill="#fff"/>
+  <path d="M76,130 q6,5 12,0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/>
+  <path class="chew" d="M79,132 h6 v6 a3,3 0 0 1 -6,0 Z" fill="#ff7a59"/>
+ </g>
+ <g transform="translate(166,182) rotate(-14)"><rect x="-10" y="-3" width="20" height="6" rx="3" fill="#fff"/><circle cx="-10" cy="-3" r="4" fill="#fff"/><circle cx="-10" cy="3" r="4" fill="#fff"/><circle cx="10" cy="-3" r="4" fill="#fff"/><circle cx="10" cy="3" r="4" fill="#fff"/></g>
+ ${at(28,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+/* Tag 2 */
+S.book=`${bg('#ece6ff')}
+ <circle cx="30" cy="34" r="22" fill="#f6f2ff"/><circle cx="176" cy="150" r="30" fill="#f6f2ff"/>
+ ${at(100,120,.82,cat({tail:false,eyes:'open'}),'peek')}
+ <path d="M22,78 L100,84 L178,78 V168 L100,174 L22,168 Z" fill="${SKY}" stroke="${SKY}" stroke-width="5" stroke-linejoin="round"/>
+ <path d="M30,74 Q65,62 100,76 V164 Q65,150 30,160 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>
+ <path d="M170,74 Q135,62 100,76 V164 Q135,150 170,160 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>
+ <path d="M40,92 q25,-8 50,0 M40,104 q25,-8 50,0 M40,116 q25,-8 50,0 M40,128 q20,-7 36,-3" fill="none" stroke="#cbc2e6" stroke-width="2.4" stroke-linecap="round"/>
+ <circle cx="136" cy="100" r="12" fill="${SUN}"/><path d="M112,140 q12,-18 24,0 q10,-12 22,0" fill="none" stroke="${MINT}" stroke-width="4" stroke-linecap="round"/>
+ <path class="flip" d="M100,76 Q135,62 170,74 V160 Q135,150 100,164 Z" fill="#f6f2ff" stroke="#cbc2e6" stroke-width="1.6"/>
+ <path d="M150,80 v34 l6,-6 6,6 v-34 Z" fill="${RED}"/>
+ <ellipse cx="72" cy="72" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/><ellipse cx="128" cy="72" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/>
+ ${spark(24,120,6,VIO,0)}${spark(180,44,7,SUN,.8)}`;
+
+const glasses=`<g fill="none" stroke="#fff" stroke-width="2.2"><circle cx="-14" cy="-74" r="10.5"/><circle cx="14" cy="-74" r="10.5"/><path d="M-3.5,-74 h7"/></g>`;
+const openBook=`<g transform="translate(0,-30)"><path d="M-27,-13 Q-13,-18 0,-12 Q13,-18 27,-13 V12 Q13,7 0,13 Q-13,7 -27,12 Z" fill="#fff" stroke="${SKY}" stroke-width="3" stroke-linejoin="round"/><path d="M0,-12 V13" stroke="${SKY}" stroke-width="2"/><path d="M-21,-6 h14 M-21,0 h14 M7,-6 h14 M7,0 h14" stroke="#cbc2e6" stroke-width="2" stroke-linecap="round"/><ellipse cx="-27" cy="2" rx="6" ry="8" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/><ellipse cx="27" cy="2" rx="6" ry="8" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/></g>`;
+const letter=(x,y,ch,c,d)=>`<g transform="translate(${x},${y})"><text class="rise" style="animation-delay:${d}s" font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" font-size="20" fill="${c}">${ch}</text></g>`;
+S.read=`${bg('#fff1c9')}
+ <rect x="14" y="20" width="60" height="50" rx="6" fill="#ffe39a"/><path d="M14,36 h60 M14,52 h60" stroke="#fff1c9" stroke-width="3"/>
+ <g fill="${RED}"><rect x="20" y="22" width="7" height="13"/></g><rect x="29" y="24" width="7" height="11" fill="${SKY}"/><rect x="38" y="21" width="7" height="14" fill="${MINT}"/><rect x="24" y="38" width="7" height="13" fill="${VIO}"/><rect x="52" y="39" width="7" height="12" fill="${ORA}"/>
+ ${floor(168,'#ffd98a')}<ellipse cx="100" cy="184" rx="74" ry="12" fill="${VIO}" opacity=".35"/>
+ <path d="M168,184 v-78" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><path d="M150,106 l8,-26 h20 l8,26 Z" fill="${SUN}"/><circle class="glow" cx="168" cy="112" r="20" fill="#fff6c8" opacity=".6"/><rect x="156" y="182" width="24" height="6" rx="3" fill="#b07a45"/>
+ ${at(96,186,1.1,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}
+ ${letter(34,118,'A',RED,0)}${letter(52,96,'B',SKY,.9)}${letter(132,84,'C',MINT,1.7)}`;
+
+S.big=`${bg('#fff3cf')}
+ <circle cx="84" cy="104" r="88" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(84,190,60)}${sh(172,190,12)}
+ <path d="M12,34 v150 M12,34 l-6,10 M12,34 l6,10 M12,184 l-6,-10 M12,184 l6,-10" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>
+ ${at(86,188,1.36,cat({armL:70,armR:-70,eyes:'happy',mouth:'open'}),'pulse')}
+ <g transform="translate(172,186)"><g class="shiver"><path d="M10,-4 q12,2 10,-8" fill="none" stroke="#8a8fb0" stroke-width="2" stroke-linecap="round"/><ellipse cx="0" cy="-6" rx="11" ry="7" fill="#b9bdd4"/><circle cx="-7" cy="-13" r="4.5" fill="#b9bdd4"/><circle cx="-7" cy="-13" r="2.2" fill="#ffc2a3"/><circle cx="-8" cy="-7" r="1.4" fill="${INK}"/><circle cx="-11.5" cy="-5" r="1.4" fill="#ff8a7a"/></g></g>
+ <path d="M190,170 v14 M190,170 l-4,5 M190,170 l4,5 M190,184 l-4,-5 M190,184 l4,-5" fill="none" stroke="${RED}" stroke-width="2" stroke-linecap="round" opacity=".7"/>`;
+
+S.small=`${bg('#e3fbf5')}
+ ${floor(184,'#bff0de')}
+ <g opacity=".28">${at(70,190,1.35,K('orange',{armL:20,armR:-20}))}</g>
+ <circle cx="156" cy="150" r="38" fill="#fff" opacity=".75"/>
+ ${sh(156,186,16,'shadow')}
+ ${at(156,184,.44,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open'}),'hop')}
+ <circle cx="156" cy="150" r="38" fill="none" stroke="${VIO}" stroke-width="5"/>
+ <path d="M128,178 l-20,18" stroke="${VIO}" stroke-width="8" stroke-linecap="round"/>
+ ${spark(126,108,5,SUN,0)}${spark(188,112,5,SUN,.8)}${spark(186,184,4,RED,.4)}`;
+
+S.hand=`${bg('#ffe9d6')}
+ <circle cx="104" cy="96" r="84" fill="#ffdcc0"/>
+ <path d="M150,52 q14,10 14,26 M160,42 q20,14 20,38 M58,52 q-14,10 -14,26" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <g transform="translate(104,186)"><g class="wave">
+  <rect x="-24" y="-28" width="48" height="44" rx="8" fill="${SKY}"/><rect x="-26" y="-34" width="52" height="12" rx="6" fill="#8dc0ff"/>
+  <g fill="#ffcf9e" stroke="#e0a070" stroke-width="1.8">
+   <rect x="-48" y="-78" width="15" height="40" rx="7.5" transform="rotate(-32 -40 -50)"/>
+   <rect x="-27" y="-140" width="13" height="56" rx="6.5"/><rect x="-13" y="-148" width="13" height="64" rx="6.5"/><rect x="1" y="-146" width="13" height="62" rx="6.5"/><rect x="15" y="-134" width="13" height="50" rx="6.5"/>
+   <rect x="-29" y="-96" width="58" height="64" rx="22"/>
+  </g>
+  <path d="M-14,-66 q14,10 30,-2 M-16,-52 q10,8 22,4" fill="none" stroke="#e0a070" stroke-width="1.8" stroke-linecap="round"/>
+ </g></g>
+ ${at(30,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+/* Tag 3 */
+const wheel=(x,y)=>`<circle cx="${x}" cy="${y}" r="16" fill="${INK}"/><g class="spinfast"><circle cx="${x}" cy="${y}" r="8" fill="#dfe6f2"/><path d="M${x-8},${y} h16 M${x},${y-8} v16" stroke="#9aa8c0" stroke-width="2.5"/></g>`;
+S.car=`${bg('#cdeeff')}${sun(34,34,12)}${cloud(120,30,.9)}${cloud(176,62,.6)}${hills('#8fe0a8','#6fd08f',132)}
+ ${floor(150,'#6b7a99')}<rect y="150" width="200" height="5" fill="#8f9bb5"/>
+ <g class="road"><path d="M-40,178 h320" stroke="#fff" stroke-width="5" stroke-dasharray="20 20"/></g>
+ <circle class="puff" cx="26" cy="140" r="7" fill="#fff"/><circle class="puff" style="animation-delay:1.1s" cx="22" cy="136" r="5" fill="#fff"/>
+ <g class="walkbob">
+  <clipPath id="cwin"><path d="M70,112 q5,-28 24,-28 h28 q16,0 24,28 Z"/></clipPath>
+  <path d="M60,116 q6,-40 32,-40 h32 q24,0 32,40 Z" fill="#d93a33"/>
+  <path d="M70,112 q5,-28 24,-28 h28 q16,0 24,28 Z" fill="#bfe9ff"/>
+  <g clip-path="url(#cwin)">${at(110,146,.52,cat({tail:false,eyes:'happy',mouth:'open'}))}</g>
+  <path d="M100,84 v28" stroke="#d93a33" stroke-width="5"/>
+  <rect x="32" y="110" width="138" height="38" rx="14" fill="${RED}"/>
+  <rect x="160" y="118" width="12" height="10" rx="4" fill="${SUN}"/><rect x="30" y="120" width="8" height="10" rx="3" fill="#ff8a7a"/>
+  <rect x="96" y="124" width="14" height="4" rx="2" fill="#fff" opacity=".8"/><path d="M40,138 h122" stroke="#d93a33" stroke-width="3" stroke-linecap="round"/>
+ </g>
+ ${wheel(66,150)}${wheel(142,150)}
+ <path d="M4,96 h18 M0,110 h14 M6,124 h12" stroke="#fff" stroke-width="3" stroke-linecap="round" class="glow"/>`;
+
+S.run=`${bg('#e3fbf5')}${cloud(40,30,.8)}${cloud(150,46,.6)}
+ <g class="scroll">${tree(30,150,.9)}${tree(130,150,.7)}${tree(230,150,.9)}${tree(330,150,.7)}</g>
+ ${floor(150,'#8fe0a8')}${floor(168,'#f3d9a4')}
+ <g class="road"><path d="M-40,190 h320" stroke="#e4c283" stroke-width="4" stroke-dasharray="14 26" stroke-linecap="round"/></g>
+ ${sh(104,184,34)}
+ <circle class="puff" cx="58" cy="176" r="8" fill="#fff"/><circle class="puff" style="animation-delay:.8s" cx="48" cy="170" r="6" fill="#fff"/><circle class="puff" style="animation-delay:1.5s" cx="64" cy="168" r="5" fill="#fff"/>
+ <g transform="translate(108,182) rotate(9) scale(-1,1)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>
+ <path d="M10,84 h34 M4,104 h26 M14,124 h30" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <path class="sweat" d="${tear(150,70)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(160,86)}" fill="${SKY}"/>`;
+
+const fan=`<g class="wave"><path d="M0,0 L-20,-30 A36,36 0 0 1 20,-30 Z" fill="${SKY}"/><path d="M0,0 L-10,-34 M0,0 L0,-36 M0,0 L10,-34" stroke="#fff" stroke-width="1.6"/><circle r="3" fill="${INK}"/></g>`;
+S.hot=`${bg('#ffe2a8')}${sun(42,42,20)}
+ <path class="heatw" d="M90,30 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="${ORA}" stroke-width="4" stroke-linecap="round"/><path class="heatw" style="animation-delay:.5s" d="M116,40 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path class="heatw" style="animation-delay:1s" d="M142,32 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="${ORA}" stroke-width="4" stroke-linecap="round"/>
+ <path d="M0,170 q50,-16 100,0 t100,0 v30 h-200 Z" fill="#f6c27a"/>
+ <g fill="#4fc27f"><rect x="16" y="120" width="18" height="60" rx="9"/><rect x="2" y="134" width="12" height="26" rx="6"/><rect x="2" y="150" width="20" height="10" rx="5"/><rect x="36" y="128" width="12" height="24" rx="6"/><rect x="28" y="142" width="20" height="10" rx="5"/></g><circle cx="25" cy="118" r="5" fill="${RED}"/>
+ ${thermo(178,52,62,RED)}
+ ${sh(104,188,36)}${at(104,186,1,cat({eyes:'closed',mouth:'big',armL:30,armR:-120,armsFront:true,prop:fan}))}
+ <path class="sweat" d="${tear(62,88)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.5s" d="${tear(146,100)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.9s" d="${tear(70,120)}" fill="${SKY}"/>`;
+
+const winter=`<path d="M-27,-50 Q0,-40 27,-50 L27,-40 Q0,-30 -27,-40 Z" fill="${RED}"/><path d="M12,-42 l4,26 h12 l-4,-28 Z" fill="${RED}"/><path d="M15,-22 h12 M-14,-45 l2,8 M0,-43 v9" stroke="#fff" stroke-width="2.4"/>`;
+const beanie=`<path d="M-28,-96 Q0,-136 28,-96 Z" fill="${RED}"/><rect x="-30" y="-101" width="60" height="10" rx="5" fill="#fff"/><circle cx="0" cy="-126" r="8" fill="#fff"/>`;
+S.cold=`${bg('#dff1ff')}<circle cx="40" cy="60" r="50" fill="#eaf7ff"/><circle cx="168" cy="110" r="44" fill="#eaf7ff"/>
+ <path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#fff"/>
+ ${thermo(176,44,14,SKY)}
+ <g stroke="#b9c9dd" stroke-width="1.6"><circle cx="34" cy="160" r="20" fill="#fff"/><circle cx="34" cy="130" r="14" fill="#fff"/></g><circle cx="29" cy="127" r="1.8" fill="${INK}"/><circle cx="39" cy="127" r="1.8" fill="${INK}"/><path d="M34,131 l10,3 -10,2 Z" fill="${ORA}"/><path d="M18,146 l-12,-10 M50,146 l12,-10" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>
+ ${at(104,184,1,cat({mouth:'wavy',armL:-40,armR:40,bow:false,hat:beanie,extra:winter,tail:false}),'shiver')}
+ <ellipse class="puff" cx="136" cy="122" rx="9" ry="6" fill="#fff"/><ellipse class="puff" style="animation-delay:1.1s" cx="142" cy="116" rx="7" ry="5" fill="#fff"/>
+ ${[[20,0,3],[52,1.2,2.2],[88,2.4,3],[130,.6,2.4],[160,1.8,3.2],[186,3,2.2],[110,3.4,2]].map(([x,d,r])=>`<circle class="snow" style="animation-delay:-${d}s" cx="${x}" cy="0" r="${r}" fill="#fff"/>`).join('')}`;
+
+S.door=`${bg('#fff1c9')}
+ <g fill="#ffe39a">${[[20,30],[20,90],[176,60],[176,120],[20,150]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5"/>`).join('')}</g>
+ ${floor(172,'#e4b77a')}<rect y="172" width="200" height="5" fill="#f0cb95"/>
+ <rect x="52" y="30" width="96" height="146" rx="8" fill="#b07a45"/>
+ <clipPath id="dopen"><rect x="60" y="38" width="80" height="136"/></clipPath>
+ <rect x="60" y="38" width="80" height="136" fill="#fff6c8"/>
+ <g clip-path="url(#dopen)"><circle cx="104" cy="96" r="50" fill="#ffe9a8"/>${at(108,172,.86,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open',eyes:'happy'}))}</g>
+ <g class="dooropen"><rect x="60" y="38" width="80" height="136" fill="${SKY}"/><rect x="70" y="50" width="60" height="50" rx="6" fill="#74b3ff"/><rect x="70" y="110" width="60" height="52" rx="6" fill="#74b3ff"/><circle cx="130" cy="108" r="5" fill="${SUN}"/></g>
+ <rect x="62" y="174" width="76" height="10" rx="5" fill="#5fd3c0"/>
+ <rect x="10" y="150" width="26" height="26" rx="5" fill="${ORA}"/><g fill="#4fc27f"><ellipse cx="16" cy="136" rx="7" ry="16" transform="rotate(-18 16 136)"/><ellipse cx="30" cy="136" rx="7" ry="16" transform="rotate(18 30 136)"/><ellipse cx="23" cy="130" rx="7" ry="18"/></g>
+ <rect x="162" y="60" width="28" height="34" rx="4" fill="#fff" stroke="#b07a45" stroke-width="4"/><circle cx="176" cy="74" r="6" fill="${SUN}"/><path d="M166,90 l8,-8 6,5 6,-9 v12 Z" fill="${MINT}"/>`;
+
+/* Tag 4 */
+S.bed=`${bg('#cfc8f5')}
+ <rect x="124" y="18" width="58" height="54" rx="8" fill="#2d2a6e" stroke="#fff" stroke-width="5"/><circle cx="164" cy="38" r="11" fill="#ffe89a"/><circle cx="169" cy="34" r="10" fill="#2d2a6e"/>${spark(138,34,4,'#ffe89a',0)}${spark(148,56,3.5,'#ffe89a',.8)}${spark(170,60,3,'#ffe89a',1.4)}
+ ${floor(170,'#b5addf')}
+ <rect x="14" y="80" width="22" height="96" rx="9" fill="#b07a45"/><rect x="172" y="120" width="16" height="56" rx="7" fill="#b07a45"/>
+ <rect x="22" y="138" width="160" height="30" rx="8" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>
+ <rect x="26" y="166" width="10" height="16" rx="3" fill="#8a5a30"/><rect x="170" y="166" width="10" height="16" rx="3" fill="#8a5a30"/>
+ <ellipse cx="66" cy="134" rx="36" ry="15" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>
+ ${at(66,168,.66,cat({tail:false,eyes:'closed',armL:60,armR:-60}))}
+ <g class="breathe"><path d="M34,146 q30,-10 60,-20 q54,-12 90,14 v28 h-150 Z" fill="${SKY}"/><g fill="#fff" opacity=".7"><circle cx="110" cy="140" r="4"/><circle cx="140" cy="150" r="4"/><circle cx="80" cy="154" r="4"/><circle cx="166" cy="146" r="4"/></g></g>
+ <path d="M34,146 q30,-10 60,-20" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="#fff"><text class="zz" x="92" y="92" font-size="14">z</text><text class="zz" style="animation-delay:1s" x="104" y="76" font-size="19">z</text><text class="zz" style="animation-delay:2s" x="118" y="58" font-size="25">Z</text></g>
+ <ellipse cx="60" cy="188" rx="12" ry="5" fill="${RED}"/><ellipse cx="88" cy="190" rx="12" ry="5" fill="${RED}"/>`;
+
+S.sit=`${bg('#e3fbf5')}
+ <rect x="14" y="22" width="46" height="40" rx="6" fill="#fff" stroke="#b07a45" stroke-width="4"/><path d="M20,56 l12,-14 8,8 10,-14 v20 Z" fill="${MINT}"/><circle cx="46" cy="34" r="5" fill="${SUN}"/>
+ ${floor(172,'#bff0de')}<ellipse cx="100" cy="186" rx="80" ry="11" fill="${VIO}" opacity=".3"/>
+ <rect x="60" y="60" width="80" height="70" rx="12" fill="#b07a45"/><rect x="70" y="70" width="60" height="50" rx="8" fill="#c98a4b"/>
+ <rect x="62" y="150" width="10" height="36" rx="4" fill="#8a5a30"/><rect x="128" y="150" width="10" height="36" rx="4" fill="#8a5a30"/>
+ ${at(100,148,1,cat({eyes:'happy'}),'sitdown')}
+ <rect x="54" y="140" width="92" height="14" rx="7" fill="#c98a4b"/><ellipse cx="100" cy="141" rx="38" ry="6" fill="${SUN}"/>
+ <ellipse cx="88" cy="142" rx="10" ry="5.5" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.6"/><ellipse cx="112" cy="142" rx="10" ry="5.5" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.6"/>
+ <g class="float"><path d="M172,60 v40 M172,104 l-9,-12 M172,104 l9,-12" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+
+S.eye=`${bg('#ece6ff')}<circle cx="100" cy="96" r="86" fill="#f6f2ff"/>
+ <path d="M40,46 q60,-34 120,0" fill="none" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>
+ <g class="blink">
+  <path d="M40,74 l-10,-12 M64,56 l-6,-14 M100,48 v-15 M136,56 l6,-14 M160,74 l10,-12" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>
+  <path d="M22,100 Q100,34 178,100 Q100,166 22,100 Z" fill="#fff" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
+  <g class="cloud"><circle cx="100" cy="100" r="33" fill="${SKY}"/><circle cx="100" cy="100" r="33" fill="none" stroke="#2f6fd0" stroke-width="4"/><circle cx="100" cy="100" r="15" fill="${INK}"/><circle cx="110" cy="88" r="7" fill="#fff"/><circle cx="90" cy="110" r="3.5" fill="#fff" opacity=".8"/></g>
+ </g>
+ ${at(32,196,.5,cat({armR:-158,armsFront:true}))}${spark(170,150,7,SUN,0)}${spark(150,172,5,VIO,.7)}`;
+
+const fork=`<path d="M0,4 v-24 M-4,-20 v-9 M0,-20 v-9 M4,-20 v-9 M-4,-20 h8" fill="none" stroke="#b9c4d8" stroke-width="2.6" stroke-linecap="round"/>`;
+const knife=`<path d="M0,4 v-12" stroke="#b9c4d8" stroke-width="3" stroke-linecap="round"/><path d="M-2,-8 v-20 q7,6 4,20 Z" fill="#dfe6f2"/>`;
+S.food=`${bg('#fff1c9')}<circle cx="100" cy="80" r="70" fill="#ffe7a3"/>
+ ${at(100,160,.92,cat({eyes:'spark',mouth:'tongue',armL:70,armR:-70,prop:knife,propL:fork,tail:false}))}
+ ${floor(140,MINT)}<g fill="#fff" opacity=".35">${[0,40,80,120,160].map(x=>`<rect x="${x}" y="140" width="20" height="20"/><rect x="${x+20}" y="160" width="20" height="20"/><rect x="${x}" y="180" width="20" height="20"/>`).join('')}</g>
+ <ellipse cx="100" cy="162" rx="78" ry="20" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><ellipse cx="100" cy="162" rx="60" ry="14" fill="#f4f1fb"/>
+ <path d="M40,160 a24,24 0 0 1 48,0 Z" fill="#ffcf5c" stroke="#e0a83a" stroke-width="2"/><path d="M44,146 q4,-8 8,0 q4,-8 8,0 q4,-8 8,0 q4,-8 8,0 q4,-8 8,0" fill="none" stroke="#4fc27f" stroke-width="5" stroke-linecap="round"/><circle cx="56" cy="142" r="3.5" fill="${RED}"/><circle cx="72" cy="142" r="3.5" fill="${RED}"/>
+ <circle cx="108" cy="150" r="14" fill="${RED}"/><circle cx="103" cy="145" r="4" fill="#fff" opacity=".5"/><path d="M108,137 q1,-6 5,-8" stroke="#7a4a21" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse cx="116" cy="131" rx="6" ry="3" fill="#4fc27f" transform="rotate(-25 116 131)"/>
+ <path d="M128,150 h36 q0,18 -18,18 q-18,0 -18,-18 Z" fill="${SKY}"/><ellipse cx="146" cy="150" rx="18" ry="5" fill="#ffd98a"/>
+ <circle class="smoke" cx="140" cy="142" r="5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="150" cy="140" r="4.5" fill="#fff"/>
+ ${spark(26,40,6,RED,0)}${spark(176,46,6,VIO,.6)}`;
+
+const roller=`<g class="bob"><path d="M0,2 v-22 h12" fill="none" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="10" y="-28" width="26" height="14" rx="5" fill="${SKY}"/></g>`;
+const pawprint=(x,y,r)=>`<g transform="translate(${x},${y}) rotate(${r})" fill="${SKY}"><ellipse cx="0" cy="2" rx="5" ry="4"/><circle cx="-5" cy="-4" r="2"/><circle cx="0" cy="-6" r="2"/><circle cx="5" cy="-4" r="2"/></g>`;
+S.blue=`${bg('#f4f8ff')}
+ <rect class="grow" x="12" y="20" width="176" height="30" rx="15" fill="${SKY}"/><rect class="grow" style="animation-delay:.5s" x="12" y="58" width="150" height="30" rx="15" fill="#74b3ff"/><rect class="grow" style="animation-delay:1s" x="12" y="96" width="96" height="30" rx="15" fill="${SKY}"/>
+ ${floor(172,'#d7e6f7')}
+ <path d="M20,140 h44 l-5,40 h-34 Z" fill="#b9c4d8"/><ellipse cx="42" cy="140" rx="22" ry="6" fill="${SKY}"/><path d="M22,138 q20,-26 40,0" fill="none" stroke="#9aa8c0" stroke-width="3"/><path d="M58,146 q3,12 0,18 q-3,-6 0,-18" fill="${SKY}"/>
+ ${pawprint(84,188,-20,)}${pawprint(104,180,10)}${pawprint(178,190,20)}
+ ${sh(118,188,34)}${at(118,186,1,cat({armR:-140,armsFront:true,prop:roller,eyes:'happy',mid:`<ellipse cx="6" cy="-22" rx="7" ry="5" fill="${SKY}"/>`}))}
+ <g transform="translate(150,110)"><g class="flutter"><g class="flap"><path d="M0,0 q-12,-14 -16,-2 q-2,10 16,2 Z M0,0 q12,-14 16,-2 q2,10 -16,2 Z" fill="#2f6fd0"/></g><rect x="-1" y="-6" width="2" height="12" rx="1" fill="${INK}"/></g></g>`;
+
+/* Tag 5 */
+S.table=`${bg('#fff1c9')}
+ <rect x="126" y="18" width="56" height="50" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="5"/><path d="M154,18 v50 M126,43 h56" stroke="#fff" stroke-width="4"/>
+ ${floor(170,'#e4b77a')}<rect y="170" width="200" height="5" fill="#f0cb95"/>
+ ${at(100,188,.64,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}),'peek')}
+ <rect x="38" y="124" width="12" height="64" rx="5" fill="#8a5a30"/><rect x="150" y="124" width="12" height="64" rx="5" fill="#8a5a30"/>
+ <rect x="24" y="110" width="152" height="16" rx="8" fill="#c98a4b"/>
+ <path d="M58,108 h84 v14 l-10.5,8 -10.5,-8 -10.5,8 -10.5,-8 -10.5,8 -10.5,-8 -10.5,8 -10.5,-8 Z" fill="${MINT}"/>
+ <path d="M62,110 q-2,-22 -8,-30 h28 q-6,8 -8,30 Z" fill="${SKY}"/>
+ <g class="flower"><path d="M68,82 v-30" stroke="#4fc27f" stroke-width="3" stroke-linecap="round"/><g fill="${RED}"><circle cx="68" cy="42" r="6"/><circle cx="60" cy="48" r="6"/><circle cx="76" cy="48" r="6"/><circle cx="63" cy="57" r="6"/><circle cx="73" cy="57" r="6"/></g><circle cx="68" cy="50" r="5" fill="${SUN}"/></g>
+ <path d="M118,88 h28 v14 q0,8 -8,8 h-12 q-8,0 -8,-8 Z" fill="${VIO}"/><path d="M146,92 q10,0 8,8 q-2,6 -8,5" fill="none" stroke="${VIO}" stroke-width="4"/>
+ <circle class="smoke" cx="128" cy="80" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.3s" cx="136" cy="78" r="4" fill="#fff"/>`;
+
+S.chair=`${bg('#ece6ff')}<circle cx="100" cy="92" r="80" fill="#f6f2ff"/>
+ ${floor(176,'#d6ccf5')}${sh(100,186,52)}
+ <rect x="66" y="126" width="10" height="56" rx="4" fill="#b52f29"/><rect x="124" y="126" width="10" height="56" rx="4" fill="#b52f29"/>
+ <rect x="62" y="34" width="76" height="88" rx="14" fill="${RED}"/><rect x="74" y="46" width="14" height="64" rx="7" fill="#ff7a70"/><rect x="93" y="46" width="14" height="64" rx="7" fill="#ff7a70"/><rect x="112" y="46" width="14" height="64" rx="7" fill="#ff7a70"/>
+ <g class="breathe"><path d="M118,110 q22,4 18,-12" fill="none" stroke="#e08a2e" stroke-width="8" stroke-linecap="round"/><ellipse cx="104" cy="106" rx="27" ry="13" fill="#ffb347" stroke="#e08a2e" stroke-width="1.6"/></g>
+ <polygon points="70,98 72,84 82,92" fill="#ffb347" stroke="#e08a2e" stroke-width="1.4" stroke-linejoin="round"/><polygon points="86,91 95,83 96,97" fill="#ffb347" stroke="#e08a2e" stroke-width="1.4" stroke-linejoin="round"/>
+ <ellipse cx="83" cy="104" rx="15" ry="12" fill="#ffb347" stroke="#e08a2e" stroke-width="1.6"/>
+ <path d="M74,104 q3.5,3.5 7,0 M85,104 q3.5,3.5 7,0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/><path d="M81.6,108 h3 l-1.5,2 Z" fill="#ff8a7a"/>
+ <rect x="52" y="116" width="96" height="18" rx="9" fill="#d93a33"/>
+ <rect x="56" y="132" width="11" height="54" rx="4" fill="#d93a33"/><rect x="133" y="132" width="11" height="54" rx="4" fill="#d93a33"/>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="112" y="84" font-size="13">z</text><text class="zz" style="animation-delay:1s" x="124" y="70" font-size="18">z</text></g>
+ ${at(174,192,.46,cat({eyes:'happy'}))}`;
+
+S.play=`${bg('#e3fbf5')}<circle cx="60" cy="50" r="34" fill="#f0fdf8"/>
+ ${floor(172,'#bff0de')}
+ <path d="M10,186 q14,-10 26,0 t26,0 t26,-2 t30,-6" fill="none" stroke="${VIO}" stroke-width="3" stroke-linecap="round"/>
+ ${sh(70,188,34)}${at(70,186,1,cat({armL:20,armR:-72,armRcls:'bob',eyes:'happy',mouth:'open',headCls:'tilt'}))}
+ <g class="roll"><circle cx="128" cy="164" r="20" fill="${VIO}"/><path d="M112,156 q16,-12 32,2 M110,166 q18,10 36,-2 M118,148 q-6,18 6,34 M134,146 q10,16 0,36" fill="none" stroke="#c9b6ff" stroke-width="2.4" stroke-linecap="round"/></g>
+ <g transform="translate(176,184)"><path d="M10,-4 q12,2 10,-8" fill="none" stroke="#8a8fb0" stroke-width="2" stroke-linecap="round"/><ellipse cx="0" cy="-6" rx="11" ry="7" fill="${SUN}"/><circle cx="-7" cy="-13" r="4.5" fill="${SUN}"/><circle cx="-8" cy="-7" r="1.4" fill="${INK}"/></g>
+ ${spark(150,60,7,SUN,0)}${spark(176,96,5,RED,.7)}${spark(24,110,5,VIO,.3)}`;
+
+const wedge=(a,c)=>`<path transform="rotate(${a} 124 120)" d="M124,120 L124,92 A28,28 0 0 1 148.2,106 Z" fill="${c}"/>`;
+S.ball=`${bg('#cdeeff')}${sun(36,34,12)}${cloud(150,36,.8)}
+ <rect y="128" width="200" height="40" fill="#5cc3ff"/><path d="M0,134 q12,-6 24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0" fill="none" stroke="#fff" stroke-width="2.5" opacity=".7" class="cloud"/>
+ ${floor(160,'#ffe08a')}
+ ${sh(124,188,24,'shadow')}
+ <g class="jump"><g class="spin"><circle cx="124" cy="120" r="28" fill="#fff"/>${wedge(0,RED)}${wedge(120,SUN)}${wedge(240,SKY)}<circle cx="124" cy="120" r="5" fill="#fff"/></g><circle cx="124" cy="120" r="28" fill="none" stroke="#cbc2e6" stroke-width="1.6"/></g>
+ ${sh(50,190,30)}${at(50,188,.86,cat({armL:30,armR:-120,armsFront:true,headCls:'tilt',mouth:'open'}))}
+ <path d="M176,178 l8,-22 8,22 Z" fill="${RED}"/><path d="M184,156 v-14" stroke="#b07a45" stroke-width="2"/>`;
+
+const leafU=`<path d="M0,4 v-40" stroke="#3aa568" stroke-width="3.5" stroke-linecap="round"/><g transform="translate(0,-40) rotate(-12)"><path d="M-44,0 Q-20,-34 0,-30 Q24,-34 46,0 Q24,-10 0,-6 Q-20,-10 -44,0 Z" fill="#9be8b4" stroke="#3aa568" stroke-width="2.5" stroke-linejoin="round"/><path d="M-40,-2 Q0,-22 42,-2" fill="none" stroke="#3aa568" stroke-width="2"/></g>`;
+S.green=`${bg('#dff7e6')}${cloud(40,30,.8)}
+ <circle cx="170" cy="60" r="36" fill="#4fc27f"/><circle cx="150" cy="78" r="22" fill="#62d08f"/><circle cx="188" cy="84" r="20" fill="#62d08f"/><rect x="166" y="90" width="9" height="86" rx="3" fill="#b07a45"/>
+ ${hills('#62d08f','#4fc27f',166)}
+ <path d="M10,176 l4,-14 4,14 4,-18 4,18 M176,180 l4,-14 4,14 4,-18 4,18" fill="none" stroke="#3aa568" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+ <g transform="translate(44,170)"><g class="hop"><ellipse cx="-16" cy="6" rx="10" ry="5" fill="#3aa568"/><ellipse cx="16" cy="6" rx="10" ry="5" fill="#3aa568"/><ellipse cx="0" cy="0" rx="22" ry="15" fill="#4fc27f"/><ellipse cx="0" cy="4" rx="13" ry="8" fill="#b7efc8"/><circle cx="-10" cy="-14" r="7.5" fill="#4fc27f"/><circle cx="10" cy="-14" r="7.5" fill="#4fc27f"/><circle cx="-10" cy="-15" r="4" fill="#fff"/><circle cx="10" cy="-15" r="4" fill="#fff"/><circle cx="-10" cy="-15" r="2" fill="${INK}"/><circle cx="10" cy="-15" r="2" fill="${INK}"/><path d="M-8,-3 q8,6 16,0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/></g></g>
+ ${sh(112,188,34)}${at(112,186,.96,cat({armR:-155,armsFront:true,prop:leafU,eyes:'happy'}))}
+ <circle cx="84" cy="180" r="9" fill="#62d08f"/><path d="M84,171 q1,-5 4,-6" stroke="#7a4a21" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+
+/* Tag 6 */
+S.fish=`${bg('#d9fbf1')}<circle cx="30" cy="34" r="46" fill="#bff3e4"/><circle cx="176" cy="60" r="30" fill="#bff3e4"/>
+ ${at(48,196,.9,cat({tail:false}),'peek')}
+ ${floor(140,'#c98a4b')}<rect y="140" width="200" height="9" fill="#e0a868"/>
+ <ellipse cx="30" cy="142" rx="10" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/><ellipse cx="66" cy="142" rx="10" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/>
+ <ellipse cx="126" cy="143" rx="30" ry="5" fill="${INK}" opacity=".15"/>
+ <circle cx="126" cy="104" r="39" fill="#bfe9ff" opacity=".75"/>
+ <clipPath id="bowl"><circle cx="126" cy="104" r="37"/></clipPath>
+ <path clip-path="url(#bowl)" d="M84,88 q7,-5 14,0 t14,0 t14,0 t14,0 t14,0 t14,0 V146 H84 Z" fill="#5cc3ff" opacity=".8"/>
+ <path d="M108,138 q3,-10 0,-18 M144,138 q-4,-12 2,-22" stroke="${MINT}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+ <g class="swim"><path d="M112,112 l-11,-8 v16 Z" fill="#ff8a3c"/><ellipse cx="124" cy="112" rx="14" ry="9" fill="#ffa53c"/><path d="M120,104 q5,-7 10,0" fill="#ff8a3c"/><circle cx="131" cy="110" r="2.3" fill="${INK}"/><path d="M118,108 q3,4 0,8" stroke="#fff" stroke-width="1.6" fill="none"/></g>
+ <circle class="bubble" cx="140" cy="98" r="3" fill="#fff"/><circle class="bubble" style="animation-delay:1s" cx="146" cy="104" r="2" fill="#fff"/><circle class="bubble" style="animation-delay:1.7s" cx="112" cy="96" r="2.4" fill="#fff"/>
+ <circle cx="126" cy="104" r="39" fill="none" stroke="#fff" stroke-width="4"/>
+ <path d="M100,84 q8,-14 22,-17" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9"/>
+ <ellipse cx="126" cy="66" rx="24" ry="5" fill="none" stroke="#fff" stroke-width="4"/>`;
+
+S.cup=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="86" fill="#ffdcc0"/>
+ <ellipse cx="100" cy="174" rx="78" ry="12" fill="#fff" stroke="#e7cdb6" stroke-width="1.6"/>
+ <path d="M146,110 q34,2 26,32 q-6,18 -30,16" fill="none" stroke="${RED}" stroke-width="11" stroke-linecap="round"/>
+ <ellipse cx="100" cy="98" rx="50" ry="11" fill="#7a4a21"/>
+ ${at(100,142,.74,cat({tail:false,eyes:'happy',mouth:'open'}),'peek')}
+ <path d="M50,98 q50,16 100,0 q0,74 -50,74 q-50,0 -50,-74 Z" fill="${RED}"/>
+ <path d="M50,98 q50,16 100,0" fill="none" stroke="#ff7a70" stroke-width="5"/>
+ <g fill="#fff" opacity=".85"><circle cx="76" cy="128" r="5"/><circle cx="100" cy="142" r="5"/><circle cx="124" cy="128" r="5"/><circle cx="88" cy="156" r="4"/><circle cx="114" cy="158" r="4"/></g>
+ <ellipse cx="76" cy="102" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/><ellipse cx="124" cy="102" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4"/>
+ <circle class="smoke" cx="52" cy="78" r="6" fill="#fff"/><circle class="smoke" style="animation-delay:1s" cx="150" cy="74" r="6" fill="#fff"/><circle class="smoke" style="animation-delay:2s" cx="60" cy="64" r="5" fill="#fff"/>
+ <path d="M30,176 h30" stroke="#b9c4d8" stroke-width="4" stroke-linecap="round"/><ellipse cx="26" cy="176" rx="8" ry="5" fill="#dfe6f2"/>`;
+
+const gift=`<rect x="-13" y="-10" width="26" height="22" rx="3" fill="${VIO}"/><rect x="-3" y="-10" width="6" height="22" fill="${SUN}"/><rect x="-13" y="-2" width="26" height="5" fill="${SUN}"/><path d="M0,-10 q-10,-12 -12,-2 q2,4 12,2 Z M0,-10 q10,-12 12,-2 q-2,4 -12,2 Z" fill="${SUN}"/>`;
+S.give=`${bg('#fff3cf')}<circle cx="100" cy="90" r="74" fill="#ffe7a3"/>
+ ${floor(180,'#ffe08a')}${sh(50,188,30)}${sh(152,188,30)}
+ ${at(50,186,.86,cat({armR:-92,eyes:'happy'}))}
+ ${flipAt(152,186,.86,K('orange',{armR:-92,eyes:'happy',mouth:'open'}))}
+ <g transform="translate(88,140)"><g class="givemove">${gift}</g></g>
+ ${heart(100,84,1.1,RED,0)}${heart(84,98,.7,'#ff8a7a',.9)}${heart(118,100,.7,SUN,1.7)}`;
+
+S.love=`${bg('#ffe9d6')}
+ ${heartS(100,112,7.4,'#ffd2b0')}
+ ${floor(184,'#ffd9bd')}${sh(100,190,56)}
+ ${at(84,188,1.04,cat({armL:30,armR:-58,eyes:'happy',armsFront:false}),'sway')}
+ ${at(132,188,.62,K('grey',{eyes:'happy',armL:40,armR:-20}),'sway')}
+ <ellipse cx="118" cy="150" rx="8" ry="14" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.6" transform="rotate(-62 118 150)"/>
+ ${heart(100,62,1.4,RED,0)}${heart(60,72,.9,'#ff8a7a',.8)}${heart(146,78,1,RED,1.6)}${heart(124,48,.7,SUN,2.2)}`;
+
+S.heart=`${bg('#fff1c9')}<circle cx="100" cy="100" r="88" fill="#ffe7a3"/>
+ ${at(100,100,.64,cat({tail:false,eyes:'happy',mouth:'open'}),'peek')}
+ ${heartS(100,128,5.4,RED,'beat')}
+ <g transform="translate(100,128) scale(5.4)"><g class="beat"><ellipse cx="-5.6" cy="-8.4" rx="2" ry="1.2" fill="#fff" opacity=".55" transform="rotate(-30 -5.6 -8.4)"/></g></g>
+ <ellipse cx="78" cy="84" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4" transform="rotate(24 78 84)"/><ellipse cx="122" cy="84" rx="9" ry="6" fill="#2f2b3d" stroke="#1b1825" stroke-width="1.4" transform="rotate(-24 122 84)"/>
+ ${heart(26,110,.9,RED,0)}${heart(176,96,.8,'#ff8a7a',1)}${heart(160,150,.7,RED,1.8)}${spark(34,46,6,VIO,.3)}${spark(170,40,6,VIO,1)}`;
+
+/* Tag 7 */
+S.friend=`${bg('#e3fbf5')}
+ <path d="M0,22 q50,26 100,0 t100,0" fill="none" stroke="#b07a45" stroke-width="2"/>
+ ${[[20,30,RED],[44,37,SUN],[68,36,SKY],[92,28,VIO],[116,28,MINT],[140,36,RED],[164,37,SUN],[186,30,SKY]].map(([x,y,c])=>`<path d="M${x-8},${y-4} h16 l-8,16 Z" fill="${c}"/>`).join('')}
+ ${floor(182,'#bff0de')}${sh(70,190,32,'shadow')}${sh(132,190,32)}
+ ${at(70,186,.95,cat({armL:30,armR:-64,eyes:'happy',mouth:'open'}),'hop')}
+ ${at(132,186,.95,K('orange',{armL:64,armR:-125,armRcls:'wave',armsFront:true,eyes:'happy',mouth:'open'}))}
+ ${spark(100,70,8,SUN,0)}${spark(24,100,6,VIO,.6)}${spark(180,90,6,RED,1.1)}${heart(101,104,.9,RED,.5)}`;
+
+const earflower=`<g transform="translate(24,-104)"><g fill="${SUN}"><circle cx="0" cy="-6" r="4.5"/><circle cx="6" cy="-1" r="4.5"/><circle cx="-6" cy="-1" r="4.5"/><circle cx="3.5" cy="5.5" r="4.5"/><circle cx="-3.5" cy="5.5" r="4.5"/></g><circle r="3.4" fill="${RED}"/></g>`;
+S.family=`${bg('#ffe7a3')}
+ <rect x="6" y="6" width="188" height="188" rx="16" fill="#fff8e6" stroke="#b07a45" stroke-width="9"/>
+ <path d="M12,150 q44,-16 88,0 t88,0 v36 h-176 Z" fill="#bff0de"/>
+ ${sun(40,40,10)}
+ ${at(56,180,.84,K('grey',{eyes:'happy',armR:-50}))}
+ ${at(144,180,.84,K('white',{eyes:'happy',armL:50,hat:earflower}))}
+ ${at(100,182,.6,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open',tail:false}),'hop')}
+ ${at(160,184,.34,K('orange',{mouth:'open',tail:false}))}
+ ${heart(100,64,1.3,RED,0)}${heart(126,52,.7,'#ff8a7a',1.2)}`;
+
+const ha=(x,y,c,d,sz)=>`<g transform="translate(${x},${y})"><text class="rise" style="animation-delay:${d}s" font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" font-size="${sz}" fill="${c}">HA</text></g>`;
+S.laugh=`${bg('#fff1c9')}
+ <g class="spin" stroke="#ffe39a" stroke-width="10" stroke-linecap="round">${[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<path transform="rotate(${a} 100 104)" d="M100,36 v-30"/>`).join('')}</g>
+ <circle cx="100" cy="104" r="64" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({armL:-34,armR:34,armsFront:true,eyes:'happy',mouth:'big',headCls:'tilt'}),'laugh')}
+ <path class="sweat" d="${tear(58,100)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(142,100)}" fill="${SKY}"/>
+ ${ha(18,70,RED,0,22)}${ha(150,60,VIO,.8,26)}${ha(160,124,ORA,1.6,18)}${ha(10,130,SKY,2.1,18)}`;
+
+S.mother=`${bg('#ffe9d6')}<circle cx="100" cy="96" r="84" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(98,190,50)}
+ ${at(98,188,1.16,K('white',{eyes:'happy',hat:earflower,armL:26,armR:-26}),'sway')}
+ ${at(100,186,.5,cat({eyes:'closed',tail:false,armL:40,armR:-40}),'breathe')}
+ <ellipse cx="74" cy="158" rx="9" ry="16" fill="#fff" stroke="#cbc2e6" stroke-width="1.6" transform="rotate(-58 74 158)"/><ellipse cx="124" cy="158" rx="9" ry="16" fill="#fff" stroke="#cbc2e6" stroke-width="1.6" transform="rotate(58 124 158)"/>
+ ${heart(150,70,1.2,RED,0)}${heart(166,96,.8,'#ff8a7a',1)}${heart(40,80,.9,RED,1.7)}`;
+
+S.boy=`${bg('#cdeeff')}${sun(34,34,12)}${cloud(150,34,.9)}${hills('#8fe0a8','#6fd08f',166)}
+ ${sh(92,188,30)}
+ <rect x="78" y="146" width="11" height="34" rx="5" fill="#ffcf9e"/><rect x="95" y="146" width="11" height="34" rx="5" fill="#ffcf9e"/>
+ <ellipse cx="81" cy="182" rx="11" ry="6" fill="${RED}"/><ellipse cx="103" cy="182" rx="11" ry="6" fill="${RED}"/>
+ <rect x="72" y="130" width="40" height="24" rx="7" fill="#2f6fd0"/>
+ <rect x="58" y="98" width="11" height="36" rx="5.5" fill="#ffcf9e" transform="rotate(12 63 100)"/>
+ <g transform="translate(116,102)"><g class="wave"><rect x="-5.5" y="-36" width="11" height="38" rx="5.5" fill="#ffcf9e" transform="rotate(28)"/><circle cx="19" cy="-36" r="7" fill="#ffcf9e"/></g></g>
+ <rect x="68" y="92" width="48" height="46" rx="12" fill="${SUN}"/><rect x="68" y="108" width="48" height="8" fill="${ORA}"/>
+ <circle cx="66" cy="70" r="5.5" fill="#ffcf9e"/><circle cx="118" cy="70" r="5.5" fill="#ffcf9e"/>
+ <circle cx="92" cy="68" r="26" fill="#ffcf9e"/>
+ <path d="M66,66 q-2,-30 26,-30 q28,0 26,30 q-8,-14 -20,-14 q-6,6 -18,4 q-8,0 -14,10 Z" fill="#7a4a21"/>
+ <circle cx="82" cy="72" r="3.2" fill="${INK}"/><circle cx="102" cy="72" r="3.2" fill="${INK}"/><circle cx="83" cy="71" r="1.1" fill="#fff"/><circle cx="103" cy="71" r="1.1" fill="#fff"/>
+ <path d="M84,82 q8,7 16,0" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>
+ <ellipse cx="76" cy="80" rx="5" ry="3" fill="#ff7a59" opacity=".5"/><ellipse cx="108" cy="80" rx="5" ry="3" fill="#ff7a59" opacity=".5"/>
+ ${at(160,190,.58,cat({armL:125,armLcls:'wave',armsFront:true,mouth:'open'}))}
+ <circle cx="30" cy="180" r="10" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><path d="M30,170 v20 M20,180 h20" stroke="${RED}" stroke-width="2"/>`;
+
+/* Tag 8 */
+const win=(x,y)=>`<rect x="${x}" y="${y}" width="22" height="22" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/><path d="M${x+11},${y} v22 M${x},${y+11} h22" stroke="#fff" stroke-width="2"/>`;
+const backpack=`<rect x="-30" y="-52" width="16" height="30" rx="7" fill="${RED}"/><path d="M-12,-50 q12,6 24,0" fill="none" stroke="${RED}" stroke-width="4"/>`;
+S.school=`${bg('#cdeeff')}${cloud(34,36,.8)}${cloud(170,30,.7)}${hills('#8fe0a8','#6fd08f',166)}
+ <path d="M100,26 v-20" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><path class="flower" d="M100,6 q9,-4 18,0 v11 q-9,-4 -18,0 Z" fill="${MINT}"/>
+ <rect x="82" y="46" width="36" height="44" fill="#ffd98a"/><path d="M76,48 L100,24 L124,48 Z" fill="${RED}" stroke="${RED}" stroke-width="4" stroke-linejoin="round"/>
+ <circle cx="100" cy="64" r="11" fill="#fff" stroke="#b07a45" stroke-width="2.5"/><path d="M100,64 v-7 M100,64 h5" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+ <rect x="36" y="88" width="128" height="92" rx="4" fill="#ffd98a"/><rect x="30" y="78" width="140" height="14" rx="5" fill="${RED}"/>
+ ${win(46,102)}${win(132,102)}${win(46,140)}${win(132,140)}
+ <path d="M84,180 v-36 a16,16 0 0 1 32,0 v36 Z" fill="${VIO}"/><path d="M100,128 v52" stroke="#7b55d9" stroke-width="2"/><circle cx="96" cy="158" r="2" fill="${SUN}"/><circle cx="104" cy="158" r="2" fill="${SUN}"/>
+ <text x="100" y="120" text-anchor="middle" font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" font-size="15" fill="${RED}">ABC</text>
+ <path d="M84,180 q-6,10 -18,20 h68 q-12,-10 -18,-20 Z" fill="#f3d9a4"/>
+ ${at(172,194,.5,cat({feet:'walk',armLcls:'slowA',armRcls:'slowB',armL:0,armR:0,mid:backpack}),'walkbob')}`;
+
+S.write=`${bg('#fff1c9')}
+ <rect x="16" y="16" width="56" height="44" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="4"/><path d="M26,32 h22 M26,44 h34" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+ ${at(92,168,.98,cat({armL:30,armR:-22,armsFront:true,mouth:'tongue',tail:false}))}
+ ${floor(142,'#c98a4b')}<rect y="142" width="200" height="8" fill="#e0a868"/>
+ <path d="M52,152 h100 l12,42 h-124 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>
+ <path d="M62,164 q8,-6 16,0 t16,0 t16,0 t16,0" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
+ <path class="draw" d="M60,178 q8,-6 16,0 t16,0 t16,0 t16,0 t12,0" fill="none" stroke="${VIO}" stroke-width="2.8" stroke-linecap="round"/>
+ <g transform="translate(124,150)"><g class="pen"><path d="M0,0 l14,24" stroke="${SUN}" stroke-width="7" stroke-linecap="round"/><path d="M12,21 l5,8 -9,-3 Z" fill="#ffcf9e"/><path d="M15.5,27 l1.5,2 -3,-1 Z" fill="${INK}"/><path d="M-1,-2 l3,-5" stroke="${RED}" stroke-width="7" stroke-linecap="round"/></g></g>
+ <rect x="166" y="126" width="20" height="22" rx="4" fill="${SKY}"/><path d="M170,126 l-4,-22 M176,126 v-26 M182,126 l4,-20" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>
+ <circle cx="26" cy="156" r="9" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><path d="M21,154 l5,5 4,-7" fill="none" stroke="#cbc2e6" stroke-width="1.6"/>`;
+
+const fp=(x,y)=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="3" fill="#d9b877"/>`;
+S.walk=`${bg('#cdeeff')}${sun(164,34,12)}${cloud(50,32,.9)}
+ <g class="scroll" style="animation-duration:14s">${tree(40,152,.9)}${tree(150,152,.7)}${tree(240,152,.9)}${tree(350,152,.7)}</g>
+ ${floor(152,'#8fe0a8')}${floor(170,'#f3d9a4')}
+ ${fp(16,188)}${fp(30,180)}${fp(44,188)}${fp(58,180)}
+ ${sh(108,188,34)}
+ <g transform="translate(108,186) scale(-1,1)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',headCls:'tilt'})}</g></g>
+ <path d="M178,186 v-44" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M160,138 h28 l8,8 -8,8 h-28 Z" fill="${SUN}"/>
+ <g transform="translate(40,96)"><g class="flutter"><g class="flap"><path d="M0,0 q-12,-14 -16,-2 q-2,10 16,2 Z M0,0 q12,-14 16,-2 q2,10 -16,2 Z" fill="${ORA}"/></g><rect x="-1" y="-6" width="2" height="12" rx="1" fill="${INK}"/></g></g>`;
+
+S.box=`${bg('#ece6ff')}<circle cx="100" cy="84" r="70" fill="#f6f2ff"/>
+ ${floor(176,'#d6ccf5')}${sh(100,186,62)}
+ <rect x="50" y="106" width="100" height="16" fill="#8a5a30"/>
+ <clipPath id="boxc"><rect x="0" y="0" width="200" height="120"/></clipPath>
+ <g clip-path="url(#boxc)">${at(100,150,.9,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open',tail:false}),'pop')}</g>
+ <path d="M50,118 l-24,-20 h22 l14,20 Z" fill="#e4b77a"/><path d="M150,118 l24,-20 h-22 l-14,20 Z" fill="#e4b77a"/>
+ <rect x="50" y="118" width="100" height="66" rx="3" fill="#d9a56a"/><rect x="92" y="118" width="16" height="66" fill="#c98a4b" opacity=".6"/>
+ <path d="M124,166 v-22 M116,152 l8,-10 8,10" fill="none" stroke="#8a5a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M62,166 h20" stroke="#8a5a30" stroke-width="3" stroke-linecap="round"/>
+ ${spark(30,60,7,SUN,0)}${spark(172,50,7,RED,.6)}${spark(160,90,5,VIO,1.2)}`;
+
+S.dark=`${bg('#1f1b3a')}
+ <rect x="118" y="20" width="62" height="56" rx="8" fill="#2d2a6e" stroke="#3a3560" stroke-width="5"/><circle cx="160" cy="42" r="11" fill="#ffe89a"/><circle cx="165" cy="38" r="10" fill="#2d2a6e"/>${spark(134,36,3.5,'#ffe89a',0)}${spark(142,60,3,'#ffe89a',.9)}
+ ${floor(176,'#17142c')}
+ <path d="M14,176 v-60 q0,-12 12,-12 h10 q12,0 12,12 v60" fill="#2a2550"/>
+ ${at(92,186,1.02,cat({fur:'#262241',out:'#3d3866',belly:'#2c2749',tail:true}))}
+ <rect x="160" y="148" width="14" height="30" rx="3" fill="#f4f1fb"/><path d="M167,148 v-6" stroke="${INK}" stroke-width="2"/><circle class="glow" cx="167" cy="136" r="22" fill="#ffe89a" opacity=".25"/><path class="beat" d="M167,126 q-7,9 0,14 q7,-5 0,-14 Z" fill="${ORA}"/>
+ <ellipse cx="167" cy="180" rx="16" ry="4" fill="#2a2550"/>`;
+
+/* Tag 9 */
+const NL={out:'#8f8ad6'};
+S.night=`${bg('#2d2a6e')}
+ <circle cx="44" cy="44" r="26" fill="#ffe89a"/><circle cx="56" cy="36" r="24" fill="#2d2a6e"/>
+ ${spark(100,24,5,'#ffe89a',0)}${spark(150,50,6,'#ffe89a',.6)}${spark(182,22,4,'#ffe89a',1.1)}${spark(84,70,4,'#ffe89a',1.5)}${spark(176,96,5,'#ffe89a',.3)}${spark(20,100,4,'#ffe89a',.9)}
+ <g transform="translate(190,40)"><g class="shoot"><path d="M0,0 l26,-14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle r="3" fill="#fff"/></g></g>
+ <g class="cloud"><ellipse cx="150" cy="118" rx="26" ry="9" fill="#3b3880"/><ellipse cx="168" cy="112" rx="18" ry="10" fill="#3b3880"/></g>
+ <rect x="0" y="150" width="34" height="50" fill="#1f1b4d"/><rect x="8" y="160" width="8" height="10" fill="#ffe89a" class="glow"/><rect x="20" y="176" width="8" height="10" fill="#ffe89a"/>
+ <rect x="168" y="140" width="32" height="60" fill="#1f1b4d"/><rect x="176" y="150" width="8" height="10" fill="#ffe89a"/><rect x="186" y="170" width="8" height="10" fill="#ffe89a" class="glow"/>
+ <rect x="132" y="138" width="14" height="26" fill="#17143c"/>
+ <path d="M30,200 V172 L100,150 L170,172 V200 Z" fill="#1f1b4d"/><path d="M30,172 L100,150 L170,172" fill="none" stroke="#3b3880" stroke-width="4" stroke-linejoin="round"/>
+ ${at(96,156,.82,cat(Object.assign({headCls:'tilt'},NL)))}`;
+
+S.star=`${bg('#4a4496')}
+ ${spark(24,30,5,'#ffe89a',0)}${spark(176,24,5,'#ffe89a',.5)}${spark(30,96,4,'#ffe89a',1)}${spark(186,110,5,'#ffe89a',1.4)}${spark(66,20,3.5,'#fff',.8)}${spark(160,150,4,'#fff',.2)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <circle class="glow" cx="118" cy="78" r="58" fill="#ffe89a" opacity=".35"/>
+ <g class="beat">${star5(118,78,46,SUN,`stroke="${SUN}" stroke-width="8"`)}
+  <circle cx="106" cy="74" r="4.2" fill="${INK}"/><circle cx="130" cy="74" r="4.2" fill="${INK}"/><circle cx="107.5" cy="72.5" r="1.4" fill="#fff"/><circle cx="131.5" cy="72.5" r="1.4" fill="#fff"/>
+  <path d="M110,86 q8,8 16,0" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="98" cy="84" rx="5" ry="3" fill="${ORA}" opacity=".7"/><ellipse cx="138" cy="84" rx="5" ry="3" fill="${ORA}" opacity=".7"/></g>
+ ${at(46,190,.78,cat(Object.assign({armR:-150,armRcls:'bob',armsFront:true,eyes:'spark',mouth:'open'},NL)))}`;
+
+S.fly=`${bg('#cdeeff')}${sun(170,30,11)}
+ <g class="scroll" style="animation-duration:9s">${cloud(40,44,1,'')}${cloud(150,150,.8,'')}${cloud(240,44,1,'')}${cloud(350,150,.8,'')}${cloud(110,96,.6,'')}${cloud(310,96,.6,'')}</g>
+ <path d="M0,190 q50,-14 100,0 t100,0 v10 h-200 Z" fill="#8fe0a8"/>
+ <path d="M14,150 l24,-12 M10,170 l20,-10 M30,176 l18,-9" stroke="#fff" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <g transform="translate(64,152) rotate(62)"><g class="float">
+  <path class="flower" d="M-20,-48 Q-40,-6 -34,30 Q-16,16 0,30 Q16,16 34,30 Q40,-6 20,-48 Z" fill="${RED}"/>
+  ${cat({armL:158,armR:-158,armsFront:true,eyes:'happy',mouth:'open'})}
+ </g></g>
+ <path d="M150,84 q5,-6 10,0 q5,-6 10,0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round" class="float"/><path d="M24,60 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round" class="float"/>`;
+
+S.phone=`${bg('#e3fbf5')}<circle cx="100" cy="100" r="84" fill="#f0fdf8"/>
+ <path d="M40,60 q-14,18 0,36 M28,48 q-22,30 0,60 M160,60 q14,18 0,36 M172,48 q22,30 0,60" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round" class="glow"/>
+ <g class="ring">
+  <rect x="60" y="20" width="80" height="160" rx="16" fill="${INK}"/>
+  <clipPath id="scr"><rect x="67" y="32" width="66" height="130" rx="8"/></clipPath>
+  <rect x="67" y="32" width="66" height="130" rx="8" fill="#ffe7a3"/>
+  <g clip-path="url(#scr)"><circle cx="100" cy="92" r="40" fill="#fff3cf"/>${at(100,146,.6,cat({tail:false,armR:-125,armRcls:'wave',armsFront:true,mouth:'open',eyes:'happy'}))}<rect x="67" y="128" width="66" height="34" fill="#fff8f0"/></g>
+  <circle cx="84" cy="145" r="9" fill="${MINT}"/><circle cx="116" cy="145" r="9" fill="${RED}"/>
+  <path d="M80,145 q4,-5 8,0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M112,147 q4,-5 8,0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="88" y="168" width="24" height="4" rx="2" fill="#7a6a8c"/><circle cx="100" cy="26" r="2" fill="#7a6a8c"/>
+ </g>
+ ${note(30,150,VIO,0)}${note(170,150,RED,1.2)}`;
+
+const phones=`<path d="M-35,-78 Q0,-132 35,-78" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><rect x="-45" y="-88" width="12" height="26" rx="6" fill="${RED}"/><rect x="33" y="-88" width="12" height="26" rx="6" fill="${RED}"/>`;
+S.music=`${bg('#ece6ff')}<circle cx="92" cy="100" r="80" fill="#f6f2ff"/>
+ ${floor(182,'#d6ccf5')}${sh(92,190,36)}
+ <rect x="152" y="112" width="40" height="72" rx="8" fill="${INK}"/><circle class="beat" cx="172" cy="134" r="10" fill="#7a6a8c"/><circle class="beat" cx="172" cy="162" r="14" fill="#7a6a8c"/><circle cx="172" cy="162" r="5" fill="${INK}"/>
+ ${at(92,186,1.02,cat({armL:96,armR:-96,armLcls:'bob',armRcls:'bob',eyes:'happy',mouth:'open',bow:false,hat:phones}),'dance')}
+ ${note(26,90,RED,0)}${note(150,84,VIO,.7)}${note(44,56,SKY,1.4)}${note(132,48,ORA,2)}${note(170,60,MINT,1)}`;
+
+/* Tag 10 */
+S.open=`${bg('#fff1c9')}<circle cx="90" cy="96" r="78" fill="#ffe7a3"/>
+ ${floor(180,'#ffe08a')}${sh(88,188,56)}
+ <rect x="40" y="118" width="96" height="14" fill="#8a5a30"/>
+ <ellipse class="glow" cx="88" cy="124" rx="44" ry="12" fill="#fff6c8"/>
+ <g fill="${SUN}"><circle cx="70" cy="124" r="7"/><circle cx="88" cy="121" r="7"/><circle cx="106" cy="124" r="7"/></g>
+ ${spark(70,96,6,SUN,0)}${spark(96,80,7,'#fff',.5)}${spark(112,100,5,SUN,1)}
+ <g class="lid"><path d="M40,130 q0,-36 48,-36 q48,0 48,36 Z" fill="#b07a45"/><path d="M82,95 h12 v35 h-12 Z" fill="${SUN}"/></g>
+ <rect x="40" y="130" width="96" height="52" rx="5" fill="#c98a4b"/><rect x="40" y="130" width="96" height="8" fill="${SUN}"/><rect x="82" y="130" width="12" height="52" fill="${SUN}"/><rect x="80" y="144" width="16" height="16" rx="4" fill="#8a5a30"/><circle cx="88" cy="151" r="3" fill="${SUN}"/>
+ ${flipAt(166,190,.8,cat({armR:-118,armRcls:'bob',armsFront:true,eyes:'wide',mouth:'o'}))}`;
+
+const bball=`<circle r="10" fill="${ORA}"/><path d="M-10,0 h20 M0,-10 v20 M-7,-7 q7,7 0,14 M7,-7 q-7,7 0,14" fill="none" stroke="#b5571a" stroke-width="1.6"/>`;
+S.throw=`${bg('#cdeeff')}${sun(30,30,11)}${cloud(112,30,.8)}${hills('#8fe0a8','#6fd08f',170)}
+ <path d="M182,186 v-96" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><rect x="160" y="70" width="34" height="28" rx="4" fill="#fff" stroke="#9aa8c0" stroke-width="2.5"/><rect x="170" y="80" width="14" height="12" fill="none" stroke="${RED}" stroke-width="2"/>
+ <path d="M78,112 q54,-70 106,0" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ ${sh(46,190,30)}${at(46,188,.88,cat({armL:30,armR:-120,armRcls:'throwarm',armsFront:true,eyes:'happy',mouth:'open'}))}
+ <g transform="translate(76,112)"><g class="throwball"><g class="spinfast">${bball}</g></g></g>
+ <ellipse cx="178" cy="106" rx="15" ry="4.5" fill="none" stroke="${RED}" stroke-width="3.5"/><path d="M164,107 l5,20 h18 l5,-20 M170,108 l4,19 M186,108 l-4,19 M178,109 v18" fill="none" stroke="#fff" stroke-width="1.8"/>`;
+
+S.head=`${bg('#e3fbf5')}<circle cx="100" cy="100" r="90" fill="#f0fdf8"/>
+ <g opacity=".3">${at(100,216,1.5,cat({tail:false,bow:false}))}</g>
+ <clipPath id="hc"><rect x="0" y="0" width="200" height="152"/></clipPath>
+ <g clip-path="url(#hc)">${at(100,216,1.5,cat({tail:false,eyes:'happy',headCls:'tilt'}))}</g>
+ <g class="spin"><circle cx="100" cy="100" r="78" fill="none" stroke="${RED}" stroke-width="5" stroke-dasharray="14 12" stroke-linecap="round"/></g>
+ <g class="float"><path d="M186,22 l-22,18 M164,40 l3,-13 M164,40 l13,-2" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+
+const feather=`<path d="M0,4 l-6,-34" stroke="#7a6a8c" stroke-width="2" stroke-linecap="round"/><path d="M-6,-30 q-12,-6 -8,-24 q14,6 12,24 Z" fill="${SKY}"/><path d="M-6,-30 q-4,-12 -4,-22" stroke="#2f6fd0" stroke-width="1.4" fill="none"/>`;
+const toe=(x,y,r,d)=>`<g class="toe" style="animation-delay:${d}s"><circle cx="${x}" cy="${y}" r="${r}" fill="#ffcf9e" stroke="#e0a070" stroke-width="1.8"/><ellipse cx="${x}" cy="${y-r*.3}" rx="${r*.5}" ry="${r*.38}" fill="#fff" opacity=".6"/></g>`;
+S.foot=`${bg('#ffe9d6')}<circle cx="96" cy="104" r="86" fill="#ffdcc0"/>
+ <rect x="62" y="150" width="60" height="50" rx="14" fill="${SKY}"/><rect x="58" y="148" width="68" height="12" rx="6" fill="#8dc0ff"/>
+ <path d="M60,150 q-14,-40 2,-76 q6,-14 30,-14 q30,0 32,22 q4,34 -4,68 Z" fill="#ffcf9e" stroke="#e0a070" stroke-width="1.8" stroke-linejoin="round"/>
+ ${toe(64,56,13,0)}${toe(84,44,10,.1)}${toe(101,42,9,.2)}${toe(115,48,8,.3)}${toe(126,58,7,.4)}
+ <path d="M76,120 q14,10 30,2" fill="none" stroke="#e0a070" stroke-width="1.8" stroke-linecap="round"/>
+ ${flipAt(166,192,.52,cat({armR:-112,armRcls:'bob',armsFront:true,prop:feather,eyes:'happy',mouth:'open'}))}
+ ${ha(140,40,RED,0,16)}${ha(20,110,VIO,1.2,16)}`;
+
+const crown=`<g>${[[-22,-100,SUN],[-8,-106,RED],[8,-106,VIO],[22,-100,ORA]].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="6.5" fill="${c}"/><circle cx="${x}" cy="${y}" r="2.4" fill="#fff"/>`).join('')}</g>`;
+const bouquet=`<path d="M0,4 l-6,-20 M0,4 v-22 M0,4 l6,-20" stroke="#3aa568" stroke-width="2.4" stroke-linecap="round"/><circle cx="-7" cy="-20" r="6" fill="${RED}"/><circle cx="0" cy="-24" r="6" fill="${SUN}"/><circle cx="7" cy="-20" r="6" fill="${VIO}"/>`;
+const bfly=(x,y,c,d)=>`<g transform="translate(${x},${y})"><g class="flutter" style="animation-delay:-${d}s"><g class="flap"><path d="M0,0 q-12,-14 -16,-2 q-2,10 16,2 Z M0,0 q12,-14 16,-2 q2,10 -16,2 Z" fill="${c}"/></g><rect x="-1" y="-6" width="2" height="12" rx="1" fill="${INK}"/></g></g>`;
+S.beautiful=`${bg('#cdeeff')}${sun(34,34,12)}
+ ${[RED,ORA,SUN,MINT,SKY,VIO].map((c,i)=>`<path d="M${10+i*7},176 a${90-i*7},${90-i*7} 0 0 1 ${180-i*14},0" fill="none" stroke="${c}" stroke-width="7" opacity=".85"/>`).join('')}
+ ${hills('#8fe0a8','#6fd08f',160)}
+ ${flower(16,186,RED,0)}${flower(34,192,SUN,.4)}${flower(52,184,VIO,.8)}${flower(150,186,ORA,.2)}${flower(168,192,RED,.6)}${flower(186,184,SKY,1)}
+ ${sh(100,188,34)}${at(100,186,.98,cat({bow:false,hat:crown,eyes:'spark',mouth:'open',armL:30,armR:-110,armsFront:true,prop:bouquet}))}
+ ${bfly(40,96,ORA,0)}${bfly(150,84,VIO,2.5)}
+ ${spark(60,60,6,'#fff',0)}${spark(140,50,7,'#fff',.6)}${spark(176,120,5,SUN,1.2)}${spark(24,130,5,SUN,.3)}`;
+
+/* Tag 11–14: the, be, to, of, and · a, in, that, have, I · it, for, not, on, with · he, as, you, do, at */
+const CB='#2f2b3d', CO='#1b1825';
+const paw=(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="${r||9}" ry="${(r||9)*.67}" fill="${CB}" stroke="${CO}" stroke-width="1.4"/>`;
+const park=(y)=>`${bg('#cdeeff')}${hills('#8fe0a8','#6fd08f',y||166)}`;
+
+S.the=`${bg('#ffe9d6')}<path d="M100,-10 L34,186 h132 Z" fill="#fff6c8"/><ellipse cx="100" cy="186" rx="66" ry="10" fill="#fff0a8"/>
+ ${floor(186,'#ffd9bd')}
+ <g opacity=".28">${at(26,184,.6,K('orange'))}${at(176,184,.6,K('grey'))}</g>
+ <rect x="86" y="-4" width="28" height="14" rx="5" fill="${INK}"/>
+ ${at(100,186,.98,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arrow(170,34,140,66,RED,5,'float')}${spark(40,60,6,SUN,0)}${spark(60,120,5,SUN,.7)}`;
+
+const nameTag=`<g transform="translate(0,-26)"><rect x="-19" y="-10" width="38" height="22" rx="4" fill="#fff"/><rect x="-19" y="-10" width="38" height="8" rx="4" fill="${RED}"/>${T(0,8,'Canela',9,INK)}</g>`;
+S.be=`${bg('#e3fbf5')}<circle cx="100" cy="98" r="80" fill="#f0fdf8"/>
+ ${[[24,40,RED],[170,34,VIO],[30,130,SUN],[176,120,MINT],[100,18,SKY]].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="5" fill="${c}"/>`).join('')}
+ ${floor(184,'#bff0de')}${sh(100,190,38)}
+ ${at(100,186,1.05,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open',eyes:'happy',extra:nameTag}))}`;
+
+S.to=`${park()}${sun(30,30,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(158,178,.86,P.house())}
+ <g class="road"><path d="M60,150 h70" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(112,150,128,150,RED,5)}
+ <g transform="translate(44,190) scale(-.62,.62)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk'})}</g></g>`;
+
+const mug=(c)=>`<path d="M22,-34 q22,0 18,18 q-4,12 -18,10" fill="none" stroke="${c}" stroke-width="7"/><path d="M-26,-44 h52 v28 q0,16 -16,16 h-20 q-16,0 -16,-16 Z" fill="${c}"/><ellipse cx="0" cy="-44" rx="26" ry="7" fill="#5cc3ff"/><ellipse class="ripple" cx="0" cy="-44" rx="12" ry="3" fill="none" stroke="#fff" stroke-width="1.5"/>`;
+S.of=`${bg('#d6f1ff')}<circle cx="116" cy="96" r="76" fill="#e6f7ff"/>
+ ${floor(176,'#9fd4f0')}
+ ${at(120,176,2,mug(MINT))}
+ <path class="drip" d="${tear(120,36)}" fill="${SKY}"/><path class="drip" style="animation-delay:.55s" d="${tear(120,36)}" fill="${SKY}"/>
+ ${at(40,190,.66,cat({armR:-100,armRcls:'bob',mouth:'tongue'}))}`;
+
+S.and=`${park()}${cloud(44,34,.8)}
+ ${sh(54,190,28)}${at(54,188,.82,cat({eyes:'happy'}))}
+ ${at(146,188,.74,P.dog({happy:true}))}
+ <g class="beat"><path d="M100,92 v30 M85,107 h30" stroke="${VIO}" stroke-width="9" stroke-linecap="round"/></g>`;
+
+S.a=`${bg('#e3fbf5')}<circle cx="100" cy="60" r="44" fill="#fff" opacity=".7"/>
+ ${floor(184,'#bff0de')}${sh(100,190,36)}
+ ${at(100,74,1.9,P.ball(RED))}${ring(100,52,36,VIO)}
+ ${at(100,186,.95,cat({armL:155,armR:-155,armsFront:true,eyes:'happy',mouth:'open'}))}`;
+
+S.in=`${bg('#fff1c9')}<circle cx="100" cy="90" r="74" fill="#ffe7a3"/>
+ ${floor(180,'#ffe08a')}${sh(100,188,60)}
+ ${at(100,128,1,P.boxBack(100))}
+ ${at(100,170,.9,cat({tail:false,eyes:'happy',armL:20,armR:-20}),'peek')}
+ ${at(100,128,1,P.boxFront(100,56))}${paw(74,128)}${paw(126,128)}
+ ${arcArrow(176,40,140,104,10,RED,5,'','float')}`;
+
+S.that=`${bg('#4a4496')}
+ ${spark(30,40,4,'#fff',0)}${spark(90,26,4,'#fff',.6)}${spark(60,90,3.5,'#fff',1.1)}${spark(186,100,4,'#fff',.3)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <g class="beat">${star5(160,44,18,SUN,`stroke="${SUN}" stroke-width="4"`)}</g>${ring(160,44,30,'#fff')}
+ <path d="M84,118 L140,62" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" class="glow"/>
+ ${at(50,190,.86,cat(Object.assign({armR:-128,armsFront:true,mouth:'open'},NL)))}`;
+
+S.have=`${bg('#ece6ff')}<circle cx="100" cy="100" r="82" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({eyes:'happy',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-6) scale(1.25)">${P.book(SKY)}</g>`}),'sway')}
+ ${heart(150,70,1,RED,0)}${spark(40,60,6,SUN,.4)}${spark(166,130,5,VIO,1)}`;
+
+S.I=`${bg('#fff3cf')}<circle cx="100" cy="104" r="78" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({armL:-50,armR:50,armsFront:true,eyes:'happy',mouth:'open'}))}
+ ${ring(100,104,82,RED)}${arrow(26,22,58,58,RED,6,'float')}`;
+
+S.it=`${bg('#e3fbf5')}
+ ${floor(180,'#bff0de')}
+ <rect x="112" y="132" width="60" height="50" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><rect x="106" y="126" width="72" height="10" rx="5" fill="#f4f1fb" stroke="#cbc2e6" stroke-width="1.6"/>
+ ${at(142,126,1.8,P.ball(SKY))}${ring(142,104,34,RED)}
+ ${arrow(176,36,158,70,RED,5,'float')}
+ ${sh(50,190,28)}${at(50,188,.84,cat({armR:-96,armRcls:'bob'}))}`;
+
+S.for=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="82" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(100,190,38)}
+ ${at(100,186,1.02,cat({eyes:'happy',mouth:'open',tail:true}))}
+ <g class="float">${at(100,180,2.3,P.gift(VIO,SUN))}<g transform="translate(132,148) rotate(14)"><rect x="-10" y="-8" width="24" height="16" rx="3" fill="#fff"/><path d="${heartP}" transform="translate(2,2) scale(.5)" fill="${RED}"/></g></g>
+ ${paw(70,150,10)}${paw(130,150,10)}
+ ${heart(40,70,1,RED,0)}${heart(160,60,.8,'#ff8a7a',1.1)}`;
+
+S.not=`${bg('#e6f1ff')}${cloud(150,40,.9)}
+ <g opacity=".85">${sun(52,52,18)}</g>${cross(52,52,24,7)}
+ ${thermo(176,70,18,SKY)}
+ ${floor(182,'#cfe3f7')}${sh(108,190,36)}
+ ${at(108,186,1,cat({eyes:'happy',armR:-96,prop:`<g transform="translate(0,12)">${P.cup(RED)}</g>`,extra:winter}))}
+ <circle class="smoke" cx="140" cy="118" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="146" cy="114" r="4" fill="#fff"/>`;
+
+S.on=`${bg('#fff1c9')}
+ <rect x="130" y="16" width="52" height="46" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="5"/>
+ ${floor(176,'#e4b77a')}
+ ${at(100,186,1.25,P.table(130))}
+ ${at(100,118,.78,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arcArrow(24,50,62,104,6,RED,5,'','float')}`;
+
+S.with=`${park(170)}${sun(170,30,10)}
+ ${sh(50,190,28)}${at(50,188,.8,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}
+ <g transform="translate(84,188)"><g class="roll">${P.ball(RED)}</g></g>
+ ${at(152,188,.72,P.dog({happy:true}))}
+ ${heart(100,80,1.1,RED,0)}`;
+
+S.he=`${park()}${cloud(40,36,.8)}
+ ${sh(124,190,28)}${at(124,188,1,P.person())}
+ ${arrow(184,26,158,56,RED,6,'float')}${ring(124,70,40,RED)}
+ ${at(36,192,.56,cat({armR:-100,armRcls:'bob'}))}`;
+
+S.as=`${bg('#e3fbf5')}${cloud(40,24,.7)}
+ ${floor(184,'#bff0de')}
+ <path d="M10,76 h180" stroke="${VIO}" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/>
+ ${at(58,184,1.22,P.house())}
+ ${at(154,184,.93,cat({eyes:'happy',armL:40,armR:-60}))}
+ <g class="beat"><path d="M98,134 h16 M98,144 h16" stroke="${VIO}" stroke-width="6" stroke-linecap="round"/></g>`;
+
+S.you=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="84" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(92,190,38)}
+ ${at(92,186,1.04,cat({eyes:'spark',mouth:'open',armR:-60}))}
+ <g class="pulse" style="transform-origin:138px 134px"><ellipse cx="138" cy="134" rx="24" ry="22" fill="${CB}" stroke="${CO}" stroke-width="1.8"/><ellipse cx="138" cy="140" rx="10" ry="8" fill="#ff8a7a"/><circle cx="124" cy="126" r="4.5" fill="#ff8a7a"/><circle cx="138" cy="120" r="4.5" fill="#ff8a7a"/><circle cx="152" cy="126" r="4.5" fill="#ff8a7a"/></g>
+ ${heart(40,60,1.1,RED,0)}${heart(170,70,.8,RED,1)}${spark(30,130,6,SUN,.5)}`;
+
+S.do=`${bg('#e3fbf5')}
+ ${floor(184,'#bff0de')}
+ ${speech(132,62,104,70,`<g transform="translate(112,62) scale(2.2)">${P.fish}</g>${T(160,78,'?',40,RED)}`,84,112)}
+ ${sh(54,190,30)}${at(54,188,.86,cat({armR:-110,armRcls:'bob',mouth:'open'}))}
+ ${at(158,190,.56,K('orange',{headCls:'tilt'}))}`;
+
+S.at=`${park()}${cloud(30,30,.7)}${cloud(176,44,.6)}
+ ${at(100,174,1.3,P.school)}
+ <g class="hop"><path d="M100,2 q-13,0 -13,13 q0,9 13,22 q13,-13 13,-22 q0,-13 -13,-13 Z" fill="${RED}"/><circle cx="100" cy="15" r="5" fill="#fff"/></g>
+ <path d="M86,174 q-6,12 -18,26 h64 q-12,-14 -18,-26 Z" fill="#f3d9a4"/>
+ ${at(100,194,.46,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+/* Tag 15–18: this, but, his, by, from · they, we, say, her, she · or, an, will, my, all · would, there, their, what, so */
+const room=(wall,fl,y)=>`${bg(wall)}${floor(y||178,fl)}`;
+S.this=`${bg('#fff1c9')}<circle cx="104" cy="100" r="80" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(96,190,38)}
+ ${at(96,186,1.06,cat({eyes:'happy',armR:-96,armsFront:true,prop:`<g transform="translate(4,14) scale(1.25)">${P.cup(RED)}</g>`}))}
+ ${ring(136,128,30,VIO)}${arrow(176,84,160,104,RED,5,'float')}
+ <circle class="smoke" cx="130" cy="96" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="140" cy="92" r="4" fill="#fff"/>`;
+
+S.but=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <path d="M124,20 l-10,36 16,-6 -8,40 14,-8 -8,50" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="glow"/>
+ ${sh(66,190,44)}${at(70,188,1.08,P.dog())}
+ ${sh(164,190,14)}${at(164,188,.46,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}),'hop')}`;
+
+S.his=`${park()}${cloud(150,30,.8)}
+ ${sh(62,190,28)}${at(62,188,.96,P.person({wave:false,happy:true}))}
+ ${at(150,188,1.9,P.ball(SKY))}${ring(150,165,32,VIO)}
+ ${arcArrow(92,96,140,128,26,VIO,4,'6 8')}`;
+
+S.by=`${room('#fff1c9','#e4b77a')}
+ <rect x="14" y="30" width="34" height="42" rx="4" fill="#fff" stroke="#b07a45" stroke-width="4"/><circle cx="31" cy="46" r="7" fill="${SUN}"/>
+ ${at(132,180,1.36,P.door(SKY))}<rect x="96" y="178" width="72" height="9" rx="4" fill="#5fd3c0"/>
+ ${sh(58,190,30)}${at(58,188,.9,cat({eyes:'happy',armR:-60}))}
+ <path d="M82,160 h12 M82,160 l4,-4 M82,160 l4,4 M94,160 l-4,-4 M94,160 l-4,4" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>`;
+
+S.from=`${park()}${sun(170,28,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(46,176,.9,P.school)}
+ <g class="road"><path d="M96,146 h70" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(164,146,182,146,RED,5)}
+ <g transform="translate(148,192) scale(-.6,.6)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',mid:backpack})}</g></g>`;
+
+S.they=`${park(170)}${cloud(40,30,.8)}
+ <rect x="36" y="78" width="150" height="116" rx="24" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(76,188,.72,K('orange',{armR:-110,eyes:'happy',mouth:'open'}))}${flipAt(150,188,.72,K('grey',{armR:-110,eyes:'happy',mouth:'open'}))}
+ ${sh(113,190,12,'shadow')}<g transform="translate(113,150)"><g class="jump">${P.ball(RED)}</g></g>
+ ${at(20,196,.4,cat({armR:-100,armRcls:'bob'}))}`;
+
+S.we=`${bg('#ffe9d6')}<circle cx="104" cy="104" r="82" fill="#ffdcc0"/>
+ ${floor(186,'#ffd9bd')}
+ <ellipse cx="106" cy="124" rx="78" ry="70" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(78,188,.92,cat({armL:-40,armR:-62,eyes:'happy',mouth:'open'}),'sway')}
+ ${at(134,188,.92,K('orange',{armL:62,armR:40,eyes:'happy',mouth:'open'}),'sway')}
+ ${heart(106,60,1.1,RED,0)}`;
+
+S.say=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(132,56,112,56,T(132,66,'Hello!',26,RED),88,104)}
+ <path d="M96,118 q8,6 0,14 M106,112 q12,10 0,26" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${sh(60,190,34)}${at(60,188,.96,cat({mouth:'big',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.her=`${park()}${cloud(40,30,.8)}
+ ${sh(64,190,32)}${at(64,188,.94,K('white',{eyes:'happy',hat:earflower}))}
+ ${at(152,188,1.6,P.book(VIO))}${ring(152,160,36,RED)}
+ ${arcArrow(98,104,140,126,24,RED,4,'6 8')}`;
+
+S.she=`${bg('#ffe9d6')}<circle cx="118" cy="100" r="78" fill="#ffdcc0"/>
+ ${floor(186,'#ffd9bd')}${sh(122,190,38)}
+ ${at(122,188,1.04,K('white',{eyes:'happy',hat:earflower,armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arrow(184,22,160,52,RED,6,'float')}
+ ${at(34,192,.54,cat({armR:-100,armRcls:'bob',eyes:'happy'}))}${heart(62,110,.9,RED,0)}`;
+
+S.or=`${bg('#ece6ff')}
+ <circle cx="46" cy="62" r="34" fill="#fff"/><circle cx="154" cy="62" r="34" fill="#fff"/>
+ ${at(46,82,1.7,P.ball(RED))}${at(154,88,1.3,P.book(SKY))}
+ <circle class="glow" cx="46" cy="62" r="38" fill="none" stroke="${VIO}" stroke-width="4"/><circle class="glow" style="animation-delay:.7s" cx="154" cy="62" r="38" fill="none" stroke="${VIO}" stroke-width="4"/>
+ ${T(100,76,'?',44,RED,'middle','beat')}
+ ${floor(186,'#d6ccf5')}${sh(100,192,30)}${at(100,190,.84,cat({eyes:'wide',mouth:'o',headCls:'tilt',armL:60,armR:-60}))}`;
+
+S.an=`${bg('#ece6ff')}
+ <rect x="34" y="20" width="132" height="96" rx="10" fill="#fff" stroke="#b07a45" stroke-width="7"/>
+ <g class="blink"><path d="M50,68 Q100,26 150,68 Q100,110 50,68 Z" fill="#fff" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><circle cx="100" cy="68" r="21" fill="${SKY}"/><circle cx="100" cy="68" r="9.5" fill="${INK}"/><circle cx="106" cy="61" r="4.5" fill="#fff"/></g>
+ ${floor(184,'#d6ccf5')}${sh(100,192,28)}
+ ${at(100,192,.62,cat({armR:-158,armRcls:'bob',armsFront:true,mouth:'open'}))}`;
+
+S.will=`${bg('#fff1c9')}
+ ${think(134,58,48,32,`<g transform="translate(134,72)">${P.plate(34)}</g><g transform="translate(134,56) scale(2)">${P.fish}</g>`,-1)}
+ ${floor(150,MINT)}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ ${at(62,190,.9,cat({eyes:'spark',mouth:'tongue',armL:60,armR:-60,prop:knife,propL:fork,tail:false}))}
+ ${floor(168,MINT)}<g transform="translate(62,186)">${P.plate(36)}</g>
+ ${arcArrow(120,128,170,128,-14,RED,5,'','glow')}`;
+
+S.my=`${room('#cfc8f5','#b5addf')}
+ <rect x="100" y="22" width="76" height="34" rx="6" fill="#fff" stroke="#b07a45" stroke-width="4"/>${pawprint(124,40,0)}${T(152,46,'C',20,RED)}
+ ${at(124,186,1.5,P.bed)}
+ ${sh(44,192,26)}${at(44,190,.74,cat({eyes:'happy',armR:-100,armRcls:'bob'}))}
+ ${heart(84,96,1,RED,0)}`;
+
+S.all=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <path d="M10,70 q0,-16 16,-16 h148 q16,0 16,16" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,54 v-16" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>
+ ${at(26,186,.48,K('orange',{eyes:'happy'}),'hop')}${at(62,186,.54,K('grey',{eyes:'happy'}))}${at(100,186,.6,cat({eyes:'happy',mouth:'open'}),'hop')}${at(138,186,.54,K('white',{eyes:'happy'}))}${at(174,186,.48,K('cream',{eyes:'happy'}),'hop')}`;
+
+S.would=`${bg('#ece6ff')}
+ ${think(136,56,48,32,`<g transform="translate(128,58) scale(2.3)">${P.fish}</g>${heartS(164,44,1,RED,'beat')}`,-1)}
+ ${floor(184,'#d6ccf5')}${sh(62,190,34)}
+ ${at(62,188,.96,cat({eyes:'spark',armL:-42,armR:42,armsFront:true,headCls:'tilt'}))}
+ ${spark(24,60,6,SUN,0)}${spark(180,130,6,SUN,.8)}`;
+
+S.there=`${bg('#cdeeff')}${sun(30,30,10)}${cloud(110,26,.7)}
+ <path d="M90,200 Q120,90 200,84 V200 Z" fill="#8fe0a8"/><path d="M0,176 q50,-14 100,0 t100,0 v24 h-200 Z" fill="#6fd08f"/>
+ ${at(166,100,.9,P.ball(RED))}${ring(166,89,20,RED)}
+ <path d="M80,124 Q120,70 152,84" fill="none" stroke="${VIO}" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" class="glow"/>
+ ${sh(48,192,30)}${at(48,190,.88,cat({armR:-126,armsFront:true,mouth:'open'}))}`;
+
+S.their=`${park()}${cloud(30,30,.7)}
+ ${at(104,172,1.34,P.house(SKY,'#ffe2b8'))}
+ ${at(50,192,.5,K('orange',{eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}${at(158,192,.5,K('grey',{eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}
+ ${arcArrow(50,128,74,104,10,RED,4,'6 8')}${arcArrow(158,128,136,104,10,RED,4,'6 8')}`;
+
+S.what=`${bg('#ece6ff')}<circle cx="120" cy="104" r="70" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}${sh(124,190,46)}
+ <g transform="translate(124,186)"><g class="ring">${P.boxClosed(84,70)}${T(0,-22,'?',40,RED)}</g></g>
+ ${[[90,60,0],[150,50,.8],[170,90,1.5]].map(([x,y,d])=>`<g transform="translate(${x},${y})">${T(0,0,'?',20,VIO,'middle','rise').replace('<text','<text style="animation-delay:'+d+'s"')}</g>`).join('')}
+ ${at(40,192,.76,cat({eyes:'wide',mouth:'o',headCls:'tilt',armR:-70}))}`;
+
+S.so=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${sh(124,190,60)}
+ <g class="pulse" style="transform-origin:124px 184px"><circle cx="124" cy="110" r="74" fill="${RED}"/><path d="M50,110 q74,-54 148,0 M50,110 q74,54 148,0" fill="none" stroke="#fff" stroke-width="7"/><circle cx="98" cy="74" r="12" fill="#fff" opacity=".5"/></g>
+ <path d="M30,96 l-14,-10 M24,116 h-16 M34,78 l-8,-14" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(30,192,.5,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+/* Tag 19–22: up, out, if, about, who · get, which, go, me, when · make, can, like, time, no · just, him, know, take, people */
+S.up=`${bg('#cdeeff')}${cloud(40,40,.8)}${cloud(170,90,.6)}
+ <rect x="150" y="0" width="50" height="200" fill="#ffd98a"/><rect x="160" y="30" width="26" height="26" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/><rect x="160" y="110" width="26" height="26" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/>
+ ${floor(186,'#8fe0a8')}
+ <path d="M84,196 V10 M136,196 V10" stroke="#b07a45" stroke-width="7" stroke-linecap="round"/><path d="M84,30 h52 M84,58 h52 M84,86 h52 M84,114 h52 M84,142 h52 M84,170 h52" stroke="#c98a4b" stroke-width="6" stroke-linecap="round"/>
+ ${at(110,144,.8,cat({armL:150,armR:-150,armsFront:true,eyes:'happy'}),'float')}
+ ${arrow(34,170,34,60,RED,8,'float')}`;
+
+S.out=`${bg('#e3fbf5')}<circle cx="130" cy="80" r="60" fill="#f0fdf8"/>
+ ${floor(184,'#bff0de')}${sh(60,190,44)}${sh(146,190,26,'shadow')}
+ ${at(60,140,1,P.boxBack(80))}${at(60,140,1,P.boxFront(80,46))}
+ ${arcArrow(66,128,128,84,34,RED,5,'8 10')}
+ ${at(146,186,.86,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open'}),'jump')}
+ ${spark(96,40,6,SUN,0)}${spark(180,60,6,VIO,.7)}`;
+
+const panel=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>`;
+S.if=`${bg('#fff1c9')}
+ ${panel(8,40,84,120)}${panel(108,40,84,120)}
+ <g transform="translate(52,146) rotate(9) scale(-.56,.56)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',mouth:'open'})}</g></g>
+ <path d="M14,90 h14 M12,104 h10" stroke="${VIO}" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${at(150,150,.56,cat({eyes:'closed',mouth:'big',armL:30,armR:-30}))}
+ <g transform="translate(176,58) scale(.6)">${sun(0,0,14)}</g>
+ <path class="sweat" d="${tear(126,96)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(174,104)}" fill="${SKY}"/>
+ ${arrow(94,100,106,100,RED,6,'glow')}`;
+
+S.about=`${bg('#ece6ff')}<circle cx="100" cy="100" r="86" fill="#f6f2ff"/>
+ ${at(158,170,.66,cat({tail:false,eyes:'happy'}),'peek')}
+ <rect x="44" y="26" width="108" height="150" rx="8" fill="${SKY}"/><rect x="44" y="26" width="14" height="150" fill="#2f6fd0"/>
+ <rect x="66" y="42" width="76" height="78" rx="8" fill="#bfe9ff"/>
+ <g transform="translate(104,82)"><g class="swim"><g transform="scale(3)">${P.fish}</g></g></g>
+ <circle class="bubble" cx="126" cy="64" r="3" fill="#fff"/><circle class="bubble" style="animation-delay:1.2s" cx="80" cy="100" r="2.5" fill="#fff"/>
+ <path d="M70,138 h66 M70,152 h44" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".85"/>
+ ${paw(152,96,8)}`;
+
+S.who=`${room('#fff1c9','#e4b77a')}
+ ${at(128,180,1.4,P.door(MINT))}
+ <rect x="110" y="56" width="36" height="40" rx="6" fill="#bfe9ff" stroke="#fff" stroke-width="3"/>
+ <path d="M116,96 v-14 q0,-12 12,-12 q12,0 12,12 v14 Z M119,72 l1,-10 6,6 Z M137,72 l-1,-10 -6,6 Z" fill="${INK}" opacity=".55" class="peek"/>
+ ${T(128,40,'?',34,RED,'middle','beat')}
+ <path d="M176,100 l10,-6 M178,112 h12 M176,124 l10,6" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${sh(44,192,28)}${at(44,190,.8,cat({eyes:'wide',mouth:'o',headCls:'tilt'}))}`;
+
+S.get=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ <g class="hop"><path d="M76,10 q24,-16 48,0 l-18,30 h-12 Z" fill="${SKY}" opacity=".85"/><path d="M82,14 l14,26 M118,14 l-14,26" stroke="#fff" stroke-width="1.6"/>${at(100,72,1.5,P.gift(VIO,SUN))}</g>
+ ${at(100,188,.98,cat({armL:135,armR:-135,armsFront:true,eyes:'spark',mouth:'open'}))}
+ ${spark(30,70,6,RED,0)}${spark(172,60,6,RED,.7)}`;
+
+S.which=`${bg('#fff1c9')}
+ <rect x="10" y="104" width="180" height="10" rx="5" fill="#c98a4b"/>
+ ${[[42,RED,0],[100,SKY,.6],[158,MINT,1.2]].map(([x,c,d])=>`${at(x,104,1.5,P.cup(c))}<circle class="glow" style="animation-delay:${d}s" cx="${x+3}" cy="80" r="34" fill="none" stroke="${VIO}" stroke-width="4"/>`).join('')}
+ ${T(100,40,'?',36,RED,'middle','beat')}
+ ${floor(186,'#ffe08a')}${at(100,194,.62,cat({eyes:'wide',mouth:'o',headCls:'tilt',armL:60,armR:-60}))}`;
+
+S.go=`${park(160)}${cloud(120,30,.8)}
+ ${floor(172,'#6b7a99')}<g class="road"><path d="M-40,188 h320" stroke="#fff" stroke-width="4" stroke-dasharray="18 22"/></g>
+ <path d="M30,172 v-70" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><rect x="16" y="38" width="28" height="70" rx="10" fill="${INK}"/><circle cx="30" cy="54" r="8" fill="#5a4a6c"/><circle cx="30" cy="74" r="8" fill="#5a4a6c"/><circle cx="30" cy="94" r="8" fill="#4fe08a"/><circle class="glow" cx="30" cy="94" r="14" fill="#4fe08a" opacity=".45"/>
+ <g transform="translate(110,186) scale(-.8,.8)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy',mid:backpack})}</g></g>
+ ${arrow(150,110,188,110,MINT,8,'glow')}`;
+
+S.me=`${park(170)}${sun(30,30,10)}
+ ${flipAt(164,190,.6,K('orange',{armR:-120,armsFront:true,eyes:'happy'}))}
+ <g transform="translate(112,128)"><g class="hop">${P.ball(RED)}</g></g>
+ <path d="M146,116 Q118,84 92,112" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ ${sh(56,192,32)}${at(56,190,.92,cat({armL:100,armR:-100,eyes:'happy',mouth:'open'}))}
+ ${arrow(20,22,40,56,RED,6,'float')}`;
+
+S.when=`${bg('#fff1c9')}<circle cx="128" cy="96" r="70" fill="#ffe7a3"/>
+ ${at(130,150,1,P.clock(50,40))}
+ ${T(40,56,'?',40,RED,'middle','beat')}
+ ${floor(160,MINT)}<rect y="160" width="200" height="7" fill="#9be6d8"/>
+ <g transform="translate(130,188)">${P.plate(40)}</g>
+ ${at(46,194,.7,cat({mouth:'wavy',armL:60,armR:-60,prop:knife,propL:fork,tail:false}))}`;
+
+S.make=`${bg('#fff1c9')}<path d="M0,40 h200 M0,80 h200 M0,120 h200 M40,0 v140 M80,0 v140 M120,0 v140 M160,0 v140" stroke="#ffe39a" stroke-width="2"/>
+ <path d="M140,22 h46" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M150,22 v14 a6,8 0 0 0 12,0 v-14" fill="#b9c4d8"/><path d="M172,22 v22" stroke="#b9c4d8" stroke-width="3"/><circle cx="172" cy="48" r="7" fill="none" stroke="#b9c4d8" stroke-width="3"/>
+ ${at(88,176,.98,cat({bow:false,hat:P.hatChef,eyes:'happy',armL:40,armR:-30,armsFront:true,tail:false,mouth:'tongue'}))}
+ ${floor(144,'#c98a4b')}<rect y="144" width="200" height="8" fill="#e0a868"/>
+ <path d="M96,150 h70 q0,34 -35,34 q-35,0 -35,-34 Z" fill="${SKY}"/><ellipse cx="131" cy="150" rx="35" ry="8" fill="#ffe9a8"/>
+ <g transform="translate(126,144)"><g class="pen"><path d="M0,0 L-14,-34" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><ellipse cx="2" cy="4" rx="7" ry="5" fill="#b07a45"/></g></g>
+ <circle class="puff" cx="150" cy="138" r="6" fill="#fff"/><circle class="puff" style="animation-delay:1s" cx="110" cy="136" r="5" fill="#fff"/>
+ <ellipse cx="40" cy="160" rx="16" ry="9" fill="#fff8e6"/><ellipse cx="60" cy="168" rx="10" ry="7" fill="#fff8e6"/>`;
+
+S.can=`${bg('#cdeeff')}${sun(30,30,10)}
+ <g class="scroll" style="animation-duration:12s">${cloud(60,60,.9,'')}${cloud(170,130,.7,'')}${cloud(260,60,.9,'')}${cloud(370,130,.7,'')}</g>
+ <path d="M0,190 q50,-10 100,0 t100,0 v10 h-200 Z" fill="#8fe0a8"/>
+ ${sh(100,192,24,'shadow')}
+ <g transform="translate(100,160)"><g class="float">
+  <path class="flower" d="M-22,-48 Q-48,-10 -44,26 Q-22,12 0,24 Q22,12 44,26 Q48,-10 22,-48 Z" fill="${RED}"/>
+  ${cat({armL:-46,armR:46,armsFront:true,eyes:'happy',mouth:'open',mid:`<g transform="translate(0,-30)">${star5(0,0,9,SUN)}</g>`})}
+ </g></g>
+ ${arrow(170,150,170,90,RED,6,'float')}${spark(40,90,6,SUN,0)}${spark(150,50,6,'#fff',.6)}`;
+
+S.like=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="82" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(100,190,38)}
+ ${at(100,186,1.04,cat({eyes:'spark',mouth:'tongue',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-14)">${P.plate(30)}<g transform="translate(0,-12) scale(1.6)">${P.fish}</g></g>`}))}
+ ${heart(40,70,1.2,RED,0)}${heart(160,60,1,RED,.8)}${heart(150,110,.7,'#ff8a7a',1.5)}${heart(54,116,.7,'#ff8a7a',2)}`;
+
+S.time=`${bg('#e3fbf5')}<circle cx="110" cy="100" r="82" fill="#f0fdf8"/>
+ ${floor(186,'#bff0de')}${sh(112,190,46)}
+ <g class="ring"><circle cx="78" cy="42" r="14" fill="${RED}"/><circle cx="146" cy="42" r="14" fill="${RED}"/><path d="M84,170 l-10,16 M140,170 l10,16" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>${at(112,176,1,P.clock(62,300))}<rect x="107" y="38" width="10" height="12" rx="3" fill="${INK}"/></g>
+ <path d="M36,40 l-12,-8 M30,58 h-14 M190,40 l8,-6" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(26,194,.46,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+S.no=`${bg('#ffe9d6')}<circle cx="96" cy="104" r="80" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(92,190,38)}
+ <g class="beat"><circle cx="160" cy="48" r="28" fill="#fff"/>${cross(160,48,14,8)}</g>
+ <g transform="translate(160,186)">${P.plate(30)}<circle cx="-6" cy="-16" r="9" fill="#4fc27f"/><circle cx="6" cy="-18" r="9" fill="#62d08f"/><circle cx="0" cy="-24" r="8" fill="#4fc27f"/><rect x="-3" y="-12" width="6" height="8" fill="#9be8b4"/></g>
+ ${at(92,186,1.02,cat({eyes:'closed',mouth:'wavy',armL:20,armR:-92,armsFront:true,headCls:'shiver'}))}
+ <ellipse cx="140" cy="146" rx="13" ry="12" fill="${CB}" stroke="${CO}" stroke-width="1.6"/>`;
+
+S.just=`${bg('#fff1c9')}
+ ${at(100,158,.92,cat({mouth:'wavy',armL:70,armR:-70,prop:knife,propL:fork,tail:false}))}
+ ${floor(140,MINT)}<g fill="#fff" opacity=".35">${[0,40,80,120,160].map(x=>`<rect x="${x}" y="140" width="20" height="20"/><rect x="${x+20}" y="160" width="20" height="20"/><rect x="${x}" y="180" width="20" height="20"/>`).join('')}</g>
+ <g transform="translate(100,180)">${P.plate(80)}</g>
+ <g transform="translate(100,168) scale(.9)">${P.fish}</g>${ring(100,168,18,RED)}
+ ${arrow(160,120,122,156,RED,4,'float')}`;
+
+S.him=`${park()}${cloud(100,30,.8)}
+ ${sh(44,192,28)}${at(44,190,.8,cat({armR:-92,eyes:'happy'}))}
+ <g transform="translate(78,160)"><g class="givemove">${P.ball(RED)}</g></g>
+ ${sh(150,190,28)}${at(150,188,.9,P.person({wave:false,happy:true}))}
+ ${arrow(192,20,172,50,RED,6,'float')}`;
+
+S.know=`${bg('#fff3cf')}<circle cx="100" cy="110" r="76" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,54,1.1,P.bulb)}
+ <path d="M60,26 l-12,-8 M140,26 l12,-8 M100,2 v-2 M52,46 h-14 M148,46 h14" stroke="${SUN}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(100,186,.94,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true}))}`;
+
+const shelfBooks=(y,cs)=>cs.map((c,i)=>c?`<rect x="${128+i*11}" y="${y-30}" width="9" height="30" rx="2" fill="${c}"/>`:'').join('');
+S.take=`${room('#ece6ff','#d6ccf5')}
+ <rect x="120" y="20" width="70" height="160" rx="6" fill="#b07a45"/><rect x="126" y="26" width="58" height="46" fill="#8a5a30"/><rect x="126" y="78" width="58" height="46" fill="#8a5a30"/><rect x="126" y="130" width="58" height="44" fill="#8a5a30"/>
+ ${shelfBooks(72,[RED,SUN,MINT,VIO,SKY])}${shelfBooks(124,[SKY,null,ORA,RED,MINT])}${shelfBooks(174,[VIO,SUN,RED,SKY,ORA])}
+ ${sh(62,190,34)}${at(62,188,.92,cat({eyes:'happy',armR:-112,armsFront:true,armRcls:'bob',prop:`<g transform="translate(0,6) scale(.6)">${P.book(SUN)}</g>`}))}
+ ${arcArrow(138,96,108,104,16,RED,4,'6 8')}`;
+
+S.people=`${park()}${sun(34,30,10)}${cloud(150,30,.8)}
+ ${at(32,188,.6,P.person({shirt:SKY,stripe:'#2f6fd0',hair:'#3a2a4a',long:true,skirt:true,pants:VIO,wave:false,happy:true}))}
+ ${at(76,188,.74,P.person({shirt:MINT,stripe:'#1f9c83',hair:'#3a2a4a',skin:'#c98a5a',pants:'#3a2a4a',beard:true,wave:false}))}
+ ${at(124,188,.68,P.person({shirt:RED,stripe:'#b52f29',hair:'#e0a83a',skin:'#ffe0c2',long:true,pants:'#2f6fd0'}))}
+ ${at(168,188,.56,P.person({shirt:SUN,stripe:ORA,hair:'#7a4a21',skin:'#e0a070',wave:false,happy:true}))}
+ ${at(100,198,.3,cat({eyes:'happy'}))}`;
+
+/* Tag 23–26: into, year, your, good, some · could, them, see, other, than · then, now, look, only, come · its, over, think, also, back */
+S.into=`${park()}${cloud(30,30,.7)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(150,180,1.36,P.house())}<rect x="114.600" y="139.200" width="24.500" height="40.800" rx="10" fill="${INK}"/>
+ <g class="road"><path d="M70,150 h40" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(102,150,120,158,RED,5)}
+ <circle class="puff" cx="22" cy="182" r="6" fill="#fff"/><circle class="puff" style="animation-delay:.8s" cx="14" cy="176" r="5" fill="#fff"/>
+ <g transform="translate(56,190) rotate(9) scale(-.6,.6)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>`;
+
+const sTree=(x,y,c1,c2,extra)=>`<g transform="translate(${x},${y})"><rect x="-3" y="-16" width="6" height="18" rx="2" fill="#b07a45"/><circle cx="0" cy="-26" r="14" fill="${c1}"/><circle cx="-8" cy="-20" r="8" fill="${c2}"/><circle cx="8" cy="-20" r="8" fill="${c2}"/>${extra||''}</g>`;
+S.year=`${bg('#fff8f0')}<circle cx="100" cy="100" r="88" fill="#fff"/>
+ <g class="spin" style="animation-duration:20s"><circle cx="100" cy="100" r="62" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="12 10" stroke-linecap="round"/></g>
+ <path d="M100,12 v176 M12,100 h176" stroke="#f0e6dc" stroke-width="2"/>
+ ${sTree(100,44,'#9be8b4','#b7efc8',`<circle cx="-6" cy="-30" r="3" fill="${RED}"/><circle cx="7" cy="-24" r="3" fill="${SUN}"/><circle cx="0" cy="-18" r="3" fill="${VIO}"/>`)}
+ ${sTree(164,112,'#4fc27f','#62d08f')}<g transform="translate(178,70) scale(.5)">${sun(0,0,12)}</g>
+ ${sTree(100,186,ORA,'#ffc93c',`<path class="sweat" d="M-14,-10 l4,3 -4,3 -4,-3 Z" fill="${ORA}"/><path class="sweat" style="animation-delay:.6s" d="M12,-8 l4,3 -4,3 -4,-3 Z" fill="${RED}"/>`)}
+ ${sTree(36,112,'#eaf7ff','#fff')}<circle class="snow" cx="24" cy="60" r="2" fill="#bfe9ff"/><circle class="snow" style="animation-delay:-2s" cx="46" cy="60" r="2" fill="#bfe9ff"/>
+ ${at(100,128,.46,cat({eyes:'happy'}))}`;
+
+S.your=`${bg('#e3fbf5')}<circle cx="100" cy="92" r="80" fill="#f0fdf8"/>
+ ${floor(184,'#bff0de')}${sh(100,190,38)}
+ ${at(100,180,.98,cat({eyes:'happy',mouth:'open'}))}
+ <g class="float"><g transform="translate(100,188) scale(2.1)">${P.book(SKY)}</g>${paw(66,150,10)}${paw(134,150,10)}</g>
+ ${arrow(40,150,24,184,RED,5,'glow')}${arrow(160,150,176,184,RED,5,'glow')}
+ ${spark(40,50,6,SUN,0)}${spark(166,56,6,SUN,.7)}`;
+
+S.good=`${bg('#fff1c9')}<circle cx="100" cy="104" r="78" fill="#ffe7a3"/>
+ <g class="twinkle">${star5(64,34,13,SUN)}</g><g class="twinkle" style="animation-delay:.4s">${star5(100,24,15,SUN)}</g><g class="twinkle" style="animation-delay:.8s">${star5(136,34,13,SUN)}</g>
+ ${floor(184,'#ffe08a')}${sh(96,190,38)}
+ ${at(96,186,1,cat({eyes:'happy',mouth:'tongue',armR:-130,armsFront:true,prop:`<g transform="translate(0,-6)">${check(0,0,10,5)}</g>`}))}
+ <g transform="translate(164,188)">${P.plate(26)}<path d="M-14,-6 a14,14 0 0 1 28,0 Z" fill="#ffcf5c" stroke="#e0a83a" stroke-width="1.6"/><circle cx="-4" cy="-14" r="2.5" fill="${RED}"/><circle cx="5" cy="-14" r="2.5" fill="#4fc27f"/></g>
+ <circle class="smoke" cx="160" cy="160" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="170" cy="158" r="4" fill="#fff"/>`;
+
+const fishAt=(x,y,s,r)=>`<g transform="translate(${x},${y}) rotate(${r||0}) scale(${s})">${P.fish}</g>`;
+S.some=`${bg('#fff1c9')}
+ ${at(60,170,.86,cat({eyes:'happy',mouth:'tongue',tail:false}))}
+ ${floor(142,'#c98a4b')}<rect y="142" width="200" height="8" fill="#e0a868"/>
+ <path d="M112,136 h76 q0,40 -38,40 q-38,0 -38,-40 Z" fill="${SKY}"/><ellipse cx="150" cy="136" rx="38" ry="9" fill="#2f6fd0"/>
+ ${fishAt(130,130,1.3,-20)}${fishAt(150,126,1.3,10)}${fishAt(170,130,1.3,-8)}${fishAt(140,120,1.3,24)}${fishAt(162,118,1.3,-30)}
+ <g transform="translate(58,186)">${P.plate(40)}</g>${fishAt(48,176,1.3,8)}${fishAt(70,178,1.3,-12)}
+ ${arcArrow(134,108,78,160,30,RED,4,'6 8')}`;
+
+S.could=`${room('#fff1c9','#e4b77a')}
+ ${at(164,180,1.2,P.door(SKY))}
+ ${at(118,190,.56,K('orange',{headCls:'tilt',armL:110,armsFront:true}))}
+ ${speech(60,40,56,44,T(60,54,'?',30,RED),64,74)}
+ ${sh(54,192,34)}${at(54,190,.9,cat({mouth:'open',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-2)">${P.boxClosed(54,40)}</g>`}))}`;
+
+const binoc=`<g><rect x="-24" y="-84" width="20" height="18" rx="6" fill="${INK}" stroke="#7a6a8c" stroke-width="1.6"/><rect x="4" y="-84" width="20" height="18" rx="6" fill="${INK}" stroke="#7a6a8c" stroke-width="1.6"/><circle cx="-14" cy="-75" r="5" fill="#bfe9ff"/><circle cx="14" cy="-75" r="5" fill="#bfe9ff"/></g>`;
+S.them=`${bg('#cdeeff')}${sun(30,30,10)}
+ <path d="M90,200 Q120,120 200,116 V200 Z" fill="#8fe0a8"/><path d="M0,178 q50,-14 100,0 t100,0 v22 h-200 Z" fill="#6fd08f"/>
+ ${at(146,126,.36,K('orange',{eyes:'happy'}),'hop')}${at(172,124,.36,K('grey',{eyes:'happy'}))}
+ <ellipse cx="159" cy="104" rx="34" ry="28" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 8"/>
+ <path d="M78,116 L124,100 M78,124 L126,116" stroke="#fff" stroke-width="3" stroke-dasharray="3 8" stroke-linecap="round" class="glow"/>
+ ${sh(48,192,32)}${at(48,190,.9,cat({hat:binoc,armL:150,armR:-150,armsFront:true}))}`;
+
+S.see=`${bg('#4a4496')}
+ ${spark(30,30,4,'#fff',0)}${spark(80,50,3.5,'#fff',.7)}${spark(120,20,4,'#fff',1.2)}${spark(186,90,4,'#fff',.4)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <g class="beat">${star5(166,40,16,SUN,`stroke="${SUN}" stroke-width="4"`)}</g>
+ <path d="M108,188 L120,132 L132,188" fill="none" stroke="#b9c4d8" stroke-width="4" stroke-linecap="round"/>
+ <g transform="translate(120,128) rotate(-42)"><rect x="-34" y="-9" width="62" height="18" rx="6" fill="#dfe6f2"/><rect x="24" y="-12" width="16" height="24" rx="5" fill="${RED}"/><rect x="-42" y="-6" width="10" height="12" rx="3" fill="#9aa8c0"/></g>
+ <path d="M150,96 L160,56" stroke="#fff" stroke-width="2.5" stroke-dasharray="3 8" stroke-linecap="round" class="glow"/>
+ ${at(58,190,.84,cat(Object.assign({armR:-70,eyes:'happy',mouth:'open'},NL)))}`;
+
+S.other=`${bg('#e3fbf5')}
+ <rect x="10" y="118" width="180" height="10" rx="5" fill="#c98a4b"/>
+ <g opacity=".35">${at(54,118,1.8,P.cup(SKY))}</g>${check(54,54,12,6)}
+ ${at(142,118,1.8,P.cup(RED))}${ring(146,88,42,RED)}
+ ${arrow(96,60,118,70,RED,6,'float')}
+ ${floor(186,'#bff0de')}${at(92,196,.6,cat({armR:-120,armsFront:true,armRcls:'bob',eyes:'happy'}))}`;
+
+S.than=`${park(170)}${cloud(150,26,.7)}
+ ${at(62,186,1.5,P.house())}
+ ${at(154,188,.66,P.car(SKY))}
+ ${at(156,152,.36,cat({eyes:'happy',tail:false}))}
+ <g class="beat"><path d="M112,96 l24,14 -24,14" fill="none" stroke="${VIO}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+
+S.then=`${bg('#ece6ff')}
+ ${panel(8,36,84,128)}${panel(108,36,84,128)}
+ ${at(50,152,.56,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}
+ ${at(146,152,.56,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(166,152)"><g class="roll" style="animation-duration:1.2s"><g transform="scale(.7)">${P.ball(RED)}</g></g></g>
+ <circle cx="50" cy="24" r="6" fill="${VIO}"/><circle cx="142" cy="24" r="6" fill="${VIO}"/><circle cx="158" cy="24" r="6" fill="${VIO}"/>
+ ${arrow(92,100,106,100,RED,6,'glow')}`;
+
+S.now=`${bg('#fff1c9')}<circle cx="90" cy="110" r="74" fill="#ffe7a3"/>
+ <g class="ring">${at(158,84,1,P.clock(30,0))}</g>
+ ${arcArrow(150,96,128,128,-12,RED,5,'','float')}
+ <path d="M190,40 l8,-6 M192,54 h8 M126,40 l-8,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(86,180,1,cat({armL:40,armR:-140,armRcls:'munch',armsFront:true,mouth:'open',mouthCls:'chew',prop:P.fish,tail:false}))}
+ ${floor(152,MINT)}<rect y="152" width="200" height="8" fill="#9be6d8"/><g transform="translate(86,184)">${P.plate(40)}</g>${fishAt(78,174,1.3,8)}`;
+
+S.look=`${park(170)}${cloud(40,30,.8)}
+ ${bfly(140,62,ORA,0)}${ring(150,62,30,RED)}
+ <path d="M92,82 l10,-12 M100,96 l14,-6 M84,70 l4,-14" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <path d="M84,120 L124,80" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ ${sh(52,192,32)}${at(52,190,.92,cat({eyes:'wide',mouth:'o',armR:-128,armsFront:true}))}`;
+
+S.only=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <g opacity=".3">${at(30,186,.56,K('white'))}${at(74,186,.56,K('orange'))}${at(118,186,.56,K('grey'))}</g>
+ <circle cx="164" cy="140" r="40" fill="#fff" opacity=".7"/>
+ ${at(164,186,.62,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}),'hop')}
+ ${ring(164,140,42,RED)}${arrow(120,60,146,96,RED,6,'float')}`;
+
+S.come=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g class="road"><path d="M100,150 h60" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(112,150,94,150,RED,5)}
+ ${sh(56,190,34)}${at(56,188,.96,cat({eyes:'happy',mouth:'open',armR:-110,armRcls:'wave',armsFront:true}))}
+ <g transform="translate(160,190)"><g class="walkbob"><g transform="scale(.5)">${K('grey',{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g></g>
+ ${heart(108,100,.9,RED,0)}`;
+
+S.its=`${park()}${sun(170,30,10)}
+ ${sh(64,190,40)}${at(68,188,.94,P.dog({happy:true}))}
+ ${at(156,188,1.7,P.ball(SKY))}${ring(156,168,30,RED)}
+ ${arcArrow(96,110,146,134,26,RED,4,'6 8')}`;
+
+S.over=`${bg('#e3fbf5')}${cloud(30,30,.7)}${floor(184,'#bff0de')}
+ ${sh(100,190,40)}${at(100,186,1,P.boxClosed(64,50))}
+ ${arcArrow(24,170,176,170,150,RED,5,'8 10')}
+ <g transform="translate(100,112) rotate(12)"><g class="float"><g transform="scale(.66)">${cat({armL:120,armR:-120,armsFront:true,eyes:'happy',mouth:'open'})}</g></g></g>
+ ${spark(40,60,6,SUN,0)}${spark(170,70,6,VIO,.7)}`;
+
+S.think=`${bg('#ece6ff')}
+ ${think(134,54,50,32,`${T(110,66,'?',34,RED)}<g transform="translate(142,60) scale(1.5)">${P.fish}</g><g transform="translate(166,74) scale(.6)">${P.ball(SKY)}</g>`,-1)}
+ ${floor(184,'#d6ccf5')}${sh(62,190,36)}
+ ${at(62,188,1,cat({headCls:'tilt',armR:-152,armsFront:true}))}
+ <circle class="glow" cx="24" cy="60" r="4" fill="${VIO}"/><circle class="glow" style="animation-delay:.5s" cx="36" cy="44" r="5" fill="${VIO}"/><circle class="glow" style="animation-delay:1s" cx="52" cy="32" r="6" fill="${VIO}"/>`;
+
+S.also=`${park()}${cloud(100,26,.7)}
+ ${sh(56,190,36)}${at(60,188,.8,P.dog({happy:true}))}
+ ${sh(150,190,30)}${at(150,188,.86,cat({eyes:'happy',mouth:'open'}),'hop')}
+ ${heart(40,90,.9,RED,0)}${heart(150,60,.9,RED,.6)}
+ <g class="beat"><circle cx="108" cy="96" r="16" fill="#fff"/><path d="M108,86 v20 M98,96 h20" stroke="${MINT}" stroke-width="6" stroke-linecap="round"/></g>`;
+
+S.back=`${room('#fff1c9','#e4b77a')}
+ <rect x="96" y="34" width="84" height="146" rx="8" fill="#b07a45"/><rect x="104" y="42" width="68" height="138" fill="#cdeeff"/><path d="M104,150 q34,-16 68,0 v30 h-68 Z" fill="#8fe0a8"/><circle cx="156" cy="62" r="9" fill="${SUN}"/>
+ <path d="M104,42 L90,34 V188 L104,180 Z" fill="${SKY}"/>
+ <rect x="100" y="178" width="76" height="9" rx="4" fill="#5fd3c0"/>
+ <rect x="22" y="150" width="36" height="34" rx="6" fill="${RED}"/><path d="M32,150 v-8 q0,-6 8,-6 q8,0 8,6 v8" fill="none" stroke="#b52f29" stroke-width="4"/><path d="M22,164 h36" stroke="#b52f29" stroke-width="3"/>
+ ${sh(120,190,30)}${at(120,188,.86,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ <g class="glow"><path d="M40,60 q24,-34 48,0" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/><path d="M40,60 l-2,-14 M40,60 l13,-5" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>`;
+
+/* Tag 27–30: after, use, how, our, work · first, well, way, even, new · want, because, any, these, day · most, us, very, thing, man */
+S.after=`${bg('#e3fbf5')}${floor(180,'#bff0de')}
+ <g opacity=".45">${at(44,150,.74,P.school)}</g>${check(44,60,10,6)}
+ <path d="M14,176 h172" stroke="${VIO}" stroke-width="4" stroke-linecap="round"/><circle cx="44" cy="176" r="6" fill="${VIO}"/><circle cx="140" cy="176" r="8" fill="${RED}"/>
+ ${arrow(84,110,110,110,RED,6,'glow')}
+ ${sh(136,170,26,'shadow')}${at(136,168,.74,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open'}),'hop')}
+ <g transform="translate(176,150)"><g class="jump">${P.ball(RED)}</g></g>`;
+
+S.use=`${bg('#ece6ff')}<circle cx="100" cy="100" r="82" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({eyes:'happy',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-4) scale(1.15)">${P.phone}<circle class="glow" cx="0" cy="-20" r="5" fill="${RED}"/></g>`}))}
+ ${[[150,80,0],[166,54,1],[40,70,.5]].map(([x,y,d])=>`<g transform="translate(${x},${y})"><g class="rise" style="animation-delay:${d}s"><rect x="-13" y="-9" width="26" height="18" rx="6" fill="#fff"/><path d="${heartP}" transform="translate(0,2) scale(.5)" fill="${RED}"/></g></g>`).join('')}`;
+
+S.how=`${bg('#fff1c9')}
+ ${floor(150,'#c98a4b')}<rect y="150" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(108,112) scale(4.6)">${P.fish}</g>
+ <rect x="22" y="160" width="160" height="20" rx="4" fill="${SUN}"/>${[30,46,62,78,94,110,126,142,158,174].map((x,i)=>`<path d="M${x},160 v${i%2?6:10}" stroke="${INK}" stroke-width="2"/>`).join('')}
+ <path d="M30,62 h156 M30,62 l8,-6 M30,62 l8,6 M186,62 l-8,-6 M186,62 l-8,6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${T(100,44,'?',36,RED,'middle','beat')}
+ ${at(26,150,.42,cat({eyes:'wide',mouth:'o',tail:false}),'peek')}`;
+
+S.our=`${park()}${cloud(30,30,.7)}
+ ${at(100,170,1.4,P.house())}${heartS(100,34,1.4,RED,'beat')}
+ <ellipse cx="100" cy="170" rx="62" ry="30" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="9 8"/>
+ ${at(76,194,.5,cat({eyes:'happy',armR:-62,mouth:'open'}))}${at(124,194,.5,K('orange',{eyes:'happy',armL:62,mouth:'open'}))}`;
+
+const hammer=`<g class="wave"><path d="M0,2 v-30" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><rect x="-12" y="-38" width="26" height="12" rx="3" fill="#9aa8c0"/></g>`;
+S.work=`${bg('#fff1c9')}<path d="M0,60 h200 M0,120 h200" stroke="#ffe39a" stroke-width="2"/>
+ ${floor(184,'#ffe08a')}
+ <rect x="104" y="140" width="90" height="12" rx="3" fill="#c98a4b"/><rect x="112" y="152" width="10" height="34" fill="#8a5a30"/><rect x="176" y="152" width="10" height="34" fill="#8a5a30"/>
+ <path d="M130,140 v-10 M150,140 v-14 M170,140 v-10" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/>
+ ${spark(134,118,7,SUN,0)}${spark(150,104,6,ORA,.25)}
+ ${sh(66,190,36)}${at(66,188,.98,cat({bow:false,hat:P.hatHard,eyes:'happy',armR:-118,armsFront:true,prop:hammer}))}`;
+
+S.first=`${bg('#e3fbf5')}
+ ${[[20,RED,0],[60,SUN,.9],[140,VIO,1.3],[180,SKY,.4],[100,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.5" fill="${c}"/>`).join('')}
+ <rect x="68" y="124" width="64" height="76" rx="4" fill="${SUN}"/>${star5(100,156,14,'#fff')}
+ <rect x="8" y="154" width="60" height="46" rx="4" fill="#cfd8e6"/><rect x="132" y="166" width="60" height="34" rx="4" fill="#e0a070"/>
+ ${at(38,156,.48,K('orange',{eyes:'happy'}))}${at(162,168,.48,K('grey'))}
+ ${at(100,126,.62,cat({armL:130,armR:-130,armsFront:true,eyes:'happy',mouth:'open',mid:`<circle cx="0" cy="-30" r="9" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><path d="M-12,-52 L0,-38 L12,-52" fill="none" stroke="${RED}" stroke-width="4"/>`}),'hop')}`;
+
+const guitar=`<g transform="rotate(-24)"><rect x="-4" y="-78" width="8" height="58" rx="3" fill="#8a5a30"/><rect x="-7" y="-88" width="14" height="14" rx="3" fill="${INK}"/><ellipse cx="0" cy="-8" rx="20" ry="16" fill="${ORA}"/><ellipse cx="0" cy="-28" rx="14" ry="12" fill="${ORA}"/><circle cx="0" cy="-14" r="6" fill="#5a2a4a"/><path d="M0,-78 V4" stroke="#fff" stroke-width="1"/></g>`;
+S.well=`${bg('#ece6ff')}<circle cx="100" cy="104" r="80" fill="#f6f2ff"/>
+ <g class="twinkle">${star5(60,30,11,SUN)}</g><g class="twinkle" style="animation-delay:.4s">${star5(100,20,13,SUN)}</g><g class="twinkle" style="animation-delay:.8s">${star5(140,30,11,SUN)}</g>
+ ${floor(184,'#d6ccf5')}${sh(100,190,38)}
+ ${at(100,186,1.02,cat({eyes:'happy',mouth:'open',armL:60,armR:10,armRcls:'wave',armsFront:true,mid:`<g transform="translate(2,-16)">${guitar}</g>`,headCls:'tilt'}))}
+ ${note(30,110,RED,0)}${note(170,100,VIO,.8)}${note(160,60,SKY,1.6)}`;
+
+S.way=`${bg('#cdeeff')}${sun(30,28,10)}${floor(70,'#8fe0a8')}
+ <path d="M120,200 C150,160 60,140 110,104 C140,84 150,80 150,74" fill="none" stroke="#f3d9a4" stroke-width="22" stroke-linecap="round"/>
+ <g class="road"><path d="M120,200 C150,160 60,140 110,104 C140,84 150,80 150,74" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 12"/></g>
+ ${at(154,76,.5,P.school)}${tree(30,110,.6)}${tree(180,150,.7)}
+ <path d="M70,150 v-40" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M56,100 h30 l8,8 -8,8 h-30 Z" fill="${RED}"/>
+ ${at(44,196,.7,cat({armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-28)"><path d="M-22,-12 l14,4 16,-4 14,4 v22 l-14,-4 -16,4 -14,-4 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><path d="M-12,2 q8,-8 16,0 t10,-4" fill="none" stroke="${RED}" stroke-width="2" stroke-dasharray="2 3"/></g>`}))}`;
+
+S.even=`${park(170)}${cloud(100,26,.7)}
+ ${at(30,192,.42,K('cream',{armR:-120,armRcls:'throwarm',armsFront:true,eyes:'happy'}))}
+ <g transform="translate(46,140)"><g class="throwball"><g transform="scale(1.6)">${P.ball(RED)}</g></g></g>
+ <path d="M48,130 q54,-70 108,10" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ <path d="M130,84 l8,-12 M140,92 l14,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${sh(162,192,28)}${at(162,190,.78,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+S.new=`${bg('#fff3cf')}<circle cx="112" cy="104" r="80" fill="#ffe7a3"/>
+ ${floor(180,'#ffe08a')}${sh(116,188,70)}
+ ${at(116,184,1.3,P.car(SKY))}
+ <path d="M96,118 q-18,-22 -22,-4 q4,8 22,4 Z M96,118 q18,-22 22,-4 q-4,8 -22,4 Z" fill="${RED}"/><circle cx="96" cy="118" r="5" fill="#ff8a7a"/><path d="M96,120 v34" stroke="${RED}" stroke-width="5"/>
+ ${spark(60,100,8,'#fff',0)}${spark(176,110,7,'#fff',.5)}${spark(150,80,6,SUN,1)}${spark(84,166,5,'#fff',1.4)}
+ <g transform="translate(172,60) rotate(16)"><path d="M-16,-10 h24 l10,10 -10,10 h-24 Z" fill="${MINT}"/><circle cx="8" cy="0" r="2.5" fill="#fff"/></g>
+ ${at(26,194,.5,cat({eyes:'spark',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}`;
+
+S.want=`${bg('#fff1c9')}
+ <rect x="96" y="56" width="100" height="10" rx="5" fill="#c98a4b"/><path d="M110,66 l-8,14 M182,66 l8,14" stroke="#8a5a30" stroke-width="4" stroke-linecap="round"/>
+ <g transform="translate(146,56)">${P.plate(34)}</g>${fishAt(146,44,2.2,0)}${ring(146,42,34,RED)}
+ ${floor(184,'#ffe08a')}${sh(66,190,36)}
+ ${at(66,188,.98,cat({eyes:'spark',mouth:'tongue',armL:30,armR:-160,armRcls:'bob',armsFront:true}),'hop')}
+ ${heart(110,110,.9,RED,0)}${heart(24,70,.8,RED,.9)}`;
+
+S.because=`${bg('#ffe9d6')}
+ <g class="beat"><g transform="translate(150,52) scale(3.4)"><path d="${heartP}" fill="${RED}"/></g><path d="M139,40 q3,-4 6,0 M155,40 q3,-4 6,0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M142,50 q8,8 16,0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g>
+ ${floor(186,'#ffd9bd')}
+ ${at(56,190,.8,cat({armL:-40,armR:-62,eyes:'happy',mouth:'open'}),'sway')}${at(104,190,.8,K('orange',{armL:62,armR:40,eyes:'happy'}),'sway')}
+ ${arcArrow(90,96,128,66,20,VIO,5,'')}`;
+
+S.any=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="104" y="20" width="84" height="164" rx="10" fill="#fff" stroke="#b9c9dd" stroke-width="3"/><rect x="112" y="28" width="68" height="148" rx="6" fill="#eaf7ff"/><path d="M112,76 h68 M112,126 h68" stroke="#b9c9dd" stroke-width="3"/>
+ <path d="M104,20 l-22,10 v150 l22,4 Z" fill="#f4f8ff" stroke="#b9c9dd" stroke-width="3" stroke-linejoin="round"/>
+ ${T(146,64,'?',30,RED,'middle','beat')}<circle cx="130" cy="120" r="2.5" fill="#c98a4b"/><path d="M160,28 q-6,14 12,16 M168,28 q-4,8 10,10" fill="none" stroke="#b9c9dd" stroke-width="1.6"/>
+ ${sh(46,192,30)}${at(46,190,.86,cat({mouth:'wavy',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-16)">${P.plate(26)}</g>`}))}`;
+
+S.these=`${bg('#ece6ff')}<circle cx="110" cy="104" r="78" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}
+ ${[[RED,0,0],[SKY,4,-16],[SUN,-3,-32],[MINT,3,-48],[VIO,-2,-64]].map(([c,dx,dy])=>`<rect x="${112+dx}" y="${168+dy}" width="64" height="15" rx="3" fill="${c}"/><rect x="${118+dx}" y="${172+dy}" width="18" height="7" rx="2" fill="#fff" opacity=".8"/>`).join('')}
+ <rect x="102" y="92" width="86" height="96" rx="14" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 8"/>
+ ${sh(54,190,34)}${at(54,188,.94,cat({eyes:'happy',mouth:'open',armR:-84,armsFront:true}))}`;
+
+S.day=`${bg('#cdeeff')}${sun(150,44,22)}${cloud(40,36,.9)}${cloud(100,70,.6)}
+ <path d="M30,60 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round" class="float"/>
+ ${hills('#8fe0a8','#6fd08f',160)}
+ <path d="M30,178 l40,-12 100,6 -30,22 h-90 Z" fill="${RED}"/><path d="M50,172 l-20,18 M90,170 l-20,24 M130,172 l-18,22" stroke="#fff" stroke-width="5" opacity=".8"/>
+ <path d="M134,166 h32 l-4,20 h-24 Z" fill="#c98a4b"/><path d="M136,166 q14,-22 28,0" fill="none" stroke="#8a5a30" stroke-width="3"/>
+ ${at(84,184,.8,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${flower(16,190,SUN,0)}${flower(186,188,VIO,.5)}`;
+
+S.most=`${bg('#4a4496')}
+ ${spark(20,30,4,'#fff',0)}${spark(186,150,4,'#fff',.8)}${spark(110,20,3.5,'#fff',1.3)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <g opacity=".6">${star5(78,70,12,SUN)}${star5(112,62,17,SUN)}</g>
+ <circle class="glow" cx="156" cy="62" r="38" fill="#ffe89a" opacity=".35"/>
+ <g class="beat">${star5(156,62,28,SUN,`stroke="${SUN}" stroke-width="5"`)}<path d="M142,30 l4,-12 6,8 4,-10 4,10 6,-8 4,12 Z" fill="${RED}"/></g>
+ <path d="M80,122 L130,84" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" class="glow"/>
+ ${at(46,190,.84,cat(Object.assign({armR:-128,armsFront:true,eyes:'spark',mouth:'open'},NL)))}`;
+
+S.us=`${park()}${cloud(100,26,.7)}
+ <path d="M100,200 q-6,-20 0,-40" fill="none" stroke="#f3d9a4" stroke-width="20" stroke-linecap="round"/>
+ ${sh(68,190,30)}${sh(134,190,30)}
+ ${at(68,188,.86,cat({armL:125,armLcls:'wave',armR:-50,armsFront:true,eyes:'happy',mouth:'open'}))}
+ ${at(134,188,.86,K('orange',{armR:-125,armRcls:'wave',armL:50,armsFront:true,eyes:'happy',mouth:'open'}))}
+ <ellipse cx="101" cy="134" rx="84" ry="62" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${arrow(100,198,100,172,RED,6,'float')}`;
+
+const burst=(x,y,c,d)=>`<g class="twinkle" style="animation-delay:${d}s" stroke="${c}" stroke-width="3.5" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>`<path transform="rotate(${a} ${x} ${y})" d="M${x},${y-8} v-12"/>`).join('')}<circle cx="${x}" cy="${y}" r="4" fill="${c}" stroke="none"/></g>`;
+S.very=`${bg('#fff3cf')}
+ ${burst(34,40,RED,0)}${burst(164,34,VIO,.5)}${burst(100,22,SKY,1)}${burst(176,110,MINT,1.4)}${burst(22,116,ORA,.8)}
+ ${floor(184,'#ffe08a')}${sh(100,190,40,'shadow')}
+ ${at(100,186,1.04,cat({armL:140,armR:-140,armsFront:true,eyes:'happy',mouth:'big'}),'jump')}
+ ${heart(60,130,.9,RED,0)}${heart(142,126,.9,RED,.7)}`;
+
+S.thing=`${bg('#e3fbf5')}<circle cx="128" cy="110" r="64" fill="#f0fdf8"/>
+ ${floor(184,'#bff0de')}${sh(130,190,40)}
+ <g class="ring"><path d="M130,96 q-8,-10 0,-20 q8,-10 0,-20" fill="none" stroke="#9aa8c0" stroke-width="3"/><circle class="glow" cx="130" cy="52" r="6" fill="${RED}"/>
+  <rect x="96" y="96" width="68" height="74" rx="20" fill="${VIO}"/><circle cx="130" cy="124" r="14" fill="#fff"/><circle class="blink" cx="130" cy="124" r="7" fill="${INK}"/>
+  <rect x="108" y="148" width="44" height="8" rx="4" fill="${SUN}"/><path d="M96,130 h-14 v-14 M164,130 h14 v14" fill="none" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="108" y="170" width="12" height="16" rx="3" fill="#9aa8c0"/><rect x="140" y="170" width="12" height="16" rx="3" fill="#9aa8c0"/></g>
+ <g class="spin" style="animation-duration:5s"><circle cx="176" cy="60" r="10" fill="none" stroke="${MINT}" stroke-width="5" stroke-dasharray="5 5"/></g>
+ ${T(170,112,'?',26,RED,'middle','beat')}
+ ${at(38,192,.76,cat({eyes:'wide',mouth:'o',headCls:'tilt',armR:-84,armRcls:'bob'}))}`;
+
+const fedora=`<ellipse cx="0" cy="-140" rx="34" ry="7" fill="#5a4a6c"/><path d="M-22,-140 q0,-24 22,-24 q22,0 22,24 Z" fill="#5a4a6c"/><rect x="-22" y="-146" width="44" height="6" fill="${RED}"/>`;
+S.man=`${park()}${sun(30,30,10)}${cloud(160,30,.8)}
+ ${sh(112,190,32)}${at(112,188,1.06,P.person({shirt:SKY,stripe:'#2f6fd0',pants:'#3a2a4a',hair:'#3a2a4a',shoes:'#7a4a21',beard:true,hat:fedora}))}
+ ${at(38,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+/* Tag 31–34: find, here, many, tell, woman · life, child, world, still, try · last, ask, need, too, feel · state, never, become, between, high */
+const lupe=`<circle cx="0" cy="-14" r="12" fill="#bfe9ff" opacity=".7" stroke="${INK}" stroke-width="3"/><path d="M0,-2 v10" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>`;
+const keyP=`<circle cx="-8" cy="0" r="6" fill="none" stroke="${SUN}" stroke-width="4"/><path d="M-2,0 h16 M8,0 v5 M13,0 v4" stroke="${SUN}" stroke-width="4" stroke-linecap="round"/>`;
+const pin=(x,y,c)=>`<g transform="translate(${x},${y})"><g class="hop"><path d="M0,0 q-13,-13 -13,-22 q0,-13 13,-13 q13,0 13,13 q0,9 -13,22 Z" fill="${c||RED}"/><circle cx="0" cy="-22" r="5" fill="#fff"/></g></g>`;
+S.find=`${park(170)}${cloud(40,30,.8)}
+ <path d="M120,176 l5,-16 5,16 5,-20 5,20 M160,178 l5,-14 5,14" fill="none" stroke="#3aa568" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+ <g transform="translate(150,178) rotate(-20)">${keyP}</g>${ring(150,176,22,RED)}${spark(170,150,7,SUN,0)}${spark(132,150,5,'#fff',.6)}
+ ${sh(64,192,34)}${at(64,190,.94,cat({eyes:'spark',mouth:'open',armR:-80,armRcls:'bob',prop:`<g transform="translate(6,10) rotate(-60)">${lupe}</g>`}))}`;
+
+S.here=`${bg('#e3fbf5')}<circle cx="128" cy="150" r="46" fill="#fff" opacity=".7"/>${floor(184,'#bff0de')}
+ ${at(128,186,1.6,P.ball(RED))}${pin(128,138)}
+ ${arrow(128,40,128,84,RED,7,'float')}
+ ${sh(56,190,32)}${at(56,188,.9,cat({eyes:'happy',mouth:'open',armR:-60}))}`;
+
+S.many=`${bg('#d9fbf1')}<circle cx="100" cy="90" r="84" fill="#bff3e4"/>
+ ${[[30,30],[70,24],[110,32],[150,26],[182,40],[20,66],[58,62],[96,70],[134,64],[172,74],[36,100],[76,104],[118,100],[158,106],[60,134],[140,134]].map(([x,y],i)=>`<g transform="translate(${x},${y}) rotate(${(i*37)%40-20})"><g class="${i%2?'float':'hop'}"><g transform="scale(1.3)">${P.fish}</g></g></g>`).join('')}
+ ${floor(186,'#9fe6d2')}${at(100,196,.6,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+S.tell=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ ${speech(128,52,108,64,`<circle cx="104" cy="52" r="14" fill="${SUN}"/><circle cx="110" cy="47" r="12" fill="#fff"/>${star5(140,46,9,SUN)}${star5(160,62,6,SUN)}`,84,104)}
+ ${sh(56,190,32)}${at(56,188,.92,cat({mouth:'open',armR:-120,armRcls:'bob',armsFront:true}))}
+ ${at(150,190,.52,K('grey',{eyes:'wide',headCls:'tilt'}))}${at(178,192,.4,K('cream',{eyes:'wide'}))}`;
+
+S.woman=`${park()}${sun(30,30,10)}${cloud(160,30,.8)}
+ ${sh(112,190,30)}${at(112,188,1.04,P.person({shirt:RED,stripe:'#b52f29',hair:'#3a2a4a',long:true,skirt:true,pants:VIO,shoes:'#7a4a21'}))}
+ ${at(38,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+const sprout=(x,y,h,fl)=>`<path d="M${x},${y} v${-h}" stroke="#3aa568" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="${x-6}" cy="${y-h*.5}" rx="6" ry="3" fill="#4fc27f" transform="rotate(-25 ${x-6} ${y-h*.5})"/><ellipse cx="${x+6}" cy="${y-h*.7}" rx="6" ry="3" fill="#4fc27f" transform="rotate(25 ${x+6} ${y-h*.7})"/>${fl?`<g class="flower"><circle cx="${x}" cy="${y-h-4}" r="9" fill="${fl}"/><circle cx="${x}" cy="${y-h-4}" r="3.5" fill="${SUN}"/></g>`:''}`;
+S.life=`${bg('#e3fbf5')}${sun(170,30,11)}${floor(160,'#c98a4b')}<rect y="160" width="200" height="8" fill="#8fe0a8"/>
+ <ellipse cx="82" cy="172" rx="5" ry="3.5" fill="#7a4a21"/>${sprout(112,166,18)}${sprout(142,166,38)}${sprout(174,166,58,RED)}
+ ${arcArrow(82,150,170,96,30,VIO,4,'6 8')}
+ ${heartS(128,60,1.6,RED,'beat')}
+ ${at(34,190,.7,cat({eyes:'happy',armR:-92,prop:`<g transform="translate(8,6)"><rect x="-10" y="-12" width="20" height="16" rx="3" fill="${SKY}"/><path d="M10,-8 l12,-6" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/></g>`}))}
+ <path class="drip" d="${tear(74,118)}" fill="${SKY}"/>`;
+
+S.child=`${park()}${cloud(40,30,.8)}
+ ${sh(120,190,24)}${at(120,188,.74,P.person({shirt:MINT,stripe:'#1f9c83',wave:false,happy:true,hair:'#e0a83a'}))}
+ <g class="float"><path d="M150,128 q10,-30 0,-56" fill="none" stroke="${INK}" stroke-width="1.6"/><ellipse cx="150" cy="52" rx="16" ry="20" fill="${RED}"/><ellipse cx="144" cy="44" rx="4" ry="6" fill="#fff" opacity=".5"/></g>
+ ${sh(54,192,30)}${at(54,190,.8,cat({eyes:'happy',armR:-80}))}${heart(86,110,.8,RED,0)}`;
+
+S.world=`${bg('#2d2a6e')}${spark(20,30,4,'#fff',0)}${spark(176,24,4,'#fff',.6)}${spark(182,150,4,'#fff',1.2)}${spark(18,160,3.5,'#fff',.9)}
+ <clipPath id="glb"><circle cx="100" cy="118" r="64"/></clipPath>
+ <circle cx="100" cy="118" r="64" fill="#4f9dff"/>
+ <g clip-path="url(#glb)"><g class="scroll" style="animation-duration:16s" fill="#4fc27f"><path d="M40,80 q20,-16 40,0 q10,20 -6,34 q-20,10 -34,-8 Z M110,130 q24,-10 36,10 q4,22 -18,26 q-20,-6 -18,-36 Z M150,70 q16,-6 22,8 q-6,12 -22,-8 Z"/><path transform="translate(200,0)" d="M40,80 q20,-16 40,0 q10,20 -6,34 q-20,10 -34,-8 Z M110,130 q24,-10 36,10 q4,22 -18,26 q-20,-6 -18,-36 Z M150,70 q16,-6 22,8 q-6,12 -22,-8 Z"/></g><ellipse cx="80" cy="92" rx="30" ry="18" fill="#fff" opacity=".18"/></g>
+ <circle cx="100" cy="118" r="64" fill="none" stroke="#bfe9ff" stroke-width="3"/>
+ ${at(100,58,.48,cat(Object.assign({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true},NL)))}`;
+
+S.still=`${bg('#cfe8ff')}
+ <rect x="118" y="16" width="66" height="56" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="5"/><g transform="translate(152,44) scale(.8)">${sun(0,0,12)}</g>
+ ${floor(170,'#b9d6f2')}
+ ${at(100,186,1.6,P.bed)}
+ ${at(62,164,.6,cat({tail:false,eyes:'closed',armL:60,armR:-60}))}<path class="breathe" d="M70,150 q40,-22 108,0 v24 h-108 Z" fill="${SKY}"/>
+ <g class="ring">${at(26,140,.5,P.clock(28,90))}</g>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="84" y="110" font-size="14">z</text><text class="zz" style="animation-delay:1s" x="96" y="94" font-size="19">z</text></g>`;
+
+const block=(x,y,c,l)=>`<rect x="${x-16}" y="${y-32}" width="32" height="32" rx="5" fill="${c}"/>${T(x,y-8,l,20,'#fff')}`;
+S.try=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${block(132,184,SKY,'A')}${block(134,152,MINT,'B')}${block(130,120,VIO,'C')}
+ <g class="wiggle" style="transform-origin:132px 88px">${block(128,88,RED,'D')}</g>
+ ${sh(62,190,34)}${at(62,188,.96,cat({mouth:'tongue',armR:-128,armRcls:'bob',armsFront:true}))}
+ <path d="M160,60 l10,-8 M164,76 h12" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>`;
+
+S.last=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <path d="M178,60 v126" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><rect x="150" y="50" width="44" height="26" rx="5" fill="${SUN}"/>${fishAt(172,63,1.2,0)}
+ ${flipAt(140,188,.5,K('orange'))}${flipAt(104,188,.5,K('grey'))}${flipAt(68,188,.5,K('white'))}
+ ${flipAt(30,188,.56,cat({eyes:'happy'}))}${ring(30,160,36,RED)}${arrow(30,70,30,112,RED,7,'float')}`;
+
+S.ask=`${bg('#fff1c9')}
+ <rect x="104" y="18" width="86" height="56" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(147,56,'ABC',22,'#fff')}
+ ${floor(184,'#ffe08a')}
+ ${at(150,188,.8,K('white',{hat:glasses.replace(/#fff/g,INK),headCls:'tilt'}))}
+ ${speech(56,36,52,44,T(56,50,'?',30,RED),64,72)}
+ ${sh(56,190,30)}${at(56,188,.82,cat({mouth:'open',armR:-155,armsFront:true}))}`;
+
+S.need=`${bg('#ffe2a8')}${sun(40,40,18)}<path d="M0,172 q50,-16 100,0 t100,0 v28 h-200 Z" fill="#f6c27a"/>
+ ${think(142,52,42,30,`<path d="M142,30 q-16,24 0,34 q16,-10 0,-34 Z" fill="${SKY}"/>`,-1)}
+ ${sh(86,190,34)}${at(86,188,.96,cat({eyes:'closed',mouth:'big',armR:-92,prop:`<g transform="translate(2,12) rotate(110)">${P.cup(SKY)}</g>`}))}
+ <path class="sweat" d="${tear(50,96)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(126,110)}" fill="${SKY}"/>`;
+
+S.too=`${bg('#fff1c9')}${floor(160,'#c98a4b')}<rect y="160" width="200" height="8" fill="#e0a868"/>
+ ${at(132,164,2.2,P.cup(RED))}
+ <path class="heatw" d="M116,84 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path class="heatw" style="animation-delay:.5s" d="M136,80 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="${ORA}" stroke-width="4" stroke-linecap="round"/><path class="heatw" style="animation-delay:1s" d="M154,84 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/>
+ ${thermo(186,60,64,RED)}
+ ${at(46,196,.8,cat({eyes:'wide',mouth:'o',armR:-70,armRcls:'ring',tail:false}))}
+ <path d="M88,128 l-10,-8 M92,142 h-12 M88,116 l-6,-12" stroke="${RED}" stroke-width="3.5" stroke-linecap="round" class="glow"/>`;
+
+const face=(x,y,c,m)=>`<circle cx="${x}" cy="${y}" r="13" fill="${c}"/><circle cx="${x-4.500}" cy="${y-2}" r="1.800" fill="${INK}"/><circle cx="${x+4.500}" cy="${y-2}" r="1.800" fill="${INK}"/><path d="M${x-5},${y+5} q5,${m} 10,0" fill="none" stroke="${INK}" stroke-width="1.800" stroke-linecap="round"/>`;
+S.feel=`${bg('#ffe9d6')}<circle cx="100" cy="104" r="80" fill="#ffdcc0"/>${floor(184,'#ffd9bd')}${sh(100,190,38)}
+ <g class="float">${face(34,56,SUN,5)}</g><g class="float" style="animation-delay:.6s">${face(166,50,'#9fd4f0',-5)}</g><g class="float" style="animation-delay:1.1s">${face(170,120,'#b7efc8',0)}</g>
+ ${at(100,186,1.04,cat({eyes:'closed',armL:-46,armR:46,armsFront:true,mid:`<g transform="translate(0,-30)"><g class="beat"><path d="${heartP}" fill="${RED}" transform="scale(1.3)"/></g></g>`}))}`;
+
+S.state=`${bg('#e3fbf5')}
+ <path d="M30,60 q30,-30 70,-16 q40,-14 66,20 q20,40 -14,70 q-40,30 -84,10 q-50,-20 -38,-84 Z" fill="#b7efc8" stroke="#3aa568" stroke-width="3" stroke-dasharray="8 6"/>
+ <path d="M70,90 q20,-10 34,6 M120,70 q16,10 10,30" fill="none" stroke="#9be8b4" stroke-width="6" stroke-linecap="round"/>
+ <path d="M112,112 v-40" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M112,72 q10,-4 20,0 v12 q-10,-4 -20,0 Z" fill="${RED}"/>${star5(112,116,7,SUN)}
+ <g transform="translate(70,130) scale(.4)">${P.house()}</g><g transform="translate(150,118) scale(.34)">${P.house(SKY)}</g>
+ ${at(34,196,.52,cat({eyes:'happy',armR:-110,armRcls:'bob'}))}`;
+
+S.never=`${bg('#cdeeff')}${cloud(40,40,.9)}${cloud(160,120,.7)}
+ <g class="float"><g transform="translate(110,78) scale(3.4)">${P.fish}</g><g class="flap"><path d="M104,62 q-20,-30 -34,-8 q10,12 34,8 Z M118,62 q20,-30 34,-8 q-10,12 -34,8 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/></g></g>
+ <g class="beat">${cross(110,78,40,9)}</g>
+ <path d="M0,176 q50,-12 100,0 t100,0 v24 h-200 Z" fill="#5cc3ff"/>
+ ${at(40,196,.6,cat({eyes:'closed',mouth:'wavy',armL:70,armR:-70,headCls:'shiver',tail:false}))}`;
+
+S.become=`${bg('#ece6ff')}
+ ${panel(8,40,84,110)}${panel(108,40,84,110)}
+ <g class="wiggle"><g fill="#4fc27f">${[30,42,54,66].map(x=>`<circle cx="${x}" cy="110" r="8"/>`).join('')}</g><circle cx="74" cy="104" r="9" fill="#62d08f"/><circle cx="77" cy="102" r="1.8" fill="${INK}"/><path d="M72,96 l-3,-8 M78,96 l3,-8" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/></g>
+ <path d="M20,124 q30,10 60,0" fill="none" stroke="#3aa568" stroke-width="4" stroke-linecap="round"/>
+ <g transform="translate(150,96) scale(2)"><g class="flap"><path d="M0,0 q-12,-14 -16,-2 q-2,10 16,2 Z M0,0 q12,-14 16,-2 q2,10 -16,2 Z" fill="${ORA}"/><circle cx="-9" cy="-3" r="2.2" fill="${RED}"/><circle cx="9" cy="-3" r="2.2" fill="${RED}"/></g><rect x="-1" y="-6" width="2" height="12" rx="1" fill="${INK}"/></g>
+ ${arrow(92,96,106,96,RED,6,'glow')}
+ ${at(100,198,.42,cat({eyes:'wide',mouth:'o'}))}`;
+
+S.between=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${at(36,186,1,P.boxClosed(56,70))}${at(164,186,1,P.boxClosed(56,70))}
+ ${sh(100,190,26)}${at(100,188,.74,cat({eyes:'happy',mouth:'open',armL:70,armR:-70}))}
+ ${arrow(100,60,100,92,RED,7,'float')}
+ <path d="M66,150 h8 M134,150 h-8" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>`;
+
+S.high=`${bg('#cdeeff')}${sun(30,28,10)}
+ <path d="M40,200 L110,50 L180,200 Z" fill="#9aa8c0"/><path d="M110,50 L88,98 l12,-8 10,10 12,-12 12,12 Z" fill="#fff"/>
+ <g class="scroll" style="animation-duration:14s">${cloud(60,130,.9,'')}${cloud(180,150,.7,'')}${cloud(260,130,.9,'')}${cloud(380,150,.7,'')}</g>
+ <path d="M124,52 v-34" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M124,18 q9,-4 18,0 v11 q-9,-4 -18,0 Z" fill="${RED}"/>
+ ${at(106,54,.42,cat({armL:130,armR:-130,armsFront:true,eyes:'happy',mouth:'open'}))}
+ <path d="M24,190 V60 M24,60 l-6,10 M24,60 l6,10" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>`;
+
+/* Tag 35–38: really, something, leave, put, old · while, mean, keep, student, why · let, great, same, group, begin · seem, country, help, talk, where */
+S.really=`${bg('#4a4496')}${spark(20,30,4,'#fff',0)}${spark(180,170,4,'#fff',.7)}
+ <circle class="glow" cx="112" cy="92" r="84" fill="#ffe89a" opacity=".3"/>
+ <g class="beat">${star5(112,92,70,SUN,`stroke="${SUN}" stroke-width="8"`)}<circle cx="96" cy="86" r="5" fill="${INK}"/><circle cx="128" cy="86" r="5" fill="${INK}"/><path d="M100,104 q12,10 24,0" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/></g>
+ <path d="M14,90 V10 M14,10 l-5,8 M14,10 l5,8 M14,170 l-5,-8 M14,170 l5,-8 M14,90 V170" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${at(34,196,.44,cat(Object.assign({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true},NL)))}`;
+
+S.something=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}${sh(128,190,48)}
+ <g transform="translate(128,186)"><g class="ring">${P.boxClosed(88,74)}<rect x="-30" y="-52" width="60" height="18" rx="9" fill="${INK}"/><g class="blink"><circle cx="-12" cy="-43" r="5" fill="${SUN}"/><circle cx="12" cy="-43" r="5" fill="${SUN}"/></g></g></g>
+ ${T(170,60,'?',34,RED,'middle','beat')}
+ <path d="M76,120 l-10,-6 M78,136 h-12 M180,120 l8,-6" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(36,192,.7,cat({eyes:'wide',mouth:'wavy',armL:-30,armR:30,armsFront:true,headCls:'shiver'}))}`;
+
+const koffer=`<rect x="-16" y="-28" width="32" height="28" rx="5" fill="${RED}"/><path d="M-7,-28 v-6 q0,-5 7,-5 q7,0 7,5 v6" fill="none" stroke="#b52f29" stroke-width="3.500"/><path d="M-16,-16 h32" stroke="#b52f29" stroke-width="3"/>`;
+S.leave=`${park()}${cloud(150,30,.8)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(46,178,1.1,P.house())}
+ <g class="road"><path d="M96,150 h70" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(166,150,186,150,RED,5)}
+ <g transform="translate(140,192) scale(-.7,.7)"><g class="walkbob">${cat({armL:140,armLcls:'wave',armR:0,armRcls:'slowB',feet:'walk',armsFront:true,eyes:'happy',prop:`<g transform="translate(0,22)">${koffer}</g>`})}</g></g>`;
+
+S.put=`${bg('#fff1c9')}${floor(184,'#ffe08a')}${sh(130,190,50)}
+ ${at(130,138,1,P.boxBack(84))}
+ <g transform="translate(130,116)"><g class="hop">${P.ball(RED)}</g></g>
+ ${at(130,138,1,P.boxFront(84,48))}
+ ${arrow(130,40,130,78,RED,7,'float')}
+ ${sh(48,190,30)}${at(48,188,.88,cat({eyes:'happy',armR:-120,armRcls:'bob',armsFront:true}))}`;
+
+const cane=`<path d="M0,6 v-40 q0,-8 8,-8" fill="none" stroke="#8a5a30" stroke-width="4" stroke-linecap="round"/>`;
+S.old=`${room('#ece6ff','#d6ccf5')}
+ <rect x="16" y="20" width="40" height="46" rx="4" fill="#fff" stroke="#b07a45" stroke-width="4"/><g transform="translate(36,58) scale(.26)">${K('orange')}</g>
+ <path d="M180,10 q-18,6 -22,24 M190,24 q-14,2 -18,14 M166,10 l14,28" fill="none" stroke="#b9c9dd" stroke-width="1.600"/>
+ <path d="M60,188 q44,14 88,0" fill="none" stroke="#8a5a30" stroke-width="6" stroke-linecap="round"/><rect x="62" y="96" width="12" height="84" rx="5" fill="#b07a45"/><rect x="62" y="150" width="84" height="12" rx="6" fill="#c98a4b"/>
+ <g class="sway" style="transform-origin:104px 188px">${at(108,152,.96,K('grey',{eyes:'closed',hat:glasses.replace(/#fff/g,INK),armR:-40,prop:cane,mid:`<path d="M-10,-58 q10,12 20,0 q-4,16 -10,18 q-6,-2 -10,-18 Z" fill="#fff"/>`}))}</g>
+ ${at(176,194,.4,cat({eyes:'happy'}))}`;
+
+S.while=`${bg('#fff1c9')}<circle cx="100" cy="100" r="80" fill="#ffe7a3"/>
+ ${at(100,178,1.02,cat({armL:40,armR:-140,armRcls:'munch',armsFront:true,mouth:'open',mouthCls:'chew',prop:P.fish,propL:`<g transform="translate(-4,6) scale(.9)">${P.book(SKY)}</g>`,hat:glasses,tail:false}))}
+ ${floor(152,MINT)}<rect y="152" width="200" height="8" fill="#9be6d8"/><g transform="translate(140,186)">${P.plate(36)}</g>${fishAt(132,176,1.3,8)}${fishAt(150,178,1.3,-10)}
+ <g class="beat"><path d="M100,22 v20 M90,32 h20" stroke="${VIO}" stroke-width="6" stroke-linecap="round"/></g>`;
+
+S.mean=`${bg('#ece6ff')}
+ <rect x="20" y="24" width="160" height="96" rx="10" fill="#fff" stroke="${SKY}" stroke-width="6"/><path d="M100,24 v96" stroke="${SKY}" stroke-width="3"/>
+ ${T(60,82,'cat',30,INK)}<g transform="translate(140,114) scale(.62)">${cat({tail:false})}</g>
+ <g class="beat"><circle cx="100" cy="72" r="14" fill="${SUN}"/><path d="M93,68 h14 M93,76 h14" stroke="#fff" stroke-width="3.500" stroke-linecap="round"/></g>
+ ${floor(184,'#d6ccf5')}${at(100,196,.56,cat({eyes:'happy',mouth:'open',armL:150,armR:-150,armsFront:true}))}`;
+
+S.keep=`${bg('#fff3cf')}<circle cx="100" cy="104" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.04,cat({eyes:'happy',armL:-40,armR:40,armsFront:true,mid:`<g transform="translate(0,-4)"><rect x="-17" y="-38" width="34" height="40" rx="8" fill="#bfe9ff" opacity=".85" stroke="#fff" stroke-width="2"/><rect x="-13" y="-44" width="26" height="8" rx="3" fill="${RED}"/>${star5(-5,-10,6,SUN)}${star5(6,-20,5,SUN)}${star5(4,-6,4,SUN)}</g>`}),'sway')}
+ ${heart(40,70,1,RED,0)}${spark(164,60,7,SUN,.5)}`;
+
+S.student=`${bg('#fff1c9')}
+ <rect x="100" y="16" width="90" height="56" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(145,54,'ABC',22,'#fff')}
+ ${at(84,172,.98,cat({mouth:'open',armL:30,armR:-155,armsFront:true,tail:false,mid:backpack}))}
+ ${floor(146,'#c98a4b')}<rect y="146" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(140,180) scale(1.2)">${P.book(RED)}</g><path d="M40,166 l40,-6" stroke="${SUN}" stroke-width="6" stroke-linecap="round"/><path d="M80,160 l7,-1 -6,5 Z" fill="${INK}"/>`;
+
+S.why=`${park()}${cloud(100,26,.7)}
+ ${sh(140,190,40)}${at(144,188,.86,P.dog({happy:true}))}${heart(124,70,1,RED,0)}${heart(160,84,.8,RED,.8)}
+ <g transform="translate(180,184) rotate(-14)"><rect x="-10" y="-3" width="20" height="6" rx="3" fill="#fff"/><circle cx="-10" cy="-3" r="4" fill="#fff"/><circle cx="-10" cy="3" r="4" fill="#fff"/><circle cx="10" cy="-3" r="4" fill="#fff"/><circle cx="10" cy="3" r="4" fill="#fff"/></g>
+ ${T(48,60,'?',44,RED,'middle','beat')}
+ ${sh(46,192,30)}${at(46,190,.84,cat({eyes:'wide',headCls:'tilt',armR:-150,armsFront:true}))}`;
+
+S.let=`${room('#fff1c9','#e4b77a')}
+ <rect x="86" y="34" width="84" height="146" rx="8" fill="#b07a45"/><rect x="94" y="42" width="68" height="138" fill="#cdeeff"/><path d="M94,150 q34,-16 68,0 v30 h-68 Z" fill="#8fe0a8"/>
+ <path d="M162,42 L178,34 V188 L162,180 Z" fill="${SKY}"/>
+ <g transform="translate(118,186)"><g class="walkbob"><g transform="scale(.5)">${K('orange',{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g></g>
+ ${arrow(84,130,104,130,MINT,6,'glow')}
+ ${sh(40,192,28)}${at(40,190,.84,cat({eyes:'happy',armR:-96}))}`;
+
+S.great=`${bg('#fff3cf')}
+ ${[[20,RED,0],[56,SUN,.9],[150,VIO,1.3],[180,SKY,.4],[100,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.5" fill="${c}"/>`).join('')}
+ ${floor(184,'#ffe08a')}
+ <g class="beat"><path d="M112,60 h56 v24 q0,30 -28,30 q-28,0 -28,-30 Z" fill="${SUN}"/><path d="M112,68 q-18,0 -14,18 q4,12 18,12 M168,68 q18,0 14,18 q-4,12 -18,12" fill="none" stroke="${SUN}" stroke-width="6"/><rect x="134" y="112" width="12" height="24" fill="#e0a83a"/><rect x="118" y="134" width="44" height="12" rx="4" fill="#e0a83a"/>${star5(140,84,11,'#fff')}</g>
+ <rect x="108" y="146" width="64" height="40" rx="4" fill="#c98a4b"/>
+ ${spark(96,50,7,'#fff',0)}${spark(186,44,7,SUN,.5)}
+ ${sh(50,190,30)}${at(50,188,.88,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}`;
+
+S.same=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${at(50,150,2.2,P.ball(RED))}${at(150,150,2.2,P.ball(RED))}
+ <g class="beat"><path d="M88,112 h24 M88,126 h24" stroke="${VIO}" stroke-width="7" stroke-linecap="round"/></g>
+ ${check(100,60,14,7)}
+ ${at(100,196,.56,cat({eyes:'happy',armL:110,armR:-110,armsFront:true}))}`;
+
+S.group=`${park(172)}${sun(30,28,10)}
+ <ellipse cx="100" cy="136" rx="90" ry="62" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(60,166,.5,K('grey',{eyes:'happy'}))}${at(140,166,.5,K('white',{eyes:'happy'}))}${at(100,160,.5,K('cream',{eyes:'happy'}))}
+ ${at(36,190,.56,K('orange',{eyes:'happy',mouth:'open'}),'hop')}${at(100,192,.62,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true}))}${at(164,190,.56,K('grey',{eyes:'happy',fur:'#ffe2b8',out:'#e0b98a',belly:'#fff6e6'}),'hop')}`;
+
+S.begin=`${bg('#3b2a4a')}
+ <rect x="20" y="20" width="160" height="150" fill="#fff3cf"/><circle cx="100" cy="100" r="50" fill="#ffe7a3"/>
+ ${at(100,168,.8,cat({eyes:'happy',mouth:'open',armL:110,armR:-110,armsFront:true}))}
+ <g class="dooropen" style="animation-duration:2.6s"><path d="M20,20 h80 v150 h-80 Z" fill="${RED}"/><path d="M36,20 v150 M56,20 v150 M76,20 v150" stroke="#b52f29" stroke-width="3"/></g>
+ <g transform="translate(200,0) scale(-1,1)"><g class="dooropen" style="animation-duration:2.6s"><path d="M20,20 h80 v150 h-80 Z" fill="${RED}"/><path d="M36,20 v150 M56,20 v150 M76,20 v150" stroke="#b52f29" stroke-width="3"/></g></g>
+ <rect x="10" y="8" width="180" height="18" rx="6" fill="#b52f29"/><rect y="170" width="200" height="30" fill="#8a5a30"/>
+ ${spark(40,186,5,SUN,0)}${spark(100,188,5,SUN,.4)}${spark(160,186,5,SUN,.8)}`;
+
+S.seem=`${room('#ffe9d6','#ffd9bd')}
+ <path d="M70,170 Q60,60 100,40 q-4,16 8,22 q8,-18 26,-18 q-6,14 4,22 q22,-10 34,6 Q190,90 176,170 Z" fill="${INK}" opacity=".35" class="pulse" style="transform-origin:120px 170px"/>
+ <circle cx="120" cy="84" r="6" fill="#fff" opacity=".7"/><circle cx="146" cy="84" r="6" fill="#fff" opacity=".7"/>
+ <g transform="translate(150,186)"><path d="M10,-4 q12,2 10,-8" fill="none" stroke="#8a8fb0" stroke-width="2" stroke-linecap="round"/><ellipse cx="0" cy="-6" rx="11" ry="7" fill="#b9bdd4"/><circle cx="-7" cy="-13" r="4.500" fill="#b9bdd4"/><circle cx="-8" cy="-7" r="1.400" fill="${INK}"/></g>
+ <path d="M186,186 l-10,-18 h-10 l6,18 Z" fill="${SUN}" opacity=".8"/><rect x="176" y="184" width="16" height="8" rx="3" fill="#9aa8c0"/>
+ ${at(38,192,.76,cat({eyes:'wide',mouth:'wavy',headCls:'shiver',armL:-30,armR:30,armsFront:true}))}`;
+
+S.country=`${bg('#cdeeff')}${cloud(30,30,.7)}
+ <path d="M10,130 q30,-60 80,-50 q40,-30 80,10 q30,40 10,80 q-50,30 -110,14 q-60,-10 -60,-54 Z" fill="#b7efc8" stroke="#3aa568" stroke-width="3"/>
+ <path d="M60,150 l14,-26 14,26 Z M82,150 l12,-20 12,20 Z" fill="#9aa8c0"/><g transform="translate(140,150) scale(.36)">${P.house()}</g><g transform="translate(166,144) scale(.3)">${P.house(SKY)}</g>
+ <path d="M112,112 v-76" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/>
+ <g class="flower"><rect x="112" y="36" width="20" height="36" fill="#1f9c5a"/><rect x="132" y="36" width="20" height="36" fill="#fff"/><ellipse cx="142" cy="54" rx="5" ry="6" fill="#b07a45"/><rect x="152" y="36" width="20" height="36" fill="${RED}"/></g>
+ ${at(40,194,.54,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.help=`${park()}${cloud(150,30,.8)}
+ <ellipse cx="140" cy="186" rx="34" ry="8" fill="#3aa568"/>
+ <g transform="translate(140,196)"><g class="float"><g transform="scale(.56)">${K('orange',{armL:150,armR:-150,armsFront:true,mouth:'wavy',tail:false})}</g></g></g>
+ <path d="M106,190 q34,14 68,0 v10 h-68 Z" fill="#6fd08f"/>
+ ${sh(64,190,32)}${at(64,188,.92,cat({eyes:'happy',armR:-80,armRcls:'bob'}))}
+ ${heart(104,96,1,RED,0)}`;
+
+const dots=(x,y,c)=>`<g fill="${c}"><circle class="glow" cx="${x-10}" cy="${y}" r="4"/><circle class="glow" style="animation-delay:.3s" cx="${x}" cy="${y}" r="4"/><circle class="glow" style="animation-delay:.6s" cx="${x+10}" cy="${y}" r="4"/></g>`;
+S.talk=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(60,44,64,40,dots(60,44,RED),64,78)}<g class="glow" style="animation-delay:.8s">${speech(140,60,64,40,dots(140,60,VIO),138,92)}</g>
+ ${sh(56,190,30)}${at(56,188,.86,cat({mouth:'open',mouthCls:'chew',armR:-80}))}
+ ${sh(146,190,30)}${flipAt(146,188,.86,K('orange',{mouth:'open',armR:-80,eyes:'happy'}))}`;
+
+S.where=`${park()}${cloud(40,30,.8)}
+ <g transform="translate(150,186)"><g class="peek"><g transform="scale(1.3)">${P.ball(RED)}</g></g></g>
+ <circle cx="150" cy="160" r="26" fill="#4fc27f"/><circle cx="128" cy="172" r="18" fill="#62d08f"/><circle cx="172" cy="172" r="18" fill="#62d08f"/>
+ ${T(72,50,'?',40,RED,'middle','beat')}${T(104,70,'?',24,VIO,'middle','beat')}
+ ${sh(56,192,32)}${at(56,190,.9,cat({eyes:'wide',headCls:'tilt',armL:150,armR:-150,armsFront:true}))}`;
+
+/* Tag 39–42: turn, problem, every, start, might · show, part, against, place, such · again, few, case, week, company · system, each, right, program, hear */
+S.turn=`${bg('#8fe0a8')}${floor(0,'#8fe0a8')}
+ <path d="M30,200 V110 Q30,60 90,60 H200" fill="none" stroke="#6b7a99" stroke-width="44"/><path d="M30,200 V110 Q30,60 90,60 H200" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="12 14"/>
+ <path d="M120,150 v-34" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><rect x="96" y="92" width="48" height="34" rx="6" fill="${SKY}"/><path d="M108,118 v-8 q0,-8 10,-8 h12 M124,96 l8,6 -8,6" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+ ${tree(170,160,.8)}${tree(150,30,.5)}
+ <g class="spin" style="animation-duration:5s;transform-origin:30px 110px"><g transform="translate(30,150)"><g transform="scale(.5)">${cat({eyes:'happy',feet:'walk'})}</g></g></g>`;
+
+S.problem=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}${sh(100,190,40)}
+ ${at(100,186,1,cat({eyes:'wide',mouth:'wavy',armL:60,armR:-60,headCls:'shiver'}))}
+ <path d="M52,150 q20,-40 50,-10 q30,30 46,-10 q-10,40 -44,26 q-30,-20 -40,14 q-18,-4 -12,-20 Z M60,120 q40,10 80,-6 M70,168 q30,-14 62,0" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round"/>
+ <g class="roll"><circle cx="150" cy="172" r="14" fill="${VIO}"/><path d="M140,168 q10,-8 20,2 M142,178 q10,6 18,-4" fill="none" stroke="#c9b6ff" stroke-width="2"/></g>
+ <g class="beat"><path d="M100,14 v26" stroke="${RED}" stroke-width="8" stroke-linecap="round"/><circle cx="100" cy="54" r="5" fill="${RED}"/></g>`;
+
+S.every=`${bg('#ece6ff')}
+ <rect x="10" y="20" width="180" height="62" rx="10" fill="#fff"/><rect x="10" y="20" width="180" height="16" rx="8" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6].map(i=>`<g transform="translate(${24+i*25.400},66) scale(.45)">${P.book([SKY,MINT,VIO,SUN,ORA,SKY,MINT][i])}</g><g class="twinkle" style="animation-delay:${i*.25}s">${check(24+i*25.400,44,4,2.500)}</g>`).join('')}
+ ${floor(184,'#d6ccf5')}${sh(100,190,36)}
+ ${at(100,188,.94,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}`;
+
+S.start=`${park(160)}${cloud(40,26,.7)}${floor(168,'#e0875a')}
+ <path d="M0,180 h200" stroke="#fff" stroke-width="2" opacity=".7"/><path d="M70,168 v32" stroke="#fff" stroke-width="6"/>
+ <path d="M70,168 v-110" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/>
+ <g class="flower"><rect x="70" y="58" width="48" height="32" fill="#fff"/><g fill="${INK}"><rect x="70" y="58" width="12" height="8"/><rect x="94" y="58" width="12" height="8"/><rect x="82" y="66" width="12" height="8"/><rect x="106" y="66" width="12" height="8"/><rect x="70" y="74" width="12" height="8"/><rect x="94" y="74" width="12" height="8"/><rect x="82" y="82" width="12" height="8"/><rect x="106" y="82" width="12" height="8"/></g></g>
+ <g transform="translate(44,192) rotate(14) scale(-.66,.66)"><g class="shiver">${cat({armL:-40,armR:40,eyes:'happy',mouth:'open'})}</g></g>
+ ${arrow(110,140,170,140,MINT,8,'glow')}
+ <circle cx="150" cy="40" r="9" fill="#5a4a6c"/><circle cx="172" cy="40" r="9" fill="#4fe08a"/><circle class="glow" cx="172" cy="40" r="14" fill="#4fe08a" opacity=".4"/>`;
+
+S.might=`${bg('#e6f1ff')}<g class="cloud"><ellipse cx="60" cy="40" rx="34" ry="14" fill="#b9c9dd"/><ellipse cx="90" cy="32" rx="26" ry="16" fill="#cfdbea"/></g>
+ ${think(140,60,44,30,`<g fill="${SKY}"><path d="M120,46 v24 M108,58 h24 M112,50 l16,16 M128,50 l-16,16" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/></g>${T(158,72,'?',34,RED)}`,-1)}
+ ${floor(184,'#cfe3f7')}${sh(70,190,34)}
+ ${at(70,188,.96,cat({headCls:'tilt',armR:-92,prop:`<g transform="translate(0,6)"><path d="M-12,-8 h24 v8 h-24 Z" fill="${RED}"/><path d="M8,0 v14 h8 v-14" fill="${RED}"/></g>`}))}
+ <circle class="snow" cx="30" cy="0" r="2.500" fill="#fff"/><circle class="snow" style="animation-delay:-2s" cx="110" cy="0" r="2.500" fill="#fff"/>`;
+
+S.show=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${sh(56,190,30)}${at(56,188,.86,cat({eyes:'happy',mouth:'open',armL:150,armR:-150,armsFront:true}))}
+ <g class="float"><rect x="26" y="26" width="60" height="50" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><circle cx="44" cy="44" r="8" fill="${SUN}"/><path d="M32,70 l14,-16 10,10 12,-18 12,24 Z" fill="${MINT}"/></g>
+ ${sh(146,190,34)}${at(146,188,.98,K('white',{eyes:'happy',hat:earflower,armL:-50,armR:50,armsFront:true}))}
+ ${heart(104,100,.9,RED,0)}${spark(110,40,6,SUN,.5)}`;
+
+S.part=`${bg('#fff1c9')}<circle cx="90" cy="96" r="78" fill="#ffe7a3"/>
+ <g transform="translate(88,104)"><circle r="58" fill="#f6c27a"/><circle r="50" fill="${SUN}"/><path d="M0,0 L50,0 A50,50 0 0 0 35.400,-35.400 Z" fill="#fff1c9"/>${[[-20,-22],[-28,12],[6,26],[-4,-34],[20,18]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="${RED}"/>`).join('')}<path d="M0,0 L-50,0 M0,0 L0,50 M0,0 L-35.400,-35.400 M0,0 L35.400,35.400 M0,0 L0,-50 M0,0 L-35.400,35.400" stroke="#f6c27a" stroke-width="2"/></g>
+ <g class="float"><g transform="translate(106,92)"><path d="M0,0 L58,0 A58,58 0 0 0 41,-41 Z" fill="#f6c27a"/><path d="M0,0 L50,0 A50,50 0 0 0 35.400,-35.400 Z" fill="${SUN}"/><circle cx="30" cy="-12" r="6" fill="${RED}"/></g></g>
+ ${ring(138,78,34,RED)}
+ ${at(160,196,.56,cat({eyes:'spark',mouth:'tongue',armL:150,armsFront:true}))}`;
+
+S.against=`${park(170)}${cloud(100,24,.7)}
+ <path d="M70,150 h60" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><path d="M100,150 v-16" stroke="${INK}" stroke-width="2"/><path class="flower" d="M100,134 l12,5 -12,5 Z" fill="${RED}"/>
+ <g class="shiver">${at(46,190,.8,cat({armR:-92,eyes:'closed',mouth:'big'}))}</g>
+ <g class="shiver" style="animation-delay:.07s">${at(152,190,.72,P.dog())}</g>
+ <g class="beat"><circle cx="100" cy="60" r="22" fill="#fff"/>${T(100,69,'VS',22,RED)}</g>`;
+
+S.place=`${bg('#cdeeff')}${sun(30,28,10)}
+ <ellipse cx="100" cy="170" rx="110" ry="40" fill="#8fe0a8"/><ellipse cx="100" cy="162" rx="70" ry="22" fill="#b7efc8"/>
+ ${tree(40,160,.8)}
+ <rect x="110" y="150" width="50" height="6" rx="3" fill="#b07a45"/><rect x="114" y="156" width="5" height="14" fill="#8a5a30"/><rect x="151" y="156" width="5" height="14" fill="#8a5a30"/><rect x="110" y="136" width="50" height="6" rx="3" fill="#b07a45"/>
+ ${pin(100,120)}<ellipse class="ripple" cx="100" cy="124" rx="18" ry="5" fill="none" stroke="${RED}" stroke-width="2.500"/>
+ ${at(74,172,.5,cat({eyes:'happy',armR:-110,armRcls:'bob'}))}`;
+
+S.such=`${bg('#cdeeff')}${sun(160,40,20)}
+ ${[RED,ORA,SUN,MINT,SKY,VIO].map((c,i)=>`<path d="M${10+i*7},176 a${90-i*7},${90-i*7} 0 0 1 ${180-i*14},0" fill="none" stroke="${c}" stroke-width="7" opacity=".85"/>`).join('')}
+ ${hills('#8fe0a8','#6fd08f',160)}${flower(20,188,RED,0)}${flower(180,188,VIO,.5)}${flower(40,192,SUN,.9)}
+ ${bfly(40,90,ORA,0)}
+ ${sh(100,190,36)}${at(100,188,1,cat({eyes:'spark',mouth:'big',armL:120,armR:-120,armsFront:true}))}
+ <path d="M60,60 l-10,-10 M140,60 l10,-10 M100,44 v-14" stroke="#fff" stroke-width="4" stroke-linecap="round" class="glow"/>`;
+
+S.again=`${park(170)}${cloud(40,26,.7)}
+ <g class="spin" style="animation-duration:4s"><path d="M100,22 a26,26 0 1 1 -24,16" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><path d="M68,30 l8,10 10,-8" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="100" cy="48" r="34" fill="none"/></g>
+ ${sh(44,192,28)}${at(44,190,.82,cat({armL:30,armR:-120,armRcls:'throwarm',armsFront:true,eyes:'happy',mouth:'open'}))}
+ <g transform="translate(70,116)"><g class="throwball"><g transform="scale(.9)">${P.ball(RED)}</g></g></g>
+ ${at(160,190,.62,P.dog({happy:true}))}`;
+
+S.few=`${bg('#fff1c9')}
+ ${at(100,160,.9,cat({mouth:'wavy',tail:false,armL:70,armR:-70}))}
+ ${floor(140,MINT)}<rect y="140" width="200" height="8" fill="#9be6d8"/>
+ <g transform="translate(100,184)">${P.plate(84)}</g>
+ ${fishAt(84,172,1.4,10)}${fishAt(116,174,1.4,-8)}
+ <ellipse cx="100" cy="173" rx="38" ry="14" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="7 6"/>`;
+
+const detHat=`<path d="M-30,-98 q30,-40 60,0 Z" fill="#b07a45"/><path d="M-38,-96 h76" stroke="#8a5a30" stroke-width="6" stroke-linecap="round"/>`;
+S.case=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <rect x="110" y="40" width="76" height="96" rx="6" fill="#f3d9a4" stroke="#b07a45" stroke-width="3"/><path d="M110,58 h30 l6,-10 h40" fill="none" stroke="#b07a45" stroke-width="3"/><path d="M122,76 h52 M122,90 h52 M122,104 h34" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>${T(160,128,'?',22,RED)}
+ ${pawprint(120,170,-20).replace(new RegExp(SKY,'g'),'#b5addf')}${pawprint(150,180,10).replace(new RegExp(SKY,'g'),'#b5addf')}${pawprint(178,166,-8).replace(new RegExp(SKY,'g'),'#b5addf')}
+ ${sh(58,190,34)}${at(58,188,.94,cat({bow:false,hat:detHat,armR:-80,armRcls:'bob',prop:`<g transform="translate(6,10) rotate(-60)">${lupe}</g>`}))}`;
+
+S.week=`${bg('#e3fbf5')}
+ <rect x="8" y="30" width="184" height="70" rx="10" fill="#fff"/><rect x="8" y="30" width="184" height="18" rx="9" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6].map(i=>`<rect x="${14+i*25.200}" y="56" width="21" height="36" rx="5" fill="${i>4?'#ffe9d6':'#f4f1fb'}"/><circle cx="${24.500+i*25.200}" cy="74" r="5" fill="${i>4?ORA:SKY}"/>`).join('')}
+ <g class="glow"><rect x="64.400" y="54" width="25" height="40" rx="6" fill="none" stroke="${VIO}" stroke-width="4"/></g>
+ ${floor(184,'#bff0de')}${sh(100,190,34)}${at(100,188,.86,cat({eyes:'happy',armR:-150,armRcls:'bob',armsFront:true}))}`;
+
+const tie=`<path d="M-4,-46 h8 l3,8 -7,22 -7,-22 Z" fill="${RED}"/>`;
+S.company=`${bg('#cdeeff')}${cloud(30,30,.7)}
+ <rect x="84" y="20" width="100" height="166" rx="4" fill="#b9c4d8"/><rect x="92" y="6" width="84" height="18" rx="4" fill="${SKY}"/>${T(134,20,'CAT Co.',12,'#fff')}
+ ${[0,1,2,3].map(r=>[0,1,2].map(c=>`<rect x="${96+c*28}" y="${36+r*30}" width="20" height="20" rx="3" fill="${(r+c)%3?'#bfe9ff':'#fff6c8'}"/>`).join('')).join('')}
+ <rect x="122" y="158" width="24" height="28" rx="3" fill="#5a4a6c"/>
+ ${floor(186,'#9aa8c0')}
+ ${sh(44,192,28)}${at(44,190,.84,cat({eyes:'happy',mid:tie,armR:-30,prop:`<g transform="translate(0,22) scale(.8)"><rect x="-16" y="-24" width="32" height="24" rx="4" fill="#7a4a21"/><path d="M-6,-24 v-5 h12 v5" fill="none" stroke="#5a3a18" stroke-width="3"/></g>`}))}`;
+
+const gear=(x,y,r,c,dur,rev)=>`<g class="spin" style="animation-duration:${dur}s;${rev?'animation-direction:reverse':''}"><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>${[0,45,90,135,180,225,270,315].map(a=>`<rect transform="rotate(${a} ${x} ${y})" x="${x-r*.18}" y="${y-r*1.300}" width="${r*.36}" height="${r*.5}" rx="2" fill="${c}"/>`).join('')}<circle cx="${x}" cy="${y}" r="${r*.35}" fill="#fff"/></g>`;
+S.system=`${bg('#ece6ff')}
+ ${gear(120,70,30,SKY,6)}${gear(166,112,20,RED,4,true)}${gear(84,118,22,MINT,4.400,true)}${gear(134,150,16,SUN,3.200)}
+ <path d="M30,40 h40 v40" fill="none" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M30,40 h40 v40" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 10" class="road"/>
+ ${floor(184,'#d6ccf5')}
+ ${at(36,192,.7,cat({bow:false,hat:P.hatHard,eyes:'happy',armR:-110,armRcls:'bob',armsFront:true,prop:`<path d="M0,4 v-26 M-6,-22 q0,-10 6,-10 q6,0 6,10" fill="none" stroke="#9aa8c0" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.each=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${[[38,'orange'],[100,null],[162,'grey']].map(([x,n],i)=>`${n?at(x,188,.6,K(n,{eyes:'happy'})):at(x,188,.62,cat({eyes:'happy',mouth:'open'}))}<g transform="translate(${x},60)"><g class="float" style="animation-delay:${i*.3}s"><circle r="22" fill="#fff"/><g transform="scale(1.6)">${P.fish}</g></g></g>${arrow(x,90,x,112,RED,4,'glow')}`).join('')}`;
+
+S.right=`${bg('#e3fbf5')}<circle cx="100" cy="88" r="76" fill="#f0fdf8"/>
+ <g class="beat"><circle cx="100" cy="72" r="46" fill="${MINT}"/><path d="M78,74 l16,18 30,-36" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <g opacity=".35"><circle cx="30" cy="40" r="18" fill="#fff"/>${cross(30,40,8,5)}</g>
+ ${floor(184,'#bff0de')}${sh(100,192,30)}${at(100,190,.7,cat({eyes:'happy',mouth:'open',armL:140,armR:-140,armsFront:true}))}
+ ${arrow(140,160,186,160,RED,7,'glow')}`;
+
+S.program=`${room('#ece6ff','#d6ccf5')}
+ <rect x="60" y="20" width="126" height="92" rx="10" fill="${INK}"/><rect x="68" y="28" width="110" height="76" rx="6" fill="#bfe9ff"/>
+ <clipPath id="tvc"><rect x="68" y="28" width="110" height="76" rx="6"/></clipPath>
+ <g clip-path="url(#tvc)"><rect x="68" y="84" width="110" height="20" fill="${RED}"/><g transform="translate(100,112) scale(.5)">${K('orange',{mouth:'open',mid:tie,tail:false})}</g><g class="glow">${sun(150,52,8)}</g><path d="M130,92 h40" stroke="#fff" stroke-width="4" stroke-linecap="round"/></g>
+ <path d="M110,112 l-10,16 M136,112 l10,16" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+ ${sh(42,192,28)}${at(42,190,.8,cat({eyes:'happy',armR:-96,prop:`<g transform="translate(2,6) rotate(60)"><rect x="-5" y="-22" width="10" height="24" rx="3" fill="#5a4a6c"/><circle cx="0" cy="-16" r="2" fill="${RED}"/></g>`}))}`;
+
+S.hear=`${bg('#fff1c9')}<circle cx="70" cy="104" r="70" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ <g class="ring"><path d="M150,60 q-22,0 -22,24 v10 h44 v-10 q0,-24 -22,-24 Z" fill="${SUN}"/><rect x="124" y="92" width="52" height="8" rx="4" fill="#e0a83a"/><circle cx="150" cy="104" r="5" fill="#e0a83a"/></g>
+ <path d="M112,70 q-10,12 0,24 M100,62 q-16,20 0,40" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${note(150,40,RED,0)}${note(176,60,VIO,.9)}
+ ${sh(56,190,32)}${at(56,188,.92,cat({eyes:'happy',headCls:'tilt',armR:-152,armsFront:true}))}`;
+
+/* Tag 43–46: question, during, government, number, off · always, move, live, point, believe · hold, today, bring, happen, next · without, before, large, must, home */
+S.question=`${bg('#ece6ff')}<circle cx="110" cy="92" r="78" fill="#f6f2ff"/>
+ <g class="float">${T(116,140,'?',170,RED)}</g>
+ ${floor(184,'#d6ccf5')}
+ ${at(42,192,.74,cat({headCls:'tilt',armR:-152,armsFront:true}))}
+ ${T(170,50,'?',22,VIO,'middle','beat')}${T(24,60,'?',18,SKY,'middle','beat')}`;
+
+S.during=`${bg('#2d2a6e')}<circle cx="160" cy="36" r="18" fill="#ffe89a"/><circle cx="168" cy="30" r="16" fill="#2d2a6e"/>${spark(30,30,4,'#ffe89a',0)}${spark(90,20,4,'#ffe89a',.7)}${spark(120,56,3.500,'#ffe89a',1.2)}
+ <rect x="10" y="72" width="180" height="10" rx="5" fill="#3b3880"/><rect x="50" y="72" width="100" height="10" rx="5" fill="${SUN}" class="glow"/><circle cx="50" cy="77" r="7" fill="#ffe89a"/><circle cx="150" cy="77" r="7" fill="#ffe89a"/>
+ ${floor(180,'#1f1b4d')}
+ <circle class="glow" cx="100" cy="150" r="56" fill="#ffe89a" opacity=".22"/>
+ <path d="M158,180 v-50" stroke="#b07a45" stroke-width="4"/><path d="M144,130 l6,-20 h16 l6,20 Z" fill="${SUN}"/>
+ ${at(94,186,.96,cat(Object.assign({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses},NL)))}`;
+
+S.government=`${bg('#cdeeff')}${cloud(30,30,.7)}${cloud(176,40,.6)}
+ <path d="M100,34 v-26" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M100,8 q9,-4 18,0 v11 q-9,-4 -18,0 Z" fill="${RED}"/>
+ <path d="M70,60 a30,26 0 0 1 60,0 Z" fill="#dfe6f2"/><path d="M36,84 L100,56 L164,84 Z" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="2"/>
+ <rect x="40" y="84" width="120" height="8" fill="#dfe6f2"/>${[50,72,94,116,138].map(x=>`<rect x="${x}" y="92" width="12" height="62" rx="3" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="1.600"/>`).join('')}
+ <rect x="32" y="154" width="136" height="10" fill="#dfe6f2"/><rect x="24" y="164" width="152" height="10" fill="#cfd8e6"/>
+ ${floor(174,'#8fe0a8')}
+ <rect x="88" y="150" width="24" height="26" rx="3" fill="#b07a45"/>
+ ${at(100,152,.4,cat({mid:tie,armR:-125,armRcls:'wave',armsFront:true,tail:false,mouth:'open'}))}
+ ${at(40,194,.36,K('orange',{mid:tie}))}${at(160,194,.36,K('grey',{mid:tie}))}`;
+
+S.number=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <g class="hop"><rect x="14" y="60" width="50" height="60" rx="10" fill="${RED}"/>${T(39,106,'1',44,'#fff')}</g>
+ <g class="hop" style="animation-delay:.2s"><rect x="75" y="40" width="50" height="60" rx="10" fill="${SKY}"/>${T(100,86,'2',44,'#fff')}</g>
+ <g class="hop" style="animation-delay:.4s"><rect x="136" y="60" width="50" height="60" rx="10" fill="${MINT}"/>${T(161,106,'3',44,'#fff')}</g>
+ ${sh(100,192,30)}${at(100,190,.74,cat({eyes:'happy',mouth:'open',armL:140,armR:-140,armsFront:true}))}`;
+
+S.off=`${bg('#3b3654')}${floor(180,'#2d2944')}
+ <path d="M100,0 v40" stroke="#7a6a8c" stroke-width="3"/><path d="M82,78 q-14,-36 18,-38 q32,2 18,38 Z" fill="#8a8499"/><rect x="90" y="78" width="20" height="10" rx="3" fill="#6a6478"/>
+ <rect x="150" y="90" width="30" height="44" rx="6" fill="#dfe6f2"/><rect x="160" y="112" width="10" height="16" rx="3" fill="#7a6a8c"/>
+ ${arrow(165,96,165,108,RED,3,'glow')}
+ ${at(110,188,.9,cat({fur:'#262241',out:'#55508a',belly:'#2c2749',armR:-118,armsFront:true}))}`;
+
+S.always=`${bg('#fff3cf')}
+ <g class="spin" style="animation-duration:12s"><circle cx="100" cy="100" r="80" fill="none"/><g transform="translate(100,20) scale(.9)">${sun(0,0,10).replace('class="spin"','')}</g><circle cx="100" cy="180" r="12" fill="#b9bdd4"/><circle cx="106" cy="176" r="10" fill="#fff3cf"/><path d="M30,60 q10,-30 40,-36 M170,140 q-10,30 -40,36" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 8"/></g>
+ ${at(100,150,.84,cat({eyes:'happy',mouth:'open',armL:120,armR:-120,armsFront:true}),'hop')}
+ <path d="M70,170 q-16,-12 0,-22 q14,-6 30,11 q16,17 30,11 q16,-10 0,-22 q-14,-6 -30,11 q-16,17 -30,11 Z" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" class="glow"/>`;
+
+S.move=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g class="roll" style="animation-duration:1.6s">${sh(120,190,40)}${at(120,186,1,P.boxClosed(72,72))}<g transform="translate(-54,0)">${at(120,188,.8,cat({armR:-92,armL:-60,armsFront:true,mouth:'big',eyes:'closed',feet:'walk'}))}</g></g>
+ <path d="M10,130 h20 M6,150 h16 M12,170 h20" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${arrow(150,70,190,70,RED,7,'glow')}`;
+
+S.live=`${park()}${cloud(30,30,.7)}
+ ${at(100,180,1.6,P.house())}
+ <clipPath id="lw"><rect x="106.400" y="116" width="35.200" height="32" rx="6"/></clipPath><g clip-path="url(#lw)">${at(124,178,.5,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true,tail:false}))}</g>
+ ${heartS(100,30,1.6,RED,'beat')}${pin(166,96)}
+ ${flower(20,190,SUN,0)}${flower(184,190,VIO,.5)}`;
+
+S.point=`${bg('#fff1c9')}
+ <rect x="84" y="20" width="104" height="80" rx="8" fill="#fff" stroke="#b07a45" stroke-width="5"/>
+ <circle class="beat" cx="140" cy="60" r="9" fill="${RED}"/>${ring(140,60,22,RED)}
+ <path d="M78,116 L132,66" stroke="${RED}" stroke-width="2.500" stroke-dasharray="2 6" class="glow"/>
+ ${floor(184,'#ffe08a')}${sh(56,190,34)}
+ ${at(56,188,.96,cat({eyes:'happy',armR:-128,armsFront:true,prop:`<path d="M0,2 l8,-26" stroke="#9aa8c0" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.believe=`${bg('#4a4496')}${spark(24,30,4,'#fff',0)}${spark(70,60,3.500,'#fff',.6)}${spark(180,120,4,'#fff',1.1)}
+ <g transform="translate(180,30)"><g class="shoot"><path d="M0,0 l26,-14" stroke="#fff" stroke-width="2.500" stroke-linecap="round"/><circle r="3" fill="#fff"/></g></g>
+ <circle class="glow" cx="140" cy="50" r="34" fill="#ffe89a" opacity=".35"/><g class="beat">${star5(140,50,22,SUN,`stroke="${SUN}" stroke-width="4"`)}</g>
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ ${at(70,190,.96,cat(Object.assign({eyes:'closed',armL:-46,armR:46,armsFront:true,mid:`<g transform="translate(0,-30)"><path class="beat" d="${heartP}" fill="${RED}"/></g>`},NL)))}
+ ${heart(110,100,.8,RED,0)}`;
+
+const ballon=(x,c)=>`<path d="M0,0 L${x},-58" stroke="${INK}" stroke-width="1.200"/><ellipse cx="${x}" cy="-74" rx="13" ry="16" fill="${c}"/>`;
+S.hold=`${bg('#cdeeff')}${cloud(30,50,.8)}${cloud(170,120,.7)}
+ <path d="M0,190 q50,-10 100,0 t100,0 v10 h-200 Z" fill="#8fe0a8"/>${sh(100,192,24,'shadow')}
+ <g transform="translate(100,170)"><g class="float">${cat({eyes:'happy',mouth:'open',armL:30,armR:-158,armsFront:true,prop:`${ballon(-18,RED)}${ballon(0,SUN)}${ballon(18,SKY)}${ballon(-8,VIO)}${ballon(10,MINT)}`})}</g></g>`;
+
+S.today=`${bg('#e3fbf5')}
+ <rect x="16" y="20" width="96" height="98" rx="10" fill="#fff"/><rect x="16" y="20" width="96" height="22" rx="10" fill="${RED}"/>
+ ${[0,1,2].map(r=>[0,1,2,3].map(c=>`<rect x="${24+c*21}" y="${50+r*21}" width="16" height="16" rx="4" fill="#f4f1fb"/>`).join('')).join('')}
+ <rect x="66" y="71" width="16" height="16" rx="4" fill="${SUN}"/><g class="beat"><rect x="62" y="67" width="24" height="24" rx="6" fill="none" stroke="${RED}" stroke-width="4"/></g>
+ ${arrow(134,50,94,74,RED,5,'float')}
+ ${floor(184,'#bff0de')}${sh(132,190,30)}${at(132,188,.86,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(166,188)"><g class="roll">${P.ball(RED)}</g></g>`;
+
+S.bring=`${room('#fff1c9','#e4b77a')}
+ ${at(160,186,1.1,P.table(70))}${at(170,190,.5,K('orange',{eyes:'happy',mouth:'open',tail:false}))}
+ <g class="road"><path d="M80,120 h40" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>
+ <g transform="translate(60,190)"><g class="walkbob"><g transform="scale(-.86,.86)">${cat({armL:-80,armR:-10,armsFront:true,feet:'walk',eyes:'happy'})}</g></g><g class="walkbob"><ellipse cx="34" cy="-52" rx="30" ry="6" fill="#dfe6f2" stroke="#9aa8c0" stroke-width="1.600"/><g transform="translate(24,-56) scale(.6)">${P.cup(RED)}</g><g transform="translate(46,-60) scale(1.1)">${P.fish}</g></g></g>`;
+
+S.happen=`${bg('#ffe9d6')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(120,170) rotate(74)"><g transform="scale(1.6)">${P.cup(SKY)}</g></g>
+ <path d="M150,172 q20,-4 40,6 q-10,14 -44,10 q-14,-6 4,-16 Z" fill="#7a4a21" class="grow"/>
+ <path class="drip" d="${tear(150,150)}" fill="#7a4a21"/>
+ <g class="beat"><path d="M100,20 v30" stroke="${RED}" stroke-width="9" stroke-linecap="round"/><circle cx="100" cy="66" r="6" fill="${RED}"/></g>
+ <path d="M130,110 l10,-12 M146,116 l14,-6 M118,104 l2,-14" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(44,196,.84,cat({eyes:'wide',mouth:'o',armL:140,armR:-140,armsFront:true,tail:false}))}`;
+
+S.next=`${park(168)}${cloud(30,26,.7)}
+ <rect x="130" y="80" width="66" height="96" rx="6" fill="#fff"/><path d="M124,80 h78 l-8,-22 h-62 Z" fill="${RED}"/><path d="M138,58 v22 M154,58 v22 M170,58 v22 M186,58 v22" stroke="#fff" stroke-width="4"/>
+ <rect x="130" y="118" width="66" height="8" fill="${SUN}"/><g transform="translate(163,112) scale(1.3)">${P.fish}</g>
+ ${flipAt(112,190,.5,K('orange',{eyes:'happy'}))}
+ ${flipAt(64,190,.6,cat({eyes:'happy',mouth:'open'}))}${ring(64,160,38,RED)}${arrow(64,60,64,112,RED,7,'float')}
+ <g opacity=".5">${flipAt(20,190,.46,K('grey'))}</g>`;
+
+S.without=`${park()}${cloud(150,30,.8)}
+ ${at(110,180,1.5,P.house())}
+ <rect x="70" y="134" width="28" height="46" rx="12" fill="#ffd166"/><rect x="70" y="134" width="28" height="46" rx="12" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="6 5"/>${cross(84,158,10,5)}
+ ${T(40,70,'?',36,RED,'middle','beat')}
+ ${at(34,194,.6,cat({eyes:'wide',headCls:'tilt',armL:70,armR:-70}))}`;
+
+S.before=`${bg('#cfc8f5')}
+ ${panel(8,36,84,116)}${panel(108,36,84,116)}
+ <rect x="6" y="34" width="88" height="120" rx="14" fill="none" stroke="${RED}" stroke-width="4" class="glow"/>
+ ${at(50,142,.52,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}
+ <g transform="translate(150,140) scale(.7)">${P.bed}</g><g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="150" y="96" font-size="14">z</text><text class="zz" style="animation-delay:1s" x="162" y="80" font-size="18">z</text></g>
+ ${arrow(92,94,106,94,RED,6)}
+ <g class="ring">${at(100,196,.5,P.clock(28,240))}</g>`;
+
+S.large=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <g class="sway" style="transform-origin:100px 180px"><circle cx="100" cy="70" r="66" fill="#f6c27a"/><circle cx="100" cy="70" r="57" fill="${SUN}"/>${[[70,50],[120,40],[136,84],[86,96],[100,64],[60,82]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="8" fill="${RED}"/>`).join('')}${[[90,34],[130,62],[112,100],[72,70]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="6" ry="3.500" fill="#4fc27f"/>`).join('')}</g>
+ ${at(100,196,.6,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}
+ <path d="M10,70 h20 M10,70 l6,-5 M10,70 l6,5 M190,70 h-20 M190,70 l-6,-5 M190,70 l-6,5" fill="none" stroke="${RED}" stroke-width="3.500" stroke-linecap="round" class="glow"/>`;
+
+S.must=`${park(160)}${floor(172,'#f3d9a4')}
+ ${at(160,170,.7,P.school)}
+ <g class="ring">${at(40,70,.6,P.clock(34,270))}</g><path d="M14,30 l-8,-6 M66,30 l8,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <g class="beat"><path d="M100,24 v24" stroke="${RED}" stroke-width="8" stroke-linecap="round"/><circle cx="100" cy="62" r="5" fill="${RED}"/></g>
+ <circle class="puff" cx="34" cy="182" r="6" fill="#fff"/>
+ <g transform="translate(80,190) rotate(9) scale(-.74,.74)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',mouth:'open',mid:backpack})}</g></g>`;
+
+S.home=`${room('#ffe9d6','#e4b77a',170)}
+ <rect x="16" y="70" width="64" height="100" rx="6" fill="#c98a4b"/><rect x="26" y="96" width="44" height="74" rx="6" fill="${INK}"/><g class="beat"><path d="M48,168 q-18,-16 -6,-36 q4,10 8,4 q0,-16 10,-22 q-2,14 8,22 q8,16 -8,32 Z" fill="${ORA}"/><path d="M48,168 q-8,-10 0,-22 q8,10 4,22 Z" fill="${SUN}"/></g><rect x="10" y="62" width="76" height="12" rx="4" fill="#8a5a30"/>
+ <ellipse cx="130" cy="184" rx="60" ry="10" fill="${VIO}" opacity=".35"/>
+ <rect x="96" y="120" width="96" height="46" rx="14" fill="${RED}"/><rect x="90" y="134" width="18" height="40" rx="8" fill="#d93a33"/><rect x="180" y="134" width="18" height="40" rx="8" fill="#d93a33"/>
+ ${at(142,160,.66,cat({eyes:'closed',tail:false}),'breathe')}<path d="M110,150 q32,-12 66,0 v18 h-66 Z" fill="${SKY}"/>
+ ${heartS(142,60,1.5,RED,'beat')}<rect x="150" y="20" width="36" height="30" rx="4" fill="#fff" stroke="#b07a45" stroke-width="3"/>`;
+
+/* Tag 47–50: under, room, area, national, money · story, young, fact, month, different · lot, study, job, word, though · business, issue, side, kind, far */
+S.under=`${bg('#fff1c9')}<rect x="130" y="16" width="52" height="46" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="5"/>${floor(176,'#e4b77a')}
+ ${at(100,190,.66,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}),'peek')}
+ ${at(100,186,1.36,P.table(130))}
+ <path d="M48,110 h104 v14 l-13,9 -13,-9 -13,9 -13,-9 -13,9 -13,-9 -13,9 -13,-9 Z" fill="${MINT}"/>
+ ${arrow(170,80,150,134,RED,6,'float')}`;
+
+S.room=`${bg('#cfe8ff')}<path d="M0,0 h200 v130 h-200 Z" fill="#e6f1ff"/>${floor(130,'#e4b77a')}<path d="M0,130 h200" stroke="#f0cb95" stroke-width="5"/>
+ <rect x="20" y="24" width="50" height="50" rx="6" fill="#bfe9ff" stroke="#fff" stroke-width="5"/><path d="M45,24 v50 M20,49 h50" stroke="#fff" stroke-width="3"/>
+ <g transform="translate(150,150) scale(.9)">${P.bed}</g>
+ <rect x="96" y="30" width="40" height="30" rx="4" fill="#fff" stroke="#b07a45" stroke-width="3"/><circle cx="116" cy="45" r="7" fill="${SUN}"/>
+ <ellipse cx="76" cy="176" rx="56" ry="12" fill="${RED}" opacity=".5"/>
+ <path d="M30,130 v-34" stroke="#b07a45" stroke-width="4"/><path d="M18,96 l6,-18 h12 l6,18 Z" fill="${SUN}"/>
+ ${at(76,180,.7,cat({eyes:'happy',armL:110,armR:-110,armsFront:true}))}`;
+
+S.area=`${bg('#8fe0a8')}
+ <rect x="30" y="40" width="140" height="120" rx="6" fill="#b7efc8" stroke="${RED}" stroke-width="4" stroke-dasharray="10 8"/>
+ ${[30,170].map(x=>[40,160].map(y=>`<circle cx="${x}" cy="${y}" r="6" fill="${RED}"/>`).join('')).join('')}
+ <path d="M30,28 h140 M30,28 l6,-5 M30,28 l6,5 M170,28 l-6,-5 M170,28 l-6,5 M184,40 v120 M184,40 l-5,6 M184,40 l5,6 M184,160 l-5,-6 M184,160 l5,-6" fill="none" stroke="${INK}" stroke-width="2.500" stroke-linecap="round"/>
+ ${flower(52,150,SUN,0)}${flower(150,150,VIO,.5)}${tree(140,90,.5)}
+ ${at(92,150,.62,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.national=`${bg('#cdeeff')}${burst(30,40,RED,0)}${burst(170,30,MINT,.6)}${burst(180,100,SUN,1.2)}
+ <path d="M60,186 V20" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="18" r="5" fill="${SUN}"/>
+ <g class="flower" style="transform-origin:60px 60px"><rect x="62" y="26" width="30" height="60" fill="#1f9c5a"/><rect x="92" y="26" width="30" height="60" fill="#fff"/><ellipse cx="107" cy="56" rx="7" ry="8" fill="#b07a45"/><path d="M100,62 q7,6 14,0" fill="none" stroke="#1f9c5a" stroke-width="2"/><rect x="122" y="26" width="30" height="60" fill="${RED}"/></g>
+ ${floor(184,'#8fe0a8')}
+ ${at(110,190,.6,cat({eyes:'happy',armR:-150,armsFront:true}))}${at(152,190,.5,K('orange',{eyes:'happy',armR:-150,armsFront:true}))}${at(184,190,.42,K('grey',{eyes:'happy'}))}`;
+
+const coin=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><circle cx="${x}" cy="${y}" r="${r*.55}" fill="none" stroke="#e0a83a" stroke-width="1.500"/>`;
+S.money=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g transform="translate(132,150)"><ellipse cx="0" cy="0" rx="46" ry="34" fill="#8dc0ff"/><circle cx="-38" cy="-4" r="10" fill="#8dc0ff"/><ellipse cx="-44" cy="-4" rx="7" ry="8" fill="#4f9dff"/><circle cx="-46" cy="-6" r="1.500" fill="${INK}"/><circle cx="-42" cy="-6" r="1.500" fill="${INK}"/><circle cx="-22" cy="-14" r="3" fill="${INK}"/><path d="M-10,-30 l8,-12 8,10" fill="#8dc0ff"/><rect x="-10" y="-36" width="22" height="5" rx="2" fill="${INK}"/><rect x="-26" y="26" width="10" height="14" rx="3" fill="#4f9dff"/><rect x="14" y="26" width="10" height="14" rx="3" fill="#4f9dff"/><path d="M44,-6 q12,-6 8,6" fill="none" stroke="#4f9dff" stroke-width="3" stroke-linecap="round"/></g>
+ <g class="drip" style="animation-duration:1.6s">${coin(134,84,9)}</g>
+ ${coin(40,60,11)}${coin(64,40,9)}<g class="twinkle">${coin(26,90,8)}</g>
+ <rect x="150" y="30" width="40" height="22" rx="4" fill="#4fc27f" transform="rotate(12 170 40)"/><circle cx="170" cy="41" r="6" fill="#b7efc8"/>
+ ${sh(52,192,30)}${at(52,190,.84,cat({eyes:'spark',mouth:'open',armR:-110,armsFront:true}))}`;
+
+S.story=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <path d="M60,150 Q95,138 130,150 Q165,138 196,150 V176 Q165,164 130,176 Q95,164 60,176 Z" fill="#fff" stroke="${SKY}" stroke-width="4" stroke-linejoin="round"/><path d="M130,150 v26" stroke="${SKY}" stroke-width="3"/>
+ <g class="float"><rect x="78" y="96" width="36" height="46" fill="#dfe6f2"/><rect x="74" y="86" width="12" height="20" fill="#cfd8e6"/><rect x="106" y="86" width="12" height="20" fill="#cfd8e6"/><path d="M72,86 l8,-12 8,12 Z M104,86 l8,-12 8,12 Z" fill="${RED}"/><rect x="90" y="120" width="12" height="22" rx="6" fill="${VIO}"/></g>
+ <g class="float" style="animation-delay:.7s"><ellipse cx="164" cy="124" rx="18" ry="12" fill="#4fc27f"/><circle cx="182" cy="112" r="9" fill="#4fc27f"/><circle cx="185" cy="110" r="1.800" fill="${INK}"/><path d="M150,120 l-10,-8 4,12 Z" fill="#4fc27f"/><path d="M160,112 l4,-10 6,8 Z" fill="${SUN}"/><path d="M190,116 q8,2 10,-4" stroke="${ORA}" stroke-width="3" fill="none" stroke-linecap="round" class="glow"/></g>
+ ${spark(130,70,7,SUN,0)}${spark(100,60,5,VIO,.6)}
+ ${at(32,192,.7,cat({mouth:'open',armR:-80,armRcls:'bob'}))}`;
+
+S.young=`${room('#ffe9d6','#ffd9bd')}
+ <path d="M10,26 q90,26 180,0" fill="none" stroke="#b07a45" stroke-width="2"/>${[[40,34,RED],[70,39,SUN],[100,41,SKY],[130,39,VIO],[160,34,MINT]].map(([x,y,c])=>`<path d="M${x-8},${y-4} h16 l-8,16 Z" fill="${c}"/>`).join('')}
+ <rect x="50" y="120" width="100" height="56" rx="8" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${[62,78,94,110,126,142].map(x=>`<path d="M${x},122 v52" stroke="#cbc2e6" stroke-width="3"/>`).join('')}
+ ${at(100,170,.56,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true,tail:false,extra:`<circle cx="0" cy="-58" r="7" fill="${SKY}"/><circle cx="0" cy="-58" r="3" fill="#fff"/>`}),'hop')}
+ <rect x="46" y="150" width="108" height="10" rx="5" fill="${SKY}"/>
+ <g class="wiggle"><circle cx="170" cy="100" r="9" fill="${SUN}"/><rect x="167" y="108" width="6" height="18" rx="3" fill="${RED}"/></g>
+ <g opacity=".35">${at(26,192,.5,K('grey',{hat:glasses.replace(/#fff/g,INK)}))}</g>`;
+
+S.fact=`${bg('#e3fbf5')}
+ <rect x="20" y="20" width="160" height="98" rx="8" fill="#fff" stroke="#b07a45" stroke-width="5"/>
+ <path d="M30,74 q10,-6 20,0 t20,0 t20,0 v34 h-60 Z" fill="#5cc3ff"/><g transform="translate(60,92)"><g class="swim" style="animation-duration:3s"><g transform="scale(1.4)">${P.fish}</g></g></g>
+ <g class="beat"><circle cx="140" cy="68" r="26" fill="${MINT}"/><path d="M128,69 l9,10 16,-20" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g>
+ ${floor(184,'#bff0de')}${sh(100,192,30)}${at(100,190,.72,cat({hat:glasses,eyes:'happy',armR:-150,armsFront:true,armRcls:'bob'}))}`;
+
+S.month=`${bg('#ece6ff')}
+ <rect x="50" y="14" width="136" height="124" rx="10" fill="#fff"/><rect x="50" y="14" width="136" height="24" rx="10" fill="${RED}"/><circle cx="76" cy="14" r="5" fill="${INK}"/><circle cx="160" cy="14" r="5" fill="${INK}"/>
+ ${[0,1,2,3].map(r=>[0,1,2,3,4,5,6].map(c=>`<rect x="${58+c*17.600}" y="${46+r*22}" width="13" height="16" rx="3" fill="${c>4?'#ffe9d6':'#f4f1fb'}"/>`).join('')).join('')}
+ <g class="glow"><rect x="54" y="42" width="128" height="92" rx="8" fill="none" stroke="${VIO}" stroke-width="4"/></g>
+ <circle cx="24" cy="40" r="11" fill="#b9bdd4"/><circle cx="29" cy="36" r="9" fill="#ece6ff"/><circle cx="24" cy="80" r="11" fill="#ffe89a"/>
+ ${floor(184,'#d6ccf5')}${at(40,194,.66,cat({eyes:'happy',armR:-140,armRcls:'bob',armsFront:true}))}`;
+
+S.different=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${at(30,120,1.5,P.ball(RED))}${at(74,120,1.5,P.ball(RED))}${at(162,120,1.5,P.ball(RED))}
+ <g class="beat">${star5(118,100,22,SKY,`stroke="${SKY}" stroke-width="4"`)}</g>${ring(118,100,32,RED)}
+ ${arrow(118,30,118,60,RED,7,'float')}
+ ${sh(100,192,30)}${at(100,190,.66,cat({eyes:'wide',mouth:'o',armR:-150,armsFront:true}))}`;
+
+S.lot=`${bg('#d9fbf1')}<circle cx="100" cy="110" r="84" fill="#bff3e4"/>${floor(186,'#9fe6d2')}
+ ${[[40,180,10],[70,182,-14],[100,180,6],[130,182,-8],[160,180,14],[54,166,-20],[86,168,12],[116,166,-6],[146,168,18],[70,152,8],[100,154,-12],[130,152,10],[86,138,-10],[114,138,14],[100,124,0]].map(([x,y,r])=>fishAt(x,y,1.5,r)).join('')}
+ ${at(100,118,.6,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}),'hop')}
+ ${spark(30,50,7,SUN,0)}${spark(170,60,7,SUN,.6)}`;
+
+S.study=`${bg('#2d2a6e')}<rect x="130" y="16" width="56" height="48" rx="6" fill="#3b3880" stroke="#55508a" stroke-width="4"/><circle cx="166" cy="34" r="9" fill="#ffe89a"/>
+ <circle class="glow" cx="80" cy="110" r="74" fill="#ffe89a" opacity=".25"/>
+ ${at(84,174,.98,cat(Object.assign({hat:glasses,mouth:'tongue',armL:30,armR:-22,armsFront:true,tail:false},NL)))}
+ ${floor(146,'#8a5a30')}<rect y="146" width="200" height="8" fill="#b07a45"/>
+ <path d="M150,146 v-40 q0,-14 -20,-14" fill="none" stroke="#9aa8c0" stroke-width="4"/><path d="M118,84 l22,6 -8,18 -22,-6 Z" fill="${SUN}"/>
+ <path d="M40,156 h90 l10,36 h-110 Z" fill="#fff"/><path class="draw" d="M52,170 q8,-6 16,0 t16,0 t16,0 t16,0" fill="none" stroke="${VIO}" stroke-width="2.800" stroke-linecap="round"/>
+ ${[[RED,0],[SKY,-12],[MINT,-24]].map(([c,dy])=>`<rect x="156" y="${134+dy}" width="40" height="11" rx="2" fill="${c}"/>`).join('')}`;
+
+const mailbag=`<rect x="-34" y="-44" width="22" height="26" rx="5" fill="${SKY}"/><path d="M-12,-52 q14,8 26,-2" fill="none" stroke="${SKY}" stroke-width="4"/><rect x="-30" y="-50" width="14" height="10" rx="1" fill="#fff"/>`;
+const cap=`<path d="M-28,-98 q0,-28 28,-28 q28,0 28,28 Z" fill="${SKY}"/><path d="M-30,-98 h70 q4,0 0,6 h-40" fill="#2f6fd0"/>`;
+S.job=`${park()}${cloud(30,30,.7)}
+ <path d="M160,186 v-60" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/><rect x="136" y="96" width="50" height="34" rx="12" fill="${RED}"/><rect x="146" y="106" width="30" height="5" rx="2" fill="#5a2a2a"/><path class="flower" d="M186,100 v-18 h12 v10 h-12" fill="${SUN}"/>
+ <g class="givemove"><rect x="104" y="100" width="26" height="18" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M104,100 l13,10 13,-10" fill="none" stroke="#cbc2e6" stroke-width="1.600"/><path d="${heartP}" transform="translate(117,114) scale(.4)" fill="${RED}"/></g>
+ ${sh(62,192,32)}${at(62,190,.92,cat({bow:false,hat:cap,eyes:'happy',armR:-96,armsFront:true,mid:mailbag}))}`;
+
+S.word=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${block(60,150,RED,'C')}${block(100,150,SKY,'A')}
+ <g class="hop">${block(140,150,MINT,'T')}</g>
+ ${speech(100,50,120,56,T(100,62,'cat',32,INK),100,96)}
+ <path d="M44,160 h112" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(100,198,.5,cat({eyes:'happy',mouth:'open',armL:150,armR:-150,armsFront:true}))}`;
+
+S.though=`${bg('#dff1ff')}<circle cx="40" cy="60" r="50" fill="#eaf7ff"/><path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#fff"/>
+ ${thermo(178,40,12,SKY)}
+ ${[[20,0,3],[60,1.2,2.2],[100,2.4,3],[140,.6,2.4],[170,1.8,3],[90,3.2,2]].map(([x,d,r])=>`<circle class="snow" style="animation-delay:-${d}s" cx="${x}" cy="0" r="${r}" fill="#fff"/>`).join('')}
+ ${sh(130,188,14,'shadow')}<g transform="translate(130,150)"><g class="jump">${P.ball(RED)}</g></g>
+ ${at(74,186,.96,cat({bow:false,hat:beanie,extra:winter,eyes:'happy',mouth:'open',armR:-120,armsFront:true}),'hop')}`;
+
+S.business=`${park(172)}${cloud(30,24,.7)}
+ <rect x="70" y="80" width="120" height="100" rx="6" fill="#fff8e6"/><path d="M62,80 h136 l-10,-26 h-116 Z" fill="${RED}"/><path d="M82,54 v26 M106,54 v26 M130,54 v26 M154,54 v26 M178,54 v26" stroke="#fff" stroke-width="5"/>
+ <rect x="70" y="124" width="120" height="10" fill="${SUN}"/>${fishAt(96,116,1.4,0)}${fishAt(124,116,1.4,0)}${fishAt(152,116,1.4,0)}
+ ${at(150,180,.5,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true,tail:false}))}<rect x="70" y="134" width="120" height="46" fill="#e4b77a"/>${T(130,164,'FISH',18,'#fff')}
+ ${at(34,192,.56,K('orange',{eyes:'happy',armR:-92,prop:`<g transform="translate(0,8)">${coin(0,0,7)}</g>`}))}`;
+
+S.issue=`${room('#e6f1ff','#cfe3f7')}
+ <path d="M0,30 h120 v30" fill="none" stroke="#9aa8c0" stroke-width="12" stroke-linejoin="round"/><rect x="108" y="56" width="24" height="12" rx="3" fill="#7a8aa6"/>
+ <path class="drip" d="${tear(120,72)}" fill="${SKY}"/><path class="drip" style="animation-delay:.5s" d="${tear(120,72)}" fill="${SKY}"/>
+ <path d="M100,150 h40 l-5,30 h-30 Z" fill="${RED}"/><ellipse cx="120" cy="150" rx="20" ry="5" fill="#5cc3ff"/><ellipse class="ripple" cx="120" cy="150" rx="10" ry="3" fill="none" stroke="#fff" stroke-width="1.500"/>
+ <ellipse cx="150" cy="186" rx="26" ry="6" fill="#5cc3ff" opacity=".6"/>
+ <g class="beat"><path d="M170,30 v24" stroke="${RED}" stroke-width="8" stroke-linecap="round"/><circle cx="170" cy="68" r="5" fill="${RED}"/></g>
+ ${sh(50,192,30)}${at(50,190,.84,cat({bow:false,hat:P.hatHard,eyes:'wide',mouth:'wavy',armR:-110,armsFront:true,prop:`<path d="M0,4 v-26 M-6,-22 q0,-10 6,-10 q6,0 6,10" fill="none" stroke="#9aa8c0" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.side=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <path d="M60,70 l50,-20 60,16 v70 l-60,24 -50,-20 Z" fill="#d9a56a"/><path d="M60,70 l50,20 60,-24 M110,90 v70" fill="none" stroke="#8a5a30" stroke-width="2.500"/>
+ <path class="glow" d="M110,90 l60,-24 v70 l-60,24 Z" fill="${RED}" opacity=".8"/>
+ ${arrow(192,40,160,86,RED,6,'float')}
+ ${at(36,192,.7,cat({eyes:'happy',armR:-100,armRcls:'bob'}))}`;
+
+S.kind=`${bg('#fff1c9')}
+ <rect x="10" y="100" width="180" height="10" rx="5" fill="#c98a4b"/>
+ <g transform="translate(40,84) scale(2)">${P.fish}</g>
+ <g transform="translate(100,84) scale(2)"><path d="M-9,0 l-8,-6 v12 Z" fill="#2f6fd0"/><ellipse cx="0" cy="0" rx="10" ry="6.500" fill="${SKY}"/><path d="M-3,-6 v12 M3,-6 v12" stroke="#fff" stroke-width="1.500"/><circle cx="6" cy="-1.500" r="1.600" fill="${INK}"/></g>
+ <g transform="translate(160,84) scale(2)"><path d="M-9,0 l-8,-6 v12 Z" fill="#3aa568"/><ellipse cx="0" cy="0" rx="10" ry="9" fill="#4fc27f"/><circle cx="0" cy="2" r="2" fill="${SUN}"/><circle cx="5" cy="-2" r="1.600" fill="${INK}"/></g>
+ ${[40,100,160].map((x,i)=>`<circle class="glow" style="animation-delay:${i*.5}s" cx="${x}" cy="84" r="30" fill="none" stroke="${VIO}" stroke-width="3.500"/>`).join('')}
+ ${floor(184,'#ffe08a')}${at(100,194,.64,cat({eyes:'wide',headCls:'tilt',armL:70,armR:-70}))}`;
+
+S.far=`${bg('#cdeeff')}${sun(30,28,10)}${cloud(120,30,.7)}
+ <path d="M0,120 q60,-30 120,-6 t80,-10 v96 h-200 Z" fill="#b7efc8"/><path d="M0,160 q50,-16 100,0 t100,0 v40 h-200 Z" fill="#8fe0a8"/>
+ <path d="M60,200 C90,170 40,150 100,132 C140,120 150,112 164,96" fill="none" stroke="#f3d9a4" stroke-width="10" stroke-linecap="round"/>
+ <g transform="translate(168,96) scale(.32)">${P.house()}</g>${ring(168,82,22,RED)}
+ <path d="M70,150 h60 M70,150 l6,-5 M70,150 l6,5 M130,150 l-6,-5 M130,150 l-6,5" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round" class="glow" transform="rotate(-28 100 150)"/>
+ ${sh(40,194,28)}${at(40,192,.8,cat({mouth:'wavy',armR:-150,armsFront:true}))}
+ <path class="sweat" d="${tear(70,120)}" fill="${SKY}"/>`;
+
+/* Tag 51–54: black, long, both, little, yes · since, provide, service, around, important · father, away, until, power, hour · game, often, yet, line, political */
+const pawK=(x,y,r,c)=>`<g transform="translate(${x},${y}) rotate(${r})" fill="${c}"><ellipse cx="0" cy="2" rx="5" ry="4"/><circle cx="-5" cy="-4" r="2"/><circle cx="0" cy="-6" r="2"/><circle cx="5" cy="-4" r="2"/></g>`;
+S.black=`${bg('#fff8f0')}
+ ${[[RED,20],[ORA,50],[SUN,80],[MINT,110],[SKY,140],[VIO,170]].map(([c,x])=>`<rect x="${x-11}" y="16" width="22" height="30" rx="6" fill="${c}" opacity=".5"/>`).join('')}
+ <rect x="128" y="60" width="40" height="52" rx="8" fill="${CB}"/>${ring(148,86,38,RED)}
+ ${floor(184,'#f0e6dc')}
+ <path d="M20,150 h36 l-4,32 h-28 Z" fill="#b9c4d8"/><ellipse cx="38" cy="150" rx="18" ry="5" fill="${CB}"/><path d="M52,154 q3,12 0,18 q-3,-6 0,-18" fill="${CB}"/>
+ ${pawK(70,190,-20,CB)}${pawK(160,186,14,CB)}${pawK(184,170,-6,CB)}
+ ${sh(104,190,34)}${at(104,188,.94,cat({eyes:'happy',mouth:'open',armR:-128,armsFront:true}))}`;
+
+S.long=`${park(170)}${cloud(40,26,.7)}
+ <g class="walkbob"><path class="wiggle" d="M178,134 q14,-6 12,-22" fill="none" stroke="#e8b06a" stroke-width="7" stroke-linecap="round"/>
+ <rect x="50" y="124" width="132" height="34" rx="17" fill="#e8b06a"/><rect x="60" y="150" width="10" height="24" rx="5" fill="#d99a52"/><rect x="76" y="150" width="10" height="24" rx="5" fill="#e8b06a"/><rect x="150" y="150" width="10" height="24" rx="5" fill="#d99a52"/><rect x="166" y="150" width="10" height="24" rx="5" fill="#e8b06a"/>
+ <ellipse cx="22" cy="122" rx="8" ry="15" fill="#b9773a" transform="rotate(16 22 122)"/><circle cx="40" cy="126" r="22" fill="#e8b06a"/><ellipse cx="30" cy="134" rx="12" ry="9" fill="#fff3dc"/><ellipse cx="24" cy="130" rx="4.500" ry="3.500" fill="${INK}"/><circle cx="42" cy="120" r="3" fill="${INK}"/><ellipse cx="58" cy="120" rx="8" ry="15" fill="#b9773a" transform="rotate(-16 58 120)"/></g>
+ <path d="M20,90 h164 M20,90 l8,-6 M20,90 l8,6 M184,90 l-8,-6 M184,90 l-8,6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(112,84,.4,cat({eyes:'wide',mouth:'o',tail:false}))}`;
+
+S.both=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}
+ <path d="M30,70 q0,-14 14,-14 h112 q14,0 14,14" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,56 v-18" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>
+ ${arrow(100,38,62,72,RED,4,'glow')}${arrow(100,38,138,72,RED,4,'glow')}
+ ${sh(62,190,30)}${at(62,188,.88,cat({eyes:'happy',mouth:'open'}),'hop')}
+ ${sh(138,190,30)}${at(138,188,.88,K('orange',{eyes:'happy',mouth:'open'}),'hop')}
+ ${heart(100,110,.9,RED,0)}`;
+
+S.little=`${bg('#e3fbf5')}<circle cx="120" cy="120" r="60" fill="#fff" opacity=".7"/>${floor(184,'#bff0de')}
+ <g transform="translate(120,176) scale(2.2)">${P.cup(SKY).replace('#7a4a21','#bfe9ff')}</g>
+ ${at(118,128,.3,K('cream',{eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true,tail:false}),'peek')}
+ <circle cx="118" cy="104" r="34" fill="none" stroke="${VIO}" stroke-width="5"/><path d="M142,128 l22,22" stroke="${VIO}" stroke-width="8" stroke-linecap="round"/>
+ ${at(34,194,.7,cat({eyes:'spark',mouth:'o',headCls:'tilt'}))}`;
+
+S.yes=`${bg('#e3fbf5')}<circle cx="100" cy="96" r="80" fill="#f0fdf8"/>${floor(184,'#bff0de')}${sh(92,190,36)}
+ <g class="beat"><circle cx="156" cy="50" r="30" fill="${MINT}"/><path d="M142,51 l10,12 18,-24" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>
+ ${at(92,186,1.02,cat({eyes:'happy',mouth:'big',armL:30,armR:-125,armsFront:true,headCls:'hop'}))}
+ ${spark(30,50,7,SUN,0)}${spark(46,120,5,SUN,.6)}`;
+
+S.since=`${park(170)}
+ <rect x="16" y="20" width="168" height="12" rx="6" fill="#fff" opacity=".7"/><rect class="grow" x="16" y="20" width="130" height="12" rx="6" fill="${RED}"/>
+ <g transform="translate(24,26) scale(.6)">${sun(0,0,12)}</g><g class="beat"><circle cx="146" cy="26" r="9" fill="${RED}"/></g>
+ <rect x="50" y="150" width="100" height="8" rx="4" fill="#b07a45"/><rect x="56" y="158" width="6" height="26" fill="#8a5a30"/><rect x="138" y="158" width="6" height="26" fill="#8a5a30"/><rect x="50" y="126" width="100" height="8" rx="4" fill="#b07a45"/>
+ ${at(86,152,.7,cat({eyes:'closed',mouth:'wavy',headCls:'tilt'}))}
+ <g class="ring">${at(150,124,.5,P.clock(28,150))}</g>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="104" y="80" font-size="14">z</text></g>`;
+
+S.provide=`${room('#fff1c9','#e4b77a')}
+ ${at(150,190,.46,K('orange',{eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}${at(180,192,.4,K('grey',{eyes:'happy'}))}${at(120,192,.4,K('cream',{eyes:'happy'}))}
+ ${sh(54,192,32)}${at(54,190,.9,cat({eyes:'happy',armR:-92,armsFront:true,prop:`<g transform="translate(6,8)"><path d="M-16,-4 h32 q0,16 -16,16 q-16,0 -16,-16 Z" fill="${SKY}"/><ellipse cx="0" cy="-4" rx="16" ry="4" fill="#ffd98a"/><g transform="translate(0,-8) scale(.9)">${P.fish}</g></g>`}))}
+ ${arrow(98,130,120,146,RED,5,'glow')}${heart(150,110,.8,RED,0)}`;
+
+const fliege=`<path d="M0,-46 l-9,-5 v10 Z M0,-46 l9,-5 v10 Z" fill="${RED}"/><circle cx="0" cy="-46" r="2.500" fill="#b52f29"/>`;
+S.service=`${room('#ece6ff','#d6ccf5')}
+ ${at(150,186,1,P.table(76))}<path d="M112,130 h76 v12 l-9.500,7 -9.500,-7 -9.500,7 -9.500,-7 -9.500,7 -9.500,-7 -9.500,7 -9.500,-7 Z" fill="#fff"/>
+ <g class="ring"><path d="M150,118 a12,12 0 0 1 24,0 Z" fill="${SUN}" transform="translate(-12,10)"/><rect x="136" y="128" width="28" height="4" rx="2" fill="#e0a83a"/></g>
+ ${sh(60,192,32)}${at(60,190,.92,cat({eyes:'happy',mid:fliege,armL:-110,armR:-30,armsFront:true}))}
+ <g class="float"><ellipse cx="34" cy="100" rx="30" ry="6" fill="#dfe6f2" stroke="#9aa8c0" stroke-width="1.600"/><path d="M14,98 a20,18 0 0 1 40,0 Z" fill="#cfd8e6"/><circle cx="34" cy="78" r="4" fill="#9aa8c0"/></g>`;
+
+S.around=`${park(176)}${cloud(30,24,.7)}
+ ${at(100,150,1,P.house())}
+ <ellipse cx="100" cy="140" rx="84" ry="46" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 9" class="glow"/>
+ <g class="spin" style="animation-duration:5s;transform-box:view-box;transform-origin:100px 140px"><g transform="translate(100,196) scale(.42)">${cat({feet:'run',eyes:'happy',mouth:'open'})}</g></g>`;
+
+S.important=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,36)}
+ ${at(100,186,.98,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}
+ <g class="float"><rect x="64" y="20" width="72" height="48" rx="5" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M64,20 l36,28 36,-28" fill="none" stroke="#cbc2e6" stroke-width="2"/><circle cx="100" cy="52" r="11" fill="${RED}"/>${star5(100,52,6,'#fff')}</g>
+ <g class="beat"><path d="M164,30 v26" stroke="${RED}" stroke-width="9" stroke-linecap="round"/><circle cx="164" cy="72" r="6" fill="${RED}"/></g>
+ <g class="beat"><path d="M36,30 v26" stroke="${RED}" stroke-width="9" stroke-linecap="round"/><circle cx="36" cy="72" r="6" fill="${RED}"/></g>`;
+
+const bart=`<path d="M-12,-60 q6,-5 12,0 q6,-5 12,0 q-2,7 -12,3 q-10,4 -12,-3 Z" fill="#6a6f8c"/>`;
+S.father=`${bg('#e3fbf5')}<circle cx="100" cy="104" r="84" fill="#f0fdf8"/>${floor(186,'#bff0de')}${sh(100,192,44)}
+ ${at(100,190,1.08,K('grey',{eyes:'happy',mid:tie,hat:bart,armL:140,armR:-140,armsFront:true}))}
+ ${at(100,82,.5,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true,tail:false}),'hop')}
+ ${heart(40,60,1,RED,0)}${heart(164,70,.8,RED,.8)}`;
+
+S.away=`${park()}${cloud(40,30,.8)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g class="road"><path d="M100,150 h50" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(150,150,172,150,RED,5)}
+ <circle class="puff" cx="126" cy="176" r="6" fill="#fff"/><circle class="puff" style="animation-delay:.8s" cx="116" cy="172" r="5" fill="#fff"/>
+ <g transform="translate(166,186) scale(-.44,.44)"><g class="runbob">${P.dog()}</g></g>
+ ${sh(50,192,30)}${at(50,190,.88,cat({mouth:'wavy',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.until=`${bg('#cdeeff')}<path d="M110,0 h90 v200 h-90 Z" fill="#2d2a6e"/><path d="M110,0 q-24,100 0,200" fill="#2d2a6e"/>
+ <g transform="translate(40,34) scale(.9)">${sun(0,0,12)}</g><circle cx="166" cy="36" r="14" fill="#ffe89a"/><circle cx="172" cy="32" r="12" fill="#2d2a6e"/>${spark(140,60,4,'#ffe89a',0)}${spark(184,80,3.500,'#ffe89a',.7)}
+ <rect x="16" y="84" width="168" height="10" rx="5" fill="#fff" opacity=".5"/><rect class="grow" x="16" y="84" width="104" height="10" rx="5" fill="${RED}"/><path d="M120,76 v26" stroke="${RED}" stroke-width="6" stroke-linecap="round"/>
+ ${floor(180,'#8fe0a8')}<path d="M110,180 h90 v20 h-90 Z" fill="#373278"/>
+ ${at(56,190,.76,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(86,190)"><g class="roll" style="animation-duration:1.4s">${P.ball(RED)}</g></g>`;
+
+const blitz=(x,y,s,c)=>`<path transform="translate(${x},${y}) scale(${s})" d="M4,-20 l-14,22 h9 l-4,18 16,-24 h-9 Z" fill="${c}"/>`;
+S.power=`${bg('#fff3cf')}<circle cx="100" cy="104" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,38)}
+ <g class="beat">${blitz(36,60,1.6,SUN)}</g><g class="beat" style="animation-delay:.3s">${blitz(164,56,1.6,SUN)}</g>
+ <rect x="150" y="120" width="34" height="56" rx="6" fill="#fff" stroke="${INK}" stroke-width="3"/><rect x="160" y="114" width="14" height="8" rx="2" fill="${INK}"/><rect class="glow" x="155" y="126" width="24" height="44" rx="3" fill="${MINT}"/>
+ ${at(92,186,1.04,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true,mid:blitz(0,-28,.7,SUN)}),'pulse')}`;
+
+S.hour=`${bg('#e3fbf5')}<circle cx="110" cy="92" r="80" fill="#f0fdf8"/>
+ <g transform="translate(110,92)"><circle r="64" fill="#fff" stroke="${INK}" stroke-width="7"/><path d="M0,0 L0,-56 A56,56 0 0 1 28,-48.500 Z" fill="${RED}" opacity=".5"/>${[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<path transform="rotate(${a})" d="M0,-58 v8" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`).join('')}<path d="M0,0 L0,-40" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><g class="spin" style="animation-duration:8s;transform-box:view-box;transform-origin:0 0"><path d="M0,0 v-50" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g><circle r="5" fill="${INK}"/></g>
+ ${floor(186,'#bff0de')}
+ <g transform="translate(28,180)"><path d="M-12,-40 h24 l-10,20 10,20 h-24 l10,-20 Z" fill="#bfe9ff" stroke="${INK}" stroke-width="2.500" stroke-linejoin="round"/><path d="M-6,-2 h12 l-6,-12 Z" fill="${SUN}"/><path class="drip" style="animation-duration:.8s" d="M0,-20 v6" stroke="${SUN}" stroke-width="2"/></g>
+ ${at(170,194,.5,cat({eyes:'happy',armR:-150,armsFront:true}))}`;
+
+S.game=`${room('#ece6ff','#d6ccf5')}
+ <rect x="50" y="16" width="130" height="88" rx="10" fill="${INK}"/><rect x="58" y="24" width="114" height="72" rx="6" fill="#2d2a6e"/>
+ <rect x="66" y="46" width="6" height="26" rx="2" fill="#fff" class="float"/><rect x="158" y="40" width="6" height="26" rx="2" fill="#fff" class="hop"/><g transform="translate(80,56)"><circle class="roll" style="animation-duration:1s" r="4" fill="${SUN}"/></g><path d="M115,28 v64" stroke="#55508a" stroke-width="2" stroke-dasharray="4 6"/>
+ ${sh(70,192,32)}${at(70,190,.9,cat({eyes:'happy',mouth:'tongue',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-18)"><rect x="-20" y="-9" width="40" height="18" rx="9" fill="#9aa8c0"/><circle cx="10" cy="-2" r="3" fill="${RED}"/><circle cx="14" cy="3" r="3" fill="${MINT}"/><path d="M-12,0 h8 M-8,-4 v8" stroke="${INK}" stroke-width="2.500"/></g>`}))}
+ <g class="hop"><rect x="148" y="150" width="30" height="30" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><circle cx="156" cy="158" r="3" fill="${INK}"/><circle cx="170" cy="172" r="3" fill="${INK}"/><circle cx="163" cy="165" r="3" fill="${INK}"/></g>`;
+
+S.often=`${bg('#ece6ff')}
+ <rect x="10" y="20" width="180" height="62" rx="10" fill="#fff"/><rect x="10" y="20" width="180" height="16" rx="8" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6].map(i=>`<rect x="${16+i*25.200}" y="42" width="21" height="34" rx="5" fill="#f4f1fb"/>${[0,1,3,4,6].includes(i)?`<g class="twinkle" style="animation-delay:${i*.2}s">${check(26.500+i*25.200,60,6,3.500)}</g>`:''}`).join('')}
+ ${floor(184,'#d6ccf5')}${sh(100,190,36)}
+ ${at(100,188,.94,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}`;
+
+S.yet=`${bg('#3b3880')}<rect x="130" y="16" width="56" height="48" rx="6" fill="#2d2a6e" stroke="#55508a" stroke-width="4"/><circle cx="164" cy="34" r="9" fill="#ffe89a"/>${floor(172,'#2d2a6e')}
+ <g opacity=".8"><g transform="translate(150,186) scale(1.1)">${P.bed}</g></g>
+ <g class="beat"><circle cx="150" cy="110" r="16" fill="#fff"/>${cross(150,110,7,5)}</g>
+ <g class="ring">${at(100,60,.5,P.clock(28,330))}</g>
+ ${at(52,190,.84,cat(Object.assign({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'},NL)))}<g transform="translate(86,190)"><g class="roll" style="animation-duration:1.2s">${P.ball(RED)}</g></g>`;
+
+S.line=`${bg('#fff1c9')}${floor(150,'#c98a4b')}<rect y="150" width="200" height="8" fill="#e0a868"/>
+ <rect x="20" y="40" width="160" height="90" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ <path class="draw" style="stroke-dasharray:140;animation-name:drawL" d="M34,86 h132" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/>
+ <style>@keyframes drawL{from{stroke-dashoffset:140}to{stroke-dashoffset:0}}</style>
+ <rect x="34" y="96" width="132" height="14" rx="3" fill="${SUN}"/>${[40,56,72,88,104,120,136,152].map((x,i)=>`<path d="M${x},96 v${i%2?5:8}" stroke="${INK}" stroke-width="1.600"/>`).join('')}
+ <path d="M34,60 h132" stroke="${VIO}" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/>
+ ${at(100,198,.6,cat({mouth:'tongue',armR:-150,armRcls:'bob',armsFront:true}))}`;
+
+const pult=(x,c)=>`<path d="M${x-22},186 l4,-46 h36 l4,46 Z" fill="#b07a45"/><rect x="${x-24}" y="132" width="48" height="10" rx="3" fill="#8a5a30"/><circle cx="${x}" cy="162" r="9" fill="${c}"/>${star5(x,162,5,'#fff')}`;
+S.political=`${bg('#ece6ff')}${floor(186,'#d6ccf5')}
+ <path d="M0,20 q100,30 200,0" fill="none" stroke="#b07a45" stroke-width="2"/>${[[30,28,SKY],[70,36,ORA],[100,38,SKY],[130,36,ORA],[170,28,SKY]].map(([x,y,c])=>`<path d="M${x-8},${y-4} h16 l-8,16 Z" fill="${c}"/>`).join('')}
+ ${at(50,150,.62,cat({mouth:'open',armR:-125,armRcls:'bob',armsFront:true,tail:false}))}${pult(50,SKY)}
+ ${at(150,150,.62,K('orange',{mouth:'open',armL:125,armLcls:'bob',armsFront:true,tail:false}))}${pult(150,ORA)}
+ <rect x="84" y="150" width="32" height="34" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="92" y="150" width="16" height="4" fill="${INK}"/><g class="drip" style="animation-duration:1.6s"><rect x="94" y="124" width="12" height="16" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>
+ ${speech(50,60,40,26,dots(50,60,SKY),50,84)}`;
+
+/* Tag 55–58: end, among, ever, stand, bad · lose, however, member, pay, law · meet, city, almost, include, continue · set, later, community, name, once */
+S.end=`${park(160)}${floor(168,'#e0875a')}<path d="M0,180 h200" stroke="#fff" stroke-width="2" opacity=".7"/>
+ <path d="M60,168 v-100 M150,168 v-100" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><rect x="56" y="56" width="98" height="26" rx="5" fill="${RED}"/>${T(105,76,'END',20,'#fff')}
+ <path class="flower" d="M60,130 q45,10 90,0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+ ${[[20,RED,0],[100,SUN,.9],[180,VIO,1.3],[60,SKY,.4],[140,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.5" fill="${c}"/>`).join('')}
+ <g transform="translate(104,192) rotate(8) scale(-.8,.8)"><g class="runbob">${cat({armL:140,armR:-140,armsFront:true,feet:'run',eyes:'happy',mouth:'big'})}</g></g>`;
+
+S.among=`${bg('#ffe9d6')}${floor(186,'#ffd9bd')}
+ ${at(30,170,.46,K('orange',{eyes:'happy'}))}${at(70,164,.46,K('grey',{eyes:'happy'}))}${at(130,164,.46,K('white',{eyes:'happy'}))}${at(170,170,.46,K('cream',{eyes:'happy'}))}
+ ${at(44,194,.5,K('white',{eyes:'happy',mouth:'open'}))}${at(156,194,.5,K('orange',{eyes:'happy',mouth:'open'}))}
+ ${at(100,192,.62,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}${ring(100,160,40,RED)}
+ ${heart(100,70,1.1,RED,0)}`;
+
+S.ever=`${bg('#fff3cf')}${burst(30,36,RED,0)}${burst(170,30,VIO,.5)}${burst(100,20,SKY,1)}${burst(176,110,MINT,1.4)}
+ ${floor(184,'#ffe08a')}
+ <rect x="110" y="136" width="70" height="48" rx="8" fill="#fff8e6"/><rect x="110" y="136" width="70" height="14" rx="7" fill="${RED}"/><path d="M118,150 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0" fill="${RED}"/>
+ <rect x="143" y="116" width="4" height="20" fill="${SKY}"/><path class="beat" d="M145,104 q-5,7 0,12 q5,-5 0,-12 Z" fill="${ORA}"/>
+ ${sh(58,190,32)}${at(58,188,.92,cat({eyes:'spark',mouth:'big',armL:130,armR:-130,armsFront:true,bow:false,hat:crown}),'hop')}`;
+
+S.stand=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="70" y="150" width="64" height="12" rx="6" fill="#c98a4b"/><rect x="76" y="162" width="9" height="24" fill="#8a5a30"/><rect x="119" y="162" width="9" height="24" fill="#8a5a30"/>
+ ${at(102,152,1,cat({eyes:'happy',armL:10,armR:-10}))}
+ <path d="M168,160 V40 M168,40 l-7,11 M168,40 l7,11" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round" class="float"/>
+ <g opacity=".3">${at(34,190,.5,cat({tail:false,eyes:'closed'}))}</g>`;
+
+S.bad=`${bg('#e9efe0')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(140,176)">${P.plate(36)}</g><g transform="translate(140,162) scale(2.4)"><path d="M-9,0 l-8,-6 v12 Z" fill="#7a9a5a"/><ellipse cx="0" cy="0" rx="10" ry="6.500" fill="#9bb86a"/><path d="M3,-3 l4,4 M7,-3 l-4,4" stroke="${INK}" stroke-width="1.200"/></g>
+ <path class="heatw" d="M124,130 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="#7a9a5a" stroke-width="4" stroke-linecap="round"/><path class="heatw" style="animation-delay:.6s" d="M152,126 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="#7a9a5a" stroke-width="4" stroke-linecap="round"/>
+ <g class="flutter"><circle cx="170" cy="110" r="2.500" fill="${INK}"/></g><g class="flutter" style="animation-delay:-2s"><circle cx="112" cy="120" r="2.500" fill="${INK}"/></g>
+ ${at(50,196,.86,cat({eyes:'closed',mouth:'wavy',armR:-150,armsFront:true,tail:false,headCls:'shiver'}))}
+ <g class="beat"><circle cx="40" cy="40" r="20" fill="#fff"/>${cross(40,40,9,6)}</g>`;
+
+S.lose=`${bg('#e6f1ff')}${floor(184,'#cfe3f7')}
+ <rect x="60" y="14" width="80" height="40" rx="6" fill="${INK}"/>${T(82,44,'0',26,'#fff')}${T(100,43,':',24,'#9aa8c0')}${T(118,44,'3',26,SUN)}
+ ${at(146,188,.7,K('orange',{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}<g transform="translate(146,74) scale(.5)"><path d="M-28,0 h56 v24 q0,30 -28,30 q-28,0 -28,-30 Z" fill="${SUN}"/><rect x="-6" y="52" width="12" height="20" fill="#e0a83a"/><rect x="-22" y="70" width="44" height="12" rx="4" fill="#e0a83a"/></g>
+ ${sh(56,190,30)}${at(56,188,.9,cat({eyes:'closed',mouth:'wavy',armL:8,armR:-8,headCls:'tilt'}))}
+ <path class="sweat" d="${tear(34,104)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(80,108)}" fill="${SKY}"/>`;
+
+S.however=`${bg('#ffe2a8')}${sun(40,40,20)}${thermo(180,40,62,RED)}
+ <path d="M0,172 q50,-16 100,0 t100,0 v28 h-200 Z" fill="#f6c27a"/>
+ <g class="road"><path d="M-40,190 h320" stroke="#e4a85a" stroke-width="4" stroke-dasharray="14 26" stroke-linecap="round"/></g>
+ <circle class="puff" cx="50" cy="178" r="7" fill="#fff"/>
+ <g transform="translate(104,184) rotate(9) scale(-.96,.96)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>
+ <path class="sweat" d="${tear(146,80)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.5s" d="${tear(70,96)}" fill="${SKY}"/>`;
+
+const clubhut=(c)=>`<path d="M-22,-100 q22,-34 44,0 Z" fill="${c}"/><circle cx="0" cy="-122" r="5" fill="#fff"/>`;
+S.member=`${bg('#e3fbf5')}${floor(186,'#bff0de')}
+ <rect x="50" y="10" width="100" height="26" rx="8" fill="${SKY}"/>${T(100,29,'CLUB',16,'#fff')}
+ ${at(150,190,.56,K('orange',{eyes:'happy',hat:clubhut(SKY)}))}${at(184,192,.46,K('grey',{eyes:'happy',hat:clubhut(SKY)}))}
+ <g class="givemove" style="animation-direction:alternate-reverse"><rect x="80" y="100" width="40" height="26" rx="4" fill="#fff" stroke="${SKY}" stroke-width="3"/><circle cx="92" cy="113" r="6" fill="${CB}"/><path d="M102,108 h12 M102,116 h8" stroke="#cbc2e6" stroke-width="2.500" stroke-linecap="round"/></g>
+ ${sh(56,192,32)}${at(56,190,.92,cat({eyes:'spark',mouth:'open',armR:-96,armsFront:true}))}
+ ${spark(110,70,7,SUN,0)}`;
+
+S.pay=`${room('#fff1c9','#e4b77a')}
+ ${at(150,150,.6,K('orange',{eyes:'happy',mouth:'open',tail:false}))}
+ <rect x="100" y="136" width="100" height="50" fill="#c98a4b"/><rect x="96" y="128" width="104" height="10" rx="4" fill="#8a5a30"/>
+ <rect x="150" y="96" width="40" height="32" rx="4" fill="#9aa8c0"/><rect x="156" y="102" width="28" height="10" rx="2" fill="#bfe9ff"/><rect x="146" y="124" width="48" height="8" rx="3" fill="#7a8aa6"/>
+ <g class="givemove">${coin(96,116,8)}</g>
+ ${sh(52,192,32)}${at(52,190,.9,cat({eyes:'happy',armR:-96,armsFront:true}))}
+ <g transform="translate(120,128) scale(1.2)">${P.fish}</g>`;
+
+S.law=`${bg('#ece6ff')}<circle cx="100" cy="90" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ <path d="M100,30 v96" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/><rect x="76" y="124" width="48" height="10" rx="4" fill="#8a5a30"/>
+ <g class="sway" style="transform-origin:100px 40px"><path d="M40,40 h120" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><path d="M40,40 l-14,34 h28 Z M160,40 l-14,34 h28 Z" fill="none" stroke="#b07a45" stroke-width="2"/><path d="M24,74 a16,10 0 0 0 32,0 Z" fill="${SUN}"/><path d="M144,74 a16,10 0 0 0 32,0 Z" fill="${SUN}"/></g>
+ <circle cx="100" cy="28" r="7" fill="${SUN}"/>
+ <g transform="translate(150,180)"><rect x="-22" y="-28" width="44" height="28" rx="3" fill="${RED}"/><rect x="-22" y="-28" width="8" height="28" fill="#b52f29"/>${T(4,-8,'§',18,'#fff')}</g>
+ ${at(44,194,.7,cat({eyes:'happy',hat:glasses,armR:-110,armsFront:true,prop:`<g class="wave"><path d="M0,2 v-22" stroke="#8a5a30" stroke-width="4" stroke-linecap="round"/><rect x="-10" y="-30" width="20" height="10" rx="3" fill="#b07a45"/></g>`}))}`;
+
+S.meet=`${park()}${cloud(100,24,.7)}
+ <path d="M0,200 Q60,170 100,186 Q140,170 200,200" fill="none" stroke="#f3d9a4" stroke-width="14"/>
+ ${sh(62,190,30)}${at(62,188,.88,cat({eyes:'happy',mouth:'open',armR:-80}))}
+ ${sh(140,190,30)}${flipAt(140,188,.88,K('orange',{eyes:'happy',mouth:'open',armR:-80}))}
+ <g class="beat"><ellipse cx="101" cy="150" rx="12" ry="9" fill="${SUN}"/></g>${spark(101,120,8,SUN,0)}${spark(86,104,5,RED,.4)}${spark(118,104,5,RED,.8)}`;
+
+S.city=`${bg('#cdeeff')}${cloud(40,26,.7)}${sun(170,28,10)}
+ ${[[10,70,34,SKY],[48,40,30,'#b9c4d8'],[82,84,36,ORA],[122,52,32,'#9aa8c0'],[158,74,36,VIO]].map(([x,y,w,c])=>`<rect x="${x}" y="${y}" width="${w}" height="${166-y}" rx="3" fill="${c}"/>${[0,1,2,3].map(r=>y+10+r*20<150?`<rect x="${x+6}" y="${y+10+r*20}" width="8" height="10" fill="#fff6c8"/><rect x="${x+w-14}" y="${y+10+r*20}" width="8" height="10" fill="#fff" opacity=".7"/>`:'').join('')}`).join('')}
+ ${floor(166,'#6b7a99')}<g class="road"><path d="M-40,184 h320" stroke="#fff" stroke-width="4" stroke-dasharray="18 22"/></g>
+ <g class="scroll" style="animation-duration:5s"><g transform="translate(230,180) scale(.5)">${P.car(RED)}</g></g>
+ ${at(36,196,.5,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+S.almost=`${bg('#d6f1ff')}${floor(176,'#9fd4f0')}
+ <path d="M70,60 h60 l-6,116 h-48 Z" fill="#f3fbff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M72.500,78 q6,-4 12,0 t12,0 t12,0 t12,0 t7,0 l-5,95 h-45 Z" fill="#5cc3ff" opacity=".9"/>
+ <path d="M134,60 h20 M134,78 h20" stroke="${RED}" stroke-width="3" stroke-linecap="round"/><path d="M146,62 v14" stroke="${RED}" stroke-width="3" class="glow"/>
+ <path class="drip" d="${tear(100,14)}" fill="${SKY}"/>
+ ${at(34,194,.66,cat({eyes:'wide',mouth:'o',armR:-110,armsFront:true}))}`;
+
+S.include=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <rect x="50" y="76" width="130" height="96" rx="12" fill="${SKY}"/><rect x="58" y="84" width="114" height="80" rx="8" fill="#fff"/><path d="M115,84 v80 M58,124 h57" stroke="${SKY}" stroke-width="3"/>
+ <g transform="translate(86,108) scale(1.6)">${P.fish}</g><circle cx="86" cy="146" r="11" fill="${RED}"/><g transform="translate(144,150) scale(1.1)">${P.cup(MINT)}</g>
+ <rect x="46" y="72" width="138" height="104" rx="14" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 7" class="glow"/>
+ <g class="hop"><g transform="translate(144,56)">${star5(0,0,10,SUN)}</g></g>${arrow(144,70,144,96,RED,4)}
+ ${at(26,194,.5,cat({eyes:'happy',armR:-100,armRcls:'bob'}))}`;
+
+S.continue=`${park()}${sun(30,28,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <path d="M60,186 v-50" stroke="#b07a45" stroke-width="4"/><rect x="48" y="118" width="24" height="24" rx="5" fill="#fff"/><rect x="54" y="124" width="4" height="12" fill="${INK}"/><rect x="62" y="124" width="4" height="12" fill="${INK}"/>
+ <g class="beat"><circle cx="150" cy="60" r="26" fill="${MINT}"/><path d="M140,48 l14,12 -14,12 Z M154,48 l14,12 -14,12 Z" fill="#fff"/></g>
+ <g class="road"><path d="M84,150 h90" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>
+ <g transform="translate(116,192) scale(-.7,.7)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`;
+
+S.set=`${room('#fff1c9','#e4b77a')}
+ ${at(110,186,1.3,P.table(130))}<path d="M26,112 h168 v10 h-168 Z" fill="#fff"/>
+ <g transform="translate(70,116)">${P.plate(22)}</g><g transform="translate(150,116)">${P.plate(22)}</g>
+ <path d="M44,116 v-12 M176,116 v-12" stroke="#b9c4d8" stroke-width="3" stroke-linecap="round"/>
+ <g class="hop"><g transform="translate(110,112) scale(.9)">${P.cup(RED)}</g></g>${arrow(110,50,110,76,RED,5)}
+ ${at(110,152,.5,cat({eyes:'happy',armL:150,armR:-150,armsFront:true,tail:false}))}`;
+
+S.later=`${bg('#ece6ff')}
+ ${panel(8,36,84,116)}${panel(108,36,84,116)}
+ ${at(50,140,.52,cat({armL:40,armR:-140,armRcls:'munch',armsFront:true,mouth:'open',mouthCls:'chew',prop:P.fish,tail:false}))}
+ <g opacity=".55">${at(146,140,.52,cat({armR:-72,eyes:'happy'}))}<g transform="translate(168,140) scale(.7)">${P.ball(RED)}</g></g>
+ <rect x="106" y="34" width="88" height="120" rx="14" fill="none" stroke="${RED}" stroke-width="4" class="glow"/>
+ <g class="ring">${at(100,196,.5,P.clock(28,60))}</g>${arcArrow(70,170,130,170,-16,RED,5)}`;
+
+S.community=`${park(150)}${sun(30,26,10)}
+ <g transform="translate(40,124) scale(.5)">${P.house()}</g><g transform="translate(100,112) scale(.5)">${P.house(SKY)}</g><g transform="translate(160,124) scale(.5)">${P.house(VIO,'#ffe2b8')}</g>
+ <ellipse cx="100" cy="168" rx="80" ry="24" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8"/>
+ ${at(44,186,.4,K('orange',{eyes:'happy',armL:70,armR:-70}))}${at(82,194,.44,cat({eyes:'happy',armL:70,armR:-70}))}${at(120,194,.44,K('white',{eyes:'happy',armL:70,armR:-70}))}${at(158,186,.4,K('grey',{eyes:'happy',armL:70,armR:-70}))}
+ ${heartS(100,150,1.3,RED,'beat')}`;
+
+S.name=`${bg('#e3fbf5')}
+ <g class="sway" style="transform-origin:100px 20px"><rect x="30" y="24" width="140" height="80" rx="10" fill="${RED}"/><rect x="38" y="54" width="124" height="42" rx="6" fill="#fff"/>${T(100,46,'HELLO',16,'#fff')}${T(100,86,'Canela',28,INK)}</g>
+ ${floor(184,'#bff0de')}${sh(100,192,32)}${at(100,190,.76,cat({eyes:'happy',mouth:'open',armL:150,armR:-150,armsFront:true}))}`;
+
+S.once=`${park(170)}${cloud(40,26,.7)}
+ <g class="beat"><circle cx="160" cy="44" r="26" fill="#fff"/><path d="M160,28 v32" stroke="${RED}" stroke-width="8" stroke-linecap="round"/></g>
+ ${sh(46,192,28)}${at(46,190,.86,cat({armL:30,armR:-120,armRcls:'throwarm',armsFront:true,eyes:'happy',mouth:'open'}))}
+ <g transform="translate(74,116)"><g class="throwball"><g transform="scale(.9)">${P.ball(RED)}</g></g></g>
+ <path d="M76,112 q54,-70 106,0" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>`;
+
+/* Tag 59–62: white, least, president, learn, real · change, team, minute, best, several · idea, kid, body, information, nothing · ago, lead, social, understand, whether */
+S.white=`${bg('#dff1ff')}<path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#fff"/>${cloud(40,40,1)}${cloud(160,60,.8)}
+ ${[[30,0,3],[80,1.5,2.4],[130,.7,3],[176,2.2,2.4]].map(([x,d,r])=>`<circle class="snow" style="animation-delay:-${d}s" cx="${x}" cy="0" r="${r}" fill="#fff"/>`).join('')}
+ <rect x="150" y="130" width="26" height="44" rx="5" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="154" y="122" width="18" height="10" rx="3" fill="${SKY}"/>
+ ${sh(92,190,38)}${at(92,188,1.02,K('white',{eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}${ring(92,128,70,RED)}
+ ${at(26,194,.4,cat({eyes:'happy'}))}`;
+
+S.least=`${bg('#fff1c9')}${floor(150,MINT)}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ ${[[36,'orange',4],[100,'grey',3],[164,null,1]].map(([x,n,k])=>`${n?at(x,140,.5,K(n,{eyes:'happy',tail:false})):at(x,140,.52,cat({mouth:'wavy',tail:false}))}<g transform="translate(${x},182)">${P.plate(26)}</g>${Array.from({length:k},(_,i)=>fishAt(x-12+i%2*20,174-Math.floor(i/2)*9,1,i*20-10)).join('')}`).join('')}
+ ${ring(164,176,30,RED)}${arrow(164,40,164,76,RED,6,'float')}`;
+
+S.president=`${bg('#ece6ff')}
+ <path d="M40,150 V30" stroke="#b07a45" stroke-width="4"/><g class="flower" style="transform-origin:40px 50px"><rect x="42" y="32" width="14" height="30" fill="#1f9c5a"/><rect x="56" y="32" width="14" height="30" fill="#fff"/><ellipse cx="63" cy="47" rx="4" ry="5" fill="#b07a45"/><rect x="70" y="32" width="14" height="30" fill="${RED}"/></g>
+ ${at(110,160,.9,cat({eyes:'happy',mid:`${tie}<path d="M-22,-48 L20,-8" stroke="${SUN}" stroke-width="7"/>`,armR:-125,armRcls:'wave',armsFront:true,tail:false}))}
+ <path d="M60,186 l6,-50 h88 l6,50 Z" fill="#b07a45"/><rect x="58" y="128" width="104" height="12" rx="4" fill="#8a5a30"/><circle cx="110" cy="162" r="13" fill="${SUN}"/>${star5(110,162,7,'#fff')}
+ ${floor(186,'#d6ccf5')}<path d="M96,128 v-14" stroke="${INK}" stroke-width="3"/><circle cx="96" cy="112" r="4" fill="${INK}"/>`;
+
+const doktorhut=`<path d="M-30,-104 L0,-116 L30,-104 L0,-92 Z" fill="${INK}"/><rect x="-16" y="-102" width="32" height="8" fill="${INK}"/><path d="M26,-104 v16" stroke="${SUN}" stroke-width="2.500"/><circle cx="26" cy="-86" r="3" fill="${SUN}"/>`;
+S.learn=`${bg('#fff1c9')}<circle cx="100" cy="104" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,36)}
+ ${letter(30,90,'A',RED,0)}${letter(160,84,'B',SKY,.7)}${letter(44,50,'C',MINT,1.4)}${letter(150,40,'1',VIO,2)}
+ ${at(100,186,1,cat({bow:false,hat:doktorhut,eyes:'happy',armL:8,armR:-8,mid:openBook}))}
+ ${spark(100,30,8,SUN,0)}`;
+
+S.real=`${bg('#e3fbf5')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <rect x="14" y="40" width="74" height="60" rx="4" fill="#fff" stroke="#b07a45" stroke-width="5"/><g opacity=".6" transform="translate(52,70) scale(2.2)"><path d="M-9,0 l-8,-6 v12 Z M0,-6.500 a10,6.500 0 1 0 .01,0" fill="none" stroke="${INK}" stroke-width=".8" stroke-dasharray="2 1.500"/></g>${cross(52,24,7,4)}
+ <g transform="translate(144,166)">${P.plate(40)}</g><g transform="translate(144,152)"><g class="wiggle"><g transform="scale(3)">${P.fish}</g></g></g>${check(144,100,12,6)}${ring(144,150,40,RED)}
+ ${at(62,196,.6,cat({eyes:'spark',mouth:'tongue',armR:-100,armRcls:'bob',tail:false}))}`;
+
+const hutK=(c)=>`<path d="M-26,-98 q0,-30 26,-30 q26,0 26,30 Z" fill="${c}"/><rect x="-32" y="-102" width="64" height="8" rx="4" fill="${c}"/>`;
+S.change=`${bg('#ece6ff')}<circle cx="100" cy="104" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(100,190,36)}
+ ${at(100,186,1,cat({bow:false,eyes:'happy',mouth:'open',hat:`<g class="glow">${hutK(RED)}</g><g class="glow" style="animation-delay:1.4s">${hutK(SKY)}</g>`}))}
+ <g class="spin" style="animation-duration:6s"><circle cx="100" cy="60" r="70" fill="none"/><path d="M44,40 q20,-30 56,-30" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,10 l-10,-7 M100,10 l-9,8" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M156,80 q-20,30 -56,30" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,110 l10,7 M100,110 l9,-8" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/></g>`;
+
+const trikot=(c)=>`<path d="M-22,-46 h44 v34 h-44 Z" fill="${c}" opacity=".95"/>${star5(0,-28,6,'#fff')}`;
+S.team=`${park(172)}${cloud(40,24,.7)}
+ ${at(52,188,.66,K('orange',{eyes:'happy',mid:trikot(SKY),armR:-70}))}${at(148,188,.66,K('grey',{eyes:'happy',mid:trikot(SKY),armL:70}))}
+ ${at(100,192,.74,cat({eyes:'happy',mouth:'open',mid:trikot(SKY),armL:70,armR:-70}))}
+ <g class="beat"><circle cx="100" cy="128" r="10" fill="${SUN}"/></g>
+ <g transform="translate(100,60)"><g class="jump">${P.ball('#fff',INK)}</g></g>${spark(60,60,6,SUN,0)}${spark(140,60,6,SUN,.5)}`;
+
+S.minute=`${bg('#e3fbf5')}<circle cx="110" cy="100" r="78" fill="#f0fdf8"/>
+ <g transform="translate(110,104)"><rect x="-8" y="-84" width="16" height="14" rx="3" fill="${INK}"/><circle r="64" fill="#fff" stroke="${INK}" stroke-width="7"/>${Array.from({length:12},(_,i)=>`<path transform="rotate(${i*30})" d="M0,-56 v7" stroke="${INK}" stroke-width="2.500" stroke-linecap="round"/>`).join('')}<path d="M0,0 L0,-56 A56,56 0 0 1 5.900,-55.700 Z" fill="${RED}"/><g class="spin" style="animation-duration:4s;transform-box:view-box;transform-origin:0 0"><path d="M0,0 v-50" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g><circle r="5" fill="${INK}"/></g>
+ ${floor(186,'#bff0de')}${at(30,194,.56,cat({eyes:'wide',armR:-110,armsFront:true}))}`;
+
+S.best=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>
+ <g class="twinkle">${star5(40,40,12,SUN)}</g><g class="twinkle" style="animation-delay:.4s">${star5(160,40,12,SUN)}</g><g class="twinkle" style="animation-delay:.8s">${star5(100,22,14,SUN)}</g>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.04,cat({bow:false,eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true,hat:`<path d="M-24,-100 l6,-24 10,14 8,-20 8,20 10,-14 6,24 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="2" stroke-linejoin="round"/><circle cx="0" cy="-106" r="3" fill="${RED}"/>`,mid:`<circle cx="0" cy="-28" r="11" fill="${SKY}"/>${star5(0,-28,6,'#fff')}<path d="M-6,-18 l-4,16 10,-6 10,6 -4,-16" fill="${SKY}"/>`}))}`;
+
+S.several=`${bg('#cdeeff')}${cloud(30,150,.8)}${cloud(170,170,.7)}
+ ${[[50,60,RED,0],[84,40,SUN,.3],[118,56,SKY,.6],[150,38,VIO,.9],[100,84,MINT,1.2]].map(([x,y,c,d])=>`<g class="float" style="animation-delay:${d}s"><path d="M${x},${y+18} Q${x+4},${y+50} 104,140" fill="none" stroke="${INK}" stroke-width="1.200"/><ellipse cx="${x}" cy="${y}" rx="15" ry="19" fill="${c}"/><ellipse cx="${x-5}" cy="${y-7}" rx="3.500" ry="5" fill="#fff" opacity=".5"/></g>`).join('')}
+ <ellipse cx="100" cy="58" rx="78" ry="54" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8" class="glow"/>
+ ${at(100,196,.6,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true}))}`;
+
+S.idea=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${think(134,54,48,32,`<g transform="translate(134,84) scale(1.1)">${P.bulb}</g>`,-1)}
+ <rect x="110" y="120" width="74" height="56" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M147,128 l12,22 h-24 Z M135,150 v16 M159,150 v16 M141,170 l6,-8 6,8" fill="none" stroke="${SKY}" stroke-width="2.500" stroke-linejoin="round" class="draw"/>
+ ${sh(56,190,32)}${at(56,188,.92,cat({eyes:'spark',mouth:'open',armR:-150,armsFront:true}))}`;
+
+const mütze=`<path d="M-26,-138 q0,-14 26,-14 q26,0 26,14 Z" fill="${RED}"/><rect x="-4" y="-142" width="44" height="7" rx="3" fill="#b52f29"/>`;
+S.kid=`${park()}${cloud(40,30,.8)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="14"/>
+ <g class="road" style="animation-direction:reverse"><g transform="translate(118,176)"><g class="walkbob"><g transform="translate(0,-8) scale(.74)">${P.person({shirt:MINT,stripe:'#1f9c83',hair:'#3a2a4a',happy:true,hat:mütze})}</g></g><rect x="-26" y="-8" width="52" height="6" rx="3" fill="${VIO}"/><circle cx="-16" cy="2" r="5" fill="${INK}"/><circle cx="16" cy="2" r="5" fill="${INK}"/></g></g>
+ <path d="M40,150 h26 M34,164 h20" stroke="#fff" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${at(30,196,.46,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+const lbl=(x1,y1,x2,y2)=>`<path d="M${x1},${y1} L${x2},${y2}" stroke="${RED}" stroke-width="2.500" stroke-linecap="round"/><circle cx="${x1}" cy="${y1}" r="4" fill="${RED}" class="beat"/><circle cx="${x2}" cy="${y2}" r="7" fill="#fff" stroke="${RED}" stroke-width="2.500"/>`;
+S.body=`${bg('#e3fbf5')}<rect x="52" y="26" width="96" height="164" rx="40" fill="#f0fdf8" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8"/>${floor(190,'#bff0de')}
+ ${at(100,186,1.06,cat({eyes:'happy',armL:40,armR:-40}))}
+ ${lbl(100,70,176,40)}${lbl(72,140,22,120)}${lbl(100,154,178,150)}${lbl(88,184,26,178)}`;
+
+S.information=`${bg('#cdeeff')}${cloud(30,24,.7)}${hills('#8fe0a8','#6fd08f',170)}
+ <path d="M130,186 v-80" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/>
+ <g class="beat"><circle cx="130" cy="72" r="40" fill="${SKY}"/><circle cx="130" cy="52" r="6" fill="#fff"/><rect x="124" y="64" width="12" height="32" rx="5" fill="#fff"/></g>
+ ${sh(52,192,30)}${at(52,190,.86,cat({eyes:'happy',hat:glasses,armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-28)"><path d="M-22,-12 l14,4 16,-4 14,4 v22 l-14,-4 -16,4 -14,-4 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M-14,-2 h8 M-14,4 h8 M6,-2 h8" stroke="${SKY}" stroke-width="2"/></g>`}))}`;
+
+S.nothing=`${bg('#ece6ff')}<circle cx="110" cy="96" r="70" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(120,190,54)}
+ ${at(120,128,1,P.boxBack(100))}<rect x="70" y="118" width="100" height="12" fill="#5a3a18"/>${at(120,128,1,P.boxFront(100,58))}
+ <g class="flutter"><circle cx="110" cy="96" r="2.500" fill="${INK}"/></g>
+ <g class="beat"><circle cx="150" cy="56" r="20" fill="#fff"/><circle cx="150" cy="56" r="11" fill="none" stroke="${RED}" stroke-width="4"/><path d="M142,64 l16,-16" stroke="${RED}" stroke-width="4"/></g>
+ ${at(34,192,.72,cat({mouth:'wavy',headCls:'tilt',armR:-80}))}`;
+
+S.ago=`${room('#fff1c9','#e4b77a')}
+ <rect x="96" y="20" width="86" height="96" rx="6" fill="#f3d9a4" stroke="#b07a45" stroke-width="6"/><g transform="translate(139,104) scale(.42)">${cat({eyes:'happy',mouth:'open',tail:false,extra:`<circle cx="0" cy="-58" r="7" fill="${SKY}"/>`})}</g>
+ <g class="glow"><path d="M70,50 q-30,-10 -40,20" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/><path d="M30,70 l-4,-14 M30,70 l13,-5" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>
+ <g class="float"><rect x="20" y="86" width="30" height="34" rx="4" fill="#fff"/><rect x="20" y="86" width="30" height="9" rx="4" fill="${RED}"/></g>
+ ${sh(70,192,32)}${at(70,190,.9,cat({eyes:'happy',armR:-128,armsFront:true}))}`;
+
+S.lead=`${park()}${sun(30,28,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g transform="translate(150,192) scale(-.74,.74)"><g class="walkbob">${cat({armL:0,armLcls:'slowA',armR:-150,armsFront:true,feet:'walk',eyes:'happy',mouth:'open',prop:`<path d="M0,4 v-44" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M0,-40 l22,8 -22,8 Z" fill="${RED}"/>`})}</g></g>
+ ${[[96,'orange',0],[60,'grey',.15],[26,'cream',.3]].map(([x,n,d])=>`<g transform="translate(${x},192) scale(-.42,.42)"><g class="walkbob" style="animation-delay:${d}s">${K(n,{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`).join('')}
+ ${arrow(150,60,188,60,RED,6,'glow')}`;
+
+S.social=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}
+ <ellipse cx="100" cy="176" rx="60" ry="12" fill="${RED}" opacity=".4"/>
+ ${at(40,190,.6,K('orange',{eyes:'happy',mouth:'open'}))}${at(160,190,.6,K('grey',{eyes:'happy',mouth:'open'}))}${at(100,194,.66,cat({eyes:'happy',mouth:'open',armL:70,armR:-70}))}
+ ${speech(40,60,44,30,`<path d="${heartP}" transform="translate(40,62) scale(.8)" fill="${RED}"/>`,40,90)}<g class="glow">${speech(160,54,44,30,dots(160,54,VIO),160,84)}</g><g class="glow" style="animation-delay:.7s">${speech(100,34,44,30,`<g transform="translate(100,36) scale(.6)">${star5(0,0,14,SUN)}</g>`,100,66)}</g>`;
+
+const puzzle=(x,y,c,cls)=>`<g class="${cls||''}"><path transform="translate(${x},${y})" d="M0,0 h14 q-4,-10 5,-10 q9,0 5,10 h14 v14 q10,-4 10,5 q0,9 -10,5 v14 h-38 Z" fill="${c}"/></g>`;
+S.understand=`${bg('#e3fbf5')}<circle cx="100" cy="90" r="78" fill="#f0fdf8"/>${floor(184,'#bff0de')}
+ ${puzzle(60,40,SKY)}<g transform="translate(40,0)">${puzzle(60,40,SUN,'givemove').replace('class="givemove"','class="givemove" style="animation-direction:alternate-reverse"')}</g>
+ <g class="beat">${check(160,40,12,6)}</g>${spark(40,36,7,SUN,0)}
+ ${sh(100,192,32)}${at(100,190,.78,cat({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true}))}`;
+
+S.whether=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <circle cx="50" cy="60" r="36" fill="#fff"/><circle cx="150" cy="60" r="36" fill="#fff"/>
+ <g transform="translate(50,60) scale(.9)">${sun(0,0,13)}</g>
+ <path d="M150,40 v40 M130,60 h40 M136,46 l28,28 M164,46 l-28,28" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/>
+ ${T(100,74,'?',44,RED,'middle','beat')}
+ ${sh(100,192,32)}${at(100,190,.86,cat({mouth:'wavy',headCls:'tilt',armL:70,armR:-70}))}`;
+
+/* Tag 63–66: watch, together, follow, parent, stop · face, anything, create, public, already · speak, others, level, allow, add · office, spend, health, person, art */
+S.watch=`${bg('#2d2a6e')}${floor(176,'#1f1b4d')}
+ <rect x="80" y="20" width="110" height="80" rx="10" fill="${INK}"/><rect x="88" y="28" width="94" height="64" rx="6" fill="#bfe9ff"/><g transform="translate(110,70)"><g class="roll" style="animation-duration:1.4s">${P.ball(RED)}</g></g><path d="M88,80 h94" stroke="#8fe0a8" stroke-width="10"/>
+ <circle class="glow" cx="135" cy="60" r="70" fill="#bfe9ff" opacity=".15"/>
+ <rect x="20" y="130" width="120" height="50" rx="14" fill="${VIO}"/><rect x="14" y="140" width="18" height="44" rx="8" fill="#7b55d9"/><rect x="128" y="140" width="18" height="44" rx="8" fill="#7b55d9"/>
+ ${at(80,172,.8,cat(Object.assign({eyes:'wide',mouth:'open',mouthCls:'chew',armR:-140,armRcls:'munch',armsFront:true,tail:false,armL:40,propL:`<g transform="translate(0,8)"><path d="M-12,-14 h24 l-4,18 h-16 Z" fill="${RED}"/><circle cx="-5" cy="-16" r="5" fill="#fff8e6"/><circle cx="4" cy="-18" r="5" fill="#fff8e6"/></g>`},NL)))}`;
+
+S.together=`${park(170)}${sun(30,28,10)}${cloud(150,30,.8)}
+ ${at(46,190,.7,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}
+ ${at(104,190,.7,K('orange',{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}))}
+ ${at(160,190,.6,P.dog({happy:true}))}
+ <g transform="translate(76,60)"><g class="jump">${P.ball(RED)}</g></g>
+ <ellipse cx="100" cy="150" rx="94" ry="52" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="9 8"/>${heart(130,70,.9,RED,0)}`;
+
+S.follow=`${park()}${cloud(40,26,.7)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g transform="translate(160,192) scale(-.7,.7)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>
+ ${[[104,'cream',.1],[68,'orange',.2],[32,'grey',.3]].map(([x,n,d])=>`<g transform="translate(${x},192) scale(-.4,.4)"><g class="walkbob" style="animation-delay:${d}s">${K(n,{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>${arrow(x+12,140,x+26,140,RED,3,'glow')}`).join('')}`;
+
+S.parent=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="84" fill="#ffdcc0"/>${floor(186,'#ffd9bd')}
+ ${at(46,188,.86,K('white',{eyes:'happy',hat:earflower,armR:-50}))}${at(154,188,.86,K('grey',{eyes:'happy',mid:tie,armL:50}))}
+ ${at(100,190,.56,cat({eyes:'happy',mouth:'open',armL:110,armR:-110,tail:false}),'hop')}
+ <path d="M24,80 q0,-14 14,-14 h124 q14,0 14,14" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>${heart(100,50,1.1,RED,0)}`;
+
+S.stop=`${park(170)}${floor(176,'#6b7a99')}
+ <path d="M150,180 v-70" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/>
+ <g class="beat"><polygon points="134,36 166,36 188,58 188,90 166,112 134,112 112,90 112,58" fill="${RED}" stroke="#fff" stroke-width="4"/>${T(150,84,'STOP',22,'#fff')}</g>
+ ${sh(54,192,32)}${at(54,190,.92,cat({mouth:'open',armR:-96,armsFront:true}))}
+ <ellipse cx="96" cy="140" rx="14" ry="16" fill="${CB}" stroke="${CO}" stroke-width="1.600"/><ellipse cx="96" cy="144" rx="6" ry="5" fill="#ff8a7a"/>`;
+
+S.face=`${bg('#ece6ff')}<circle cx="100" cy="100" r="88" fill="#f6f2ff"/>
+ <clipPath id="fc"><rect width="200" height="176"/></clipPath><g clip-path="url(#fc)">${at(100,254,1.9,cat({tail:false,eyes:'happy',headCls:'tilt'}))}</g>
+ <ellipse cx="100" cy="112" rx="84" ry="74" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${floor(176,'#d6ccf5')}${arrow(184,20,160,48,RED,6,'float')}`;
+
+S.anything=`${bg('#fff1c9')}
+ ${at(100,150,.96,cat({eyes:'spark',mouth:'big',armL:70,armR:-70,prop:knife,propL:fork,tail:false}))}
+ ${floor(136,MINT)}<rect y="136" width="200" height="8" fill="#9be6d8"/>
+ <g transform="translate(100,186)">${P.plate(90)}</g>
+ ${fishAt(50,170,1.6,-10)}<circle cx="80" cy="166" r="11" fill="${RED}"/><path d="M96,176 a16,16 0 0 1 32,0 Z" fill="#ffcf5c" stroke="#e0a83a" stroke-width="1.600"/>
+ <path d="M134,176 h30 v-14 q-15,-10 -30,0 Z" fill="#fff8e6"/><path d="M134,162 q15,-10 30,0" fill="none" stroke="${RED}" stroke-width="4"/><circle cx="149" cy="154" r="4" fill="${RED}"/>
+ <circle cx="112" cy="160" r="8" fill="#4fc27f"/><path d="M60,182 q10,-8 20,0" stroke="${SUN}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+
+const barett=`<ellipse cx="6" cy="-104" rx="28" ry="10" fill="${RED}"/><circle cx="6" cy="-114" r="3" fill="#b52f29"/>`;
+S.create=`${room('#fff1c9','#e4b77a')}
+ <path d="M110,186 l14,-130 M176,186 l-14,-130 M143,186 v-40" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><rect x="104" y="36" width="78" height="84" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ <circle cx="124" cy="58" r="10" fill="${SUN}"/><path class="grow" d="M108,104 q18,-28 36,-8 q14,-22 34,0 v12 h-70 Z" fill="${MINT}"/><path class="draw" d="M112,84 q20,-10 60,-4" fill="none" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/>
+ ${sh(56,192,32)}${at(56,190,.92,cat({bow:false,hat:barett,eyes:'happy',mouth:'tongue',armL:40,armR:-110,armRcls:'bob',armsFront:true,prop:`<path d="M0,4 l6,-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><path d="M5,-24 l2,-10 4,9 Z" fill="${RED}"/>`,propL:`<ellipse cx="0" cy="6" rx="15" ry="10" fill="#e4b77a"/><circle cx="-6" cy="4" r="3" fill="${RED}"/><circle cx="2" cy="1" r="3" fill="${SKY}"/><circle cx="7" cy="8" r="3" fill="${SUN}"/>`}))}`;
+
+S.public=`${park(160)}${sun(30,26,10)}${cloud(150,26,.7)}
+ <ellipse cx="100" cy="176" rx="50" ry="12" fill="#9fd4f0"/><rect x="92" y="130" width="16" height="44" rx="4" fill="#cfd8e6"/><ellipse cx="100" cy="130" rx="24" ry="6" fill="#dfe6f2"/>
+ <path class="drip" d="M100,100 q-18,10 -22,34" fill="none" stroke="#5cc3ff" stroke-width="3" stroke-linecap="round"/><path class="drip" style="animation-delay:.5s" d="M100,100 q18,10 22,34" fill="none" stroke="#5cc3ff" stroke-width="3" stroke-linecap="round"/>
+ ${at(30,190,.46,P.person({shirt:SKY,stripe:'#2f6fd0',long:true,hair:'#3a2a4a',wave:false,happy:true}))}${at(172,190,.5,P.person({shirt:MINT,stripe:'#1f9c83',skin:'#c98a5a',hair:'#3a2a4a'}))}
+ ${at(60,196,.4,cat({eyes:'happy'}))}${at(142,196,.36,K('orange',{eyes:'happy'}))}
+ <rect x="76" y="20" width="48" height="22" rx="5" fill="${MINT}"/>${T(100,36,'PARK',12,'#fff')}<path d="M100,42 v20" stroke="#b07a45" stroke-width="3"/>`;
+
+S.already=`${bg('#ffe2a8')}<rect x="120" y="14" width="64" height="54" rx="8" fill="#ffd98a" stroke="#fff" stroke-width="5"/><g transform="translate(152,50) scale(.9)">${sun(0,0,12)}</g>${floor(170,'#f0c98a')}
+ ${at(104,186,1.6,P.bed)}${at(66,164,.6,cat({tail:false,eyes:'closed',armL:60,armR:-60}))}<path class="breathe" d="M74,150 q40,-22 108,0 v24 h-108 Z" fill="${SKY}"/>
+ <g class="ring">${at(28,140,.5,P.clock(28,180))}</g>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="88" y="110" font-size="14">z</text><text class="zz" style="animation-delay:1s" x="100" y="94" font-size="19">z</text></g>
+ ${at(178,194,.36,K('orange',{eyes:'wide',mouth:'o'}))}`;
+
+S.speak=`${bg('#3b2a4a')}<path d="M100,-10 L30,186 h140 Z" fill="#fff6c8" opacity=".25"/>${floor(176,'#8a5a30')}
+ <path d="M140,176 v-70" stroke="#9aa8c0" stroke-width="4"/><rect x="132" y="92" width="16" height="22" rx="8" fill="#5a4a6c" transform="rotate(-20 140 103)"/>
+ <path d="M150,84 q10,10 0,22 M162,76 q16,16 0,36" fill="none" stroke="${SUN}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(90,182,1,cat(Object.assign({mouth:'big',armL:60,armR:-90,armsFront:true},NL)))}
+ ${at(20,198,.3,K('orange',{tail:false}))}${at(180,198,.3,K('grey',{tail:false}))}`;
+
+S.others=`${park(170)}${cloud(40,26,.7)}
+ ${at(40,190,.74,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(68,190)"><g class="roll" style="animation-duration:1.2s">${P.ball(RED)}</g></g>
+ ${at(120,188,.5,K('orange',{tail:false}))}${at(150,188,.5,K('grey',{tail:false}))}${at(180,188,.5,K('white',{tail:false}))}
+ <rect x="100" y="126" width="98" height="70" rx="16" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 8" class="glow"/>${arrow(150,80,150,116,RED,6,'float')}`;
+
+S.level=`${bg('#e3fbf5')}
+ <rect x="20" y="150" width="50" height="40" fill="${SKY}"/><rect x="70" y="110" width="50" height="80" fill="${MINT}"/><rect x="120" y="70" width="60" height="120" fill="${SUN}"/>
+ ${T(45,178,'1',22,'#fff')}${T(95,160,'2',22,'#fff')}${T(150,140,'3',22,'#fff')}
+ ${at(95,112,.56,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}
+ <g class="twinkle">${star5(150,46,14,RED)}</g>
+ ${arcArrow(60,130,84,96,10,RED,4,'5 7')}${arcArrow(112,92,136,56,10,RED,4,'5 7')}`;
+
+S.allow=`${park(170)}${floor(176,'#f3d9a4')}
+ <rect x="100" y="110" width="14" height="70" rx="4" fill="#9aa8c0"/>
+ <g class="lid" style="transform-box:view-box;transform-origin:107px 124px"><rect x="107" y="118" width="88" height="12" rx="6" fill="#fff"/><rect x="125" y="118" width="16" height="12" fill="${RED}"/><rect x="157" y="118" width="16" height="12" fill="${RED}"/></g>
+ ${at(140,192,.56,K('orange',{eyes:'happy',armR:-125,armRcls:'wave',armsFront:true,hat:cap}))}
+ <g class="beat"><circle cx="150" cy="50" r="24" fill="${MINT}"/><path d="M139,51 l8,9 14,-18" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <g transform="translate(50,192) scale(-.74,.74)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`;
+
+S.add=`${bg('#fff3cf')}
+ <circle cx="36" cy="60" r="28" fill="#fff"/><g transform="translate(36,60) scale(2)">${P.fish}</g>
+ <g class="beat"><path d="M84,46 v28 M70,60 h28" stroke="${VIO}" stroke-width="8" stroke-linecap="round"/></g>
+ <circle cx="130" cy="60" r="28" fill="#fff"/><g transform="translate(130,60) scale(2)">${P.fish}</g>
+ <path d="M162,52 h20 M162,68 h20" stroke="${VIO}" stroke-width="7" stroke-linecap="round"/>
+ ${floor(184,'#ffe08a')}
+ <g transform="translate(150,184)">${P.plate(40)}</g>${fishAt(138,170,1.6,8)}${fishAt(162,172,1.6,-10)}
+ ${at(60,192,.76,cat({eyes:'happy',mouth:'tongue',armR:-80}))}`;
+
+S.office=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="130" y="16" width="52" height="44" rx="6" fill="#bfe9ff" stroke="#fff" stroke-width="5"/><g class="ring">${at(40,60,.5,P.clock(26,300))}</g>
+ ${at(84,176,.92,cat({eyes:'happy',mid:tie,armL:30,armR:-30,armsFront:true,tail:false}))}
+ <rect x="20" y="140" width="170" height="12" rx="4" fill="#c98a4b"/><rect x="30" y="152" width="10" height="36" fill="#8a5a30"/><rect x="170" y="152" width="10" height="36" fill="#8a5a30"/>
+ <rect x="56" y="100" width="56" height="38" rx="4" fill="${INK}"/><rect x="60" y="104" width="48" height="30" rx="2" fill="#bfe9ff"/><path d="M66,112 h30 M66,120 h22 M66,128 h34" stroke="#fff" stroke-width="2.500" stroke-linecap="round" class="glow"/>
+ <rect x="150" y="118" width="16" height="22" rx="4" fill="${ORA}"/><ellipse cx="154" cy="108" rx="5" ry="12" fill="#4fc27f" transform="rotate(-16 154 108)"/><ellipse cx="163" cy="108" rx="5" ry="12" fill="#4fc27f" transform="rotate(16 163 108)"/>`;
+
+S.spend=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="124" y="110" width="60" height="70" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M138,110 q16,-26 32,0" fill="none" stroke="${RED}" stroke-width="4"/>${star5(154,146,12,RED)}
+ <rect x="150" y="130" width="44" height="52" rx="4" fill="${SKY}"/><path d="M160,130 q12,-20 24,0" fill="none" stroke="#2f6fd0" stroke-width="4"/>
+ ${[[90,100,0],[104,80,.3],[84,70,.6]].map(([x,y,d])=>`<g class="rise" style="animation-delay:${d}s">${coin(x,y,7)}</g>`).join('')}
+ ${sh(54,192,32)}${at(54,190,.92,cat({eyes:'happy',mouth:'open',armR:-96,armsFront:true,prop:`<g transform="translate(0,8)"><rect x="-14" y="-10" width="28" height="18" rx="4" fill="#7a4a21"/><rect x="-14" y="-10" width="28" height="6" rx="3" fill="#5a3a18"/></g>`}))}`;
+
+S.health=`${bg('#e3fbf5')}<circle cx="100" cy="96" r="80" fill="#f0fdf8"/>${floor(184,'#bff0de')}${sh(100,190,36)}
+ <g class="beat"><g transform="translate(150,52) scale(3)"><path d="${heartP}" fill="${RED}"/></g><path d="M150,36 v20 M140,46 h20" stroke="#fff" stroke-width="5" stroke-linecap="round"/></g>
+ <circle cx="40" cy="60" r="16" fill="${RED}"/><path d="M40,46 q1,-6 5,-8" stroke="#7a4a21" stroke-width="2.500" fill="none" stroke-linecap="round"/><ellipse cx="48" cy="40" rx="6" ry="3" fill="#4fc27f" transform="rotate(-25 48 40)"/>
+ <path d="M10,110 h20 l6,-14 8,26 6,-12 h20" fill="none" stroke="${MINT}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+ ${at(100,186,1,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}`;
+
+S.person=`${park()}${cloud(40,26,.7)}
+ ${sh(110,190,28)}${at(110,188,1,P.person({shirt:'#b9c4d8',stripe:'#9aa8c0',pants:'#5a4a6c',hair:'#5a3a18',shoes:'#3a2a4a'}))}
+ <rect x="68" y="22" width="84" height="172" rx="36" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${at(30,194,.5,cat({armR:-100,armRcls:'bob',eyes:'happy'}))}`;
+
+const rahmen=(x,y,w,h,inner)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#fff" stroke="#b07a45" stroke-width="5"/>${inner}`;
+S.art=`${room('#ece6ff','#d6ccf5')}
+ ${rahmen(14,24,52,44,`<circle cx="32" cy="40" r="7" fill="${SUN}"/><path d="M18,64 l14,-14 10,8 10,-14 10,20 Z" fill="${MINT}"/>`)}
+ ${rahmen(76,18,48,56,`<g transform="translate(100,70) scale(.34)">${K('orange',{tail:false})}</g>`)}
+ ${rahmen(134,24,52,44,`<path d="M140,60 q10,-30 20,-6 q10,-24 20,6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><circle cx="150" cy="38" r="5" fill="${SKY}"/><circle cx="172" cy="36" r="5" fill="${VIO}"/>`)}
+ <path d="M10,100 h180" stroke="#b5addf" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
+ ${spark(70,90,6,SUN,0)}${spark(130,92,6,SUN,.6)}
+ ${sh(100,192,34)}${at(100,190,.9,cat({bow:false,hat:barett,eyes:'spark',mouth:'o',armL:-46,armR:46,armsFront:true}))}`;
+
+/* Tag 67–70: sure, war, history, party, within · grow, result, morning, reason, low · win, research, girl, guy, early · moment, himself, air, teacher, force */
+S.sure=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(150,46,50,36,T(150,58,'?',26,VIO),150,78)}${at(150,190,.6,K('orange',{headCls:'tilt'}))}
+ <g class="beat"><rect x="26" y="20" width="76" height="40" rx="8" fill="none" stroke="${MINT}" stroke-width="5" transform="rotate(-8 64 40)"/><g transform="rotate(-8 64 40)">${T(64,50,'OK',26,MINT)}</g></g>
+ ${sh(66,192,34)}${at(66,190,.96,cat({eyes:'happy',mouth:'big',armL:-40,armR:-125,armsFront:true}))}`;
+
+const kissen=(x,y,c,r)=>`<rect x="${x-16}" y="${y-11}" width="32" height="22" rx="7" fill="${c}" stroke="#fff" stroke-width="2" transform="rotate(${r} ${x} ${y})"/>`;
+S.war=`${room('#cfc8f5','#b5addf')}
+ ${[[30,40,0],[80,26,.5],[120,50,1],[170,34,1.5],[100,80,.8],[56,90,1.8],[150,96,.3]].map(([x,y,d])=>`<path class="snow" style="animation-delay:-${d}s;animation-duration:5s" d="M${x},0 q5,-6 0,-12 q-5,6 0,12 Z" fill="#fff"/>`).join('')}
+ ${at(54,190,.8,cat({eyes:'happy',mouth:'big',armR:-130,armRcls:'wave',armsFront:true,prop:kissen(0,-6,SKY,20)}))}
+ ${flipAt(146,190,.8,K('orange',{eyes:'happy',mouth:'big',armR:-130,armRcls:'wave',armsFront:true,prop:kissen(0,-6,SUN,20)}))}
+ <g class="beat">${spark(100,96,12,'#fff',0)}</g>
+ ${kissen(100,186,RED,-8)}`;
+
+S.history=`${bg('#ffe2a8')}${sun(160,36,14)}<path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#f6c27a"/>
+ <path d="M30,170 L90,70 L150,170 Z" fill="#e0a85a"/><path d="M90,70 L150,170 h-30 Z" fill="#c98a4b"/><path d="M44,150 h92 M58,128 h66 M72,104 h38" stroke="#b07a45" stroke-width="2"/>
+ <g class="float"><rect x="110" y="20" width="76" height="46" rx="4" fill="#f3d9a4" stroke="#b07a45" stroke-width="2"/><circle cx="110" cy="43" r="7" fill="#e4b77a" stroke="#b07a45" stroke-width="2"/><circle cx="186" cy="43" r="7" fill="#e4b77a" stroke="#b07a45" stroke-width="2"/><path d="M124,34 h48 M124,44 h48 M124,54 h30" stroke="#b07a45" stroke-width="2.500" stroke-linecap="round"/></g>
+ ${at(40,194,.66,cat({eyes:'wide',mouth:'o',bow:false,hat:detHat,armR:-110,armsFront:true}))}
+ <g class="ring">${at(170,186,.4,P.clock(28,210))}</g>`;
+
+const partyhut=(c)=>`<path d="M-14,-100 L4,-140 L20,-102 Z" fill="${c}"/><circle cx="4" cy="-140" r="5" fill="${SUN}"/>`;
+S.party=`${bg('#fff3cf')}
+ ${[[20,RED,0],[50,SUN,.9],[90,MINT,1.7],[130,SKY,.4],[160,VIO,1.3],[184,ORA,2.2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.500" fill="${c}"/>`).join('')}
+ <g class="float"><path d="M30,90 q6,30 0,60" fill="none" stroke="${INK}" stroke-width="1.200"/><ellipse cx="30" cy="70" rx="15" ry="19" fill="${RED}"/></g><g class="float" style="animation-delay:.6s"><path d="M172,84 q-6,30 0,60" fill="none" stroke="${INK}" stroke-width="1.200"/><ellipse cx="172" cy="64" rx="15" ry="19" fill="${SKY}"/></g>
+ ${floor(184,'#ffe08a')}
+ <rect x="76" y="140" width="48" height="40" rx="6" fill="#fff8e6"/><path d="M76,150 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0" fill="${RED}"/><rect x="98" y="122" width="4" height="18" fill="${SKY}"/><path class="beat" d="M100,110 q-5,7 0,12 q5,-5 0,-12 Z" fill="${ORA}"/>
+ ${at(44,190,.74,cat({bow:false,hat:partyhut(VIO),eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}),'dance')}
+ ${at(156,190,.74,K('orange',{hat:partyhut(MINT),eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}),'dance')}
+ ${note(100,60,VIO,0)}${note(124,40,RED,1)}`;
+
+S.within=`${bg('#8fe0a8')}
+ <ellipse cx="100" cy="112" rx="76" ry="62" fill="#b7efc8" stroke="#fff" stroke-width="5" stroke-dasharray="12 9"/>
+ ${at(100,150,.76,cat({eyes:'happy',mouth:'open',armL:70,armR:-70}))}
+ ${arrow(18,30,46,62,RED,5,'glow')}${arrow(182,30,154,62,RED,5,'glow')}
+ <g opacity=".6"><circle cx="24" cy="176" r="14" fill="#fff"/>${cross(24,176,6,4)}</g>${check(100,40,10,6)}`;
+
+S.grow=`${bg('#e3fbf5')}${sun(170,30,11)}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#8fe0a8"/>
+ <path d="M150,170 V40 M144,170 h12 M144,130 h12 M144,90 h12 M144,50 h12" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/>
+ <g style="transform-box:fill-box;transform-origin:center bottom;animation:growY 4s ease-in-out infinite"><path d="M110,170 v-110" stroke="#3aa568" stroke-width="5" stroke-linecap="round"/><ellipse cx="98" cy="130" rx="12" ry="5" fill="#4fc27f" transform="rotate(-25 98 130)"/><ellipse cx="122" cy="110" rx="12" ry="5" fill="#4fc27f" transform="rotate(25 122 110)"/><ellipse cx="98" cy="90" rx="12" ry="5" fill="#4fc27f" transform="rotate(-25 98 90)"/><circle cx="110" cy="54" r="14" fill="${RED}"/><circle cx="110" cy="54" r="5" fill="${SUN}"/></g>
+ <style>@keyframes growY{0%{transform:scaleY(.2)}70%,100%{transform:scaleY(1)}}</style>
+ ${at(44,194,.76,cat({eyes:'happy',armR:-92,prop:`<g transform="translate(8,6)"><rect x="-10" y="-12" width="20" height="16" rx="3" fill="${SKY}"/><path d="M10,-8 l12,-6" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/></g>`}))}
+ <path class="drip" d="${tear(86,116)}" fill="${SKY}"/>`;
+
+S.result=`${bg('#fff1c9')}<circle cx="100" cy="100" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,36)}
+ ${at(100,186,.98,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true}))}
+ <g class="float"><rect x="62" y="14" width="76" height="62" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M72,30 h34 M72,42 h28 M72,54 h34" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>${T(122,56,'A',30,RED)}${check(86,66,5,3)}</g>
+ <g class="twinkle">${star5(160,40,12,SUN)}</g><g class="twinkle" style="animation-delay:.5s">${star5(36,46,10,SUN)}</g>`;
+
+S.morning=`${bg('#ffd9a8')}<circle cx="100" cy="150" r="60" fill="#fff0c8"/>
+ <g class="float"><circle cx="100" cy="150" r="34" fill="${SUN}"/></g>
+ <path d="M0,150 q50,-20 100,0 t100,0 v50 h-200 Z" fill="#8fe0a8"/>${cloud(40,40,.8)}${cloud(160,60,.6)}
+ <g transform="translate(150,186) scale(.4)">${P.house()}</g>
+ <path d="M20,60 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round" class="float"/>
+ ${at(70,192,.86,cat({eyes:'closed',mouth:'big',armL:140,armR:-140,armsFront:true}))}
+ <g transform="translate(120,190) scale(.8)">${P.cup(RED)}</g><circle class="smoke" cx="118" cy="160" r="4" fill="#fff"/>`;
+
+S.reason=`${room('#ece6ff','#d6ccf5')}
+ <g transform="translate(150,176) rotate(70)"><path d="M-10,-30 h20 l4,30 h-28 Z" fill="${SKY}"/></g><path d="M130,180 q20,-6 40,4 q-12,10 -40,4 Z" fill="#5cc3ff" opacity=".7"/><path d="M168,150 l8,-12 M176,160 l12,-4" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>
+ <g transform="translate(70,60)"><g class="float">${P.ball(RED)}</g></g>
+ ${arcArrow(84,56,146,140,10,RED,5,'8 8')}
+ <g class="beat"><circle cx="70" cy="56" r="26" fill="none" stroke="${RED}" stroke-width="4"/></g>
+ ${T(120,40,'!',34,RED,'middle','beat')}
+ ${at(36,194,.7,cat({eyes:'wide',mouth:'o',armR:-128,armsFront:true}))}`;
+
+S.low=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <path d="M30,184 V70 M170,184 V70" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/><rect x="26" y="122" width="148" height="8" rx="4" fill="${RED}" class="float"/>
+ <g transform="translate(100,186) rotate(0)"><g class="shiver"><g transform="scale(1,.62)">${cat({eyes:'happy',mouth:'tongue',armL:70,armR:-70})}</g></g></g>
+ <path d="M186,60 V110 M186,110 l-6,-9 M186,110 l6,-9" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" class="float"/>
+ ${note(40,40,VIO,0)}${note(150,36,SKY,1)}`;
+
+S.win=`${bg('#fff3cf')}
+ ${[[20,RED,0],[60,SUN,.9],[140,VIO,1.3],[180,SKY,.4],[100,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.500" fill="${c}"/>`).join('')}
+ ${floor(184,'#ffe08a')}${sh(100,190,40,'shadow')}
+ ${at(100,186,1,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true,mid:`<circle cx="0" cy="-28" r="9" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><path d="M-12,-50 L0,-36 L12,-50" fill="none" stroke="${RED}" stroke-width="4"/>`}),'hop')}
+ <g class="hop"><g transform="translate(100,52) scale(.7)"><path d="M-28,0 h56 v24 q0,30 -28,30 q-28,0 -28,-30 Z" fill="${SUN}"/><path d="M-28,8 q-18,0 -14,18 q4,12 18,12 M28,8 q18,0 14,18 q-4,12 -18,12" fill="none" stroke="${SUN}" stroke-width="6"/></g></g>
+ ${burst(30,60,RED,0)}${burst(170,60,VIO,.6)}`;
+
+const kittel=`<path d="M-22,-46 h44 l4,44 h-52 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M0,-46 v44" stroke="#cbc2e6" stroke-width="1.600"/>`;
+S.research=`${room('#e6f1ff','#cfe3f7')}
+ ${at(70,176,.94,cat({hat:glasses,mid:kittel,eyes:'open',armL:30,armR:-60,armsFront:true,tail:false}))}
+ <rect x="10" y="140" width="180" height="12" rx="4" fill="#9aa8c0"/><rect x="20" y="152" width="10" height="36" fill="#7a8aa6"/><rect x="170" y="152" width="10" height="36" fill="#7a8aa6"/>
+ <path d="M120,138 h30 M135,138 v-14 l-10,-22 l8,-4 l12,26" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="124" cy="98" r="6" fill="${INK}"/>
+ <path d="M164,100 h14 v10 l8,26 h-30 l8,-26 Z" fill="#bfe9ff" stroke="#fff" stroke-width="2"/><path d="M158,128 h26 l2,8 h-30 Z" fill="${MINT}"/>
+ <circle class="bubble" cx="168" cy="120" r="3" fill="${MINT}"/><circle class="bubble" style="animation-delay:1s" cx="174" cy="116" r="2.500" fill="${MINT}"/>
+ ${spark(150,60,8,SUN,0)}${T(30,50,'?',26,VIO,'middle','beat')}`;
+
+const schleifeH=`<path d="M0,-146 l-12,-7 v14 Z M0,-146 l12,-7 v14 Z" fill="${RED}"/>`;
+S.girl=`${park()}${sun(30,30,10)}${cloud(160,30,.8)}
+ ${sh(112,190,28)}${at(112,188,.94,P.person({shirt:SUN,stripe:ORA,hair:'#7a4a21',long:true,skirt:true,pants:SKY,hat:schleifeH,happy:true}))}
+ ${flower(170,188,RED,0)}${flower(184,192,VIO,.5)}
+ ${at(38,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+S.guy=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="0" y="60" width="200" height="60" fill="#d9f5ec"/><path d="M10,120 v-40 h20 v40 M50,120 v-50 h26 v50 M150,120 v-44 h30 v44" fill="#bff0de"/>
+ ${sh(120,190,28)}${at(120,188,.98,P.person({shirt:VIO,stripe:'#7b55d9',pants:'#3a2a4a',hair:'#3a2a4a',skin:'#e0a070',hat:mütze,happy:true}))}
+ ${at(40,192,.6,cat({eyes:'happy',armR:-110,armsFront:true}))}${spark(78,110,7,SUN,0)}`;
+
+S.early=`${bg('#ffd9a8')}<g class="float"><circle cx="40" cy="150" r="26" fill="${SUN}"/></g><path d="M0,160 q50,-14 100,0 t100,0 v40 h-200 Z" fill="#8fe0a8"/>
+ ${at(140,176,.9,P.school)}<rect x="126" y="150" width="28" height="26" fill="#5a4a6c" opacity=".5"/>
+ <g class="ring">${at(60,70,.6,P.clock(34,210))}</g>
+ ${at(84,194,.6,cat({eyes:'happy',mid:backpack,armR:-125,armRcls:'wave',armsFront:true}))}
+ <g opacity=".4"><path d="M10,196 h20" stroke="${INK}" stroke-width="3" stroke-dasharray="3 5"/></g>${star5(100,150,7,RED)}`;
+
+S.moment=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g class="twinkle"><rect width="200" height="200" fill="#fff" opacity=".5"/></g>
+ <rect x="40" y="26" width="120" height="130" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="50" y="36" width="100" height="96" fill="#cdeeff"/>
+ <clipPath id="mo"><rect x="50" y="36" width="100" height="96"/></clipPath><g clip-path="url(#mo)"><path d="M50,112 q50,-14 100,0 v20 h-100 Z" fill="#8fe0a8"/>${at(100,104,.56,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}))}</g>
+ <g transform="translate(160,184)"><rect x="-22" y="-24" width="44" height="26" rx="5" fill="${INK}"/><circle cx="0" cy="-11" r="8" fill="#bfe9ff"/><rect x="8" y="-30" width="10" height="6" fill="${INK}"/></g>${spark(150,150,9,SUN,0)}`;
+
+S.himself=`${park(170)}${tree(150,170,1.4)}
+ ${at(84,188,.8,P.person({wave:false,happy:true,shirt:SKY,stripe:'#2f6fd0'}))}
+ <g transform="translate(84,146) scale(1.1)"><path d="M-22,-12 Q-11,-17 0,-11 Q11,-17 22,-12 V10 Q11,5 0,11 Q-11,5 -22,10 Z" fill="#fff" stroke="${RED}" stroke-width="2.500"/><path d="M0,-11 V11" stroke="${RED}" stroke-width="2"/></g>
+ <g class="glow"><path d="M40,90 q-26,-50 30,-60 q40,-6 50,20" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" stroke-dasharray="7 8"/><path d="M120,50 l-12,-4 M120,50 l-2,-13" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>
+ <g opacity=".35">${at(24,194,.4,cat({}))}</g>`;
+
+S.air=`${bg('#cdeeff')}${cloud(150,36,.9)}
+ <g class="scroll" style="animation-duration:5s;animation-direction:reverse" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M-180,60 h70 q14,0 14,-10 q0,-10 -10,-8 M-160,100 h100 q16,0 16,12 M-190,140 h60 q12,0 12,-9"/><path d="M20,60 h70 q14,0 14,-10 q0,-10 -10,-8 M40,100 h100 q16,0 16,12 M10,140 h60 q12,0 12,-9"/></g>
+ <g class="flutter"><path d="M150,110 q8,-10 16,0 q-8,10 -16,0 Z" fill="${ORA}"/></g><g class="flutter" style="animation-delay:-2s"><path d="M40,60 q8,-10 16,0 q-8,10 -16,0 Z" fill="${SUN}"/></g>
+ <path d="M0,186 q50,-12 100,0 t100,0 v14 h-200 Z" fill="#8fe0a8"/>
+ <g class="float"><path d="M118,120 L160,40" stroke="${INK}" stroke-width="1.200"/><path d="M160,40 l14,-18 14,18 -14,22 Z" fill="${RED}"/><path d="M174,62 q-6,10 4,18" fill="none" stroke="${RED}" stroke-width="2.500"/></g>
+ ${at(84,190,.9,cat({eyes:'happy',armR:-128,armsFront:true,extra:`<path class="flower" d="M-22,-48 q-30,-6 -44,6 q22,2 44,6 Z" fill="${RED}"/>`}))}`;
+
+S.teacher=`${bg('#fff1c9')}
+ <rect x="20" y="16" width="120" height="80" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(60,60,'A',28,'#fff')}<g transform="translate(104,56) scale(1.6)">${P.fish.replace(/#ff8a3c|#ffa53c/g,'#fff')}</g>
+ ${floor(184,'#ffe08a')}
+ ${sh(150,190,34)}${at(150,188,.94,K('white',{hat:glasses.replace(/#fff/g,INK),mouth:'open',armL:130,armsFront:true,propL:`<path d="M0,4 l-10,-34" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${at(34,194,.46,cat({eyes:'happy',mid:backpack,tail:false}))}${at(70,196,.4,K('orange',{eyes:'happy',tail:false}))}`;
+
+S.force=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g transform="translate(56,120)"><path d="M-30,-30 h30 a30,30 0 0 1 0,60 h-30 v-20 h30 a10,10 0 0 0 0,-20 h-30 Z" fill="${RED}"/><rect x="-30" y="-30" width="12" height="20" fill="#dfe6f2"/><rect x="-30" y="10" width="12" height="20" fill="#dfe6f2"/></g>
+ <path d="M96,100 q10,20 0,40 M110,92 q14,28 0,56" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${[[176,90,0],[160,124,.3],[180,150,.6]].map(([x,y,d])=>`<g class="givemove" style="animation-direction:alternate-reverse;animation-delay:${d}s"><circle cx="${x-30}" cy="${y}" r="7" fill="#9aa8c0"/><circle cx="${x-32}" cy="${y-2}" r="2" fill="#fff"/></g>`).join('')}
+ ${arrow(170,60,120,60,RED,7,'glow')}
+ ${at(56,196,.5,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+/* Tag 71–74: offer, enough, education, across, although · remember, second, maybe, toward, able · age, policy, everything, process, including · consider, appear, actually, buy, probably */
+S.offer=`${park()}${cloud(100,24,.7)}
+ ${sh(54,192,32)}${at(54,190,.9,cat({eyes:'happy',mouth:'open',armR:-92,armsFront:true}))}
+ <g class="float"><g transform="translate(104,150)">${P.plate(24)}</g>${fishAt(104,138,1.5,0)}</g>
+ ${at(160,190,.66,P.dog({happy:true}))}${heart(130,90,.9,RED,0)}`;
+
+S.enough=`${bg('#fff1c9')}
+ ${at(70,160,.92,cat({eyes:'happy',mouth:'w',armR:-96,armsFront:true,tail:false,mid:`<ellipse cx="0" cy="-22" rx="20" ry="20" fill="#454059"/>`}))}
+ ${at(170,150,.5,K('orange',{bow:false,hat:P.hatChef,armL:110,armsFront:true,tail:false}))}
+ ${floor(140,MINT)}<rect y="140" width="200" height="8" fill="#9be6d8"/>
+ <path d="M30,168 h70 q0,26 -35,26 q-35,0 -35,-26 Z" fill="${SKY}"/><ellipse cx="65" cy="168" rx="35" ry="8" fill="#ffd98a"/>${fishAt(54,160,1.3,-12)}${fishAt(76,160,1.3,14)}${fishAt(65,154,1.3,0)}
+ <g class="beat">${check(122,60,14,7)}</g>
+ <ellipse cx="110" cy="118" rx="12" ry="13" fill="${CB}" stroke="${CO}" stroke-width="1.600"/>`;
+
+S.education=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${[[150,170,RED],[130,150,SKY],[110,130,SUN],[90,110,MINT],[70,90,VIO]].map(([x,y,c])=>`<rect x="${x-40}" y="${y}" width="${200-x+40}" height="20" rx="3" fill="${c}"/><rect x="${x-32}" y="${y+6}" width="20" height="8" rx="2" fill="#fff" opacity=".8"/>`).join('')}
+ <g class="float"><g transform="translate(150,150) scale(.7)">${doktorhut}</g></g>${spark(170,40,7,SUN,0)}
+ ${at(56,92,.5,cat({eyes:'happy',armL:140,armR:-140,armsFront:true}),'hop')}
+ ${arcArrow(20,170,40,110,10,RED,4,'6 8')}`;
+
+S.across=`${bg('#8fe0a8')}<rect x="0" y="60" width="200" height="80" fill="#6b7a99"/><path d="M0,100 h200" stroke="#fff" stroke-width="3" stroke-dasharray="14 14"/>
+ ${[70,86,102,118,134].map(x=>`<rect x="${x}" y="62" width="10" height="76" fill="#fff"/>`).join('')}
+ ${tree(24,40,.6)}${tree(176,196,.7)}
+ <g class="scroll" style="animation-duration:4s"><g transform="translate(260,92) scale(.44)">${P.car(RED)}</g></g>
+ <g class="float" style="animation-duration:1.6s"><g transform="translate(106,150) scale(.56)">${cat({feet:'walk',eyes:'happy',armLcls:'slowA',armRcls:'slowB',armL:0,armR:0})}</g></g>
+ ${arrow(160,150,160,50,RED,6,'glow')}`;
+
+S.although=`${bg('#2d2a6e')}<circle cx="160" cy="40" r="20" fill="#ffe89a"/><circle cx="168" cy="34" r="18" fill="#2d2a6e"/>${spark(30,30,4,'#ffe89a',0)}${spark(90,50,3.500,'#ffe89a',.7)}${spark(60,90,4,'#ffe89a',1.2)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <path d="M110,150 L190,110 V196 Z" fill="#ffe89a" opacity=".3" class="glow"/>
+ ${at(70,190,.9,cat(Object.assign({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'},NL)))}<g transform="translate(130,190)"><g class="roll" style="animation-duration:1.4s">${P.ball(RED)}</g></g>`;
+
+S.remember=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ ${think(134,60,50,38,`<rect x="108" y="34" width="52" height="52" rx="3" fill="#f3d9a4"/><g transform="translate(134,84) scale(.36)">${K('orange',{eyes:'happy',tail:false})}</g>`,-1)}
+ ${sh(60,190,34)}${at(60,188,.96,cat({eyes:'closed',armR:-150,armsFront:true,headCls:'tilt'}))}
+ ${heart(110,120,.8,RED,0)}<path d="M82,96 q6,-6 12,0" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>`;
+
+S.second=`${bg('#e3fbf5')}
+ <rect x="68" y="124" width="64" height="76" rx="4" fill="${SUN}"/>${T(100,170,'1',30,'#fff')}
+ <rect x="8" y="150" width="60" height="50" rx="4" fill="#cfd8e6"/>${T(38,186,'2',30,'#fff')}
+ <rect x="132" y="166" width="60" height="34" rx="4" fill="#e0a070"/>${T(162,192,'3',22,'#fff')}
+ ${at(100,126,.5,K('orange',{eyes:'happy'}))}${at(162,168,.44,K('grey'))}
+ ${at(38,152,.62,cat({armL:130,armR:-130,armsFront:true,eyes:'happy',mouth:'open',mid:`<circle cx="0" cy="-30" r="9" fill="#dfe6f2" stroke="#9aa8c0" stroke-width="2"/><path d="M-12,-52 L0,-38 L12,-52" fill="none" stroke="${SKY}" stroke-width="4"/>`}),'hop')}
+ ${ring(38,116,40,RED)}`;
+
+S.maybe=`${bg('#ece6ff')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <path d="M90,170 q-6,-40 20,-44 q20,-20 44,-4 q26,2 24,48 Z" fill="${SKY}" class="pulse" style="transform-origin:130px 170px"/><path d="M96,170 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0" fill="none" stroke="#2f6fd0" stroke-width="3"/>
+ ${think(60,52,44,30,`<g transform="translate(52,54) scale(2)">${P.fish}</g>${T(86,64,'?',26,RED)}`,1)}
+ ${at(40,198,.7,cat({headCls:'tilt',armR:-150,armsFront:true,tail:false}))}`;
+
+S.toward=`${park()}${cloud(40,26,.7)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g class="road"><path d="M96,150 h60" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(106,150,88,150,RED,5)}
+ <g transform="translate(150,186)"><g class="runbob"><g transform="scale(.6)">${P.dog({happy:true})}</g></g></g>
+ <circle class="puff" cx="186" cy="178" r="6" fill="#fff"/>
+ ${sh(46,192,30)}${at(46,190,.88,cat({eyes:'happy',mouth:'big',armL:100,armR:-100}))}`;
+
+const hantel=`<rect x="-34" y="-3" width="68" height="6" rx="3" fill="#9aa8c0"/><rect x="-40" y="-14" width="10" height="28" rx="3" fill="${INK}"/><rect x="30" y="-14" width="10" height="28" rx="3" fill="${INK}"/>`;
+S.able=`${bg('#fff3cf')}<circle cx="100" cy="104" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.02,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true}))}
+ <g class="hop"><g transform="translate(100,46) scale(1.4)">${hantel}</g></g>
+ <g class="beat">${check(170,90,12,6)}</g>${spark(30,80,7,SUN,0)}`;
+
+S.age=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <path d="M14,184 V30 M8,150 h12 M8,110 h12 M8,70 h12" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/>
+ ${at(44,186,.3,cat({eyes:'happy',tail:false}))}${at(84,186,.5,cat({eyes:'happy',tail:false}))}${at(140,186,.78,cat({eyes:'happy',mouth:'open'}))}
+ ${[[44,140,1],[84,116,2],[140,76,3]].map(([x,y,n],i)=>`<g class="float" style="animation-delay:${i*.3}s"><rect x="${x-10}" y="${y-8}" width="20" height="14" rx="3" fill="#fff8e6"/>${Array.from({length:n},(_,k)=>`<rect x="${x-8+k*6+(3-n)*3}" y="${y-18}" width="3" height="10" fill="${SKY}"/><circle cx="${x-6.500+k*6+(3-n)*3}" cy="${y-21}" r="2.500" fill="${ORA}"/>`).join('')}</g>`).join('')}
+ ${arcArrow(44,170,150,170,-18,RED,4,'6 8')}`;
+
+const regel=(y,inner)=>`<circle cx="62" cy="${y}" r="12" fill="#fff" stroke="${RED}" stroke-width="3"/>${inner}<path d="M84,${y} h70" stroke="#cbc2e6" stroke-width="5" stroke-linecap="round"/>`;
+S.policy=`${bg('#e3fbf5')}
+ <rect x="36" y="14" width="140" height="124" rx="8" fill="#fff" stroke="${SKY}" stroke-width="5"/><rect x="36" y="14" width="140" height="22" rx="8" fill="${SKY}"/>${T(106,31,'RULES',14,'#fff')}
+ ${regel(58,check(62,58,5,3))}${regel(88,check(62,88,5,3))}${regel(118,cross(62,118,4,3))}
+ ${floor(184,'#bff0de')}${at(30,194,.6,cat({hat:glasses,armR:-128,armsFront:true,prop:`<path d="M0,4 l10,-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${at(160,196,.4,K('orange',{eyes:'wide'}))}${at(186,196,.36,K('grey',{eyes:'wide'}))}`;
+
+S.everything=`${bg('#fff1c9')}
+ ${at(100,158,1,cat({eyes:'closed',mouth:'tongue',armL:-30,armR:30,armsFront:true,tail:false,mid:`<ellipse cx="0" cy="-24" rx="24" ry="24" fill="#454059"/>`}),'breathe')}
+ ${floor(142,MINT)}<rect y="142" width="200" height="8" fill="#9be6d8"/>
+ ${[[36,170,26],[100,178,30],[164,170,26]].map(([x,y,w])=>`<g transform="translate(${x},${y})">${P.plate(w)}</g><circle cx="${x-6}" cy="${y-6}" r="1.500" fill="#e0a83a"/><circle cx="${x+8}" cy="${y-4}" r="1.500" fill="#e0a83a"/>`).join('')}
+ <path d="M90,172 l-14,6 M92,176 l-10,10" stroke="#cbc2e6" stroke-width="2" stroke-linecap="round"/>
+ ${spark(30,40,6,SUN,0)}${spark(170,50,6,SUN,.6)}`;
+
+S.process=`${bg('#ece6ff')}
+ ${[[36,SKY],[100,SUN],[164,MINT]].map(([x,c],i)=>`<circle cx="${x}" cy="70" r="28" fill="#fff" stroke="${c}" stroke-width="4"/><circle cx="${x-20}" cy="46" r="10" fill="${c}"/>${T(x-20,51,String(i+1),13,'#fff')}`).join('')}
+ <path d="M26,74 h20 l-4,-12 h-12 Z" fill="#fff8e6" stroke="#cbc2e6" stroke-width="1.500"/><ellipse cx="36" cy="60" rx="7" ry="4" fill="#fff8e6" stroke="#cbc2e6" stroke-width="1.500"/>
+ <path d="M86,66 h28 q0,16 -14,16 q-14,0 -14,-16 Z" fill="${SKY}"/><g class="pen"><path d="M104,64 l8,-18" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/></g>
+ <rect x="150" y="66" width="28" height="18" rx="4" fill="#fff8e6"/><path d="M150,70 q4.600,6 9.300,0 q4.600,6 9.300,0 q4.600,6 9.300,0" fill="${RED}"/><path class="beat" d="M164,54 q-3,5 0,8 q3,-3 0,-8 Z" fill="${ORA}"/>
+ ${arrow(66,70,72,70,RED,4,'glow')}${arrow(130,70,136,70,RED,4,'glow')}
+ ${floor(184,'#d6ccf5')}${at(100,194,.66,cat({bow:false,hat:P.hatChef,eyes:'happy',armL:110,armR:-110,armsFront:true}))}`;
+
+S.including=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <rect x="8" y="96" width="184" height="98" rx="20" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(34,188,.5,K('orange',{eyes:'happy'}))}${at(74,188,.5,K('grey',{eyes:'happy'}))}${at(114,188,.5,K('white',{eyes:'happy'}))}
+ ${at(160,188,.58,cat({eyes:'happy',mouth:'open',armL:-50,armR:50,armsFront:true}),'hop')}
+ <g class="beat"><circle cx="160" cy="60" r="18" fill="${MINT}"/><path d="M160,50 v20 M150,60 h20" stroke="#fff" stroke-width="5" stroke-linecap="round"/></g>${arrow(160,82,160,108,RED,5)}`;
+
+S.consider=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <path d="M130,40 v100" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><rect x="108" y="138" width="44" height="9" rx="4" fill="#8a5a30"/>
+ <g class="sway" style="transform-origin:130px 50px"><path d="M84,50 h92" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M84,50 l-12,30 h24 Z M176,50 l-12,30 h24 Z" fill="none" stroke="#b07a45" stroke-width="1.800"/><path d="M70,80 a14,8 0 0 0 28,0 Z" fill="${SUN}"/><path d="M162,80 a14,8 0 0 0 28,0 Z" fill="${SUN}"/><g transform="translate(84,80) scale(.8)">${P.ball(RED)}</g><g transform="translate(176,80) scale(.6)">${P.book(SKY)}</g></g>
+ ${T(36,50,'?',34,RED,'middle','beat')}
+ ${at(46,192,.84,cat({headCls:'tilt',armR:-152,armsFront:true}))}`;
+
+S.appear=`${bg('#3b2a4a')}${spark(30,40,6,SUN,0)}${spark(170,50,6,'#fff',.5)}${spark(150,110,5,SUN,1)}${spark(40,110,5,'#fff',1.4)}
+ ${floor(180,'#8a5a30')}
+ <clipPath id="zh"><rect x="0" y="0" width="200" height="130"/></clipPath>
+ <g clip-path="url(#zh)">${at(100,166,.84,cat(Object.assign({armL:130,armR:-130,armsFront:true,eyes:'happy',mouth:'open',tail:false},NL)),'pop')}</g>
+ <ellipse cx="100" cy="130" rx="46" ry="9" fill="${INK}" stroke="#7a6a8c" stroke-width="2"/><path d="M66,132 l6,48 h56 l6,-48 Z" fill="${INK}" stroke="#7a6a8c" stroke-width="2"/><rect x="68" y="140" width="64" height="8" fill="${RED}"/>
+ <g class="wave" style="transform-origin:170px 150px"><path d="M170,150 l-14,-40" stroke="#fff" stroke-width="4" stroke-linecap="round"/>${star5(156,106,7,SUN)}</g>`;
+
+S.actually=`${room('#ffe9d6','#ffd9bd')}
+ <path d="M90,170 Q84,70 120,50 q-2,16 10,20 q8,-20 28,-16 q-8,14 2,22 q20,10 24,94 Z" fill="${INK}" opacity=".25"/><circle cx="130" cy="90" r="5" fill="#fff" opacity=".6"/><circle cx="152" cy="90" r="5" fill="#fff" opacity=".6"/><path d="M124,112 l8,8 8,-8 8,8 8,-8" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
+ <g transform="translate(150,186)"><g transform="scale(.4)">${P.dog({happy:true})}</g></g>${ring(144,170,26,RED)}
+ ${arrow(96,150,116,164,RED,5,'float')}
+ ${at(40,192,.76,cat({eyes:'happy',mouth:'open',armR:-80}))}`;
+
+S.buy=`${park(172)}${cloud(30,24,.7)}
+ <rect x="96" y="80" width="100" height="100" rx="6" fill="#fff8e6"/><path d="M88,80 h116 l-10,-26 h-96 Z" fill="${SKY}"/><path d="M108,54 v26 M132,54 v26 M156,54 v26 M180,54 v26" stroke="#fff" stroke-width="5"/>
+ ${at(150,150,.5,K('orange',{eyes:'happy',mouth:'open',tail:false}))}<rect x="96" y="134" width="100" height="46" fill="#e4b77a"/>
+ <g class="givemove">${coin(84,120,8)}</g>
+ ${sh(46,192,30)}${at(46,190,.88,cat({eyes:'happy',armL:30,armR:-96,armsFront:true,propL:`<g transform="translate(-2,8)"><path d="M-14,-6 h28 l-3,20 h-22 Z" fill="${RED}"/><path d="M-8,-6 q8,-14 16,0" fill="none" stroke="#b52f29" stroke-width="3"/><g transform="translate(2,-8) rotate(-30)">${P.fish}</g></g>`}))}`;
+
+S.probably=`${room('#ece6ff','#d6ccf5')}
+ <path d="M110,20 h80 v160 h-80 q10,-80 0,-160 Z" fill="${RED}"/><path d="M130,20 q8,80 0,160 M154,20 q8,80 0,160 M176,20 q6,80 0,160" stroke="#b52f29" stroke-width="3" fill="none"/>
+ <path class="tail" style="transform-origin:120px 176px" d="M120,176 q-26,-4 -24,-30" fill="none" stroke="${CB}" stroke-width="9" stroke-linecap="round"/>
+ ${pawK(40,188,-20,'#b5addf')}${pawK(64,180,10,'#b5addf')}${pawK(88,188,-8,'#b5addf')}
+ ${think(52,56,42,30,`<g transform="translate(46,74) scale(.34)">${cat({tail:false})}</g>${T(76,66,'?',24,RED)}`,1)}
+ <rect x="20" y="110" width="70" height="10" rx="5" fill="#fff"/><rect class="glow" x="20" y="110" width="56" height="10" rx="5" fill="${MINT}"/>
+ ${at(30,196,.4,K('orange',{headCls:'tilt'}))}`;
+
+/* Tag 75–78: human, wait, serve, market, die · send, expect, sense, build, stay · fall, oh, nation, plan, cut · college, interest, death, course, someone */
+S.human=`${park()}${cloud(40,26,.7)}
+ ${sh(120,190,28)}${at(120,188,1,P.person({shirt:MINT,stripe:'#1f9c83',skin:'#e0a070',hair:'#3a2a4a'}))}${ring(120,110,84,RED)}
+ ${at(34,194,.56,cat({eyes:'wide',armR:-110,armRcls:'bob',armsFront:true}))}
+ <g class="beat"><circle cx="60" cy="60" r="16" fill="#fff"/><path d="M52,56 h16 M52,64 h16 M66,50 l-12,20" stroke="${VIO}" stroke-width="3" stroke-linecap="round"/></g>`;
+
+S.wait=`${park(170)}${cloud(40,26,.7)}${floor(176,'#6b7a99')}
+ <path d="M160,176 v-120" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><rect x="140" y="40" width="40" height="30" rx="6" fill="${SKY}"/><rect x="148" y="48" width="24" height="12" rx="3" fill="#fff"/><circle cx="152" cy="64" r="2.500" fill="${INK}"/><circle cx="168" cy="64" r="2.500" fill="${INK}"/>
+ <rect x="30" y="140" width="90" height="8" rx="4" fill="#b07a45"/><rect x="36" y="148" width="6" height="28" fill="#8a5a30"/><rect x="108" y="148" width="6" height="28" fill="#8a5a30"/>
+ ${at(74,142,.7,cat({mouth:'wavy',headCls:'tilt',feet:'walk'}))}
+ <g class="ring">${at(110,70,.5,P.clock(28,120))}</g>
+ ${dots(74,40,VIO)}`;
+
+S.serve=`${room('#fff1c9','#e4b77a')}
+ ${at(130,186,1.1,P.table(120))}
+ ${at(150,150,.44,K('orange',{eyes:'happy',mouth:'open',tail:false}))}${at(184,150,.4,K('grey',{eyes:'happy',tail:false}))}
+ <path d="M64,124 h132 v12 h-132 Z" fill="#c98a4b"/>
+ <path d="M136,118 h24 q0,10 -12,10 q-12,0 -12,-10 Z" fill="${SKY}"/><path d="M170,118 h22 q0,10 -11,10 q-11,0 -11,-10 Z" fill="${SKY}"/>
+ <path d="M76,98 h34 q0,22 -17,22 q-17,0 -17,-22 Z" fill="${RED}"/><ellipse cx="93" cy="98" rx="17" ry="4" fill="#ffd98a"/><circle class="smoke" cx="93" cy="86" r="4" fill="#fff"/>
+ ${sh(40,192,28)}${at(40,190,.84,cat({bow:false,hat:P.hatChef,eyes:'happy',armR:-80,armRcls:'bob',armsFront:true,prop:`<path d="M0,2 l14,-14" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="-16" r="6" fill="#9aa8c0"/>`}))}`;
+
+const stand=(x,c,inner)=>`<rect x="${x}" y="96" width="60" height="80" rx="4" fill="#fff8e6"/><path d="M${x-6},96 h72 l-8,-22 h-56 Z" fill="${c}"/><path d="M${x+14},74 v22 M${x+30},74 v22 M${x+46},74 v22" stroke="#fff" stroke-width="4"/><rect x="${x}" y="130" width="60" height="8" fill="#c98a4b"/>${inner}`;
+S.market=`${park(176)}${sun(30,24,9)}
+ ${stand(6,RED,`<circle cx="22" cy="122" r="7" fill="${RED}"/><circle cx="36" cy="122" r="7" fill="${SUN}"/><circle cx="50" cy="122" r="7" fill="#4fc27f"/>`)}
+ ${stand(70,SKY,`${fishAt(88,122,1.2,0)}${fishAt(112,122,1.2,0)}`)}
+ ${stand(134,MINT,`<path d="M146,128 a10,10 0 0 1 20,0 Z" fill="#e4b77a"/><path d="M170,128 a10,10 0 0 1 20,0 Z" fill="#e4b77a"/>`)}
+ ${at(36,194,.4,K('orange',{eyes:'happy'}))}${at(166,194,.4,K('grey',{eyes:'happy'}))}
+ ${at(100,196,.56,cat({eyes:'happy',mouth:'open',armL:30,propL:`<g transform="translate(-2,8)"><path d="M-14,-4 h28 l-4,16 h-20 Z" fill="#c98a4b"/><path d="M-10,-4 q10,-16 20,0" fill="none" stroke="#8a5a30" stroke-width="3"/></g>`}))}`;
+
+S.die=`${room('#e9efe0','#d7dfc8')}
+ <rect x="130" y="16" width="52" height="46" rx="8" fill="#cfe4d8" stroke="#fff" stroke-width="5"/>
+ <path d="M104,170 h44 l-6,-34 h-32 Z" fill="${ORA}"/><rect x="100" y="130" width="52" height="10" rx="4" fill="#e0875a"/>
+ <g class="sway" style="transform-origin:126px 132px"><path d="M126,132 q-2,-30 14,-46" fill="none" stroke="#9bb86a" stroke-width="4" stroke-linecap="round"/><ellipse cx="118" cy="110" rx="9" ry="4" fill="#b9c48a" transform="rotate(30 118 110)"/><circle cx="142" cy="84" r="9" fill="#c9b07a"/><circle cx="142" cy="84" r="3.500" fill="#8a5a30"/></g>
+ <path class="snow" style="animation-duration:5s" d="M150,60 q5,5 0,10 q-5,-5 0,-10 Z" fill="#c9b07a"/><path class="snow" style="animation-duration:5s;animation-delay:-2.500s" d="M160,60 q5,5 0,10 q-5,-5 0,-10 Z" fill="#c9b07a"/>
+ ${sh(50,192,30)}${at(50,190,.86,cat({eyes:'closed',mouth:'wavy',armR:-60,headCls:'tilt'}))}
+ <path class="sweat" d="${tear(30,104)}" fill="${SKY}"/>`;
+
+S.send=`${park()}${cloud(40,26,.7)}
+ <path d="M150,186 v-56" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/><rect x="122" y="90" width="56" height="46" rx="14" fill="${RED}"/><rect x="132" y="102" width="36" height="6" rx="3" fill="#5a2a2a"/>
+ <g class="givemove"><g transform="translate(98,104) rotate(-8)"><rect x="-14" y="-10" width="28" height="20" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M-14,-10 l14,10 14,-10" fill="none" stroke="#cbc2e6" stroke-width="1.600"/></g></g>
+ <g class="flutter"><path d="M40,50 l26,8 -18,6 -2,10 -6,-12 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>
+ ${sh(56,192,32)}${at(56,190,.92,cat({eyes:'happy',armR:-96,armsFront:true}))}`;
+
+S.expect=`${room('#fff1c9','#e4b77a')}
+ <rect x="90" y="24" width="96" height="100" rx="8" fill="#cdeeff" stroke="#fff" stroke-width="6"/><path d="M138,24 v100" stroke="#fff" stroke-width="4"/><path d="M90,104 q48,-16 96,0 v20 h-96 Z" fill="#8fe0a8"/>
+ <g class="road" style="animation-duration:3s"><g transform="translate(150,112) scale(.26)">${K('orange',{hat:cap})}</g></g>
+ ${think(44,44,36,26,`<g transform="translate(44,58) scale(1.1)">${P.gift(VIO,SUN)}</g>`,1)}
+ ${at(60,194,.8,cat({eyes:'spark',armR:-110,armsFront:true}))}
+ <g class="ring">${at(164,178,.36,P.clock(28,90))}</g>`;
+
+const sinn=(x,y,inner,d)=>`<g class="glow" style="animation-delay:${d}s"><circle cx="${x}" cy="${y}" r="20" fill="#fff"/></g>${inner}`;
+S.sense=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${sinn(30,50,`<path d="M16,50 q14,-12 28,0 q-14,12 -28,0 Z" fill="#fff" stroke="${INK}" stroke-width="2"/><circle cx="30" cy="50" r="5" fill="${SKY}"/>`,0)}
+ ${sinn(100,26,`<path d="M94,34 q-8,-20 8,-18 q10,2 4,12 q-2,4 -4,8" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`,.4)}
+ ${sinn(170,50,`<path d="M164,40 q10,14 12,22 q-10,4 -14,-4" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`,.8)}
+ ${sinn(24,120,`<path d="M16,116 h16 v6 a8,8 0 0 1 -16,0 Z" fill="#ff7a59"/>`,1.2)}
+ ${sinn(176,120,pawK(176,122,0,INK),1.6)}
+ ${sh(100,192,34)}${at(100,190,.9,cat({eyes:'closed',headCls:'tilt',armR:-96,prop:`<g transform="translate(4,0)"><path d="M0,6 v-18" stroke="#3aa568" stroke-width="3"/><circle cx="0" cy="-16" r="7" fill="${RED}"/><circle cx="0" cy="-16" r="2.500" fill="${SUN}"/></g>`}))}`;
+
+const stein=(x,y,c)=>`<rect x="${x}" y="${y}" width="30" height="14" rx="2" fill="${c}" stroke="#b5571a" stroke-width="1.200"/>`;
+S.build=`${bg('#cdeeff')}${cloud(40,26,.7)}${floor(180,'#e4b77a')}
+ ${[0,1,2].map(r=>[0,1,2].map(c=>stein(96+c*30+(r%2?-15:0),166-r*14,ORA)).join('')).join('')}
+ <g class="hop">${stein(111,112,ORA)}</g>
+ <path d="M180,180 V30 h-60 v20" fill="none" stroke="${SUN}" stroke-width="6" stroke-linejoin="round"/><path d="M120,50 v40" stroke="${INK}" stroke-width="2"/>
+ ${sh(50,192,32)}${at(50,190,.9,cat({bow:false,hat:P.hatHard,eyes:'happy',armR:-110,armRcls:'bob',armsFront:true,prop:`<path d="M0,2 v-18 l12,-2 v8 Z" fill="#9aa8c0"/>`}))}`;
+
+S.stay=`${room('#ffe9d6','#e4b77a',170)}
+ <rect x="130" y="40" width="60" height="130" rx="6" fill="#b07a45"/><rect x="136" y="46" width="48" height="124" fill="#cdeeff"/>
+ <g class="road" style="animation-duration:2.500s;animation-direction:reverse"><g transform="translate(150,170) scale(.34)">${K('orange',{armR:-125,armRcls:'wave',armsFront:true,feet:'walk'})}</g></g>
+ <ellipse cx="66" cy="182" rx="56" ry="9" fill="${VIO}" opacity=".35"/>
+ <rect x="16" y="120" width="96" height="46" rx="14" fill="${RED}"/><rect x="10" y="134" width="18" height="40" rx="8" fill="#d93a33"/><rect x="100" y="134" width="18" height="40" rx="8" fill="#d93a33"/>
+ ${at(62,158,.7,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true,tail:false}))}
+ ${pin(62,66)}`;
+
+S.fall=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}
+ <rect x="26" y="130" width="40" height="10" rx="5" fill="#c98a4b"/><rect x="30" y="140" width="7" height="44" fill="#8a5a30" transform="rotate(8 34 160)"/><rect x="56" y="140" width="7" height="44" fill="#8a5a30" transform="rotate(-6 60 160)"/>
+ <g transform="translate(120,150) rotate(60)"><g class="float" style="animation-duration:.8s"><g transform="scale(.8)">${cat({eyes:'wide',mouth:'o',armL:140,armR:-140,armsFront:true})}</g></g></g>
+ <path d="M84,70 q20,-20 40,-4 M96,90 q14,-10 26,0" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${arcArrow(60,110,130,170,20,RED,5,'8 9')}
+ <ellipse cx="150" cy="184" rx="40" ry="10" fill="${SKY}"/><ellipse cx="150" cy="180" rx="36" ry="8" fill="#8dc0ff"/>`;
+
+S.oh=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${speech(60,40,60,44,T(60,54,'Oh!',24,RED),70,80)}
+ <g class="hop">${at(146,186,2,P.gift(VIO,SUN))}</g>${spark(110,100,8,SUN,0)}${spark(180,90,7,RED,.5)}${spark(150,60,6,SUN,1)}
+ ${sh(60,190,32)}${at(60,188,.92,cat({eyes:'wide',mouth:'o',armL:120,armR:-120,armsFront:true}))}`;
+
+S.nation=`${bg('#cdeeff')}${burst(30,36,RED,0)}${burst(176,40,'#1f9c5a',.6)}
+ <path d="M100,150 V16" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/>
+ <g class="flower" style="transform-origin:100px 40px"><rect x="102" y="20" width="24" height="50" fill="#1f9c5a"/><rect x="126" y="20" width="24" height="50" fill="#fff"/><ellipse cx="138" cy="45" rx="6" ry="7" fill="#b07a45"/><rect x="150" y="20" width="24" height="50" fill="${RED}"/></g>
+ ${floor(176,'#8fe0a8')}
+ ${at(24,190,.4,K('orange',{eyes:'happy'}))}${at(60,192,.46,K('white',{eyes:'happy'}))}${at(100,194,.52,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true}))}${at(142,192,.46,K('grey',{eyes:'happy'}))}${at(178,190,.4,K('cream',{eyes:'happy'}))}
+ ${note(40,90,RED,0)}${note(160,96,'#1f9c5a',.9)}`;
+
+S.plan=`${bg('#e6f1ff')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <rect x="30" y="30" width="150" height="110" rx="4" fill="#2f6fd0"/><path d="M30,52 h150 M30,74 h150 M30,96 h150 M30,118 h150 M60,30 v110 M90,30 v110 M120,30 v110 M150,30 v110" stroke="#4f9dff" stroke-width="1"/>
+ <path class="draw" style="stroke-dasharray:220;animation-name:drawP" d="M50,120 q20,-50 50,-30 t50,-40" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/><style>@keyframes drawP{from{stroke-dashoffset:220}to{stroke-dashoffset:0}}</style>
+ <circle cx="50" cy="120" r="5" fill="#fff"/>${cross(150,50,7,4)}
+ <rect x="150" y="100" width="24" height="30" rx="2" fill="#fff"/>${check(162,110,4,2.500)}${check(162,122,4,2.500)}
+ ${at(40,198,.66,cat({hat:glasses,armR:-128,armsFront:true,tail:false,prop:`<path d="M0,2 l8,-24" stroke="${SUN}" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.cut=`${bg('#fff1c9')}${floor(160,'#c98a4b')}<rect y="160" width="200" height="8" fill="#e0a868"/>
+ <rect x="60" y="100" width="110" height="70" rx="3" fill="${SKY}" transform="rotate(-6 115 135)"/><path d="M70,150 l90,-30" stroke="#fff" stroke-width="2" stroke-dasharray="5 5"/>
+ <g transform="translate(112,134) rotate(-18)"><g class="roll" style="animation-duration:1.600s"><g><path d="M0,0 L-26,-4 L-6,4 Z" fill="#dfe6f2" stroke="#9aa8c0" stroke-width=".8"/><circle cx="8" cy="6" r="5" fill="none" stroke="${RED}" stroke-width="3"/></g><g class="chew" style="transform-origin:0 0;transform-box:view-box"><path d="M0,0 L-26,4 L-6,-4 Z" fill="#f4f7fb" stroke="#9aa8c0" stroke-width=".8"/><circle cx="8" cy="-6" r="5" fill="none" stroke="${RED}" stroke-width="3"/></g></g></g>
+ <g class="float">${star5(160,60,14,SKY)}</g><g class="float" style="animation-delay:.6s">${star5(130,40,10,SUN)}</g>
+ ${at(40,198,.74,cat({mouth:'tongue',armR:-80,tail:false}))}`;
+
+S.college=`${bg('#cdeeff')}${cloud(30,24,.7)}${cloud(176,36,.6)}
+ <path d="M30,84 L100,44 L170,84 Z" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="2"/><circle cx="100" cy="68" r="9" fill="#fff" stroke="#b07a45" stroke-width="2"/><path d="M100,68 v-5 M100,68 h4" stroke="${INK}" stroke-width="1.600" stroke-linecap="round"/>
+ <rect x="34" y="84" width="132" height="8" fill="#dfe6f2"/>${[44,70,96,122,148].map(x=>`<rect x="${x}" y="92" width="10" height="64" rx="3" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="1.600"/>`).join('')}
+ <rect x="26" y="156" width="148" height="10" fill="#dfe6f2"/><rect x="18" y="166" width="164" height="10" fill="#cfd8e6"/>${floor(176,'#8fe0a8')}
+ <rect x="88" y="126" width="24" height="30" rx="12" fill="${RED}"/>
+ ${at(46,194,.5,cat({bow:false,hat:doktorhut,eyes:'happy',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-8) scale(.8)">${P.book(SKY)}</g>`}))}${at(150,194,.44,K('orange',{hat:doktorhut,eyes:'happy'}))}
+ <g class="hop"><g transform="translate(100,36) scale(.5)">${doktorhut.replace(/-1[0-9]{2}|-9[0-9]|-8[0-9]/g,m=>String(Number(m)+104))}</g></g>`;
+
+S.interest=`${park(170)}${cloud(150,26,.7)}
+ ${flower(150,186,RED,0)}<g transform="translate(150,150)"><g class="wiggle"><ellipse cx="0" cy="0" rx="9" ry="7" fill="${RED}"/><circle cx="-3" cy="-1" r="1.800" fill="${INK}"/><circle cx="3" cy="2" r="1.800" fill="${INK}"/><circle cx="8" cy="-3" r="4" fill="${INK}"/><path d="M0,-7 v14" stroke="${INK}" stroke-width="1.200"/></g></g>
+ ${ring(150,152,24,VIO)}
+ <g class="beat"><path d="M100,60 v20" stroke="${RED}" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="92" r="4.500" fill="${RED}"/></g>
+ ${sh(62,192,34)}${at(62,190,.94,cat({eyes:'spark',mouth:'o',armR:-80,armRcls:'bob',prop:`<g transform="translate(6,10) rotate(-60)">${lupe}</g>`}))}`;
+
+S.death=`${bg('#d9d3e8')}${floor(176,'#bdb5d6')}
+ <path d="M150,176 v-70 M150,130 l-22,-18 M150,116 l20,-16 M150,106 l-10,-22" stroke="#8a7a66" stroke-width="5" stroke-linecap="round"/>
+ <path class="snow" style="animation-duration:6s" d="M130,60 q6,6 0,12 q-6,-6 0,-12 Z" fill="${ORA}"/>
+ <path d="M96,176 q-4,-22 -16,-30" fill="none" stroke="#9bb86a" stroke-width="4" stroke-linecap="round"/><circle cx="78" cy="146" r="8" fill="#c9b07a"/>
+ <rect x="104" y="150" width="8" height="26" rx="3" fill="#fff8e6"/><path class="beat" d="M108,138 q-5,7 0,12 q5,-5 0,-12 Z" fill="${ORA}"/><circle class="glow" cx="108" cy="144" r="16" fill="#ffe89a" opacity=".4"/>
+ ${at(44,192,.8,cat({eyes:'closed',mouth:'w',armL:-40,armR:40,armsFront:true,headCls:'tilt'}))}
+ ${heart(108,110,.7,RED,0)}`;
+
+S.course=`${park(160)}${floor(168,'#e0875a')}<path d="M0,180 h200 M0,192 h200" stroke="#fff" stroke-width="2" opacity=".7"/>
+ ${[60,130].map(x=>`<path d="M${x},168 v-26 M${x+26},168 v-26" stroke="#fff" stroke-width="4"/><rect x="${x-3}" y="138" width="32" height="7" rx="3" fill="${RED}"/>`).join('')}
+ <path d="M186,168 v-60" stroke="#9aa8c0" stroke-width="4"/><path class="flower" d="M186,108 l-22,8 22,8 Z" fill="${SUN}"/>
+ <g transform="translate(96,150)"><g class="jump" style="animation-duration:.6s"><g transform="rotate(8) scale(-.5,.5)">${cat({armL:120,armR:-120,armsFront:true,eyes:'happy',mouth:'open',feet:'run'})}</g></g></g>
+ ${arcArrow(20,150,176,150,60,VIO,4,'6 9')}`;
+
+S.someone=`${room('#fff1c9','#e4b77a')}
+ <path d="M100,16 h90 v164 h-90 q12,-82 0,-164 Z" fill="${VIO}"/><path d="M124,16 q8,82 0,164 M150,16 q8,82 0,164 M174,16 q6,82 0,164" stroke="#7b55d9" stroke-width="3" fill="none"/>
+ <ellipse cx="136" cy="182" rx="10" ry="5.500" fill="#ffb347" stroke="#e08a2e" stroke-width="1.400"/><ellipse cx="160" cy="182" rx="10" ry="5.500" fill="#ffb347" stroke="#e08a2e" stroke-width="1.400"/>
+ <g class="shiver"><path d="M130,70 q18,-14 36,0" fill="none" stroke="#7b55d9" stroke-width="6" stroke-linecap="round"/></g>
+ ${T(148,50,'?',30,'#fff','middle','beat')}
+ ${at(46,194,.84,cat({eyes:'wide',mouth:'o',headCls:'tilt',armR:-110,armsFront:true}))}`;
+
+/* Tag 79–82: experience, behind, reach, local, kill · remain, effect, yeah, suggest, class · control, raise, care, perhaps, late · hard, field, else, pass, former */
+const abz=(x,y,c,inner)=>`<circle cx="${x}" cy="${y}" r="11" fill="${c}" stroke="#fff" stroke-width="2"/>${inner}`;
+S.experience=`${park(170)}${sun(170,28,10)}
+ <path d="M10,150 l30,-50 30,50 Z" fill="#9aa8c0"/><path d="M40,100 l-10,17 8,-4 6,6 6,-8 Z" fill="#fff"/>
+ ${sh(110,192,38)}${at(110,190,1.02,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true,mid:`<path d="M-24,-50 L22,-6 l6,-8 L-18,-56 Z" fill="${SKY}"/>${abz(-12,-42,SUN,'')}${abz(2,-28,MINT,'')}${abz(16,-14,RED,'')}`}))}
+ <g class="float">${star5(40,50,9,SUN)}</g><g class="float" style="animation-delay:.5s">${star5(70,34,7,SUN)}</g>
+ <g transform="translate(170,186)">${koffer}</g>`;
+
+S.behind=`${bg('#fff1c9')}${floor(180,'#ffe08a')}${sh(110,188,52)}
+ ${at(86,160,.9,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}),'peek')}
+ ${at(124,186,1,P.boxClosed(96,84))}
+ ${arcArrow(180,50,130,96,8,RED,5,'','float')}`;
+
+S.reach=`${bg('#4a4496')}${spark(24,40,4,'#fff',0)}${spark(60,80,3.500,'#fff',.7)}${spark(180,130,4,'#fff',1.2)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <path d="M96,196 L116,60 M144,196 L130,60" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/><path d="M100,170 h42 M104,140 h36 M108,110 h30 M112,80 h24" stroke="#c98a4b" stroke-width="5" stroke-linecap="round"/>
+ <g class="beat">${star5(124,28,18,SUN,`stroke="${SUN}" stroke-width="4"`)}</g>
+ ${at(122,112,.56,cat(Object.assign({armR:-166,armRcls:'bob',armL:150,armsFront:true,eyes:'spark',mouth:'tongue'},NL)))}`;
+
+S.local=`${park(176)}${cloud(30,24,.7)}
+ <g transform="translate(34,170) scale(.5)">${P.house(SKY)}</g><g transform="translate(170,170) scale(.5)">${P.house(VIO,'#ffe2b8')}</g>
+ <rect x="66" y="96" width="72" height="80" rx="4" fill="#fff8e6"/><path d="M60,96 h84 l-8,-22 h-68 Z" fill="${MINT}"/><path d="M80,74 v22 M100,74 v22 M120,74 v22" stroke="#fff" stroke-width="4"/>
+ <rect x="76" y="110" width="52" height="30" rx="3" fill="#bfe9ff"/><ellipse cx="94" cy="130" rx="10" ry="6" fill="#e4b77a"/><ellipse cx="112" cy="130" rx="10" ry="6" fill="#e4b77a"/><rect x="92" y="146" width="20" height="30" rx="3" fill="#b07a45"/>
+ ${pin(102,60)}
+ <ellipse cx="102" cy="178" rx="92" ry="16" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8"/>
+ ${at(50,196,.46,cat({eyes:'happy',armR:-110,armRcls:'bob'}))}`;
+
+S.kill=`${room('#e3fbf5','#bff0de')}
+ <g class="flutter" style="animation-duration:2s"><g transform="translate(140,60)"><ellipse cx="0" cy="0" rx="6" ry="3" fill="${INK}"/><g class="flap"><path d="M-2,-2 q-8,-10 -12,-2 Z M2,-2 q8,-10 12,-2 Z" fill="#bfe9ff"/></g><path d="M6,0 l8,2" stroke="${INK}" stroke-width="1.200"/></g></g>
+ <path d="M110,40 q10,-10 20,0 M160,90 q10,-6 16,4" fill="none" stroke="#9aa8c0" stroke-width="2" stroke-dasharray="3 5"/>
+ ${sh(64,192,34)}${at(64,190,.96,cat({eyes:'open',mouth:'wavy',armR:-120,armRcls:'throwarm',armsFront:true,prop:`<path d="M0,2 v-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><rect x="-12" y="-52" width="24" height="24" rx="4" fill="${MINT}" opacity=".9"/><path d="M-6,-52 v24 M0,-52 v24 M6,-52 v24 M-12,-44 h24 M-12,-36 h24" stroke="#fff" stroke-width="1"/>`}))}
+ ${T(150,130,'bzz',16,VIO,'middle','glow')}`;
+
+S.remain=`${room('#fff3cf','#e4b77a')}
+ <path d="M10,26 q90,26 180,0" fill="none" stroke="#b07a45" stroke-width="2"/>${[[40,34,RED],[100,41,SKY],[160,34,MINT]].map(([x,y,c])=>`<path d="M${x-8},${y-4} h16 l-8,16 Z" fill="${c}" opacity=".6"/>`).join('')}
+ ${at(110,186,1.2,P.table(120))}
+ <g transform="translate(110,116)">${P.plate(40)}</g><path d="M96,112 l26,-10 v10 Z" fill="#fff8e6" stroke="#e0a83a" stroke-width="1.500"/><path d="M96,112 l26,-10" stroke="${RED}" stroke-width="4" stroke-linecap="round"/>${ring(110,106,26,RED)}
+ <g opacity=".3">${at(30,150,.4,K('orange',{tail:false}))}${at(186,150,.4,K('grey',{tail:false}))}</g>
+ ${at(110,196,.5,cat({eyes:'spark',mouth:'tongue',armL:150,armR:-150,armsFront:true}))}`;
+
+S.effect=`${bg('#ece6ff')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ ${[0,1,2,3,4,5].map(i=>`<g style="transform-box:fill-box;transform-origin:left bottom;animation:domino 3s ease-in ${i*.25}s infinite"><rect x="${70+i*20}" y="120" width="9" height="50" rx="2" fill="${[RED,ORA,SUN,MINT,SKY,VIO][i]}"/></g>`).join('')}
+ <style>@keyframes domino{0%,10%{transform:rotate(0)}30%,90%{transform:rotate(62deg)}100%{transform:rotate(0)}}</style>
+ ${arcArrow(70,96,180,96,30,RED,4,'6 8')}
+ ${at(34,198,.7,cat({eyes:'happy',mouth:'tongue',armR:-84,armRcls:'bob',tail:false}))}`;
+
+S.yeah=`${bg('#fff3cf')}${burst(30,36,RED,0)}${burst(170,36,VIO,.5)}
+ ${speech(100,30,70,36,T(100,42,'Yeah!',20,RED),100,60)}
+ ${floor(184,'#ffe08a')}
+ ${at(62,188,.86,cat({eyes:'happy',mouth:'big',armL:30,armR:-140,armsFront:true}),'hop')}
+ ${at(138,188,.86,K('orange',{eyes:'happy',mouth:'big',armL:140,armR:-30,armsFront:true}),'hop')}
+ ${spark(100,96,10,SUN,0)}`;
+
+S.suggest=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(70,42,84,54,`<g transform="translate(52,66) scale(.8)">${P.bulb}</g>${arrow(70,44,84,44,RED,3)}<g transform="translate(100,56) scale(.9)">${P.ball(RED)}</g>`,72,86)}
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'happy',mouth:'open',armR:-110,armRcls:'bob',armsFront:true}))}
+ ${sh(150,192,30)}${at(150,190,.84,K('orange',{headCls:'tilt',armL:152,armsFront:true}))}
+ ${T(176,90,'?',22,VIO,'middle','beat')}`;
+
+S.class=`${bg('#fff1c9')}
+ <rect x="50" y="12" width="100" height="56" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(100,50,'1+1',22,'#fff')}
+ ${floor(176,'#ffe08a')}
+ ${at(100,116,.4,K('white',{hat:glasses.replace(/#fff/g,INK),tail:false}))}
+ ${[[36,'orange'],[100,null],[164,'grey']].map(([x,n])=>`${n?at(x,170,.46,K(n,{tail:false,eyes:'happy'})):at(x,170,.48,cat({tail:false,armR:-155,armsFront:true,mouth:'open'}))}<rect x="${x-26}" y="158" width="52" height="10" rx="3" fill="#c98a4b"/><rect x="${x-22}" y="168" width="6" height="24" fill="#8a5a30"/><rect x="${x+16}" y="168" width="6" height="24" fill="#8a5a30"/>`).join('')}`;
+
+S.control=`${bg('#e3fbf5')}${floor(170,'#bff0de')}
+ <g class="roll" style="animation-duration:1.400s"><g transform="translate(120,172) scale(.6)">${P.car(RED)}</g><path d="M120,150 v-14" stroke="${INK}" stroke-width="2"/><circle cx="120" cy="134" r="3" fill="${RED}"/></g>
+ <path d="M84,112 q10,-10 20,-4 M88,100 q14,-14 28,-6" fill="none" stroke="${VIO}" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${sh(50,192,30)}${at(50,190,.88,cat({eyes:'happy',mouth:'tongue',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-20)"><rect x="-18" y="-10" width="36" height="22" rx="6" fill="#5a4a6c"/><path d="M-8,-10 v-12" stroke="#9aa8c0" stroke-width="2.500"/><circle cx="-8" cy="1" r="5" fill="#9aa8c0"/><circle cx="8" cy="1" r="4" fill="${RED}"/></g>`}))}`;
+
+S.raise=`${park()}${cloud(40,26,.7)}
+ <path d="M130,186 V20" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><circle cx="130" cy="18" r="5" fill="${SUN}"/>
+ <g style="animation:raiseF 3.500s ease-in-out infinite"><g class="flower" style="transform-origin:130px 110px"><rect x="132" y="96" width="46" height="30" fill="${RED}"/>${star5(155,111,8,'#fff')}</g></g>
+ <style>@keyframes raiseF{0%,10%{transform:translateY(0)}80%,100%{transform:translateY(-70px)}}</style>
+ <path d="M124,186 V30" stroke="#fff" stroke-width="1.500" stroke-dasharray="4 4"/>
+ ${arrow(170,150,170,70,RED,6,'glow')}
+ ${sh(76,192,34)}${at(76,190,.94,cat({eyes:'happy',armR:-140,armRcls:'bob',armL:-150,armsFront:true}))}`;
+
+S.care=`${room('#ffe9d6','#ffd9bd',170)}
+ <g transform="translate(120,186) scale(1.5)">${P.bed}</g>
+ ${at(84,164,.56,K('orange',{tail:false,eyes:'closed',mouth:'wavy',armL:60,armR:-60}))}<path d="M92,150 q40,-22 100,0 v24 h-100 Z" fill="${SKY}"/>
+ <rect x="72" y="100" width="26" height="8" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="1.400"/>
+ ${sh(34,192,26)}${at(34,190,.76,cat({eyes:'happy',armR:-96,armsFront:true,prop:`<g transform="translate(6,8)"><path d="M-12,-4 h24 q0,12 -12,12 q-12,0 -12,-12 Z" fill="${RED}"/><ellipse cx="0" cy="-4" rx="12" ry="3" fill="#ffd98a"/></g>`}))}
+ <circle class="smoke" cx="62" cy="130" r="4" fill="#fff"/>${heart(110,90,1,RED,0)}`;
+
+S.perhaps=`${bg('#cdeeff')}
+ <g class="cloud"><path d="M40,60 q-20,0 -16,-18 q4,-16 24,-10 q10,-18 34,-8 q20,-4 24,14 q16,6 4,22 Z" fill="#fff"/><path d="M98,40 l14,-10 v20 Z" fill="#fff"/><circle cx="52" cy="40" r="2.500" fill="#cdeeff"/></g>
+ <g class="cloud" style="animation-delay:-2s"><circle cx="150" cy="80" r="16" fill="#fff"/><path d="M150,66 q-14,10 0,28 q14,-18 0,-28 Z" fill="#eaf7ff"/></g>
+ ${T(120,56,'?',30,RED,'middle','beat')}
+ ${hills('#8fe0a8','#6fd08f',166)}
+ ${at(70,188,.8,cat({tail:false,eyes:'open',armL:150,armR:-150,armsFront:true}))}
+ ${at(124,190,.5,K('orange',{eyes:'wide',headCls:'tilt'}))}`;
+
+S.late=`${park(160)}${floor(172,'#6b7a99')}
+ <g class="ring">${at(40,70,.6,P.clock(34,300))}</g><path d="M14,30 l-8,-6 M66,30 l8,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <g class="road" style="animation-duration:2s"><g transform="translate(170,164)"><rect x="-34" y="-34" width="68" height="34" rx="6" fill="${SUN}"/><rect x="-28" y="-28" width="14" height="12" fill="#bfe9ff"/><rect x="-8" y="-28" width="14" height="12" fill="#bfe9ff"/><rect x="12" y="-28" width="14" height="12" fill="#bfe9ff"/><circle cx="-18" cy="2" r="7" fill="${INK}"/><circle cx="18" cy="2" r="7" fill="${INK}"/></g></g>
+ <circle class="puff" cx="130" cy="166" r="6" fill="#fff"/>
+ <g transform="translate(70,190) rotate(9) scale(-.74,.74)"><g class="runbob">${cat({armL:0,armR:-150,armLcls:'swingA',armsFront:true,feet:'run',mouth:'big',eyes:'wide',mid:backpack})}</g></g>
+ <path class="sweat" d="${tear(40,120)}" fill="${SKY}"/>`;
+
+S.hard=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}
+ <path d="M96,184 q-10,-50 30,-56 q34,-10 54,20 q14,20 2,36 Z" fill="#9aa8c0"/><path d="M120,140 q20,-6 30,6 M140,166 l14,-10" stroke="#7a8aa6" stroke-width="3" fill="none" stroke-linecap="round"/>
+ ${spark(104,120,8,SUN,0)}${spark(118,104,6,ORA,.25)}
+ ${sh(54,192,32)}${at(54,190,.92,cat({eyes:'closed',mouth:'big',armR:-118,armsFront:true,prop:hammer}))}
+ <path class="sweat" d="${tear(24,100)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(84,96)}" fill="${SKY}"/>
+ <g class="beat">${T(160,60,'!',36,RED)}</g>`;
+
+S.field=`${bg('#cdeeff')}${sun(30,28,10)}${cloud(150,26,.8)}
+ <path d="M0,110 q100,-20 200,0 v90 h-200 Z" fill="#8fe0a8"/>
+ ${[0,1,2,3,4].map(i=>`<path d="M${-20+i*50},200 q${40},-60 ${30+i*4},-92" fill="none" stroke="#6fd08f" stroke-width="4"/>`).join('')}
+ <path d="M0,116 h200" stroke="#b07a45" stroke-width="3"/>${[10,50,90,130,170].map(x=>`<path d="M${x},104 v22" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/>`).join('')}
+ ${flower(40,170,RED,0)}${flower(160,160,SUN,.5)}${flower(70,190,VIO,.9)}
+ <g transform="translate(100,170) scale(-.66,.66)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>${bfly(150,120,ORA,0)}`;
+
+S.else=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ ${at(140,150,1,P.boxBack(90))}${at(140,150,1,P.boxFront(90,38))}
+ <g transform="translate(28,186)">${P.ball(RED)}</g><g transform="translate(58,186) scale(.7)">${P.book(SKY)}</g><g transform="translate(86,186) scale(.8)">${P.cup(MINT)}</g>
+ ${T(140,110,'?',36,RED,'middle','beat')}${arrow(140,60,140,84,VIO,5,'float')}
+ ${at(176,196,.5,cat({eyes:'wide',headCls:'tilt',armL:150,armsFront:true}))}`;
+
+S.pass=`${bg('#8fe0a8')}<path d="M0,40 h200 M100,40 v160" stroke="#fff" stroke-width="2" opacity=".6"/><circle cx="100" cy="120" r="30" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>${bg('#cdeeff').replace('height="200"','height="40"')}
+ ${at(40,176,.76,cat({eyes:'happy',mouth:'open',armR:-60,feet:'run'}))}
+ <g transform="translate(64,176)"><g class="givemove" style="animation-duration:1.200s"><g class="givemove" style="animation-duration:1.200s"><g class="givemove" style="animation-duration:1.200s">${P.ball('#fff',INK)}</g></g></g></g>
+ <path d="M70,170 h80" stroke="#fff" stroke-width="3" stroke-dasharray="4 8" stroke-linecap="round"/>${arrow(140,170,154,170,RED,4)}
+ ${flipAt(170,176,.7,K('orange',{eyes:'happy',armR:-60,feet:'run'}))}`;
+
+S.former=`${room('#ece6ff','#d6ccf5')}
+ <rect x="20" y="20" width="74" height="84" rx="4" fill="#f3d9a4" stroke="#b07a45" stroke-width="5"/><g transform="translate(57,96) scale(.4)">${K('orange',{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true,tail:false,mid:`<circle cx="0" cy="-28" r="10" fill="${SUN}"/>`})}</g>
+ <g class="glow"><path d="M140,60 q-20,-24 -40,-6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path d="M100,54 l-2,-13 M100,54 l13,-3" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>
+ ${sh(140,192,34)}${at(140,190,.9,K('orange',{eyes:'closed',hat:glasses.replace(/#fff/g,INK),armR:-40,prop:cane,fur:'#f0c98a',out:'#d9a56a',belly:'#fff6e6'}))}
+ <g opacity=".7" transform="translate(40,184) scale(.5)"><path d="M-28,0 h56 v24 q0,30 -28,30 q-28,0 -28,-30 Z" fill="#cfc19a"/></g>`;
+
+/* Tag 83–86: sell, major, sometimes, require, along · development, themselves, report, role, better · economic, effort, decide, rate, strong · possible, drug, leader, light, voice */
+S.sell=`${park(172)}${sun(30,24,9)}
+ <rect x="80" y="110" width="100" height="70" rx="4" fill="${SUN}"/><path d="M74,110 h112 l-8,-22 h-96 Z" fill="${RED}"/><path d="M96,88 v22 M120,88 v22 M144,88 v22 M168,88 v22" stroke="#fff" stroke-width="5"/>
+ ${at(130,150,.5,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true,tail:false}))}<rect x="80" y="140" width="100" height="40" fill="#e4b77a"/>
+ <g transform="translate(100,138) scale(.7)">${P.cup(SKY)}</g><g transform="translate(160,138) scale(.7)">${P.cup(SKY)}</g>
+ <g transform="translate(130,164) rotate(-6)"><path d="M-20,-10 h30 l10,10 -10,10 h-30 Z" fill="#fff"/>${coin(-6,0,6)}</g>
+ ${at(36,194,.5,K('orange',{eyes:'happy',armR:-92,prop:`<g transform="translate(0,8)">${coin(0,0,7)}</g>`}))}`;
+
+const schl=(x,y,s,c)=>`<g transform="translate(${x},${y}) scale(${s})"><circle cx="0" cy="-20" r="10" fill="none" stroke="${c}" stroke-width="6"/><path d="M0,-10 v34 M0,14 h10 M0,24 h8" stroke="${c}" stroke-width="6" stroke-linecap="round"/></g>`;
+S.major=`${bg('#ece6ff')}<circle cx="100" cy="90" r="78" fill="#f6f2ff"/>
+ <g opacity=".5">${schl(36,70,.7,'#9aa8c0')}${schl(166,70,.7,'#9aa8c0')}${schl(60,120,.5,'#9aa8c0')}${schl(146,120,.5,'#9aa8c0')}</g>
+ <g class="beat">${schl(100,72,1.7,SUN)}</g>${ring(100,74,58,RED)}${spark(150,30,8,SUN,0)}
+ ${floor(184,'#d6ccf5')}${at(100,198,.54,cat({eyes:'spark',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+S.sometimes=`${bg('#2d2a6e')}
+ <rect x="10" y="14" width="180" height="56" rx="10" fill="#fff"/><rect x="10" y="14" width="180" height="14" rx="7" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6].map(i=>`<rect x="${16+i*25.200}" y="34" width="21" height="30" rx="5" fill="#f4f1fb"/>${[1,4].includes(i)?`<g class="twinkle" style="animation-delay:${i*.2}s">${check(26.500+i*25.200,50,6,3.500)}</g>`:''}`).join('')}
+ ${floor(180,'#1f1b4d')}<circle class="glow" cx="100" cy="150" r="54" fill="#ffe89a" opacity=".22"/>
+ <path d="M160,180 v-46" stroke="#b07a45" stroke-width="4"/><path d="M146,134 l6,-20 h16 l6,20 Z" fill="${SUN}"/>
+ ${at(94,188,.9,cat(Object.assign({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses},NL)))}`;
+
+S.require=`${park(172)}${cloud(40,24,.7)}
+ <path d="M150,186 V50" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><rect x="96" y="96" width="60" height="12" rx="4" fill="${RED}"/><path d="M96,102 h-20 M76,102 l7,-5 M76,102 l7,5" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>
+ <rect x="120" y="34" width="64" height="40" rx="6" fill="#fff" stroke="${RED}" stroke-width="4"/><path d="M152,42 v24 M144,48 l8,-6 8,6 M144,60 l8,6 8,-6" fill="none" stroke="${INK}" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round"/>
+ ${sh(60,192,32)}${at(60,190,.84,cat({eyes:'wide',mouth:'o',armR:-150,armsFront:true}),'hop')}
+ <path d="M30,104 h60" stroke="${VIO}" stroke-width="3" stroke-dasharray="5 6" class="glow"/>
+ ${at(178,194,.4,K('orange',{hat:cap}))}`;
+
+S.along=`${bg('#cdeeff')}${cloud(40,24,.7)}<path d="M0,120 h200 v80 h-200 Z" fill="#8fe0a8"/>
+ <path d="M0,150 h200" stroke="#6b7a99" stroke-width="34"/><path d="M0,150 h200" stroke="#fff" stroke-width="2" stroke-dasharray="12 12"/>
+ ${[20,80,140].map(x=>`<path d="M${x},128 v-50" stroke="${INK}" stroke-width="3"/><circle class="glow" cx="${x}" cy="74" r="7" fill="${SUN}"/>`).join('')}
+ <path d="M10,186 h180" stroke="#f3d9a4" stroke-width="14"/>
+ <g class="road"><path d="M40,100 h130" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(170,100,190,100,RED,5)}
+ <g transform="translate(90,194) scale(-.6,.6)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`;
+
+S.development=`${bg('#e3fbf5')}${floor(176,'#bff0de')}
+ ${[[30,20,SKY],[70,44,MINT],[110,72,SUN],[150,104,RED]].map(([x,h,c],i)=>`<rect class="grow" style="transform-origin:center bottom;animation-delay:${i*.3}s" x="${x}" y="${176-h}" width="30" height="${h}" rx="4" fill="${c}"/>`).join('')}
+ <path d="M34,150 L84,126 L124,98 L170,60" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 6"/>${arrow(160,68,176,54,RED,5,'glow')}
+ ${sprout(44,156,10)}<g transform="translate(164,72) scale(.5)">${tree(0,0,1)}</g>
+ ${at(100,198,.5,cat({bow:false,hat:P.hatHard,eyes:'happy',armR:-150,armsFront:true}))}`;
+
+S.themselves=`${room('#fff1c9','#ffe08a')}
+ <ellipse cx="110" cy="150" rx="74" ry="44" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(84,188,.5,K('orange',{eyes:'happy',armR:-80,armRcls:'bob'}))}${at(140,188,.5,K('grey',{eyes:'happy',armL:80,armLcls:'bob'}))}
+ ${block(112,186,SKY,'A').replace(/32/g,'22').replace('20','14')}<g class="hop">${block(112,162,RED,'B').replace(/32/g,'22').replace('20','14')}</g>
+ <g opacity=".3">${at(26,150,.5,K('white',{hat:earflower}))}</g>
+ <g class="glow"><path d="M150,70 q24,-20 30,10 q2,20 -20,24" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 7"/></g>`;
+
+S.report=`${room('#e6f1ff','#cfe3f7')}
+ <g class="float"><rect x="96" y="20" width="84" height="110" rx="6" fill="#c98a4b"/><rect x="104" y="30" width="68" height="92" rx="2" fill="#fff"/><rect x="124" y="14" width="28" height="12" rx="4" fill="#9aa8c0"/>
+ <rect x="112" y="80" width="10" height="30" fill="${SKY}"/><rect x="128" y="64" width="10" height="46" fill="${MINT}"/><rect x="144" y="48" width="10" height="62" fill="${RED}"/><path d="M112,42 h44 M112,52 h30" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/></g>
+ ${sh(54,192,32)}${at(54,190,.9,cat({hat:glasses,mid:tie,mouth:'open',armR:-128,armsFront:true,prop:`<path d="M0,2 l10,-28" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${at(170,196,.4,K('grey',{mid:tie,eyes:'happy'}))}`;
+
+const pirat=`<path d="M-30,-98 q30,-34 60,0 Z" fill="${INK}"/><path d="M-34,-98 h68" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><circle cx="0" cy="-110" r="5" fill="#fff"/><path d="M-22,-80 L22,-70" stroke="${INK}" stroke-width="2.500"/><ellipse cx="14" cy="-74" rx="8" ry="7" fill="${INK}"/>`;
+S.role=`${bg('#3b2a4a')}<path d="M100,-10 L24,186 h152 Z" fill="#fff6c8" opacity=".22"/>${floor(176,'#8a5a30')}
+ <path d="M0,0 h36 q-6,90 0,176 h-36 Z M200,0 h-36 q6,90 0,176 h36 Z" fill="${RED}"/>
+ <g class="float"><circle cx="58" cy="40" r="14" fill="${SUN}"/><path d="M52,36 h3 M61,36 h3 M52,44 q6,6 12,0" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round"/></g><g class="float" style="animation-delay:.6s"><circle cx="142" cy="40" r="14" fill="#9fd4f0"/><path d="M136,36 h3 M145,36 h3 M136,47 q6,-6 12,0" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+ ${at(100,182,.96,cat(Object.assign({bow:false,hat:pirat,mouth:'big',armL:60,armR:-120,armsFront:true,prop:`<path d="M0,2 l6,-34" stroke="#dfe6f2" stroke-width="4" stroke-linecap="round"/><path d="M-6,-2 h12" stroke="${SUN}" stroke-width="4" stroke-linecap="round"/>`},NL)))}`;
+
+S.better=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g opacity=".6" transform="rotate(-6 50 150)">${block(50,184,SKY,'').replace(/32/g,'26')}${block(46,158,SKY,'').replace(/32/g,'26')}${block(56,132,SKY,'').replace(/32/g,'26')}</g>
+ ${[0,1,2,3].map(i=>`<rect x="124" y="${158-i*28}" width="40" height="26" rx="5" fill="${[RED,SUN,MINT,VIO][i]}"/>`).join('')}<g class="twinkle">${star5(144,58,10,SUN)}</g>
+ ${arrow(76,120,112,100,RED,6,'glow')}<g class="beat">${check(170,40,10,6)}</g>
+ ${at(96,198,.5,cat({eyes:'happy',mouth:'open',armR:-125,armsFront:true}))}`;
+
+S.economic=`${bg('#ece6ff')}${floor(180,'#d6ccf5')}
+ ${[[30,2],[60,3],[90,5],[120,7]].map(([x,n])=>Array.from({length:n},(_,k)=>`<ellipse cx="${x}" cy="${176-k*8}" rx="13" ry="5" fill="${SUN}" stroke="#e0a83a" stroke-width="1.500"/>`).join('')).join('')}
+ <path d="M24,120 L60,104 L90,80 L124,50" fill="none" stroke="${MINT}" stroke-width="5" stroke-linecap="round" class="draw"/>${arrow(116,58,134,40,MINT,5)}
+ <rect x="150" y="110" width="40" height="70" fill="#9aa8c0"/><path d="M150,110 l10,-14 v14 l10,-14 v14 l10,-14 v14 l10,-14 v14 Z" fill="#7a8aa6"/><rect x="176" y="70" width="8" height="30" fill="#7a8aa6"/><circle class="smoke" cx="180" cy="64" r="5" fill="#fff"/>
+ ${at(70,60,.3,cat({mid:tie,eyes:'happy',tail:false}))}`;
+
+S.effort=`${bg('#ffe9d6')}<path d="M0,200 L200,90 V200 Z" fill="#c9a06a"/>
+ <g class="roll" style="animation-duration:1.600s"><g transform="translate(0,0)"><circle cx="124" cy="106" r="30" fill="#9aa8c0"/><path d="M110,96 q10,-8 20,2 M114,118 q12,6 20,-4" stroke="#7a8aa6" stroke-width="3" fill="none"/>
+ <g transform="translate(76,158) rotate(-22)"><g transform="scale(.76)">${cat({eyes:'closed',mouth:'big',armL:-60,armR:-100,armsFront:true,feet:'walk'})}</g></g></g></g>
+ <path class="sweat" d="${tear(40,90)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(60,70)}" fill="${SKY}"/>
+ <path d="M176,96 v-30" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M176,66 l-18,6 18,6 Z" fill="${RED}"/>`;
+
+S.decide=`${park()}${cloud(100,22,.7)}
+ <path d="M100,200 V150 Q100,120 40,90 M100,150 Q100,120 160,90" fill="none" stroke="#f3d9a4" stroke-width="18" stroke-linecap="round"/>
+ <path d="M100,150 v-50" stroke="#b07a45" stroke-width="4"/><path d="M100,104 h-34 l-8,8 8,8 h34 Z" fill="${SKY}"/><path d="M100,124 h34 l8,8 -8,8 h-34 Z" fill="${SUN}"/>
+ <g class="beat">${check(160,60,10,6)}</g><g opacity=".5">${cross(40,60,7,5)}</g>
+ ${arrow(116,170,150,120,RED,5,'glow')}
+ ${at(100,198,.5,cat({eyes:'happy',armR:-128,armsFront:true}))}`;
+
+S.rate=`${bg('#e3fbf5')}
+ <path d="M30,120 a70,70 0 0 1 140,0" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round"/><path d="M30,120 a70,70 0 0 1 35,-60.600" fill="none" stroke="${MINT}" stroke-width="18" stroke-linecap="round"/><path d="M65,59.400 a70,70 0 0 1 70,0" fill="none" stroke="${SUN}" stroke-width="18"/><path d="M135,59.400 a70,70 0 0 1 35,60.600" fill="none" stroke="${RED}" stroke-width="18" stroke-linecap="round"/>
+ <g style="transform-origin:100px 120px;animation:nadel 3s ease-in-out infinite alternate"><path d="M100,120 L100,62" stroke="${INK}" stroke-width="5" stroke-linecap="round"/></g><circle cx="100" cy="120" r="8" fill="${INK}"/>
+ <style>@keyframes nadel{from{transform:rotate(-70deg)}to{transform:rotate(60deg)}}</style>
+ ${[60,80,100,120].map((x,i)=>star5(x,150,8,SUN)).join('')}${star5(140,150,8,'#fff')}
+ ${floor(186,'#bff0de')}${at(30,196,.44,cat({eyes:'wide',armR:-110,armsFront:true}))}`;
+
+S.strong=`${bg('#fff3cf')}<circle cx="100" cy="110" r="78" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,40)}
+ ${at(100,186,1.04,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true}),'pulse')}
+ <g class="hop"><g transform="translate(100,42) scale(1.7)">${hantel}</g></g>
+ ${spark(30,110,8,SUN,0)}${spark(170,110,8,SUN,.5)}`;
+
+S.possible=`${bg('#cdeeff')}${cloud(40,30,.7)}${sun(170,28,10)}
+ <path d="M0,200 V140 h60 v60 Z M200,200 V140 h-60 v60 Z" fill="#8fe0a8"/><path d="M60,200 v-40 h80 v40 Z" fill="#5cc3ff"/>
+ <path d="M56,140 q44,-30 88,0" fill="none" stroke="#b07a45" stroke-width="7" stroke-linecap="round"/>${[66,84,100,116,134].map((x,i)=>`<path d="M${x},${136-[4,10,13,10,4][i]} v12" stroke="#8a5a30" stroke-width="3"/>`).join('')}
+ <g class="road" style="animation-duration:3s;animation-direction:reverse"><g transform="translate(100,128) scale(.4)">${cat({feet:'walk',eyes:'happy'})}</g></g>
+ <g class="beat">${check(100,50,14,7)}</g>${arrow(40,110,160,110,RED,4,'glow')}`;
+
+S.drug=`${room('#e3fbf5','#bff0de')}
+ <g class="beat"><circle cx="160" cy="40" r="20" fill="#fff"/><path d="M160,28 v24 M148,40 h24" stroke="${MINT}" stroke-width="7" stroke-linecap="round"/></g>
+ <rect x="110" y="110" width="40" height="66" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="3"/><rect x="118" y="98" width="24" height="14" rx="3" fill="${RED}"/><rect x="114" y="134" width="32" height="20" rx="2" fill="#fff"/><path d="M130,138 v12 M124,144 h12" stroke="${MINT}" stroke-width="3"/>
+ <rect x="160" y="150" width="30" height="16" rx="8" fill="#fff"/><path d="M175,150 v16" stroke="#cbc2e6" stroke-width="1.500"/><rect x="160" y="150" width="15" height="16" rx="8" fill="${SUN}"/>
+ ${at(170,196,.36,K('orange',{mouth:'wavy',eyes:'closed'}))}
+ ${sh(54,192,32)}${at(54,190,.9,cat({mid:kittel,hat:glasses,eyes:'happy',armR:-96,armsFront:true,prop:`<path d="M0,4 l16,-10" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/><ellipse cx="20" cy="-8" rx="6" ry="3.500" fill="${ORA}"/>`}))}`;
+
+S.leader=`${park()}${sun(30,26,10)}
+ <rect x="110" y="140" width="50" height="46" rx="4" fill="#c98a4b"/>
+ ${at(135,142,.64,cat({eyes:'happy',mouth:'big',armL:60,armR:-110,armsFront:true,mid:`<circle cx="0" cy="-28" r="8" fill="${SUN}"/>${star5(0,-28,5,'#fff')}`,prop:`<path d="M-4,0 l14,-10 v20 Z" fill="${RED}"/><rect x="-10" y="-4" width="8" height="8" fill="#b52f29"/>`}))}
+ <path d="M168,84 q8,6 0,14 M178,78 q12,10 0,26" fill="none" stroke="${VIO}" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${at(26,192,.44,K('orange',{eyes:'happy',armL:125,armsFront:true}))}${at(60,194,.44,K('grey',{eyes:'happy'}))}${at(92,192,.4,K('cream',{eyes:'happy',armR:-125,armsFront:true}))}`;
+
+S.light=`${bg('#fff6c8')}${floor(180,'#ffe9a8')}
+ <g class="spin" stroke="${SUN}" stroke-width="5" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>`<path transform="rotate(${a} 100 70)" d="M100,20 v-14"/>`).join('')}<circle cx="100" cy="70" r="66" fill="none" stroke="none"/></g>
+ <path d="M100,0 v30" stroke="#7a6a8c" stroke-width="3"/><g class="glow"><circle cx="100" cy="70" r="44" fill="#fff" opacity=".8"/></g><path d="M80,84 q-16,-40 20,-44 q36,4 20,44 Z" fill="${SUN}"/><rect x="88" y="84" width="24" height="12" rx="3" fill="#9aa8c0"/>
+ <rect x="160" y="110" width="26" height="40" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="168" y="116" width="10" height="16" rx="3" fill="${MINT}"/>
+ ${at(110,192,.86,cat({eyes:'happy',mouth:'open',armR:-112,armsFront:true}))}`;
+
+S.voice=`${bg('#ece6ff')}<circle cx="80" cy="104" r="76" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ <path d="M112,96 q10,12 0,26 M126,86 q16,22 0,46 M140,76 q22,32 0,66" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" class="glow"/>
+ ${[0,1,2,3,4].map(i=>`<rect class="chew" style="animation-delay:${i*.12}s;animation-duration:.5s" x="${156+i*8}" y="${30}" width="5" height="${[20,34,26,40,18][i]}" rx="2" fill="${VIO}"/>`).join('')}
+ ${note(164,110,SKY,0)}${note(182,84,ORA,.9)}
+ ${sh(70,190,36)}${at(70,188,1,cat({eyes:'closed',mouth:'big',mouthCls:'chew',armL:60,armR:-60,headCls:'tilt'}))}`;
+
+/* Tag 87–90: wife, whole, police, mind, finally · pull, return, free, military, price · less, according, decision, explain, son · hope, develop, view, relationship, carry */
+const schleier=`<path d="M-30,-100 q30,-24 60,0 q14,40 8,70 q-10,-40 -30,-58 q-28,-2 -46,6 Z" fill="#fff" opacity=".85" stroke="#cbc2e6" stroke-width="1.400"/>`;
+S.wife=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="84" fill="#ffdcc0"/>${floor(186,'#ffd9bd')}
+ ${at(66,188,.92,K('white',{eyes:'happy',hat:schleier+earflower,armR:-60,prop:bouquet}))}${ring(66,130,60,RED)}
+ ${at(140,188,.92,K('grey',{eyes:'happy',mid:tie,armL:60}))}
+ <g class="beat"><circle cx="96" cy="40" r="10" fill="none" stroke="${SUN}" stroke-width="4"/><circle cx="110" cy="40" r="10" fill="none" stroke="${SUN}" stroke-width="4"/></g>
+ ${heart(100,84,1,RED,0)}${arrow(20,30,40,60,RED,5,'float')}`;
+
+S.whole=`${bg('#fff1c9')}<circle cx="100" cy="96" r="80" fill="#ffe7a3"/>
+ <g class="pulse" style="transform-origin:100px 96px"><circle cx="100" cy="96" r="62" fill="#f6c27a"/><circle cx="100" cy="96" r="53" fill="${SUN}"/>${[[76,76],[124,70],[136,110],[92,124],[104,92],[66,108]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="${RED}"/>`).join('')}</g>
+ ${ring(100,96,70,RED)}
+ <g opacity=".5"><path d="M170,170 l24,-8 -6,22 Z" fill="${SUN}" stroke="#f6c27a" stroke-width="3"/></g>
+ ${floor(186,'#ffe08a')}${at(40,198,.56,cat({eyes:'spark',mouth:'tongue',armR:-150,armsFront:true}))}`;
+
+const polcap=`<path d="M-28,-98 q0,-26 28,-26 q28,0 28,26 Z" fill="#2f6fd0"/><path d="M-32,-98 h64 q4,0 0,7 h-64 q-4,-7 0,-7" fill="${INK}"/>${star5(0,-110,6,SUN)}`;
+S.police=`${park(166)}${floor(172,'#6b7a99')}<path d="M0,186 h200" stroke="#fff" stroke-width="3" stroke-dasharray="14 14"/>
+ <g class="road" style="animation-duration:2.400s"><g transform="translate(190,170) scale(.5)">${P.car('#fff')}<rect x="-8" y="-62" width="16" height="10" rx="3" fill="${SKY}" class="glow"/><rect x="-40" y="-20" width="80" height="6" fill="#2f6fd0"/></g></g>
+ ${sh(70,192,34)}${at(70,190,.94,K('orange',{hat:polcap,mouth:'open',armL:140,armR:-92,armsFront:true,mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="#2f6fd0"/>${star5(-10,-32,5,SUN)}`}))}
+ <ellipse cx="112" cy="140" rx="12" ry="13" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/>
+ ${at(170,150,.3,cat({eyes:'happy',tail:false}))}`;
+
+S.mind=`${bg('#ece6ff')}<circle cx="100" cy="92" r="84" fill="#f6f2ff"/>
+ <clipPath id="mi"><rect width="200" height="176"/></clipPath><g clip-path="url(#mi)">${at(100,250,1.8,cat({tail:false,eyes:'closed',bow:false}))}</g>
+ <g opacity=".95">${gear(84,56,14,SKY,5)}${gear(110,66,10,RED,3.500,true)}${gear(98,40,8,SUN,3)}</g>
+ <circle class="glow" cx="100" cy="54" r="40" fill="none" stroke="${VIO}" stroke-width="3" stroke-dasharray="6 8"/>
+ ${floor(176,'#d6ccf5')}${spark(160,40,7,SUN,0)}${spark(36,50,6,SUN,.6)}`;
+
+S.finally=`${bg('#ffd9a8')}<circle cx="40" cy="60" r="26" fill="${SUN}"/>${hills('#8fe0a8','#6fd08f',170)}
+ ${at(140,180,1.4,P.house())}${heartS(140,40,1.4,RED,'beat')}
+ <path d="M0,190 q50,-8 104,-12" fill="none" stroke="#f3d9a4" stroke-width="14" stroke-linecap="round"/>
+ <g transform="translate(56,192) scale(-.74,.74)"><g class="walkbob" style="animation-duration:.9s">${cat({eyes:'closed',mouth:'big',armL:0,armLcls:'slowA',armR:-20,feet:'walk',prop:`<g transform="translate(0,22)">${koffer}</g>`})}</g></g>
+ <path class="sweat" d="${tear(30,110)}" fill="${SKY}"/>${spark(100,120,7,'#fff',0)}`;
+
+S.pull=`${park(172)}${cloud(150,24,.7)}
+ <g class="road" style="animation-duration:1.200s"><path d="M-40,190 h320" stroke="#6fd08f" stroke-width="4" stroke-dasharray="10 30" stroke-linecap="round"/></g>
+ <g class="walkbob"><rect x="110" y="140" width="70" height="30" rx="4" fill="${RED}"/><circle cx="124" cy="176" r="9" fill="${INK}"/><circle cx="166" cy="176" r="9" fill="${INK}"/>
+ <g transform="translate(130,140) scale(.6)">${P.gift(VIO,SUN)}</g><g transform="translate(160,140) scale(.8)">${P.ball(SKY)}</g><g transform="translate(146,140) scale(.36)">${K('cream',{eyes:'happy',tail:false})}</g></g>
+ <path d="M110,154 L76,140" stroke="#b07a45" stroke-width="3"/>
+ <g transform="translate(52,192) scale(-.8,.8)"><g class="walkbob">${cat({armL:60,armR:0,armRcls:'slowB',feet:'walk',eyes:'closed',mouth:'big'})}</g></g>
+ ${arrow(60,70,20,70,RED,7,'glow')}`;
+
+S.return=`${room('#ece6ff','#d6ccf5')}
+ <rect x="110" y="20" width="80" height="160" rx="6" fill="#b07a45"/><rect x="116" y="26" width="68" height="46" fill="#8a5a30"/><rect x="116" y="78" width="68" height="46" fill="#8a5a30"/><rect x="116" y="130" width="68" height="44" fill="#8a5a30"/>
+ ${[[RED,0],[SUN,1],[MINT,2],[VIO,3],[SKY,4]].map(([c,i])=>`<rect x="${120+i*12}" y="42" width="10" height="30" rx="2" fill="${c}"/>`).join('')}${[[SKY,0],[ORA,2],[RED,3],[MINT,4]].map(([c,i])=>`<rect x="${120+i*12}" y="94" width="10" height="30" rx="2" fill="${c}"/>`).join('')}
+ <g class="givemove"><rect x="100" y="94" width="10" height="30" rx="2" fill="${SUN}"/></g>
+ <g class="glow"><path d="M40,60 q30,-34 60,-6" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/><path d="M100,54 l-13,-3 M100,54 l-2,-13" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>
+ ${sh(56,192,32)}${at(56,190,.9,cat({eyes:'happy',armR:-100,armsFront:true}))}`;
+
+S.free=`${bg('#cdeeff')}${cloud(40,40,.8)}${sun(170,30,10)}${hills('#8fe0a8','#6fd08f',170)}
+ <path d="M112,170 v-70 q0,-26 26,-26 q26,0 26,26 v70 Z" fill="none" stroke="#b07a45" stroke-width="3"/><path d="M125,170 v-90 M138,170 v-96 M151,170 v-90" stroke="#b07a45" stroke-width="2"/><rect x="108" y="168" width="60" height="8" rx="3" fill="#8a5a30"/>
+ <path d="M112,110 l-22,-10 v60 l22,10" fill="none" stroke="#b07a45" stroke-width="3" stroke-linejoin="round"/>
+ <g class="flutter"><g transform="translate(60,60)"><ellipse cx="0" cy="0" rx="10" ry="7" fill="${SKY}"/><circle cx="9" cy="-4" r="5" fill="${SKY}"/><path d="M13,-4 l6,2 -6,2 Z" fill="${ORA}"/><circle cx="10" cy="-5" r="1.200" fill="${INK}"/><g class="flap"><path d="M-2,-2 q-10,-16 -16,-2 Z" fill="#2f6fd0"/></g></g></g>
+ ${arcArrow(96,120,64,76,20,RED,4,'6 8')}
+ ${at(40,194,.7,cat({eyes:'happy',mouth:'open',armR:-128,armRcls:'wave',armsFront:true}))}`;
+
+const helm=`<path d="M-30,-96 q0,-32 30,-32 q30,0 30,32 Z" fill="#7a9a5a"/><rect x="-34" y="-100" width="68" height="7" rx="3" fill="#5f7f44"/>`;
+S.military=`${room('#fff1c9','#ffe08a')}
+ ${[0,1,2,3].map(i=>`<g class="walkbob" style="animation-delay:${i*.14}s"><g transform="translate(${110+i*24},186)"><rect x="-6" y="-26" width="12" height="20" rx="3" fill="${RED}"/><circle cx="0" cy="-32" r="6" fill="#ffcf9e"/><rect x="-6" y="-44" width="12" height="9" rx="2" fill="${INK}"/><rect x="-5" y="-8" width="4" height="10" fill="${INK}"/><rect x="1" y="-8" width="4" height="10" fill="${INK}"/><path d="M7,-24 v-18" stroke="#b07a45" stroke-width="2"/></g></g>`).join('')}
+ <g class="wiggle"><ellipse cx="170" cy="130" rx="16" ry="6" fill="#fff8e6" stroke="${RED}" stroke-width="2"/><rect x="154" y="130" width="32" height="18" fill="${RED}"/><ellipse cx="170" cy="148" rx="16" ry="6" fill="#b52f29"/></g>
+ ${sh(54,192,32)}${at(54,190,.92,cat({bow:false,hat:helm,eyes:'happy',armR:-150,armsFront:true}))}
+ ${note(120,110,VIO,0)}${note(150,96,SKY,.8)}`;
+
+S.price=`${bg('#fff1c9')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(120,168)">${P.plate(44)}</g><g transform="translate(120,150) scale(3.200)">${P.fish}</g>
+ <g class="sway" style="transform-origin:70px 60px"><path d="M70,60 q20,30 34,62" fill="none" stroke="${INK}" stroke-width="1.500"/><g transform="translate(60,54) rotate(-14)"><path d="M-26,-16 h40 l14,16 -14,16 h-40 Z" fill="#fff" stroke="${RED}" stroke-width="3"/><circle cx="16" cy="0" r="3" fill="${RED}"/>${coin(-14,0,8)}${coin(2,0,8)}</g></g>
+ ${ring(58,54,34,RED)}
+ ${at(170,198,.5,cat({eyes:'wide',mouth:'o',tail:false,armR:-150,armsFront:true}))}`;
+
+S.less=`${bg('#fff1c9')}${floor(150,MINT)}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ ${at(52,140,.56,K('orange',{eyes:'happy',tail:false}))}<g transform="translate(52,184)">${P.plate(40)}</g>${fishAt(36,174,1.200,10)}${fishAt(60,176,1.200,-10)}${fishAt(46,166,1.200,0)}${fishAt(70,168,1.200,16)}${fishAt(52,158,1.200,-6)}
+ ${at(150,140,.58,cat({mouth:'wavy',tail:false}))}<g transform="translate(150,184)">${P.plate(40)}</g>${fishAt(150,174,1.200,0)}
+ ${ring(150,176,34,RED)}
+ <g class="beat"><circle cx="100" cy="60" r="20" fill="#fff"/><path d="M90,60 h20" stroke="${RED}" stroke-width="7" stroke-linecap="round"/></g>`;
+
+S.according=`${park(170)}${cloud(150,24,.7)}
+ ${pin(150,170)}<ellipse class="ripple" cx="150" cy="174" rx="18" ry="5" fill="none" stroke="${RED}" stroke-width="2.500"/>${cross(150,186,6,4)}
+ <path d="M96,130 q24,-20 44,20" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="5 7" class="glow"/>
+ ${sh(60,192,34)}${at(60,190,.96,cat({eyes:'happy',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-26) scale(1.2)"><path d="M-22,-12 l14,4 16,-4 14,4 v22 l-14,-4 -16,4 -14,-4 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M-14,4 q8,-10 16,-2 t12,-6" fill="none" stroke="${RED}" stroke-width="1.800" stroke-dasharray="2 3"/><path d="M12,-8 l4,4 M16,-8 l-4,4" stroke="${RED}" stroke-width="1.800"/></g>`}))}`;
+
+S.decision=`${bg('#ece6ff')}${floor(170,'#9aa8c0')}<rect y="170" width="200" height="8" fill="#b9c4d8"/>
+ <ellipse cx="60" cy="160" rx="30" ry="10" fill="#7a8aa6"/><g opacity=".6"><path d="M36,156 a24,18 0 0 1 48,0 Z" fill="${SKY}"/></g>
+ <ellipse cx="140" cy="160" rx="30" ry="10" fill="#7a8aa6"/><g class="hop" style="animation-direction:alternate-reverse"><path d="M116,156 a24,18 0 0 1 48,0 Z" fill="${RED}"/></g>
+ <g class="beat">${check(140,60,14,7)}</g><g opacity=".5">${T(60,74,'?',30,SKY)}</g>
+ ${at(140,150,.46,cat({eyes:'happy',mouth:'open',armL:-30,armR:30,armsFront:true,tail:false}),'hop')}`;
+
+S.explain=`${bg('#fff1c9')}
+ <rect x="60" y="14" width="130" height="86" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>
+ <g transform="translate(86,56) scale(1.5)">${P.fish.replace(/#ff8a3c|#ffa53c/g,'#fff')}</g><path d="M108,56 h10 M113,51 v10" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M130,48 q-8,12 0,16 q8,-4 0,-16 Z" fill="#fff"/><path d="M146,52 h10 M146,60 h10" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="${heartP}" transform="translate(174,60) scale(1)" fill="#fff"/>
+ ${floor(184,'#ffe08a')}
+ ${sh(50,192,32)}${at(50,190,.9,cat({hat:glasses,mouth:'open',armR:-128,armsFront:true,armRcls:'bob',prop:`<path d="M0,4 l10,-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${at(150,194,.5,K('orange',{eyes:'wide',headCls:'tilt'}))}<g class="beat"><g transform="translate(176,130) scale(.6)">${P.bulb}</g></g>`;
+
+S.son=`${park()}${cloud(40,26,.7)}
+ ${sh(60,192,34)}${at(60,190,.96,K('grey',{eyes:'happy',mid:tie,hat:bart,armR:-70}))}
+ ${sh(140,192,22)}${at(140,190,.56,K('grey',{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true,hat:`<g transform="translate(0,36)">${mütze}</g>`}),'hop')}${ring(140,160,38,RED)}
+ <g transform="translate(100,150)"><g class="jump">${P.ball(RED)}</g></g>${arrow(184,60,164,100,RED,6,'float')}`;
+
+S.hope=`${bg('#cdeeff')}
+ <g class="cloud"><ellipse cx="50" cy="40" rx="34" ry="14" fill="#b9c9dd"/><ellipse cx="80" cy="32" rx="26" ry="16" fill="#cfdbea"/></g>
+ ${[RED,ORA,SUN,MINT,SKY,VIO].map((c,i)=>`<path class="glow" style="animation-delay:${i*.15}s" d="M${60+i*6},170 a${70-i*6},${70-i*6} 0 0 1 ${140-i*12},0" fill="none" stroke="${c}" stroke-width="6" opacity=".85"/>`).join('')}
+ <g transform="translate(160,56) scale(.8)">${sun(0,0,12)}</g>
+ ${hills('#8fe0a8','#6fd08f',166)}${sprout(150,176,16)}
+ ${sh(64,190,34)}${at(64,188,.94,cat({eyes:'spark',armL:-46,armR:46,armsFront:true,headCls:'tilt'}))}${heart(100,110,.8,RED,0)}`;
+
+S.develop=`${bg('#d9fbf1')}<path d="M0,120 q50,-12 100,0 t100,0 v80 h-200 Z" fill="#5cc3ff" opacity=".7"/>
+ ${[36,100,164].map(x=>`<circle cx="${x}" cy="80" r="30" fill="#fff"/>`).join('')}
+ <circle cx="36" cy="80" r="10" fill="${INK}"/><path class="wiggle" d="M36,90 q4,14 -6,20" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+ <ellipse cx="100" cy="78" rx="13" ry="10" fill="#4fc27f"/><path d="M90,86 l-8,8 M110,86 l8,8" stroke="#4fc27f" stroke-width="4" stroke-linecap="round"/><path class="wiggle" d="M100,88 q3,10 -4,14" fill="none" stroke="#4fc27f" stroke-width="4" stroke-linecap="round"/><circle cx="96" cy="74" r="2" fill="${INK}"/><circle cx="104" cy="74" r="2" fill="${INK}"/>
+ <g transform="translate(164,90) scale(.8)"><g class="hop"><ellipse cx="-16" cy="6" rx="10" ry="5" fill="#3aa568"/><ellipse cx="16" cy="6" rx="10" ry="5" fill="#3aa568"/><ellipse cx="0" cy="0" rx="22" ry="15" fill="#4fc27f"/><circle cx="-10" cy="-14" r="7.500" fill="#4fc27f"/><circle cx="10" cy="-14" r="7.500" fill="#4fc27f"/><circle cx="-10" cy="-15" r="3" fill="${INK}"/><circle cx="10" cy="-15" r="3" fill="${INK}"/><path d="M-8,-3 q8,6 16,0" fill="none" stroke="${INK}" stroke-width="1.800" stroke-linecap="round"/></g></g>
+ ${arrow(66,80,70,80,RED,4,'glow')}${arrow(130,80,134,80,RED,4,'glow')}
+ ${at(100,198,.5,cat({eyes:'wide',mouth:'o',tail:false}))}`;
+
+S.view=`${bg('#ffd9a8')}<circle cx="100" cy="90" r="34" fill="${SUN}"/>
+ <path d="M0,130 l40,-50 30,30 40,-60 50,60 40,-30 v50 Z" fill="#b9a0d6"/><path d="M110,50 l-14,21 10,-5 8,8 10,-8 Z" fill="#fff"/>
+ <path d="M0,130 h200 v20 h-200 Z" fill="#9fd4f0"/><path d="M0,150 q100,-16 200,0 v50 h-200 Z" fill="#8fe0a8"/>
+ <rect x="14" y="14" width="172" height="130" rx="8" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="12 10" class="glow"/>
+ <rect x="60" y="160" width="80" height="7" rx="3" fill="#b07a45"/><rect x="66" y="167" width="6" height="22" fill="#8a5a30"/><rect x="128" y="167" width="6" height="22" fill="#8a5a30"/>
+ ${at(100,162,.6,cat({eyes:'happy',tail:true}))}`;
+
+S.relationship=`${bg('#ffe9d6')}${floor(186,'#ffd9bd')}
+ <path d="M50,96 Q100,30 150,96" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="8 8" class="glow"/>
+ ${heartS(100,60,2.400,RED,'beat')}
+ ${sh(50,192,30)}${at(50,190,.84,cat({eyes:'happy',armR:-80}))}
+ ${sh(150,192,30)}${at(150,190,.84,K('orange',{eyes:'happy',armL:80}))}
+ <path d="M76,150 h48" stroke="${SUN}" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="150" r="7" fill="${SUN}"/>`;
+
+S.carry=`${room('#e3fbf5','#bff0de')}
+ <g class="road"><path d="M-40,192 h320" stroke="#9fe6d2" stroke-width="4" stroke-dasharray="10 30" stroke-linecap="round"/></g>
+ <g transform="translate(96,190)"><g class="walkbob"><g transform="scale(-.9,.9)">${cat({armL:-70,armR:-70,armsFront:true,feet:'walk',eyes:'closed',mouth:'big'})}</g>
+ <g class="sway" style="transform-origin:34px -60px"><rect x="10" y="-80" width="52" height="34" rx="3" fill="#d9a56a"/><rect x="16" y="-110" width="40" height="30" rx="3" fill="#e4b77a"/><rect x="22" y="-134" width="28" height="24" rx="3" fill="#d9a56a"/><rect x="30" y="-80" width="10" height="34" fill="#c98a4b" opacity=".6"/></g></g></g>
+ <path class="sweat" d="${tear(60,90)}" fill="${SKY}"/>${arrow(150,60,186,60,RED,6,'glow')}`;
+
+/* Tag 91–94: town, road, drive, arm, true · federal, break, difference, thank, receive · value, international, building, action, full · model, join, season, society, tax */
+const hausK=(x,y,s,r,w)=>`<g transform="translate(${x},${y}) scale(${s})">${P.house(r,w)}</g>`;
+S.town=`${park(150)}${sun(30,24,9)}${cloud(150,24,.7)}
+ ${hausK(34,150,.5,SKY)}${hausK(166,150,.5,VIO,'#ffe2b8')}
+ <rect x="86" y="60" width="28" height="90" fill="#fff8e6"/><path d="M82,60 l18,-26 18,26 Z" fill="${RED}"/><circle cx="100" cy="78" r="8" fill="#fff" stroke="#b07a45" stroke-width="2"/><path d="M100,78 v-5 M100,78 h4" stroke="${INK}" stroke-width="1.500"/><rect x="94" y="126" width="12" height="24" rx="6" fill="#b07a45"/>
+ ${hausK(64,172,.5,MINT)}${hausK(136,172,.5,SUN,'#fff')}
+ <path d="M0,190 q100,-14 200,0" fill="none" stroke="#f3d9a4" stroke-width="14"/>
+ ${at(100,198,.4,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.road=`${bg('#cdeeff')}${sun(160,26,10)}${hills('#8fe0a8','#6fd08f',90)}
+ <path d="M70,200 L94,90 h12 L130,200 Z" fill="#6b7a99"/><g class="road" style="animation-duration:1s"><path d="M100,96 V200" stroke="#fff" stroke-width="3" stroke-dasharray="10 12"/></g>
+ ${tree(40,150,1)}${tree(160,130,.8)}${tree(150,180,1.2)}
+ <rect x="24" y="100" width="34" height="18" rx="3" fill="#3aa568"/><path d="M41,118 v20" stroke="#b07a45" stroke-width="3"/>${arrow(30,109,50,109,'#fff',3)}
+ ${ring(100,150,40,RED)}${at(40,200,.44,cat({eyes:'happy',armR:-100,armsFront:true}))}`;
+
+S.drive=`${park(150)}${cloud(40,24,.7)}${floor(160,'#6b7a99')}
+ <g class="road" style="animation-duration:.9s"><path d="M-40,180 h320" stroke="#fff" stroke-width="3" stroke-dasharray="14 26"/></g>
+ <g class="road" style="animation-duration:3s">${tree(170,150,.8)}</g>
+ <g class="walkbob" style="animation-duration:.5s">${at(96,150,.42,cat({eyes:'happy',mouth:'open',tail:false,armR:-70,armL:70,armsFront:true}))}
+ <path d="M40,170 v-22 q0,-8 10,-10 l14,-18 h64 l18,18 q14,2 14,12 v20 Z" fill="${RED}"/><path d="M70,138 l8,-12 h20 v12 Z M104,138 v-12 h20 l10,12 Z" fill="#bfe9ff"/>
+ <circle cx="104" cy="140" r="9" fill="none" stroke="${INK}" stroke-width="3"/><circle cx="154" cy="156" r="4" fill="${SUN}"/></g>
+ ${wheel(68,172)}${wheel(136,172)}<circle class="puff" cx="28" cy="170" r="6" fill="#fff"/>`;
+
+S.arm=`${bg('#ece6ff')}<circle cx="100" cy="100" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(90,190,40)}
+ ${at(90,188,1.06,cat({eyes:'happy',mouth:'open',armR:-140,armRcls:'bob',armsFront:true}))}
+ ${ring(138,108,24,RED)}${arrow(184,60,160,88,RED,6,'float')}`;
+
+S.true=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(60,40,80,50,`${fishAt(40,54,1.300,0)}${T(62,62,'=',20,INK)}${fishAt(84,54,1.300,0)}`,60,84)}
+ <g class="beat"><circle cx="150" cy="50" r="24" fill="${MINT}"/>${check(150,50,12,7).replace(new RegExp(MINT,'g'),'#fff')}</g>
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'open',armR:-125,armsFront:true}))}
+ ${at(150,194,.6,K('orange',{eyes:'happy',armL:150,armsFront:true}))}`;
+
+S.federal=`${bg('#cdeeff')}${cloud(30,24,.7)}${burst(176,30,SUN,0)}
+ <path d="M100,54 V14" stroke="#b07a45" stroke-width="3"/><g class="flower" style="transform-origin:100px 22px"><rect x="101" y="14" width="10" height="18" fill="#1f9c5a"/><rect x="111" y="14" width="10" height="18" fill="#fff"/><circle cx="116" cy="23" r="2.500" fill="#b07a45"/><rect x="121" y="14" width="10" height="18" fill="${RED}"/></g>
+ <path d="M70,84 a30,30 0 0 1 60,0 Z" fill="#dfe6f2" stroke="#b9c4d8" stroke-width="2"/>
+ <path d="M24,104 L100,80 L176,104 Z" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="2"/>${[36,62,88,114,140,160].map(x=>`<rect x="${x-4}" y="108" width="10" height="50" rx="3" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="1.600"/>`).join('')}
+ <rect x="22" y="158" width="156" height="10" fill="#dfe6f2"/><rect x="14" y="168" width="172" height="10" fill="#cfd8e6"/>${floor(178,'#8fe0a8')}
+ ${at(60,198,.4,cat({mid:tie,eyes:'happy'}))}${at(140,198,.36,K('grey',{mid:tie}))}`;
+
+S.break=`${room('#ffe9d6','#ffd9bd')}
+ <rect x="110" y="110" width="80" height="8" rx="3" fill="#b07a45"/><path d="M118,118 v60 M182,118 v60" stroke="#8a5a30" stroke-width="6"/>
+ <g transform="translate(92,170)"><path d="M-14,0 l6,-18 8,10 6,-12 8,20 Z" fill="${SKY}"/><path d="M14,4 l10,-8 4,10 Z M-26,6 l8,-4 -2,8 Z" fill="${SKY}"/><path d="M0,-6 q6,-14 16,-10" fill="none" stroke="#3aa568" stroke-width="3"/><circle cx="18" cy="-18" r="5" fill="${RED}"/></g>
+ ${burst(92,150,ORA,0)}${T(140,90,'crack!',15,RED,'middle','beat')}
+ <path d="M112,112 q-16,20 -18,40" fill="none" stroke="${VIO}" stroke-width="3" stroke-dasharray="4 6"/>
+ ${at(46,192,.84,cat({eyes:'wide',mouth:'o',armL:120,armR:-120,armsFront:true}))}`;
+
+S.difference=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${panel(12,30,82,110)}${panel(106,30,82,110)}
+ ${at(53,128,.5,K('orange',{eyes:'happy',tail:false}))}${at(147,128,.5,K('orange',{eyes:'happy',tail:false,hat:partyhut(RED)}))}
+ <g class="glow">${ring(147,58,20,RED)}</g>
+ ${T(100,96,'≠',30,VIO,'middle','beat')}
+ ${at(100,200,.46,cat({eyes:'wide',armR:-140,armsFront:true,prop:`<g transform="translate(4,6) rotate(-40) scale(.8)">${lupe}</g>`}))}`;
+
+S.thank=`${park()}${cloud(40,24,.7)}
+ ${speech(60,36,72,36,T(60,48,'Thank you!',13,RED),60,70)}
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'open',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-18)">${P.gift(VIO,SUN)}</g>`}))}
+ ${sh(146,192,30)}${at(146,190,.86,K('orange',{eyes:'happy',armL:110,armsFront:true}))}
+ ${heart(104,110,1,RED,0)}${heart(120,96,.7,RED,.8)}`;
+
+S.receive=`${room('#e3fbf5','#bff0de')}
+ <rect x="120" y="30" width="70" height="148" rx="6" fill="#b07a45"/><rect x="126" y="36" width="58" height="142" fill="#cdeeff"/>
+ ${at(160,178,.6,K('grey',{hat:cap,eyes:'happy',armL:100,armsFront:true}))}
+ <g class="givemove" style="animation-direction:reverse"><g transform="translate(104,140)">${P.boxClosed(40,34)}</g></g>
+ ${arrow(110,96,76,96,RED,6,'glow')}
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'spark',mouth:'open',armR:-96,armL:-96,armsFront:true}))}`;
+
+S.value=`${bg('#ece6ff')}<circle cx="100" cy="90" r="78" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ <g class="pulse" style="transform-origin:100px 80px"><path d="M70,60 h60 l20,22 -50,54 -50,-54 Z" fill="${SKY}"/><path d="M70,60 l14,22 16,-22 16,22 14,-22 M50,82 h100 M84,82 l16,54 16,-54" fill="none" stroke="#fff" stroke-width="2.500" stroke-linejoin="round"/></g>
+ ${spark(40,50,8,SUN,0)}${spark(164,44,7,SUN,.5)}${spark(160,120,6,SUN,1)}
+ ${coin(30,170,10)}${coin(48,174,10)}${coin(160,172,10)}
+ ${at(100,200,.5,cat({eyes:'spark',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+const fahne=(x,y,a,b,c)=>`<path d="M${x},${y} v-30" stroke="#b07a45" stroke-width="2"/><rect x="${x}" y="${y-30}" width="7" height="14" fill="${a}"/><rect x="${x+7}" y="${y-30}" width="7" height="14" fill="${b}"/><rect x="${x+14}" y="${y-30}" width="7" height="14" fill="${c}"/>`;
+S.international=`${bg('#2d2a6e')}${spark(20,30,4,'#fff',0)}${spark(180,40,4,'#fff',.6)}${spark(30,170,3.500,'#fff',1.2)}
+ <g class="float"><circle cx="100" cy="104" r="62" fill="#5cc3ff"/><path d="M70,66 q20,-12 34,2 q4,18 -14,24 q-22,2 -20,-26 Z M112,104 q24,-10 34,10 q-2,26 -24,30 q-16,-14 -10,-40 Z M62,120 q14,-2 16,14 q-6,12 -16,4 Z" fill="#6fd08f"/>
+ ${fahne(76,70,'#1f9c5a','#fff',RED)}${fahne(126,112,RED,SUN,RED)}${fahne(56,130,SKY,'#fff',SKY)}</g>
+ <ellipse cx="100" cy="104" rx="84" ry="24" fill="none" stroke="${SUN}" stroke-width="3" stroke-dasharray="7 8" transform="rotate(-18 100 104)" class="glow"/>
+ ${at(160,196,.44,cat(Object.assign({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true},NL)))}`;
+
+S.building=`${bg('#cdeeff')}${cloud(30,30,.8)}${sun(170,26,9)}${floor(180,'#8fe0a8')}
+ <rect x="20" y="110" width="40" height="70" fill="#b9c4d8"/>${[0,1,2].map(r=>[0,1].map(c=>win(26+c*14,116+r*20).replace(/22/g,'10').replace(/11/g,'5')).join('')).join('')}
+ <rect x="76" y="30" width="64" height="150" rx="3" fill="${SKY}"/>${[0,1,2,3,4,5].map(r=>[0,1,2].map(c=>`<rect x="${84+c*18}" y="${40+r*22}" width="12" height="14" rx="2" fill="${(r+c)%3?'#bfe9ff':SUN}"/>`).join('')).join('')}<rect x="100" y="160" width="16" height="20" fill="#2f6fd0"/>
+ <rect x="150" y="90" width="36" height="90" fill="#cbc2e6"/>${[0,1,2,3].map(r=>`<rect x="156" y="${98+r*20}" width="24" height="10" rx="2" fill="#fff"/>`).join('')}
+ ${arrow(60,170,60,60,RED,5,'glow')}
+ ${at(40,200,.44,cat({eyes:'wide',mouth:'o',headCls:'tilt'}))}`;
+
+S.action=`${bg('#fff3cf')}${burst(40,40,RED,0)}${burst(170,60,VIO,.5)}
+ <path d="M10,90 h50 M20,110 h60 M10,130 h40" stroke="${ORA}" stroke-width="5" stroke-linecap="round" class="glow"/>
+ ${floor(184,'#ffe08a')}
+ <g transform="translate(116,150) rotate(-18)"><g class="float" style="animation-duration:.7s"><g transform="scale(-.9,.9)">${cat({eyes:'spark',mouth:'big',armL:160,armR:-90,armsFront:true,feet:'run',mid:`<path d="M-20,-52 q-30,10 -50,-6 q20,26 50,22 Z" fill="${RED}"/>`})}</g></g></g>
+ <g transform="translate(40,170) rotate(-10)"><rect x="-24" y="-12" width="48" height="26" rx="3" fill="${INK}"/><path d="M-24,-12 l48,-10 v8 l-48,10 Z" fill="#fff" stroke="${INK}" stroke-width="2" class="chew" style="transform-origin:-24px -12px;transform-box:view-box"/></g>`;
+
+S.full=`${bg('#fff1c9')}${floor(156,MINT)}<rect y="156" width="200" height="8" fill="#9be6d8"/>
+ <path d="M96,96 h80 q0,60 -40,60 q-40,0 -40,-60 Z" fill="${SKY}"/><ellipse cx="136" cy="96" rx="40" ry="9" fill="#ffd98a"/>
+ ${fishAt(120,86,1.300,-20)}${fishAt(146,82,1.300,10)}${fishAt(134,72,1.300,-6)}${fishAt(156,92,1.200,30)}${fishAt(112,96,1.200,0)}
+ ${arrow(184,40,160,66,RED,6,'float')}
+ ${at(46,160,.78,cat({eyes:'happy',mouth:'wavy',tail:false,armL:20,armR:-20,mid:`<ellipse cx="0" cy="-26" rx="24" ry="20" fill="#3a3148"/>`}),'breathe')}
+ ${T(46,60,'uff',16,VIO,'middle','glow')}`;
+
+S.model=`${room('#e6f1ff','#c98a4b',166)}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(130,166) scale(.7)">${P.house(RED,'#fff8e6')}</g>
+ <g opacity=".35" transform="translate(150,90) scale(1.3)">${P.house('#9aa8c0','#dfe6f2')}</g>
+ <path d="M104,150 l-10,-56 M158,150 l22,-56" stroke="${VIO}" stroke-width="2" stroke-dasharray="4 5"/>
+ ${at(50,190,.8,cat({hat:glasses,mouth:'tongue',armR:-84,armRcls:'bob',prop:`<path d="M0,2 l10,-14" stroke="#b07a45" stroke-width="3"/><path d="M10,-12 l4,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.join=`${park()}${sun(30,26,9)}
+ ${[['orange',96],['grey',130],['cream',164]].map(([n,x],i)=>at(x,186,.56,K(n,{eyes:'happy',armL:70,armR:-70}),'hop')).join('')}
+ <g class="road" style="animation-duration:3s;animation-direction:reverse"><g transform="translate(6,188) scale(-.56,.56)">${cat({eyes:'happy',mouth:'open',feet:'walk',armR:-110,armsFront:true})}</g></g>
+ ${arrow(30,110,66,110,RED,6,'glow')}${T(48,96,'+1',18,RED,'middle','beat')}
+ <g transform="translate(130,120)"><g class="jump">${P.ball(RED)}</g></g>`;
+
+S.season=`${bg('#fff8e6')}<path d="M100,0 v200 M0,100 h200" stroke="#fff" stroke-width="4"/>
+ <rect width="98" height="98" fill="#d9f7e1"/>${flower(30,84,RED,0)}${flower(56,88,VIO,.4)}${flower(80,82,SUN,.8)}
+ <rect x="102" width="98" height="98" fill="#fff3b8"/><g transform="translate(150,46)">${sun(0,0,16)}</g>
+ <rect y="102" width="98" height="98" fill="#ffe1c2"/>${tree(48,186,1.500).replace(/#3aa568|#4fc27f|#6fd08f/g,ORA)}<path class="snow" style="animation-duration:5s" d="M70,120 q5,5 0,10 q-5,-5 0,-10 Z" fill="${ORA}"/>
+ <rect x="102" y="102" width="98" height="98" fill="#dff1ff"/><circle cx="150" cy="176" r="16" fill="#fff"/><circle cx="150" cy="150" r="11" fill="#fff"/><circle cx="146" cy="148" r="1.600" fill="${INK}"/><circle cx="154" cy="148" r="1.600" fill="${INK}"/><path d="M150,152 l8,2 -8,2 Z" fill="${ORA}"/><circle class="snow" cx="120" cy="110" r="2.500" fill="#fff"/><circle class="snow" style="animation-delay:-1.500s" cx="180" cy="110" r="2.500" fill="#fff"/>
+ <g class="spin" style="animation-duration:8s;transform-origin:100px 100px"><path d="M100,74 a26,26 0 0 1 26,26" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path d="M126,100 l-6,-8 M126,100 l7,-7" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>
+ <circle cx="100" cy="100" r="16" fill="#fff"/>${at(100,114,.2,cat({tail:false,eyes:'happy'}))}`;
+
+S.society=`${bg('#fff1c9')}<circle cx="100" cy="100" r="86" fill="#ffe7a3"/>
+ <circle cx="100" cy="104" r="60" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8" class="glow"/>
+ ${[[100,70,null],[150,100,'orange'],[130,160,'grey'],[70,160,'cream'],[50,100,'white']].map(([x,y,n])=>at(x,y,.36,n?K(n,{eyes:'happy',armL:80,armR:-80}):cat({eyes:'happy',armL:80,armR:-80}))).join('')}
+ <g transform="translate(100,112) scale(.5)">${P.house()}</g>${heartS(100,70,.001,RED)}
+ ${heart(100,130,.8,RED,0)}`;
+
+S.tax=`${bg('#e6f1ff')}${floor(180,'#cfe3f7')}
+ <path d="M110,84 L150,64 L190,84 Z" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="2"/>${[120,140,160,178].map(x=>`<rect x="${x-4}" y="88" width="8" height="60" rx="2" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="1.500"/>`).join('')}<rect x="108" y="148" width="84" height="32" fill="#dfe6f2"/><rect x="134" y="154" width="32" height="6" rx="3" fill="${INK}"/>
+ ${[0,1,2,3].map(k=>`<ellipse cx="50" cy="${120-k*8}" rx="14" ry="5" fill="${SUN}" stroke="#e0a83a" stroke-width="1.500"/>`).join('')}
+ <g style="animation:steuer 2.400s ease-in-out infinite">${coin(50,84,9)}</g><style>@keyframes steuer{0%,15%{transform:translate(0,0)}80%,100%{transform:translate(100px,72px)}}</style>
+ <path d="M64,84 q50,-20 84,60" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="5 7"/>
+ ${T(96,70,'%',22,RED,'middle','beat')}
+ ${at(50,198,.56,cat({mouth:'wavy',armR:-150,armsFront:true}))}`;
+
+/* Tag 95–98: director, position, player, agree, especially · record, pick, wear, paper, special · space, ground, form, support, event · official, whose, matter, everyone, center */
+const klappe=`<rect x="-24" y="-12" width="48" height="26" rx="3" fill="${INK}"/><path d="M-24,-12 l48,-10 v8 l-48,10 Z" fill="#fff" stroke="${INK}" stroke-width="2"/>`;
+S.director=`${room('#3b2a4a','#5a4a6c')}<path d="M150,-10 L96,180 h104 V-10 Z" fill="#fff6c8" opacity=".18"/>
+ ${at(160,180,.6,K('orange',{eyes:'happy',mouth:'big',armL:120,armR:-120,armsFront:true}),'hop')}
+ <path d="M28,186 l14,-50 M72,186 l-14,-50 M24,150 h52" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><rect x="26" y="126" width="48" height="12" rx="3" fill="${RED}"/>
+ ${at(50,150,.66,cat(Object.assign({tail:false,mouth:'open',armR:-110,armRcls:'bob',armsFront:true,hat:`<path d="M-30,-98 q30,-20 60,0 q-30,-8 -60,0 Z" fill="${RED}"/><circle cx="0" cy="-112" r="4" fill="${RED}"/>`,prop:`<path d="M-4,0 l14,-10 v20 Z" fill="${SUN}"/>`},NL)))}
+ <g transform="translate(108,170) rotate(-8) scale(.8)">${klappe}</g>`;
+
+S.position=`${bg('#e3fbf5')}${floor(170,'#bff0de')}
+ ${[40,100,160].map((x,i)=>`<circle cx="${x}" cy="176" r="16" fill="#fff" stroke="${i==1?RED:'#cbc2e6'}" stroke-width="3"/>${T(x,182,String(i+1),16,i==1?RED:'#b9b0d6')}`).join('')}
+ ${at(100,168,.7,cat({eyes:'happy',armL:20,armR:-20}))}
+ ${pin(100,60)}<path d="M100,66 v30" stroke="${RED}" stroke-width="3" stroke-dasharray="4 5"/>
+ <g opacity=".4">${at(40,168,.5,K('grey',{}))}${at(160,168,.5,K('orange',{}))}</g>`;
+
+S.player=`${bg('#8fe0a8')}<rect width="200" height="50" fill="#cdeeff"/><path d="M0,50 h200" stroke="#fff" stroke-width="3"/><path d="M150,50 v-34 h44 v34" fill="none" stroke="#fff" stroke-width="4"/><path d="M150,26 h44 M161,16 v34 M172,16 v34 M183,16 v34" stroke="#fff" stroke-width="1" opacity=".7"/>
+ <g transform="translate(74,184) scale(-.9,.9)"><g class="runbob">${cat({eyes:'happy',mouth:'open',armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',mid:trikot(RED)})}</g></g>
+ <g transform="translate(128,176)"><g class="roll">${P.ball('#fff',INK)}</g></g>
+ ${T(74,150,'10',12,'#fff')}${ring(74,140,56,SUN)}`;
+
+S.agree=`${park()}${cloud(100,22,.7)}
+ ${speech(52,40,50,34,`<g transform="translate(52,50) scale(1.5)">${P.fish}</g>`,56,70)}${speech(148,40,50,34,`<g transform="translate(148,50) scale(1.5)">${P.fish}</g>`,144,70)}
+ <g class="beat">${check(100,40,10,6)}</g>
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'happy',mouth:'open',armR:-80}))}
+ ${sh(144,192,30)}${at(144,190,.84,K('orange',{eyes:'happy',mouth:'open',armL:80}))}
+ <circle cx="100" cy="150" r="7" fill="${SUN}"/>${spark(100,130,7,SUN,0)}`;
+
+S.especially=`${bg('#ffe9d6')}<circle cx="110" cy="100" r="80" fill="#ffdcc0"/>${floor(184,'#ffd9bd')}
+ <g opacity=".55">${at(24,186,.44,K('grey',{eyes:'happy'}))}${at(56,186,.44,K('cream',{eyes:'happy'}))}</g>
+ ${at(92,186,.5,K('white',{eyes:'happy',armR:-60,prop:`<g transform="scale(.8)">${heartS(0,0,1,RED)}</g>`}))}
+ ${sh(150,192,30)}${at(150,190,.84,K('orange',{eyes:'spark',mouth:'open'}))}${ring(150,140,50,RED)}
+ <g class="beat">${star5(150,40,14,SUN)}</g>${heart(120,110,1,RED,0)}`;
+
+S.record=`${bg('#fff3cf')}${burst(30,36,RED,0)}${burst(170,36,VIO,.6)}${floor(184,'#ffe08a')}
+ <rect x="30" y="20" width="140" height="44" rx="8" fill="${INK}"/>${T(100,52,'0:09',28,SUN,'middle','glow')}
+ <path d="M150,184 V110 M190,184 V110" stroke="#9aa8c0" stroke-width="4"/><path class="flower" d="M150,116 q20,10 40,0" fill="none" stroke="${RED}" stroke-width="4"/>
+ <g transform="translate(110,186) scale(-.8,.8)"><g class="runbob">${cat({eyes:'closed',mouth:'big',armL:140,armR:-140,armsFront:true,feet:'run',mid:trikot(SKY)})}</g></g>
+ <g class="twinkle">${star5(30,110,10,SUN)}</g>${T(30,140,'#1',16,RED,'middle','beat')}`;
+
+S.pick=`${park(176)}${sun(30,24,9)}
+ <rect x="140" y="110" width="12" height="80" rx="4" fill="#b07a45"/><circle cx="146" cy="76" r="48" fill="#4fc27f"/><circle cx="110" cy="98" r="24" fill="#6fd08f"/>
+ ${[[124,70],[160,56],[172,96],[140,104]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="${RED}"/><path d="M${x},${y-7} q2,-5 5,-5" stroke="#3aa568" stroke-width="2" fill="none"/>`).join('')}
+ ${ring(110,98,14,SUN)}
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'tongue',armR:-140,armRcls:'bob',armsFront:true,armL:30,propL:`<g transform="translate(-2,8)"><path d="M-14,-4 h28 l-4,16 h-20 Z" fill="#c98a4b"/><circle cx="-5" cy="-6" r="5" fill="${RED}"/><circle cx="5" cy="-6" r="5" fill="${RED}"/></g>`,prop:`<circle cx="2" cy="-6" r="6" fill="${RED}"/>`}))}`;
+
+S.wear=`${room('#ece6ff','#d6ccf5')}
+ <rect x="124" y="30" width="60" height="140" rx="26" fill="#bfe9ff" stroke="#b07a45" stroke-width="5"/><g opacity=".5">${at(154,160,.5,cat({tail:false,eyes:'happy',hat:fedora,mid:trikot(SUN)}))}</g>
+ ${sh(64,192,34)}${at(64,190,.96,cat({eyes:'happy',mouth:'open',hat:fedora,mid:trikot(SUN),armR:-150,armsFront:true}))}
+ ${ring(64,70,30,RED)}${arrow(20,30,40,52,RED,5,'float')}${spark(110,60,7,SUN,0)}`;
+
+S.paper=`${bg('#e6f1ff')}${floor(160,'#c98a4b')}<rect y="160" width="200" height="8" fill="#e0a868"/>
+ <g transform="rotate(-6 110 110)"><rect x="76" y="50" width="76" height="100" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M88,70 h52 M88,84 h52 M88,98 h40 M88,112 h48" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/><path d="M134,50 h18 v18 Z" fill="#e6f1ff" stroke="#cbc2e6" stroke-width="2"/></g>
+ <g class="flutter"><path d="M30,40 l30,10 -20,6 -2,12 -8,-14 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>
+ <g transform="translate(170,150) rotate(30)"><ellipse cx="0" cy="0" rx="12" ry="11" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M-6,-4 l8,6 M4,-6 l-4,10" stroke="#cbc2e6" stroke-width="1.500"/></g>
+ ${at(40,198,.66,cat({eyes:'happy',tail:false,armR:-96,armsFront:true}))}`;
+
+S.special=`${bg('#fff3cf')}<circle cx="100" cy="96" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ <g class="spin" style="animation-duration:14s;transform-origin:100px 100px" stroke="#fff" stroke-width="10" opacity=".6">${[0,45,90,135].map(a=>`<path transform="rotate(${a} 100 100)" d="M100,10 v180"/>`).join('')}</g>
+ <g opacity=".5">${fishAt(30,170,1.400,0)}${fishAt(170,170,1.400,0)}</g>
+ <g class="hop"><g transform="translate(100,120) scale(3)"><path d="M-9,0 l-8,-6 v12 Z" fill="${SUN}"/><ellipse cx="0" cy="0" rx="10" ry="6.500" fill="${SUN}" stroke="#e0a83a" stroke-width=".8"/><circle cx="5" cy="-1.500" r="1.400" fill="${INK}"/></g></g>
+ ${crown.replace('<g>','<g transform="translate(104,206) scale(.7)">')}
+ ${spark(50,60,9,RED,0)}${spark(156,54,8,RED,.5)}
+ ${at(100,202,.44,cat({eyes:'spark',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+S.space=`${bg('#1f1b4d')}${spark(24,30,4,'#fff',0)}${spark(170,50,4,'#fff',.5)}${spark(60,170,3.500,'#fff',1)}${spark(150,150,3,'#fff',1.4)}${spark(100,20,3,'#fff',.8)}
+ <circle cx="160" cy="150" r="30" fill="${ORA}"/><ellipse cx="160" cy="150" rx="48" ry="9" fill="none" stroke="${SUN}" stroke-width="4" transform="rotate(-16 160 150)"/>
+ <circle cx="30" cy="110" r="14" fill="${SKY}"/><path d="M22,106 q8,-6 14,2" stroke="#6fd08f" stroke-width="4" fill="none"/>
+ <g class="float">${at(96,150,.84,cat(Object.assign({eyes:'happy',mouth:'open',armL:120,armR:-120,armsFront:true,hat:`<circle cx="0" cy="-70" r="52" fill="#bfe9ff" opacity=".28" stroke="#fff" stroke-width="3"/>`},NL)))}</g>`;
+
+S.ground=`${bg('#cdeeff')}${cloud(40,26,.7)}<path d="M0,110 h200 v90 h-200 Z" fill="#b07a45"/><path d="M0,104 h200 v14 h-200 Z" fill="#6fd08f"/>
+ <ellipse cx="40" cy="150" rx="12" ry="7" fill="#8a5a30"/><ellipse cx="150" cy="170" rx="16" ry="8" fill="#8a5a30"/><path d="M90,140 q10,8 4,20 q-6,10 4,20" fill="none" stroke="#e0a868" stroke-width="5" stroke-linecap="round" class="wiggle"/>
+ ${sprout(30,104,14)}${sprout(170,104,10)}
+ ${at(110,106,.66,cat({eyes:'happy',armR:150,armsFront:true}))}
+ ${arrow(170,50,170,96,RED,6,'float')}`;
+
+S.form=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g class="float"><circle cx="40" cy="60" r="24" fill="${RED}"/></g><g class="float" style="animation-delay:.4s"><rect x="78" y="34" width="46" height="46" rx="4" fill="${SKY}"/></g><g class="float" style="animation-delay:.8s"><path d="M164,34 l28,48 h-56 Z" fill="${SUN}"/></g>
+ <path d="M40,120 a24,24 0 1 1 .1,0 M78,96 h46 v46 h-46 Z" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 6" transform="translate(0,20)" opacity=".001"/>
+ <g class="glow">${star5(164,130,18,MINT)}</g>
+ ${sh(80,192,32)}${at(80,190,.86,cat({eyes:'spark',mouth:'o',armR:-150,armsFront:true}))}`;
+
+S.support=`${park()}${cloud(150,24,.7)}
+ <path d="M150,186 q-8,-60 0,-110" fill="none" stroke="#b07a45" stroke-width="5" stroke-linecap="round" class="sway" style="transform-origin:150px 186px"/>
+ ${at(108,186,.84,K('orange',{eyes:'closed',mouth:'wavy',feet:'walk',armR:-60}))}
+ ${sh(56,192,30)}${at(60,188,.9,cat({eyes:'happy',armR:-70,armsFront:true}))}
+ <path d="M78,140 q14,-10 22,-2" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/>
+ ${heart(84,90,1,RED,0)}${arrow(30,60,60,100,RED,5,'float')}`;
+
+S.event=`${bg('#2d2a6e')}${burst(40,40,SUN,0)}${burst(160,30,RED,.5)}${burst(100,60,MINT,1)}
+ <path d="M10,84 q90,26 180,0" fill="none" stroke="#fff" stroke-width="2"/>${[[30,90,RED],[60,96,SUN],[100,99,MINT],[140,96,SKY],[170,90,VIO]].map(([x,y,c])=>`<path d="M${x-8},${y-2} h16 l-8,16 Z" fill="${c}"/>`).join('')}
+ <rect x="20" y="150" width="160" height="50" fill="#8a5a30"/><rect x="20" y="146" width="160" height="8" fill="#b07a45"/>
+ ${at(100,150,.6,cat(Object.assign({eyes:'closed',mouth:'big',armR:-60,prop:`<rect x="-3" y="-16" width="6" height="18" rx="2" fill="#9aa8c0"/><circle cx="0" cy="-20" r="6" fill="${INK}"/>`},NL)))}
+ ${note(60,120,SUN,0)}${note(150,116,MINT,.8)}
+ <g opacity=".9">${[30,70,130,170].map((x,i)=>`<path d="M${x-12},200 q0,-22 12,-22 q12,0 12,22 Z" fill="${[ORA,'#9aa8c0','#f0c98a','#fff'][i]}"/><path d="M${x-10},182 l4,-8 4,6 M${x+10},182 l-4,-8 -4,6" fill="${[ORA,'#9aa8c0','#f0c98a','#fff'][i]}"/>`).join('')}</g>`;
+
+S.official=`${bg('#e6f1ff')}${floor(166,'#c98a4b')}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <g transform="rotate(-4 120 100)"><rect x="80" y="40" width="90" height="116" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M92,60 h66 M92,74 h66 M92,88 h50" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>
+ <g><circle cx="140" cy="124" r="18" fill="none" stroke="${RED}" stroke-width="4"/>${star5(140,124,9,RED)}</g><path d="M92,132 q8,-10 14,0 t14,0" fill="none" stroke="${INK}" stroke-width="2"/></g>
+ ${at(46,198,.74,cat({mid:tie,hat:glasses,tail:false,armR:-100,armRcls:'throwarm',armsFront:true,prop:`<rect x="-8" y="-4" width="16" height="10" rx="2" fill="#8a5a30"/><rect x="-3" y="-16" width="6" height="12" fill="#b07a45"/>`}))}`;
+
+S.whose=`${park()}${cloud(40,24,.7)}
+ <g transform="translate(100,180) scale(1.6)"><g class="jump">${P.ball(RED)}</g></g>
+ ${T(100,60,'?',40,RED,'middle','beat')}
+ <path d="M84,150 q-20,-10 -30,10 M116,150 q20,-10 30,10" fill="none" stroke="${VIO}" stroke-width="3" stroke-dasharray="4 6" class="glow"/>
+ ${at(36,190,.66,K('orange',{eyes:'wide',headCls:'tilt'}))}${at(164,190,.66,K('grey',{eyes:'wide',headCls:'tilt'}))}
+ ${at(100,128,.3,cat({eyes:'wide',tail:false,armL:150,armR:-150,armsFront:true}))}`;
+
+S.matter=`${room('#fff1c9','#e4b77a')}
+ ${at(110,186,1.1,P.table(110))}
+ <path d="M74,96 h72 v26 h-72 Z" fill="#f3d9a4" stroke="#b07a45" stroke-width="2"/><path d="M74,96 l8,-8 h72 l-8,8 M146,122 l8,-8 v-26" fill="#e4c58a" stroke="#b07a45" stroke-width="2" stroke-linejoin="round"/><path d="M86,104 h40 M86,112 h28" stroke="#b07a45" stroke-width="2.500" stroke-linecap="round"/>
+ <g class="beat"><circle cx="150" cy="60" r="16" fill="${RED}"/>${T(150,68,'!',22,'#fff')}</g>
+ ${at(40,192,.76,cat({mid:tie,hat:glasses,headCls:'tilt',armR:-96,armsFront:true}))}
+ ${at(176,150,.44,K('grey',{mid:tie,tail:false,armL:150,armsFront:true}))}`;
+
+S.everyone=`${bg('#fff3cf')}<circle cx="100" cy="110" r="88" fill="#ffe7a3"/>${floor(186,'#ffe08a')}
+ <rect x="8" y="60" width="184" height="134" rx="20" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${at(36,150,.4,K('grey',{eyes:'happy'}))}${at(100,146,.4,K('cream',{eyes:'happy'}))}${at(164,150,.4,K('white',{eyes:'happy'}))}
+ ${at(30,192,.5,K('orange',{eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}${at(100,194,.56,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}))}${at(170,192,.5,K('grey',{eyes:'happy',hat:cap}))}
+ <g class="beat">${check(100,34,12,7)}</g>`;
+
+S.center=`${bg('#e3fbf5')}
+ <circle cx="100" cy="100" r="88" fill="#fff"/><circle cx="100" cy="100" r="68" fill="${RED}"/><circle cx="100" cy="100" r="48" fill="#fff"/><circle cx="100" cy="100" r="28" fill="${SKY}"/>
+ <g class="pulse" style="transform-origin:100px 100px"><circle cx="100" cy="100" r="12" fill="${SUN}"/></g>
+ ${at(100,116,.22,cat({tail:false,eyes:'happy'}))}
+ ${arrow(20,20,74,74,INK,5,'glow')}${arrow(180,180,126,126,INK,5,'glow')}${arrow(180,20,126,74,INK,5,'glow')}${arrow(20,180,74,126,INK,5,'glow')}`;
+
+/* Tag 99–102: couple, site, project, hit, base · activity, court, produce, teach, oil · half, situation, easy, cost, industry · figure, street, image, itself, either */
+S.couple=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="82" fill="#ffdcc0"/>${floor(186,'#ffd9bd')}
+ ${sh(72,192,30)}${at(72,190,.88,cat({eyes:'happy',armR:-70,headCls:'tilt'}))}
+ ${sh(128,192,30)}${at(128,190,.88,K('orange',{eyes:'happy',armL:70}))}
+ <path d="M30,150 q70,70 140,0 q10,-90 -70,-100 q-80,10 -70,100 Z" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 9" class="glow"/>
+ ${heartS(100,46,1.600,RED,'beat')}${T(170,60,'2',26,RED,'middle','beat')}`;
+
+S.site=`${park(170)}${cloud(40,24,.7)}
+ <path d="M30,170 h140 l10,20 h-160 Z" fill="#e4b77a"/><path d="M40,170 v-40 h40 v40 M80,150 h50 v20" fill="none" stroke="#b07a45" stroke-width="4"/>
+ <path d="M150,170 V40 h-70 v14" fill="none" stroke="${SUN}" stroke-width="6" stroke-linejoin="round"/><path d="M80,54 v30" stroke="${INK}" stroke-width="2"/><rect class="hop" x="68" y="84" width="24" height="14" rx="2" fill="${ORA}"/>
+ <path d="M10,186 l14,-30 14,30 Z" fill="${ORA}"/><path d="M17,172 h14" stroke="#fff" stroke-width="4"/>
+ ${pin(176,60)}
+ ${at(176,198,.5,cat({bow:false,hat:P.hatHard,eyes:'happy',armL:140,armsFront:true}))}`;
+
+S.project=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="70" y="20" width="120" height="100" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="3"/>
+ ${[[80,36,40,RED],[100,56,50,SUN],[130,76,44,MINT],[150,96,30,SKY]].map(([x,y,w,c],i)=>`<rect class="grow" style="transform-origin:${x}px ${y}px;transform-box:view-box;animation-delay:${i*.3}s" x="${x}" y="${y}" width="${w}" height="12" rx="6" fill="${c}"/>`).join('')}
+ <path d="M70,130 h120" stroke="#cbc2e6" stroke-width="3"/><g class="beat">${star5(180,112,8,SUN)}</g>
+ ${at(110,190,.5,K('orange',{eyes:'happy',armL:150,armsFront:true}))}${at(160,190,.5,K('grey',{eyes:'happy',bow:false,hat:P.hatHard}))}
+ ${sh(40,192,28)}${at(40,190,.8,cat({hat:glasses,mouth:'open',armR:-128,armsFront:true,prop:`<path d="M0,2 l10,-26" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}`;
+
+S.hit=`${park()}${sun(30,24,9)}
+ <path d="M150,0 v40" stroke="${INK}" stroke-width="2"/>
+ <g class="sway" style="transform-origin:150px 0px"><g transform="translate(150,70)">${[0,60,120,180,240,300].map((a,i)=>`<path transform="rotate(${a})" d="M-8,-18 L0,-44 L8,-18 Z" fill="${[RED,SUN,MINT,SKY,VIO,ORA][i]}"/>`).join('')}<circle r="22" fill="${VIO}"/><path d="M-22,0 h44 M-18,-10 h36 M-18,10 h36" stroke="${SUN}" stroke-width="3"/></g></g>
+ ${burst(118,84,ORA,0)}
+ <rect class="snow" x="130" y="100" width="6" height="6" fill="${RED}"/><rect class="snow" style="animation-delay:-1s" x="160" y="100" width="6" height="6" fill="${SUN}"/><circle class="snow" style="animation-delay:-2s" cx="146" cy="100" r="3.500" fill="${MINT}"/>
+ ${sh(70,192,32)}${at(70,190,.92,cat({eyes:'closed',mouth:'big',armR:-130,armRcls:'throwarm',armsFront:true,prop:`<path d="M0,4 l4,-44" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/>`,hat:`<rect x="-30" y="-84" width="60" height="12" rx="3" fill="${RED}"/>`}))}`;
+
+S.base=`${bg('#cdeeff')}${cloud(40,24,.7)}${floor(184,'#8fe0a8')}
+ <rect x="40" y="152" width="120" height="32" rx="4" fill="${RED}"/>${ring(100,168,70,SUN)}
+ <rect x="56" y="124" width="88" height="28" rx="4" fill="#9aa8c0" opacity=".7"/><rect x="72" y="98" width="56" height="26" rx="4" fill="#9aa8c0" opacity=".55"/>
+ ${at(100,100,.44,cat({eyes:'happy',armL:130,armR:-130,armsFront:true}))}
+ ${arrow(20,130,36,160,RED,6,'float')}${T(100,176,'base',14,'#fff')}`;
+
+S.activity=`${bg('#fff1c9')}
+ ${panel(8,10,90,86)}${panel(102,10,90,86)}${panel(8,104,90,86)}${panel(102,104,90,86)}
+ ${at(52,90,.4,cat({eyes:'happy',mid:trikot(RED),feet:'run',armL:120,armR:-120,armsFront:true}),'hop')}
+ ${at(146,90,.4,cat({eyes:'closed',mouth:'big',mouthCls:'chew',armR:-60}))}${note(170,40,RED,0)}
+ ${at(52,184,.4,cat({mouth:'tongue',armR:-90,prop:`<path d="M0,2 l10,-24" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/>`}))}<rect x="64" y="130" width="24" height="30" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/><path d="M68,152 q6,-14 16,-4" fill="none" stroke="${SKY}" stroke-width="2.500"/>
+ ${at(146,184,.4,cat({eyes:'happy',armL:8,armR:-8,mid:openBook}))}`;
+
+S.court=`${bg('#e0875a')}<rect width="200" height="56" fill="#cdeeff"/><path d="M0,56 h200 M100,56 v144" stroke="#fff" stroke-width="3"/><circle cx="100" cy="130" r="26" fill="none" stroke="#fff" stroke-width="3"/>
+ <path d="M170,56 V14" stroke="#9aa8c0" stroke-width="5"/><rect x="150" y="8" width="40" height="28" rx="3" fill="#fff" stroke="${RED}" stroke-width="3"/><ellipse cx="170" cy="40" rx="12" ry="4" fill="none" stroke="${RED}" stroke-width="3"/><path d="M160,42 l4,14 M170,44 v12 M180,42 l-4,14" stroke="#fff" stroke-width="1.500"/>
+ <g class="hop"><g transform="translate(120,70)">${bball}</g></g>
+ ${arcArrow(96,110,166,36,30,'#fff',3,'5 7')}
+ ${at(60,190,.8,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true,mid:trikot(SKY)}))}${flipAt(160,188,.5,K('orange',{mid:trikot(SUN),armR:-150,armsFront:true}))}`;
+
+S.produce=`${room('#e3fbf5','#bff0de',170)}
+ <rect x="0" y="150" width="200" height="14" rx="4" fill="#5a4a6c"/><g class="road" style="animation-duration:1.200s"><path d="M-40,157 h320" stroke="#9aa8c0" stroke-width="4" stroke-dasharray="6 14"/></g>
+ <rect x="10" y="60" width="50" height="90" rx="6" fill="#9aa8c0"/><rect x="20" y="70" width="30" height="20" rx="3" fill="#bfe9ff"/>${gear(35,120,12,SUN,4)}<rect x="24" y="40" width="10" height="20" fill="#7a8aa6"/><circle class="smoke" cx="29" cy="34" r="5" fill="#fff"/>
+ <g class="road" style="animation-duration:3s;animation-direction:reverse">${[0,50,100].map(d=>`<g transform="translate(${-30+d},150) scale(.5)">${P.ball(RED)}</g>`).join('')}</g>
+ ${arrow(70,110,110,110,RED,6,'glow')}
+ ${at(160,150,.5,cat({bow:false,hat:P.hatHard,eyes:'happy',armL:120,armsFront:true,tail:false}))}`;
+
+S.teach=`${bg('#fff1c9')}
+ <rect x="70" y="14" width="120" height="76" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(130,52,'A B C',24,'#fff')}<path d="M90,70 h80" stroke="#fff" stroke-width="2" stroke-dasharray="6 6"/>
+ ${floor(184,'#ffe08a')}
+ ${sh(46,192,30)}${at(46,190,.88,cat({hat:glasses,mouth:'open',armR:-128,armRcls:'bob',armsFront:true,prop:`<path d="M0,4 l12,-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${at(118,194,.44,K('orange',{eyes:'wide',tail:false}))}${at(152,194,.44,K('grey',{eyes:'happy',tail:false,armR:-155,armsFront:true}))}${at(184,194,.4,K('cream',{eyes:'wide',tail:false}))}`;
+
+S.oil=`${room('#fff1c9','#e4b77a',166)}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <ellipse cx="140" cy="160" rx="42" ry="9" fill="#5a4a6c"/><rect x="98" y="150" width="84" height="10" fill="#5a4a6c"/><rect x="180" y="152" width="20" height="5" rx="2" fill="#3a3148"/><ellipse cx="140" cy="150" rx="42" ry="8" fill="#3a3148"/><ellipse cx="140" cy="150" rx="30" ry="5" fill="${SUN}" class="glow"/>
+ <g transform="translate(86,104) rotate(52)"><rect x="-12" y="-30" width="24" height="46" rx="6" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><rect x="-6" y="-42" width="12" height="12" fill="#3aa568"/><rect x="-8" y="-12" width="16" height="16" rx="2" fill="#fff"/><path d="M0,-8 q-4,6 0,8 q4,-2 0,-8 Z" fill="#3aa568"/></g>
+ <path class="drip" d="${tear(122,112)}" fill="${SUN}"/><path class="drip" style="animation-delay:.5s" d="${tear(122,112)}" fill="${SUN}"/>
+ ${at(46,192,.84,cat({bow:false,hat:P.hatChef,eyes:'happy',mouth:'tongue',armR:-70,armsFront:true}))}`;
+
+S.half=`${bg('#fff1c9')}<circle cx="100" cy="92" r="80" fill="#ffe7a3"/>
+ <path d="M96,30 a60,60 0 0 0 0,120 Z" fill="${SUN}" stroke="#f6c27a" stroke-width="8"/><circle cx="70" cy="70" r="7" fill="${RED}"/><circle cx="76" cy="112" r="7" fill="${RED}"/><circle cx="56" cy="94" r="6" fill="${RED}"/>
+ <g opacity=".3"><path d="M104,30 a60,60 0 0 1 0,120 Z" fill="none" stroke="#b07a45" stroke-width="3" stroke-dasharray="7 7"/></g>
+ <path d="M100,20 v140" stroke="${RED}" stroke-width="3" stroke-dasharray="6 6"/>
+ <g class="beat"><circle cx="150" cy="60" r="22" fill="#fff"/>${T(150,56,'1',16,RED)}<path d="M140,62 h20" stroke="${RED}" stroke-width="3"/>${T(150,78,'2',16,RED)}</g>
+ ${floor(186,'#ffe08a')}${at(150,200,.5,cat({eyes:'happy',mouth:'tongue',armL:150,armsFront:true}))}`;
+
+S.situation=`${bg('#cdeeff')}
+ <g class="cloud"><ellipse cx="100" cy="30" rx="60" ry="18" fill="#9aa8c0"/><ellipse cx="70" cy="24" rx="30" ry="16" fill="#b9c4d8"/></g>
+ ${[30,60,90,120,150,180].map((x,i)=>`<path class="drop" style="animation-delay:${i*.2}s" d="M${x},50 l-6,14" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ ${hills('#8fe0a8','#6fd08f',170)}<ellipse cx="60" cy="186" rx="34" ry="6" fill="#5cc3ff" opacity=".7"/>
+ ${at(110,188,.86,cat({mouth:'wavy',eyes:'open',armR:-60,headCls:'tilt',prop:`<g transform="translate(0,-4)"><path d="M0,6 v-40" stroke="${INK}" stroke-width="3"/><path d="M-22,-34 l44,0 -8,-16 Z" fill="${RED}" transform="rotate(150 0 -34)"/></g>`}))}
+ <g class="beat"><circle cx="170" cy="100" r="16" fill="#fff"/>${T(170,108,'?!',16,RED)}</g>`;
+
+S.easy=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${panel(90,30,100,90)}${puzzle(100,56,SKY,'')}${puzzle(138,56,SUN,'hop')}
+ <g class="beat">${check(170,46,8,5)}</g>
+ ${sh(50,192,32)}${at(50,190,.92,cat({eyes:'closed',mouth:'w',armL:-150,armR:150,armsFront:true,headCls:'tilt'}))}
+ ${T(146,150,'1 · 2 · 3',18,'#1f9c83','middle','glow')}${note(24,70,VIO,0)}`;
+
+S.cost=`${bg('#fff1c9')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(60,168) scale(1.6)">${P.ball(RED)}</g>
+ <path d="M84,130 h30" stroke="${INK}" stroke-width="2"/><g transform="translate(140,128) rotate(-6)"><path d="M-30,-18 h46 l16,18 -16,18 h-46 Z" fill="#fff" stroke="${RED}" stroke-width="3"/>${coin(-16,0,8)}${coin(2,0,8)}${coin(-7,-6,8)}</g>
+ ${T(140,90,'=',26,VIO,'middle','beat')}
+ ${at(160,198,.5,cat({eyes:'wide',mouth:'o',tail:false,armL:150,armsFront:true}))}`;
+
+S.industry=`${bg('#cdeeff')}${cloud(30,24,.6)}${floor(176,'#9aa8c0')}
+ <rect x="20" y="110" width="120" height="66" fill="#b9c4d8"/><path d="M20,110 l30,-22 v22 l30,-22 v22 l30,-22 v22 l30,-22 v22 Z" fill="#7a8aa6"/>
+ <rect x="150" y="50" width="16" height="126" fill="#7a8aa6"/><rect x="172" y="76" width="14" height="100" fill="#9aa8c0"/>
+ <circle class="smoke" cx="158" cy="40" r="8" fill="#fff"/><circle class="smoke" style="animation-delay:.8s" cx="179" cy="66" r="6" fill="#fff"/>
+ ${[34,64,94].map(x=>win(x,126).replace('#bfe9ff',SUN)).join('')}
+ ${gear(40,60,14,SUN,5)}${gear(64,70,10,RED,3.500,true)}
+ ${at(110,198,.44,cat({bow:false,hat:P.hatHard,eyes:'happy',armR:-110,armsFront:true}))}`;
+
+S.figure=`${room('#ece6ff','#d6ccf5')}
+ <rect x="110" y="140" width="60" height="38" rx="4" fill="#dfe6f2"/><rect x="104" y="134" width="72" height="10" rx="3" fill="#cfd8e6"/>
+ <g>${at(140,136,.6,K('white',{eyes:'closed',tail:true,fur:'#f4f7fb',out:'#b9c4d8',belly:'#fff',armR:-150,armsFront:true}))}</g>
+ ${ring(140,96,46,RED)}
+ ${at(50,192,.84,cat({bow:false,hat:barett,mouth:'tongue',armR:-90,armRcls:'bob',prop:hammer}))}`;
+
+S.street=`${bg('#cdeeff')}${cloud(100,20,.6)}
+ <rect x="0" y="60" width="50" height="140" fill="${ORA}"/><rect x="150" y="50" width="50" height="150" fill="${SKY}"/>${win(10,80)}${win(10,120)}${win(162,70)}${win(162,110)}
+ <path d="M50,200 L86,90 h28 L150,200 Z" fill="#6b7a99"/><path d="M100,96 V200" stroke="#fff" stroke-width="3" stroke-dasharray="10 10"/>
+ <path d="M56,150 v-50" stroke="${INK}" stroke-width="3"/><circle class="glow" cx="56" cy="96" r="6" fill="${SUN}"/>
+ <rect x="120" y="64" width="50" height="16" rx="3" fill="#3aa568"/>${T(145,76,'Main St',9,'#fff')}<path d="M144,80 v40" stroke="#b07a45" stroke-width="3"/>
+ <g class="road" style="animation-duration:4s"><g transform="translate(130,170) scale(.3)">${P.car(RED)}</g></g>
+ ${at(70,198,.44,cat({eyes:'happy',feet:'walk'}))}`;
+
+S.image=`${room('#fff1c9','#e4b77a')}
+ ${rahmen(90,30,90,100,`<rect x="96" y="36" width="78" height="88" fill="#cdeeff"/><path d="M96,110 q40,-16 78,0 v14 h-78 Z" fill="#8fe0a8"/>`)}<clipPath id="imgc"><rect x="96" y="36" width="78" height="88"/></clipPath><g clip-path="url(#imgc)">${at(135,124,.5,cat({tail:false,eyes:'happy'}))}</g>
+ <g class="twinkle">${spark(176,34,8,SUN,0)}</g>
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'spark',mouth:'o',armR:-110,armsFront:true}))}
+ <path d="M70,120 h16" stroke="${RED}" stroke-width="3" stroke-dasharray="4 4"/>`;
+
+S.itself=`${room('#e3fbf5','#bff0de')}
+ ${sh(90,192,38)}${at(90,190,1,cat({eyes:'closed',mouth:'tongue',armR:-150,armRcls:'bob',armsFront:true,headCls:'tilt'}))}
+ <g class="glow"><path d="M150,120 q30,-40 -6,-70 q-20,-12 -34,0" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 8"/><path d="M110,50 l12,-8 M110,50 l10,10" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>
+ <circle class="bubble" cx="40" cy="120" r="7" fill="#fff" opacity=".8"/><circle class="bubble" style="animation-delay:1s" cx="160" cy="150" r="5" fill="#fff" opacity=".8"/>${spark(40,60,7,SKY,0)}`;
+
+S.either=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g class="hop"><g transform="translate(40,90) scale(1.5)">${P.ball(RED)}</g></g><g class="hop" style="animation-delay:.5s"><g transform="translate(160,90) scale(1.5)">${P.ball(SKY)}</g></g>
+ ${check(40,40,8,5)}${check(160,40,8,5)}
+ ${arrow(84,130,56,104,VIO,5,'glow')}${arrow(116,130,144,104,VIO,5,'glow')}
+ ${sh(100,192,32)}${at(100,190,.84,cat({eyes:'happy',mouth:'open',armL:120,armR:-120,armsFront:true}))}`;
+
+/* Tag 103–106: data, cover, quite, picture, clear · practice, piece, land, recent, describe · product, doctor, wall, patient, worker · news, test, movie, certain, north */
+S.data=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="80" y="24" width="110" height="96" rx="8" fill="${INK}"/><rect x="86" y="30" width="98" height="84" rx="4" fill="#1f1b4d"/>
+ ${[0,1,2,3,4].map(i=>`<rect class="chew" style="transform-origin:center bottom;animation-delay:${i*.15}s;animation-duration:.9s" x="${94+i*10}" y="${[70,56,80,62,74][i]}" width="7" height="${106-[70,56,80,62,74][i]}" fill="${[RED,SUN,MINT,SKY,VIO][i]}"/>`).join('')}
+ <circle cx="164" cy="56" r="14" fill="${SKY}"/><path d="M164,56 v-14 a14,14 0 0 1 12,21 Z" fill="${SUN}"/>${T(164,96,'01 10',9,MINT)}
+ <rect x="120" y="120" width="30" height="10" fill="#9aa8c0"/><rect x="100" y="130" width="70" height="6" rx="3" fill="#9aa8c0"/>
+ ${at(46,192,.84,cat({hat:glasses,eyes:'wide',armR:-110,armsFront:true}))}`;
+
+S.cover=`${room('#ffe9d6','#ffd9bd',170)}
+ <g transform="translate(110,186) scale(1.5)">${P.bed}</g>
+ ${at(74,164,.5,K('orange',{tail:false,eyes:'closed'}))}
+ <g style="animation:decke 3s ease-in-out infinite alternate"><path d="M70,150 q50,-24 120,0 v26 h-120 Z" fill="${VIO}"/><path d="M70,150 q50,-24 120,0" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/></g><style>@keyframes decke{from{transform:translateX(40px)}to{transform:translateX(0)}}</style>
+ ${arrow(150,110,96,110,RED,6,'glow')}
+ ${sh(30,192,24)}${at(30,190,.72,cat({eyes:'happy',armR:-96,armsFront:true}))}${T(64,112,'z z',14,VIO,'middle','zz')}`;
+
+S.quite=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <g opacity=".5">${at(40,184,.5,P.boxClosed(60,50))}</g>
+ <g class="pulse" style="transform-origin:130px 184px">${at(130,184,1,P.boxClosed(100,90))}</g>
+ <path d="M70,60 h120" stroke="#cbc2e6" stroke-width="6" stroke-linecap="round"/><path d="M70,60 h84" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><circle cx="154" cy="60" r="8" fill="${RED}" class="beat"/>
+ ${at(40,200,.5,cat({eyes:'wide',mouth:'o',armR:-140,armsFront:true}))}`;
+
+S.picture=`${room('#fff1c9','#e4b77a')}
+ <path d="M96,180 l24,-130 M164,180 l-24,-130 M130,180 v-110" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/>
+ <rect x="92" y="40" width="76" height="90" rx="3" fill="#fff" stroke="#b07a45" stroke-width="3"/><rect x="98" y="46" width="64" height="78" fill="#cdeeff"/><circle cx="146" cy="62" r="8" fill="${SUN}"/><path d="M98,110 q30,-18 64,0 v14 h-64 Z" fill="#8fe0a8"/><path d="M112,110 l10,-22 10,22 Z" fill="${RED}" class="draw"/>
+ ${sh(46,192,30)}${at(46,190,.86,cat({bow:false,hat:barett,mouth:'tongue',armR:-110,armRcls:'bob',armsFront:true,prop:`<path d="M0,2 l10,-22" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><path d="M10,-20 l3,-7" stroke="${RED}" stroke-width="5" stroke-linecap="round"/>`}))}`;
+
+S.clear=`${bg('#cdeeff')}${sun(160,30,12)}
+ <rect x="20" y="30" width="110" height="130" rx="8" fill="#eaf7ff" stroke="#fff" stroke-width="6"/><path d="M36,60 l20,-20 M40,90 l40,-40" stroke="#fff" stroke-width="5" stroke-linecap="round" class="glow"/>
+ <clipPath id="clr"><rect x="23" y="33" width="104" height="124"/></clipPath><g clip-path="url(#clr)">${at(76,190,.76,K('orange',{eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}</g>
+ ${floor(176,'#8fe0a8')}
+ ${at(160,196,.6,cat({eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}
+ ${spark(126,36,8,'#fff',0)}${spark(24,160,7,'#fff',.6)}`;
+
+S.practice=`${room('#ece6ff','#d6ccf5')}
+ <rect x="8" y="14" width="90" height="34" rx="8" fill="#fff"/>${[0,1,2,3,4].map(i=>`<g class="twinkle" style="animation-delay:${i*.25}s">${check(22+i*16,32,5,3)}</g>`).join('')}
+ ${note(150,50,RED,0)}${note(176,80,SKY,.7)}${note(130,90,VIO,1.2)}
+ ${sh(90,192,36)}${at(90,190,1,cat({eyes:'closed',mouth:'open',armL:40,armR:-50,armRcls:'bob',armsFront:true,mid:guitar}))}
+ <g class="spin" style="animation-duration:5s;transform-origin:166px 150px"><path d="M166,130 a20,20 0 1 1 -18,12" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path d="M148,142 l-2,-10 M148,142 l10,-2" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>`;
+
+S.piece=`${bg('#e3fbf5')}${floor(170,MINT)}<rect y="170" width="200" height="8" fill="#9be6d8"/>
+ <g opacity=".5"><ellipse cx="70" cy="150" rx="46" ry="12" fill="#fff"/><path d="M34,150 v-26 a36,10 0 0 1 72,0 v26 a36,10 0 0 1 -72,0" fill="#ffd98a"/><ellipse cx="70" cy="124" rx="36" ry="10" fill="#fff8e6"/><path d="M70,124 l30,-6 v30" fill="#e3fbf5"/></g>
+ <g class="hop"><g transform="translate(140,120)"><path d="M-22,10 l44,-12 v26 l-44,12 Z" fill="#ffd98a"/><path d="M-22,10 l44,-12 -30,-8 Z" fill="#fff8e6"/><path d="M-22,20 l44,-12" stroke="${RED}" stroke-width="4"/><circle cx="0" cy="-8" r="5" fill="${RED}"/></g></g>
+ ${ring(140,124,36,RED)}
+ ${at(170,200,.5,cat({eyes:'spark',mouth:'tongue',tail:false,armL:150,armsFront:true}))}`;
+
+S.land=`${bg('#cdeeff')}${sun(160,28,10)}${cloud(40,24,.7)}
+ <path d="M0,140 q50,-10 100,0 t100,0 v60 h-200 Z" fill="#5cc3ff"/><path class="ripple" d="M20,170 q10,-6 20,0 M150,180 q10,-6 20,0" fill="none" stroke="#fff" stroke-width="2"/>
+ <path d="M50,150 q50,-60 110,0 Z" fill="#f3d9a4"/><path d="M70,140 q30,-34 70,0 Z" fill="#8fe0a8"/>${tree(120,126,.9)}
+ <path d="M96,126 v-36" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M96,90 l22,7 -22,7 Z" fill="${RED}"/>
+ ${at(84,132,.36,cat({eyes:'happy',armR:-150,armsFront:true}))}
+ <g class="sway"><path d="M14,150 h30 l-6,10 h-18 Z" fill="#b07a45"/><path d="M28,150 v-22 l12,16 Z" fill="#fff"/></g>`;
+
+S.recent=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <rect x="20" y="20" width="160" height="60" rx="10" fill="#fff"/><rect x="20" y="20" width="160" height="14" rx="7" fill="${RED}"/>
+ ${[0,1,2,3,4].map(i=>`<rect x="${28+i*30}" y="42" width="24" height="30" rx="5" fill="${i==3?SUN:'#f4f1fb'}"/>`).join('')}${ring(130,57,20,RED)}<circle cx="160" cy="57" r="5" fill="${INK}"/>
+ ${arcArrow(160,90,130,90,-12,VIO,3,'')}
+ <g class="hop"><g transform="translate(140,180) scale(.5)">${P.gift(VIO,SUN)}</g></g>${spark(160,150,7,SUN,0)}${T(140,130,'new',14,RED,'middle','beat')}
+ ${sh(60,192,30)}${at(60,190,.84,cat({eyes:'happy',mouth:'open',armR:-96,armsFront:true}))}`;
+
+S.describe=`${park()}${cloud(160,24,.7)}
+ ${speech(70,44,110,60,`${fishAt(44,48,1.400,0)}${T(70,54,'big',11,INK)}<circle cx="96" cy="48" r="8" fill="${ORA}"/>${T(116,54,'orange',9,INK)}<path d="M30,66 h80" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>`,60,96)}
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'happy',mouth:'open',mouthCls:'chew',armL:120,armR:-120,armsFront:true}))}
+ ${sh(150,192,28)}${at(150,190,.76,K('grey',{eyes:'closed',headCls:'tilt'}))}
+ ${think(166,96,22,16,`${fishAt(166,104,1,0)}`,-1)}`;
+
+S.product=`${room('#fff1c9','#e4b77a')}
+ <rect x="20" y="40" width="160" height="8" rx="3" fill="#b07a45"/><rect x="20" y="100" width="160" height="8" rx="3" fill="#b07a45"/>
+ ${[36,70,104,138].map((x,i)=>`<rect x="${x}" y="64" width="22" height="36" rx="4" fill="${[SKY,MINT,SUN,VIO][i]}"/><rect x="${x+4}" y="74" width="14" height="10" fill="#fff"/>`).join('')}
+ <g class="hop"><rect x="150" y="118" width="30" height="48" rx="5" fill="${RED}"/><rect x="155" y="130" width="20" height="16" fill="#fff"/><g transform="translate(165,138) scale(.8)">${P.fish}</g></g>
+ <g class="twinkle">${star5(184,112,8,SUN)}</g>${T(165,186,'NEW',11,RED)}
+ ${sh(70,192,32)}${at(70,190,.88,cat({eyes:'spark',mouth:'o',armR:-110,armsFront:true}))}`;
+
+S.doctor=`${room('#e3fbf5','#bff0de')}
+ <g class="beat"><circle cx="160" cy="44" r="20" fill="#fff"/><path d="M160,32 v24 M148,44 h24" stroke="${RED}" stroke-width="7" stroke-linecap="round"/></g>
+ ${sh(80,192,36)}${at(80,190,1,cat({mid:kittel+`<path d="M-12,-50 q-6,20 6,26 M12,-50 q6,20 -6,26" fill="none" stroke="${INK}" stroke-width="2.500"/><circle cx="0" cy="-22" r="5" fill="#9aa8c0"/>`,hat:glasses,eyes:'happy',mouth:'open',armR:-110,armsFront:true,prop:`<rect x="-10" y="-22" width="20" height="26" rx="2" fill="#c98a4b"/><rect x="-7" y="-18" width="14" height="18" fill="#fff"/>`}))}
+ ${heart(150,110,.8,RED,0)}`;
+
+const ziegel=(x,y,w,h)=>Array.from({length:Math.floor(h/14)},(_,r)=>Array.from({length:Math.ceil(w/28)+1},(_,c)=>`<rect x="${x+c*28-(r%2?14:0)}" y="${y+r*14}" width="26" height="12" rx="2" fill="${ORA}"/>`).join('')).join('');
+S.wall=`${bg('#cdeeff')}${cloud(40,24,.7)}${floor(176,'#8fe0a8')}
+ <rect x="50" y="78" width="150" height="100" fill="#b5571a"/><clipPath id="wl"><rect x="50" y="78" width="150" height="100"/></clipPath><g clip-path="url(#wl)">${ziegel(50,80,150,98)}</g>
+ ${at(150,82,.4,K('orange',{eyes:'happy',armL:20,armR:-20}))}
+ ${arrow(30,60,46,90,RED,6,'float')}
+ ${at(30,196,.6,cat({eyes:'wide',headCls:'tilt',armR:-140,armsFront:true}))}`;
+
+S.patient=`${room('#e3fbf5','#bff0de',170)}
+ <g transform="translate(120,186) scale(1.5)">${P.bed}</g>
+ ${at(84,164,.56,cat({tail:false,mouth:'wavy',eyes:'open',hat:`<path d="M-30,-104 q30,-14 60,0 v10 h-60 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/>`}))}<path d="M92,150 q40,-22 100,0 v24 h-100 Z" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ <path d="M94,140 l16,-10" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>
+ ${ring(84,134,34,RED)}
+ ${at(30,192,.6,K('white',{mid:kittel,hat:glasses.replace(/#fff/g,INK),eyes:'happy',armR:-96,armsFront:true}))}
+ ${heart(150,100,.8,RED,0)}`;
+
+S.worker=`${park(170)}${cloud(150,24,.7)}
+ <path d="M130,186 l20,-40 20,40 Z" fill="${ORA}"/><path d="M140,170 h20" stroke="#fff" stroke-width="5"/>
+ <path d="M20,186 q20,-26 50,0 Z" fill="#b07a45"/>
+ ${sh(90,192,36)}${at(90,190,.98,cat({bow:false,hat:P.hatHard,eyes:'happy',mouth:'big',armR:-110,armRcls:'bob',armsFront:true,mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="${ORA}"/><path d="M-22,-34 h44 M-22,-22 h44" stroke="${SUN}" stroke-width="4"/>`,prop:`<path d="M0,4 v-40" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M-9,-36 h18 l-3,-16 h-12 Z" fill="#9aa8c0"/>`}))}
+ <path class="sweat" d="${tear(50,90)}" fill="${SKY}"/>`;
+
+S.news=`${room('#fff1c9','#e4b77a')}
+ <rect x="110" y="110" width="64" height="60" rx="14" fill="${RED}"/><rect x="104" y="124" width="14" height="50" rx="7" fill="#d93a33"/><rect x="166" y="124" width="14" height="50" rx="7" fill="#d93a33"/>
+ ${at(142,164,.66,cat({tail:false,eyes:'wide',mouth:'o',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-34)"><rect x="-34" y="-24" width="68" height="44" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${T(0,-10,'NEWS',12,INK)}<path d="M-26,-2 h22 M-26,6 h22 M-26,14 h22" stroke="#cbc2e6" stroke-width="2.500"/><rect x="4" y="-4" width="24" height="18" fill="${SKY}"/></g>`}))}
+ <g class="beat"><circle cx="50" cy="50" r="22" fill="${SUN}"/>${T(50,60,'!',28,RED)}</g>
+ ${at(46,196,.46,K('orange',{eyes:'wide',headCls:'tilt'}))}`;
+
+S.test=`${bg('#e6f1ff')}${floor(150,'#c98a4b')}<rect y="150" width="200" height="8" fill="#e0a868"/>
+ <g transform="rotate(-5 130 90)"><rect x="92" y="34" width="84" height="110" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ ${[0,1,2,3].map(i=>`<rect x="100" y="${48+i*22}" width="12" height="12" rx="2" fill="none" stroke="${INK}" stroke-width="2"/><path d="M118,${54+i*22} h48" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>${i<3?`<g class="twinkle" style="animation-delay:${i*.3}s">${check(106,54+i*22,4,2.500)}</g>`:''}`).join('')}
+ <g class="beat">${T(160,48,'A+',16,RED)}</g></g>
+ ${at(50,196,.76,cat({hat:glasses,mouth:'tongue',tail:false,armR:-84,armRcls:'bob',prop:`<path d="M0,2 l12,-16" stroke="${SUN}" stroke-width="4" stroke-linecap="round"/>`}))}
+ <g class="ring">${at(176,180,.3,P.clock(28,60))}</g>`;
+
+S.movie=`${bg('#2d2a6e')}
+ <rect x="20" y="14" width="160" height="96" rx="6" fill="#fff"/><rect x="26" y="20" width="148" height="84" fill="#cdeeff"/><path d="M26,90 q74,-20 148,0 v14 h-148 Z" fill="#8fe0a8"/>
+ <clipPath id="mv"><rect x="26" y="20" width="148" height="84"/></clipPath><g clip-path="url(#mv)"><g class="road" style="animation-duration:3s;animation-direction:reverse"><g transform="translate(60,98) scale(-.34,.34)">${K('orange',{feet:'run',mid:`<path d="M-20,-52 q-30,10 -50,-6 q20,26 50,22 Z" fill="${RED}"/>`})}</g></g></g>
+ <path d="M0,150 h200 v50 h-200 Z" fill="#1f1b4d"/>
+ ${at(70,196,.6,cat(Object.assign({eyes:'spark',tail:false,armR:-70,prop:`<g transform="translate(2,4)"><path d="M-10,-14 h20 l-4,22 h-12 Z" fill="${RED}"/><path d="M-6,-14 v22 M2,-14 v22" stroke="#fff" stroke-width="2"/><circle cx="-6" cy="-18" r="5" fill="#fff8e6"/><circle cx="2" cy="-21" r="5" fill="#fff8e6"/><circle cx="8" cy="-17" r="5" fill="#fff8e6"/></g>`},NL)))}
+ ${at(130,196,.56,K('grey',{eyes:'wide',tail:false}))}`;
+
+S.certain=`${bg('#e3fbf5')}<circle cx="100" cy="100" r="80" fill="#fff" opacity=".6"/>${floor(184,'#bff0de')}
+ <g class="beat"><circle cx="150" cy="50" r="26" fill="${MINT}"/><path d="M138,50 l9,9 16,-18" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g>
+ ${T(40,60,'100%',20,RED,'middle','glow')}
+ ${sh(90,192,36)}${at(90,190,1,cat({eyes:'happy',mouth:'w',armL:-150,armR:150,armsFront:true,hat:`<path d="M-22,-84 l10,-4 M22,-84 l-10,-4" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`}))}`;
+
+const kompass=(hl)=>`<circle cx="100" cy="96" r="64" fill="#fff" stroke="#b07a45" stroke-width="6"/>${[['N',100,52],['E',146,102],['S',100,150],['W',54,102]].map(([l,x,y])=>T(x,y,l,hl==l?22:14,hl==l?RED:'#b9b0d6')).join('')}`;
+S.north=`${bg('#cdeeff')}${kompass('N')}
+ <g class="wiggle" style="transform-origin:100px 96px"><path d="M100,60 l10,36 h-20 Z" fill="${RED}"/><path d="M100,132 l10,-36 h-20 Z" fill="#9aa8c0"/></g><circle cx="100" cy="96" r="5" fill="${INK}"/>
+ ${arrow(100,26,100,6,RED,6,'glow')}
+ ${floor(184,'#8fe0a8')}${at(34,200,.5,cat({eyes:'happy',armR:-150,armsFront:true}))}
+ <g transform="translate(170,186) scale(.5)"><circle cx="0" cy="-10" r="16" fill="#fff"/><circle cx="0" cy="-32" r="11" fill="#fff"/><circle cx="-4" cy="-34" r="1.600" fill="${INK}"/><circle cx="4" cy="-34" r="1.600" fill="${INK}"/></g>`;
+
+/* Tag 107–110: personal, bank, west, sport, board · seek, per, subject, officer, private · rest, behavior, deal, performance, fight · top, quickly, past, goal, order */
+S.personal=`${room('#ece6ff','#d6ccf5')}
+ <rect x="100" y="40" width="80" height="100" rx="6" fill="${RED}"/><rect x="100" y="40" width="14" height="100" rx="4" fill="#b52f29"/><rect x="124" y="60" width="44" height="26" rx="4" fill="#fff"/>${T(146,78,'My',14,INK)}
+ <rect x="170" y="80" width="18" height="18" rx="4" fill="${SUN}"/><circle cx="179" cy="89" r="3" fill="${INK}"/>
+ <g transform="translate(140,116) scale(.9)">${heartS(0,0,1,'#fff','beat')}</g>
+ ${sh(50,192,30)}${at(50,190,.88,cat({eyes:'happy',headCls:'tilt',armL:-40,armR:40,armsFront:true}))}
+ ${arcArrow(70,110,100,90,-14,VIO,3,'5 6')}`;
+
+S.bank=`${bg('#cdeeff')}${cloud(30,24,.7)}${sun(170,26,9)}
+ <path d="M30,80 L100,40 L170,80 Z" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="2"/>${coin(100,64,9)}
+ <rect x="34" y="80" width="132" height="14" fill="#dfe6f2"/>${T(100,92,'BANK',11,INK)}${[48,76,116,144].map(x=>`<rect x="${x}" y="96" width="10" height="60" rx="3" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="1.600"/>`).join('')}
+ <rect x="90" y="116" width="22" height="40" rx="3" fill="#b07a45"/><rect x="26" y="156" width="148" height="10" fill="#dfe6f2"/><rect x="18" y="166" width="164" height="10" fill="#cfd8e6"/>${floor(176,'#8fe0a8')}
+ ${at(50,198,.5,cat({eyes:'happy',armR:-92,prop:`<g transform="translate(2,6)"><path d="M-10,0 q0,-16 10,-16 q10,0 10,16 q0,8 -10,8 q-10,0 -10,-8 Z" fill="#c98a4b"/><path d="M-4,-16 h8" stroke="#8a5a30" stroke-width="3"/>${coin(0,-2,4)}</g>`}))}
+ ${arrow(74,170,90,160,RED,4,'glow')}`;
+
+S.west=`${bg('#ffd9a8')}${kompass('W')}
+ <g class="wiggle" style="transform-origin:100px 96px"><path d="M64,96 l36,-10 v20 Z" fill="${RED}"/><path d="M136,96 l-36,-10 v20 Z" fill="#9aa8c0"/></g><circle cx="100" cy="96" r="5" fill="${INK}"/>
+ ${arrow(30,96,8,96,RED,6,'glow')}
+ <path d="M0,184 h200 v16 h-200 Z" fill="#e0a868"/><circle cx="20" cy="184" r="16" fill="${ORA}"/>
+ ${at(166,200,.5,cat({eyes:'happy',armL:150,armsFront:true}))}`;
+
+S.sport=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g class="float"><g transform="translate(40,50) scale(1.3)">${P.ball('#fff',INK)}</g></g><g class="float" style="animation-delay:.4s"><g transform="translate(100,36) scale(1.3)">${bball}</g></g><g class="float" style="animation-delay:.8s"><circle cx="160" cy="50" r="12" fill="${SUN}"/><path d="M150,46 q10,8 20,0 M150,56 q10,-8 20,0" fill="none" stroke="#fff" stroke-width="2"/></g>
+ ${sh(100,192,36)}${at(100,190,.96,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true,mid:trikot(RED),hat:`<rect x="-30" y="-86" width="60" height="10" rx="3" fill="${SKY}"/>`}),'hop')}
+ <g transform="translate(30,170) scale(.8)">${hantel}</g><path class="sweat" d="${tear(150,110)}" fill="${SKY}"/>`;
+
+S.board=`${room('#fff1c9','#e4b77a')}
+ <rect x="40" y="16" width="150" height="100" rx="6" fill="#c98a4b" stroke="#8a5a30" stroke-width="5"/>
+ <rect x="52" y="28" width="40" height="34" fill="${SUN}" transform="rotate(-4 72 45)"/><rect x="104" y="30" width="36" height="30" fill="#fff" transform="rotate(5 122 45)"/><rect x="150" y="34" width="30" height="40" fill="${MINT}"/><rect x="60" y="72" width="50" height="34" fill="#bfe9ff" transform="rotate(3 85 89)"/><rect x="122" y="76" width="22" height="24" fill="#fff"/>
+ ${[[72,30],[122,32],[165,36],[85,74],[133,78]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.500" fill="${RED}"/>`).join('')}
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'happy',armR:-140,armRcls:'bob',armsFront:true,prop:`<rect x="-8" y="-20" width="16" height="16" fill="${VIO}"/>`}))}`;
+
+S.seek=`${park()}${cloud(150,24,.7)}
+ <ellipse cx="150" cy="170" rx="34" ry="26" fill="#3aa568"/><ellipse cx="170" cy="160" rx="22" ry="20" fill="#4fc27f"/><ellipse cx="130" cy="160" rx="20" ry="18" fill="#4fc27f"/>
+ <g class="peek"><path d="M142,146 l4,-12 6,10 M162,146 l-4,-12 -6,10" fill="${ORA}"/></g>
+ <path d="M60,150 q10,6 0,12 M76,160 q10,6 0,12" fill="none" stroke="#b07a45" stroke-width="3" opacity=".6"/>
+ ${T(100,60,'?',34,RED,'middle','beat')}
+ ${sh(50,192,30)}${at(50,190,.88,cat({eyes:'wide',armR:-100,armRcls:'bob',prop:`<g transform="translate(6,10) rotate(-60)">${lupe}</g>`,feet:'walk'}))}`;
+
+S.per=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${[['orange',36],[null,100],['grey',164]].map(([n,x],i)=>`${at(x,180,.56,n?K(n,{eyes:'happy',tail:false}):cat({eyes:'happy',tail:false}))}<g class="hop" style="animation-delay:${i*.25}s">${fishAt(x,60,1.800,0)}</g><path d="M${x},80 v20" stroke="${RED}" stroke-width="3" stroke-dasharray="4 5"/>${T(x,196,'1',14,RED)}`).join('')}`;
+
+S.subject=`${room('#e6f1ff','#cfe3f7')}
+ ${[[36,RED,'A'],[100,SKY,'+'],[164,MINT,'♪']].map(([x,c,l],i)=>`<g class="float" style="animation-delay:${i*.4}s"><rect x="${x-24}" y="30" width="48" height="62" rx="5" fill="${c}"/><rect x="${x-24}" y="30" width="8" height="62" rx="3" fill="#0002"/>${T(x+3,70,l,24,'#fff')}</g>`).join('')}
+ ${ring(100,61,38,SUN)}
+ ${sh(100,192,32)}${at(100,190,.84,cat({hat:glasses,eyes:'happy',armR:-150,armsFront:true,mid:backpack}))}`;
+
+S.officer=`${park(166)}${floor(172,'#6b7a99')}
+ ${sh(100,192,36)}${at(100,190,1,K('orange',{hat:polcap,eyes:'happy',mouth:'open',armR:-140,armsFront:true,mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="#2f6fd0"/>${star5(-10,-32,5,SUN)}<path d="M-22,-18 h44" stroke="${INK}" stroke-width="4"/>`}))}
+ ${ring(88,150,10,SUN)}
+ ${at(170,196,.4,cat({eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}${heart(160,130,.6,RED,0)}`;
+
+S.private=`${room('#ffe9d6','#ffd9bd')}
+ <rect x="100" y="30" width="80" height="150" rx="6" fill="#b07a45"/><rect x="108" y="38" width="64" height="134" rx="3" fill="#c98a4b"/><circle cx="116" cy="110" r="5" fill="${SUN}"/>
+ <g class="sway" style="transform-origin:140px 60px"><path d="M140,60 l-14,14 M140,60 l14,14" stroke="${INK}" stroke-width="1.500"/><rect x="116" y="74" width="48" height="28" rx="4" fill="#fff" stroke="${RED}" stroke-width="3"/>${T(140,93,'Private',10,RED)}</g>
+ <g class="beat"><rect x="130" y="130" width="22" height="18" rx="3" fill="${SUN}"/><path d="M135,130 v-6 a6,6 0 0 1 12,0 v6" fill="none" stroke="#e0a83a" stroke-width="3"/></g>
+ ${at(46,192,.84,K('orange',{eyes:'wide',headCls:'tilt',armR:-110,armsFront:true}))}`;
+
+S.rest=`${park(160)}${sun(160,30,10)}
+ <path d="M30,180 V90 M170,180 V100" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/>${tree(30,96,1.200)}${tree(170,106,1)}
+ <g class="sway" style="transform-origin:100px 100px"><path d="M30,110 q70,70 140,0" fill="${RED}"/><path d="M30,110 q70,70 140,0" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 8"/>
+ <g transform="translate(100,140) rotate(-4)"><g transform="scale(.6)">${cat({eyes:'closed',mouth:'w',tail:false,armL:140,armR:-140,armsFront:true})}</g></g><path d="M48,128 q52,44 104,0 q-52,56 -104,0 Z" fill="#d93a33"/></g>
+ ${T(140,70,'z z',16,VIO,'middle','zz')}`;
+
+S.behavior=`${room('#fff1c9','#e4b77a')}
+ ${panel(10,20,84,110)}${panel(106,20,84,110)}
+ ${at(52,120,.46,K('orange',{eyes:'happy',tail:false,armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-18) scale(.8)">${P.gift(VIO,SUN)}</g>`}))}<g class="beat">${check(80,36,6,4)}</g>
+ ${at(148,120,.46,K('grey',{mouth:'tongue',tail:false,armR:-100,armsFront:true}))}<g transform="translate(176,112) rotate(70) scale(.6)">${P.cup(SKY)}</g>${cross(176,36,5,4)}
+ ${at(100,200,.5,cat({hat:glasses,headCls:'tilt',armR:-110,armsFront:true}))}`;
+
+S.deal=`${room('#e3fbf5','#bff0de')}
+ ${sh(56,192,30)}${at(56,190,.86,cat({eyes:'happy',mouth:'open',mid:tie,armR:-80,armL:30,propL:`<g transform="translate(0,8)">${fishAt(0,0,1.200,0)}</g>`}))}
+ ${sh(144,192,30)}${at(144,190,.86,K('orange',{eyes:'happy',mouth:'open',mid:tie,armL:80,armR:-30,prop:`<g transform="translate(0,8)">${P.ball(RED)}</g>`}))}
+ <circle cx="100" cy="150" r="8" fill="${INK}"/><circle cx="100" cy="150" r="5" fill="${ORA}"/>
+ <g class="beat">${check(100,60,12,7)}</g>${arcArrow(60,110,140,110,24,VIO,3,'5 6')}${arcArrow(140,120,60,120,-24,VIO,3,'5 6')}`;
+
+S.performance=`${bg('#3b2a4a')}<path d="M100,-10 L30,186 h140 Z" fill="#fff6c8" opacity=".22"/>${floor(176,'#8a5a30')}
+ <path d="M0,0 h30 q-6,90 0,176 h-30 Z M200,0 h-30 q6,90 0,176 h30 Z" fill="${RED}"/>
+ ${at(100,180,.92,cat(Object.assign({eyes:'closed',mouth:'big',armL:150,armR:-150,armsFront:true,mid:`<path d="M-26,-14 q26,22 52,0 l6,14 q-32,20 -64,0 Z" fill="${VIO}"/>`},NL)),'dance')}
+ ${note(50,70,SUN,0)}${note(150,60,MINT,.7)}
+ <g class="rise">${flower(60,190,RED,0)}</g>${spark(40,120,7,SUN,0)}${spark(160,120,7,SUN,.5)}
+ ${[70,100,130].map((x,i)=>`<g class="twinkle" style="animation-delay:${i*.2}s">${star5(x,24,7,SUN)}</g>`).join('')}`;
+
+const polster=(x,y,r,c)=>`<g transform="translate(${x},${y}) rotate(${r})"><rect x="-18" y="-13" width="36" height="26" rx="8" fill="${c}"/><path d="M-10,-5 h20 M-10,3 h20" stroke="#fff" stroke-width="2" opacity=".6"/></g>`;
+S.fight=`${room('#ffe9d6','#ffd9bd')}
+ ${sh(54,192,30)}${at(54,190,.86,cat({eyes:'happy',mouth:'big',armR:-130,armRcls:'throwarm',armsFront:true,prop:polster(0,-20,20,SKY)}))}
+ ${sh(146,192,30)}${at(146,190,.86,K('orange',{eyes:'happy',mouth:'big',armL:130,armLcls:'throwarm',armsFront:true,propL:polster(0,-20,-20,SUN)}))}
+ ${burst(100,90,VIO,0)}
+ ${[[80,60],[110,50],[124,76],[90,110]].map(([x,y],i)=>`<path class="snow" style="animation-delay:${-i*.8}s;animation-duration:4s" d="M${x},${y} q6,-8 12,0 q-6,4 -12,0 Z" fill="#fff"/>`).join('')}
+ ${T(100,40,'ha ha',14,RED,'middle','beat')}`;
+
+S.top=`${bg('#cdeeff')}${cloud(30,60,.7)}${cloud(170,90,.6)}${sun(170,26,9)}
+ <path d="M10,200 L100,50 L190,200 Z" fill="#9aa8c0"/><path d="M100,50 l-22,37 14,-8 10,12 12,-14 10,8 Z" fill="#fff"/>
+ <path d="M100,50 v-34" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M100,16 l24,8 -24,8 Z" fill="${RED}"/>
+ ${at(100,62,.4,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}),'hop')}
+ ${ring(100,40,30,SUN)}${arrow(40,180,76,110,RED,5,'glow')}`;
+
+S.quickly=`${park(160)}${floor(172,'#e0875a')}<path d="M0,186 h200" stroke="#fff" stroke-width="2" opacity=".7"/>
+ <path d="M10,100 h60 M0,120 h70 M14,140 h50" stroke="#fff" stroke-width="5" stroke-linecap="round" class="glow"/>
+ <circle class="puff" cx="50" cy="176" r="8" fill="#fff"/><circle class="puff" style="animation-delay:.3s" cx="30" cy="180" r="6" fill="#fff"/>
+ <g transform="translate(120,184) rotate(10) scale(-.86,.86)"><g class="runbob" style="animation-duration:.3s">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'closed',mouth:'big'})}</g></g>
+ <g class="beat">${blitz(170,50,1.4,SUN)}</g>`;
+
+S.past=`${room('#ece6ff','#d6ccf5')}
+ <rect x="16" y="20" width="84" height="96" rx="4" fill="#f3d9a4" stroke="#b07a45" stroke-width="5"/><g transform="translate(58,108) scale(.4)">${cat({eyes:'happy',tail:false,fur:'#7a6a5a',out:'#5a4a3a',hat:`<circle cx="0" cy="-124" r="9" fill="#e4c58a"/>`})}</g>${T(58,34,'baby',9,'#8a5a30')}
+ <g class="ring">${at(150,60,.56,P.clock(34,210))}</g>
+ <g class="glow"><path d="M178,96 q-28,26 -56,0" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path d="M122,96 l12,-2 M122,96 l3,12" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>
+ ${sh(130,192,32)}${at(130,190,.88,cat({eyes:'closed',headCls:'tilt',armR:-60}))}
+ ${think(170,130,0,0,'',-1).slice(0,0)}`;
+
+S.goal=`${bg('#8fe0a8')}<rect width="200" height="60" fill="#cdeeff"/>
+ <path d="M40,150 V40 h120 v110" fill="none" stroke="#fff" stroke-width="6"/><path d="M40,60 h120 M40,80 h120 M40,100 h120 M40,120 h120 M40,140 h120 M60,40 v110 M80,40 v110 M100,40 v110 M120,40 v110 M140,40 v110" stroke="#fff" stroke-width="1" opacity=".7"/>
+ <g class="shoot"><g transform="translate(100,170)">${P.ball('#fff',INK)}</g></g>
+ ${T(100,30,'GOAL!',22,RED,'middle','beat')}
+ ${at(36,196,.6,cat({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true,mid:trikot(RED)}),'hop')}
+ ${at(150,150,.4,K('grey',{eyes:'wide',mouth:'o',armL:140,armR:-140,armsFront:true}))}`;
+
+S.order=`${room('#fff1c9','#e4b77a')}
+ ${at(130,186,1.1,P.table(110))}
+ ${at(130,150,.5,K('orange',{eyes:'happy',mouth:'open',tail:false,armR:-150,armsFront:true}))}<path d="M70,124 h120 v12 h-120 Z" fill="#c98a4b"/>
+ ${speech(150,40,60,40,`${fishAt(138,48,1.200,0)}${T(162,54,'×2',14,RED)}`,146,74)}
+ ${sh(40,192,28)}${at(40,190,.82,cat({eyes:'happy',mid:tie,armR:-84,armRcls:'bob',armL:-30,armsFront:true,prop:`<path d="M0,2 l8,-12" stroke="${SUN}" stroke-width="3" stroke-linecap="round"/>`,mid:`<g transform="translate(-2,-24)"><rect x="-12" y="-12" width="24" height="26" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/><path d="M-7,-5 h14 M-7,1 h14 M-7,7 h9" stroke="${INK}" stroke-width="1.500"/></g>`}))}`;
+
+/* Tag 111–114: author, fill, represent, focus, foreign · drop, blood, upon, agency, push · nature, color, recently, store, reduce · sound, note, fine, near, movement */
+const papel=(y,x0,x1)=>`<path d="M${x0},${y} q${(x1-x0)/2},16 ${x1-x0},0" fill="none" stroke="#b07a45" stroke-width="1.500"/>${[0,1,2,3,4,5].map(i=>{const n=6,x=x0+(i+.5)*(x1-x0)/n,yy=y+16*(1-Math.pow((i+.5)/n*2-1,2))*.5;return `<g class="sway" style="transform-origin:${x}px ${yy}px;animation-delay:${i*.2}s"><rect x="${x-9}" y="${yy}" width="18" height="16" fill="${[RED,SUN,MINT,SKY,VIO,ORA][i]}"/><circle cx="${x}" cy="${yy+7}" r="3" fill="#fff" opacity=".7"/><path d="M${x-9},${yy+16} l3,-4 3,4 3,-4 3,4 3,-4 3,4" fill="#fff8e6"/></g>`}).join('')}`;
+const kaktus=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="-22" rx="13" ry="22" fill="#4fc27f"/><ellipse cx="-17" cy="-34" rx="8" ry="12" fill="#6fd08f"/><ellipse cx="16" cy="-42" rx="8" ry="11" fill="#6fd08f"/><circle cx="16" cy="-55" r="4" fill="${RED}"/><path d="M-5,-30 v0 M5,-18 v0 M0,-10 v0 M-3,-40 v0" stroke="#fff" stroke-width="2.500" stroke-linecap="round"/></g>`;
+const taco=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><path d="M-16,4 a16,16 0 0 1 32,0 Z" fill="#3aa568"/><circle cx="-6" cy="-6" r="4" fill="${RED}"/><circle cx="5" cy="-8" r="4" fill="${RED}"/><path d="M-18,6 a18,17 0 0 1 36,0 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="1.500" transform="translate(0,3)"/></g>`;
+const sombrero=`<ellipse cx="0" cy="-98" rx="50" ry="10" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><path d="M-20,-100 q4,-40 20,-40 q16,0 20,40 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><path d="M-19,-106 h38" stroke="${RED}" stroke-width="5"/><path d="M-44,-98 q44,10 88,0" fill="none" stroke="${MINT}" stroke-width="2.500" stroke-dasharray="4 4"/>`;
+
+S.author=`${room('#fff1c9','#e4b77a')}
+ ${at(120,186,1.1,P.table(110))}<path d="M60,124 h120 v12 h-120 Z" fill="#c98a4b"/>
+ <rect x="130" y="94" width="40" height="30" rx="3" fill="${RED}"/><rect x="130" y="94" width="7" height="30" fill="#b52f29"/>${T(153,114,'by me',8,'#fff')}<g class="twinkle">${star5(176,88,7,SUN)}</g>
+ <rect x="82" y="108" width="36" height="16" fill="#fff" stroke="#cbc2e6" stroke-width="1.500" transform="rotate(-6 100 116)"/><path class="draw" d="M88,114 q6,-6 12,0 t12,0" fill="none" stroke="${INK}" stroke-width="1.800"/>
+ ${at(44,192,.8,cat({hat:glasses,mouth:'tongue',armR:-84,armRcls:'bob',armsFront:true,prop:`<path d="M0,2 l14,-18" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><path d="M14,-16 q8,-14 14,-18 q-2,12 -10,20 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1"/>`}))}`;
+
+S.fill=`${bg('#e3fbf5')}${floor(170,MINT)}<rect y="170" width="200" height="8" fill="#9be6d8"/>
+ <path d="M110,90 h60 l-6,80 h-48 Z" fill="#fff" opacity=".7" stroke="#cbc2e6" stroke-width="3"/>
+ <clipPath id="fl"><path d="M110,90 h60 l-6,80 h-48 Z"/></clipPath><g clip-path="url(#fl)"><rect x="100" y="90" width="80" height="84" fill="${SKY}" style="transform-origin:140px 170px;transform-box:view-box;animation:fuell 3s ease-in-out infinite alternate"/></g><style>@keyframes fuell{from{transform:scaleY(.15)}to{transform:scaleY(.9)}}</style>
+ <path class="drip" d="${tear(140,62)}" fill="${SKY}"/><path d="M134,44 q6,10 6,40" fill="none" stroke="${SKY}" stroke-width="5" stroke-linecap="round" class="glow"/>
+ ${at(50,192,.86,cat({eyes:'happy',mouth:'tongue',armR:-124,armsFront:true,prop:`<g transform="rotate(50)"><path d="M-12,-22 h24 l-3,24 h-18 Z" fill="${RED}"/><path d="M12,-18 q10,0 8,10" fill="none" stroke="${RED}" stroke-width="4"/></g>`}))}`;
+
+S.represent=`${park()}${burst(170,30,SUN,0)}
+ <g opacity=".6">${at(24,190,.4,K('grey',{eyes:'happy'}))}${at(56,192,.4,K('cream',{eyes:'happy'}))}${at(40,172,.36,K('white',{eyes:'happy'}))}</g>
+ ${arrow(74,150,96,150,VIO,5,'glow')}
+ ${sh(136,192,34)}${at(136,190,.94,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true,mid:`<path d="M-24,-50 L22,-6 l6,-8 L-18,-56 Z" fill="${SUN}"/>`,prop:`<path d="M0,4 v-50" stroke="#b07a45" stroke-width="3"/><g transform="translate(0,-46)"><rect x="1" y="0" width="9" height="20" fill="#1f9c5a"/><rect x="10" y="0" width="9" height="20" fill="#fff"/><circle cx="14.500" cy="10" r="2.500" fill="#b07a45"/><rect x="19" y="0" width="9" height="20" fill="${RED}"/></g>`}))}`;
+
+S.focus=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g opacity=".25">${bfly(30,50,ORA,0)}${note(170,50,SKY,0)}<g transform="translate(170,150)">${P.ball(RED)}</g></g>
+ <circle cx="140" cy="100" r="34" fill="#fff"/><circle cx="140" cy="100" r="24" fill="${RED}"/><circle cx="140" cy="100" r="14" fill="#fff"/><circle cx="140" cy="100" r="6" fill="${RED}" class="beat"/>
+ <path d="M84,96 L112,100" stroke="${SUN}" stroke-width="3" stroke-dasharray="4 5" class="glow"/>
+ ${sh(54,192,32)}${at(54,190,.92,cat({eyes:'open',mouth:'wavy',headCls:'',hat:`<path d="M-24,-86 l14,5 M24,-86 l-14,5" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`,armR:-90,armsFront:true}))}`;
+
+S.foreign=`${park(170)}${cloud(40,24,.7)}
+ <g class="float"><path d="M120,40 l40,-8 6,6 -30,12 -4,12 -6,-10 -10,2 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>
+ ${sh(60,192,30)}${at(60,190,.84,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true,hat:sombrero}))}
+ ${sh(146,192,30)}${at(146,190,.84,K('white',{eyes:'happy',mouth:'open',armL:125,armLcls:'wave',armsFront:true,hat:barett,prop:`<g transform="translate(0,22)">${koffer}</g>`}))}
+ ${speech(150,70,44,26,T(150,78,'Bonjour!',9,SKY),146,96)}${T(100,110,'?',22,VIO,'middle','beat')}`;
+
+S.drop=`${room('#fff1c9','#e4b77a')}
+ <g transform="translate(140,110)"><g style="animation:fallen 1.600s ease-in infinite"><g transform="scale(1.3)">${P.cup(SKY)}</g></g></g><style>@keyframes fallen{0%,15%{transform:translateY(-40px) rotate(0)}80%,100%{transform:translateY(60px) rotate(50deg)}}</style>
+ <path d="M140,60 v20 M130,66 v14 M150,66 v14" stroke="${VIO}" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 5"/>
+ <ellipse cx="140" cy="182" rx="26" ry="5" fill="#bfe9ff"/>
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'wide',mouth:'o',armR:-110,armsFront:true}))}${T(100,50,'oops!',15,RED,'middle','beat')}`;
+
+S.blood=`${room('#e3fbf5','#bff0de')}
+ <g class="beat"><path d="M150,30 q-22,30 0,44 q22,-14 0,-44 Z" fill="${RED}"/><path d="M144,56 q2,8 8,8" fill="none" stroke="#fff" stroke-width="2.500" stroke-linecap="round"/></g>
+ ${sh(70,192,34)}${at(70,190,.94,cat({eyes:'happy',mouth:'wavy',armR:-110,armsFront:true,prop:`<g transform="translate(0,-6) rotate(-30)"><rect x="-12" y="-5" width="24" height="10" rx="5" fill="#f3d9a4"/><rect x="-4" y="-5" width="8" height="10" fill="#fff8e6"/></g>`}))}
+ ${ring(108,110,18,RED)}
+ ${at(160,194,.5,K('white',{mid:kittel,eyes:'happy',armL:110,armsFront:true}))}${heart(150,120,.7,RED,0)}`;
+
+S.upon=`${bg('#fff1c9')}${floor(180,'#ffe08a')}${sh(110,188,52)}
+ ${at(110,186,1,P.boxClosed(96,74))}
+ ${at(110,114,.7,cat({eyes:'happy',armL:20,armR:-20}))}
+ ${arrow(40,50,70,84,RED,6,'float')}<path d="M62,112 h96" stroke="${RED}" stroke-width="4" stroke-dasharray="6 6" class="glow"/>`;
+
+S.agency=`${bg('#cdeeff')}${cloud(30,24,.7)}${floor(176,'#8fe0a8')}
+ <rect x="40" y="60" width="120" height="116" rx="4" fill="#fff8e6"/><rect x="34" y="50" width="132" height="20" rx="4" fill="${SKY}"/>${T(100,65,'TRAVEL',12,'#fff')}
+ <rect x="52" y="84" width="44" height="50" rx="3" fill="#bfe9ff"/><g transform="translate(74,122) scale(.36)">${cat({tail:false,mid:tie,eyes:'happy'})}</g>
+ <rect x="108" y="84" width="40" height="28" rx="3" fill="${SUN}"/><path d="M114,104 l10,-12 8,8 6,-6 6,10 Z" fill="#fff"/><rect x="112" y="124" width="32" height="52" rx="3" fill="#b07a45"/>
+ ${at(170,198,.44,K('orange',{eyes:'happy',prop:`<g transform="translate(0,22)">${koffer}</g>`,armR:-20}))}
+ <g class="float"><path d="M10,30 l26,-5 4,4 -20,8 -3,8 -4,-7 -6,1 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.200"/></g>`;
+
+S.push=`${room('#e3fbf5','#bff0de')}
+ <g class="road" style="animation-direction:reverse"><path d="M-40,192 h320" stroke="#9fe6d2" stroke-width="4" stroke-dasharray="10 30" stroke-linecap="round"/></g>
+ <g class="walkbob">${at(140,186,1,P.boxClosed(84,80))}</g>
+ <g transform="translate(60,190) rotate(12)"><g class="walkbob"><g transform="scale(-.86,.86)">${cat({eyes:'closed',mouth:'big',armL:-90,armR:-90,armsFront:true,feet:'walk'})}</g></g></g>
+ <path class="sweat" d="${tear(30,100)}" fill="${SKY}"/>${arrow(120,60,170,60,RED,7,'glow')}`;
+
+S.nature=`${bg('#cdeeff')}${sun(160,28,10)}${cloud(40,24,.7)}
+ <path d="M0,130 l40,-56 30,34 30,-50 44,60 56,-30 v42 Z" fill="#b9a0d6"/><path d="M100,58 l-12,20 8,-4 6,6 8,-8 Z" fill="#fff"/>
+ ${hills('#8fe0a8','#6fd08f',150)}<path d="M120,200 q-10,-30 20,-50 q10,-8 60,-6 v56 Z" fill="#5cc3ff"/>
+ ${kaktus(40,176,1)}${tree(84,170,1)}${flower(100,190,RED,0)}${flower(20,192,SUN,.5)}${bfly(130,110,ORA,0)}
+ ${at(160,150,.4,cat({eyes:'closed',headCls:'tilt',armL:140,armR:-140,armsFront:true}))}`;
+
+S.color=`${room('#fff8e6','#e4b77a')}${papel(14,6,194)}
+ <path d="M70,96 q-30,10 -24,44 q10,36 60,30 q50,-8 44,-44 q-8,-40 -50,-34 q-20,2 -10,16 q6,10 -20,-12 Z" fill="#e4c58a" stroke="#b07a45" stroke-width="3"/>
+ ${[[70,130,RED],[90,152,SUN],[118,154,MINT],[138,134,SKY],[124,108,VIO]].map(([x,y,c],i)=>`<circle class="pulse" style="transform-origin:${x}px ${y}px;animation-delay:${i*.2}s" cx="${x}" cy="${y}" r="10" fill="${c}"/>`).join('')}
+ ${at(170,198,.5,cat({bow:false,hat:barett,eyes:'happy',mouth:'tongue',armL:150,armsFront:true}))}`;
+
+S.recently=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <g class="ring">${at(50,56,.7,P.clock(34,30))}</g><path d="M50,56 L50,34 A22,22 0 0 1 68,44 Z" fill="${RED}" opacity=".5"/>
+ ${T(50,112,'5 min',13,RED)}
+ <g transform="translate(150,184) scale(1.4)">${P.gift(VIO,SUN)}</g>${spark(176,130,8,SUN,0)}${spark(124,140,6,SUN,.5)}
+ ${arcArrow(80,60,140,130,-20,VIO,3,'5 6')}
+ ${sh(90,192,28)}${at(90,190,.76,cat({eyes:'happy',mouth:'open',armR:-100,armsFront:true}))}`;
+
+S.store=`${bg('#cdeeff')}${cloud(30,22,.6)}${floor(178,'#e4b77a')}
+ <rect x="24" y="70" width="152" height="108" rx="4" fill="#fff8e6"/><path d="M16,70 h168 l-10,-26 h-148 Z" fill="${RED}"/><path d="M44,44 v26 M72,44 v26 M100,44 v26 M128,44 v26 M156,44 v26" stroke="#fff" stroke-width="6"/>
+ <rect x="50" y="26" width="100" height="18" rx="4" fill="${SUN}"/>${T(100,40,'TIENDA',12,INK)}
+ ${papel(74,26,174)}
+ <rect x="36" y="100" width="60" height="44" rx="3" fill="#bfe9ff"/>${taco(52,134,.7)}<g transform="translate(78,132) scale(.6)">${P.cup(SKY)}</g><rect x="112" y="104" width="44" height="74" rx="3" fill="#b07a45"/><circle cx="148" cy="142" r="3" fill="${SUN}"/>
+ ${at(180,198,.44,cat({eyes:'happy',armL:30,propL:`<g transform="translate(-2,8)"><path d="M-14,-4 h28 l-4,16 h-20 Z" fill="#c98a4b"/><path d="M-10,-4 q10,-16 20,0" fill="none" stroke="#8a5a30" stroke-width="3"/></g>`}))}`;
+
+S.reduce=`${bg('#e3fbf5')}${floor(176,'#bff0de')}
+ ${[[30,100,RED],[76,76,ORA],[122,50,SUN],[168,26,MINT]].map(([x,h,c],i)=>`<rect x="${x-14}" y="${176-h}" width="28" height="${h}" rx="4" fill="${c}" opacity="${1-i*.12}"/>`).join('')}
+ <path d="M30,60 L76,86 L122,112 L164,136" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="5 6"/>${arrow(150,128,172,142,RED,6,'glow')}
+ ${T(150,60,'−',40,RED,'middle','beat')}
+ ${at(100,200,.46,cat({eyes:'happy',armR:150,armsFront:true}))}`;
+
+S.sound=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <path d="M130,150 l10,-70 h30 l10,70 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="3" class="wiggle" style="transform-origin:155px 80px"/><circle cx="155" cy="154" r="8" fill="#e0a83a"/><path d="M155,80 v-16" stroke="#b07a45" stroke-width="4"/>
+ <path d="M118,100 q-12,14 0,30 M104,90 q-18,24 0,50 M186,100 q12,14 0,30" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" class="glow"/>
+ ${T(155,40,'ding!',16,RED,'middle','beat')}
+ ${sh(54,192,30)}${at(54,190,.86,cat({eyes:'wide',mouth:'o',headCls:'tilt',armL:120,armsFront:true}))}`;
+
+S.note=`${room('#fff1c9','#e4b77a')}
+ <rect x="110" y="20" width="76" height="130" rx="6" fill="#dfe6f2"/><rect x="110" y="20" width="76" height="52" rx="6" fill="#cfd8e6"/><rect x="176" y="34" width="5" height="24" rx="2" fill="#9aa8c0"/><rect x="176" y="86" width="5" height="40" rx="2" fill="#9aa8c0"/>
+ <g class="sway" style="transform-origin:140px 84px"><rect x="120" y="84" width="46" height="46" fill="${SUN}"/><path d="M128,98 h30 M128,108 h30 M128,118 h18" stroke="${INK}" stroke-width="2.500" stroke-linecap="round"/>${heartS(154,120,.5,RED)}<circle cx="143" cy="86" r="4" fill="${RED}"/></g>
+ ${ring(143,106,36,RED)}
+ ${at(50,192,.84,cat({eyes:'happy',headCls:'tilt',armR:-110,armsFront:true}))}`;
+
+S.fine=`${park()}${sun(40,30,12)}${cloud(150,26,.7)}
+ ${speech(140,60,70,34,T(140,72,"I'm fine!",13,MINT.length?'#1f9c83':MINT),120,94)}
+ ${sh(90,192,36)}${at(90,190,1,cat({eyes:'happy',mouth:'big',armR:-120,armsFront:true,prop:`<g transform="translate(0,-8)"><rect x="-6" y="-2" width="12" height="14" rx="4" fill="${INK}"/><rect x="-5" y="-18" width="8" height="18" rx="4" fill="${INK}"/></g>`}))}
+ ${flower(160,188,RED,0)}${flower(30,190,SUN,.5)}<g class="beat">${check(170,120,9,6)}</g>`;
+
+S.near=`${park()}${cloud(40,24,.7)}
+ ${tree(130,186,2.4)}
+ ${at(84,188,1,P.dog({happy:true}))}
+ <path d="M96,196 h28" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><path d="M96,190 v12 M124,190 v12" stroke="${RED}" stroke-width="4" stroke-linecap="round"/>
+ <ellipse cx="110" cy="176" rx="60" ry="22" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="7 7" class="glow"/>
+ ${at(22,196,.44,cat({eyes:'happy',armR:-100,armsFront:true}))}`;
+
+S.movement=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${[[30,.25],[66,.45],[102,.7]].map(([x,o],i)=>`<g opacity="${o}">${at(x,186,.7,cat({feet:'run',armL:[60,0,-60][i],armR:[-60,0,60][i],tail:false,bow:i==2}))}</g>`).join('')}
+ <g transform="translate(146,186) scale(-.76,.76)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>
+ ${arcArrow(20,70,180,70,26,RED,5,'10 9')}<path d="M10,110 h40 M20,126 h30" stroke="${ORA}" stroke-width="4" stroke-linecap="round" class="glow"/>`;
+
+/* Tag 115–118: page, enter, share, common, poor · natural, race, concern, series, significant · similar, language, usually, response, dead · rise, animal, factor, decade, article */
+S.page=`${room('#ece6ff','#d6ccf5')}
+ <g transform="translate(110,100)"><path d="M-70,-50 h66 v104 h-66 Z" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M4,-50 h66 v104 h-66 Z" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M-58,-34 h44 M-58,-20 h44 M-58,-6 h30" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/><rect x="16" y="-36" width="42" height="34" fill="#cdeeff"/><g transform="translate(37,-18) scale(1.2)">${P.fish}</g><path d="M16,10 h42 M16,24 h30" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>
+ ${T(-37,46,'12',10,'#9aa8c0')}${T(37,46,'13',10,RED,'middle','beat')}
+ <g class="flip" style="transform-origin:0px 0px;transform-box:view-box"><path d="M4,-50 q30,-14 66,0 v104 q-36,-14 -66,0 Z" fill="#f4f1fb" stroke="#cbc2e6" stroke-width="2" opacity=".8"/></g></g>
+ ${ring(147,146,14,RED)}
+ ${at(34,196,.6,cat({hat:glasses,eyes:'happy',armR:-110,armsFront:true}))}`;
+
+S.enter=`${room('#fff1c9','#e4b77a')}
+ <rect x="100" y="24" width="84" height="156" rx="6" fill="#b07a45"/><rect x="108" y="32" width="68" height="148" fill="#2d2a6e"/><circle class="glow" cx="142" cy="100" r="26" fill="#ffe89a" opacity=".5"/>
+ <path d="M108,32 l-30,12 v148 l30,-12 Z" fill="#c98a4b" stroke="#8a5a30" stroke-width="2"/>
+ <g class="road" style="animation-duration:3s;animation-direction:reverse"><g transform="translate(60,188) scale(-.8,.8)"><g class="walkbob">${cat({eyes:'happy',feet:'walk',armL:0,armR:0,armLcls:'slowA',armRcls:'slowB'})}</g></g></g>
+ ${arrow(30,60,90,60,RED,7,'glow')}${T(60,44,'in',16,RED)}`;
+
+S.share=`${park()}${sun(30,24,9)}${papel(10,60,196)}
+ ${sh(60,192,30)}${at(60,190,.86,cat({eyes:'happy',mouth:'open',armR:-84,armsFront:true,prop:taco(4,0,.9)}))}
+ ${sh(144,192,30)}${at(144,190,.86,K('orange',{eyes:'spark',mouth:'open',armL:84,armsFront:true,propL:taco(-4,0,.9)}))}
+ <path d="M90,150 h28" stroke="${RED}" stroke-width="3" stroke-dasharray="4 5"/>${heart(102,100,1,RED,0)}
+ ${T(102,76,'½ + ½',16,VIO,'middle','glow')}`;
+
+S.common=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${[30,66,102,138].map((x,i)=>at(x,150+((i%2)*8),.4,K('orange',{eyes:'happy'}))).join('')}${[48,84,120].map(x=>at(x,190,.42,K('orange',{eyes:'happy'}))).join('')}
+ <g opacity=".9">${at(172,186,.5,K('white',{hat:crown,eyes:'happy'}))}</g>
+ <path d="M10,104 q70,-30 140,0 v90 h-140 Z" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8" class="glow"/>
+ ${T(80,90,'× 7',22,RED,'middle','beat')}${T(172,120,'× 1',14,'#9aa8c0')}`;
+
+S.poor=`${park(170)}<g class="cloud"><ellipse cx="60" cy="30" rx="40" ry="14" fill="#b9c9dd"/></g>
+ <g transform="translate(140,186)"><ellipse cx="0" cy="0" rx="30" ry="8" fill="#9aa8c0"/><path d="M-26,0 q26,-16 52,0" fill="#dfe6f2"/></g>${T(140,160,'0',20,'#9aa8c0','middle','glow')}
+ ${sh(70,192,32)}${at(70,190,.9,K('grey',{eyes:'closed',mouth:'wavy',headCls:'tilt',armL:150,armR:-150,armsFront:true,mid:`<rect x="-16" y="-40" width="12" height="12" fill="${SUN}" stroke="${INK}" stroke-width="1" stroke-dasharray="2 2"/><rect x="6" y="-28" width="10" height="10" fill="${SKY}" stroke="${INK}" stroke-width="1" stroke-dasharray="2 2"/>`}))}
+ <g opacity=".5">${coin(170,60,10)}</g>${cross(170,60,8,4)}
+ ${at(176,196,.4,cat({eyes:'happy',armL:100,armsFront:true,propL:fishAt(0,6,1,0)}))}`;
+
+S.natural=`${bg('#d9f7e1')}${sun(160,28,10)}
+ ${hills('#8fe0a8','#6fd08f',160)}
+ <path d="M60,200 q10,-60 -6,-90 M60,160 q20,-10 28,-30 M58,140 q-20,-6 -26,-26" fill="none" stroke="#3aa568" stroke-width="5" stroke-linecap="round"/><ellipse cx="90" cy="126" rx="14" ry="7" fill="#4fc27f" transform="rotate(-40 90 126)"/><ellipse cx="30" cy="110" rx="14" ry="7" fill="#4fc27f" transform="rotate(30 30 110)"/><ellipse cx="54" cy="104" rx="8" ry="16" fill="#4fc27f"/>
+ <g class="beat"><circle cx="150" cy="90" r="24" fill="#fff"/><path d="M138,96 q4,-22 26,-18 q0,22 -22,22 M140,100 q8,-10 18,-16" fill="#4fc27f" stroke="#3aa568" stroke-width="2"/></g>${T(150,130,'100%',12,'#1f9c5a')}
+ ${at(130,198,.6,cat({eyes:'closed',mouth:'w',headCls:'tilt',armR:-60,prop:`<circle cx="2" cy="-8" r="7" fill="${RED}"/><path d="M2,-15 q2,-5 6,-5" stroke="#3aa568" stroke-width="2" fill="none"/>`}))}`;
+
+S.race=`${park(150)}${floor(156,'#e0875a')}<path d="M0,170 h200 M0,186 h200" stroke="#fff" stroke-width="2" opacity=".8"/>
+ <path d="M176,156 V96 M196,156 V96" stroke="#9aa8c0" stroke-width="3"/><g class="flower"><rect x="176" y="96" width="20" height="20" fill="#fff"/><path d="M176,96 h10 v10 h-10 Z M186,106 h10 v10 h-10 Z" fill="${INK}"/></g>
+ <g transform="translate(116,166) scale(-.5,.5)"><g class="runbob">${cat({feet:'run',armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',eyes:'happy',mouth:'big',mid:trikot(RED)})}</g></g>
+ <g transform="translate(76,182) scale(-.5,.5)"><g class="runbob" style="animation-delay:.1s">${K('orange',{feet:'run',armL:0,armR:0,armLcls:'swingB',armRcls:'swingA',mid:trikot(SKY)})}</g></g>
+ <g transform="translate(40,198) scale(-.5,.5)"><g class="runbob" style="animation-delay:.2s">${K('grey',{feet:'run',armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',mid:trikot(SUN)})}</g></g>
+ ${T(116,110,'1',16,RED,'middle','beat')}`;
+
+S.concern=`${room('#e9efe0','#d7dfc8')}
+ ${think(150,50,36,28,`<path d="M134,70 q10,-24 24,-10" fill="none" stroke="${INK}" stroke-width="2"/><path d="M136,40 q14,-10 28,0 q-14,10 -28,0" fill="#b9c9dd"/><path d="M144,52 l-3,8 M152,52 l-3,8 M160,52 l-3,8" stroke="${SKY}" stroke-width="2" stroke-linecap="round"/>`,-1)}
+ ${sh(70,192,34)}${at(70,190,.96,cat({eyes:'open',mouth:'wavy',armL:150,armR:-150,armsFront:true,headCls:'tilt',hat:`<path d="M-24,-88 l12,-5 M24,-88 l-12,-5" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`}))}
+ <path class="sweat" d="${tear(110,96)}" fill="${SKY}"/>${T(30,60,'?',26,VIO,'middle','beat')}
+ ${at(160,196,.44,K('orange',{eyes:'happy',armL:100,armsFront:true}))}${heart(140,150,.6,RED,0)}`;
+
+S.series=`${bg('#2d2a6e')}${floor(180,'#1f1b4d')}
+ ${[0,1,2,3].map(i=>`<g style="animation-delay:${i*.3}s"><rect x="${14+i*46}" y="${40+(i%2)*6}" width="40" height="52" rx="4" fill="#fff"/><rect x="${18+i*46}" y="${44+(i%2)*6}" width="32" height="36" fill="${[RED,SUN,MINT,SKY][i]}"/>${T(34+i*46,88+(i%2)*6,String(i+1),10,INK)}<g transform="translate(${34+i*46},${76+(i%2)*6}) scale(.2)">${cat({tail:false})}</g></g>`).join('')}
+ <path d="M34,104 h134" stroke="${SUN}" stroke-width="3" stroke-dasharray="5 6"/>${arrow(160,104,176,104,SUN,4)}
+ ${at(100,196,.66,cat(Object.assign({eyes:'spark',mouth:'open',armL:140,armR:-140,armsFront:true},NL)))}`;
+
+S.significant=`${bg('#fff3cf')}<circle cx="100" cy="96" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ <g opacity=".5">${[30,54,146,170].map(x=>`<circle cx="${x}" cy="150" r="8" fill="#9aa8c0"/>`).join('')}</g>
+ <g class="pulse" style="transform-origin:100px 100px"><circle cx="100" cy="100" r="40" fill="${RED}"/>${T(100,116,'!',50,'#fff')}</g>
+ ${spark(40,50,9,SUN,0)}${spark(160,50,9,SUN,.5)}${arrow(100,20,100,50,INK,6,'float')}
+ ${at(100,202,.44,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+S.similar=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${sh(60,190,30)}${at(60,188,.86,cat({eyes:'happy',armR:-60}))}
+ ${sh(140,190,30)}${at(140,188,.86,cat({eyes:'happy',armL:60,bow:false,hat:`<g transform="translate(0,-120)"><path d="M-15,-9 L15,9 L15,-9 L-15,9 Z" fill="${SKY}"/><circle r="5" fill="#2f6fd0"/></g>`}))}
+ ${T(100,70,'≈',44,VIO,'middle','beat')}
+ <path d="M76,40 q24,-14 48,0" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="5 6" class="glow"/>`;
+
+S.language=`${park()}${cloud(100,18,.6)}
+ ${speech(52,50,70,40,T(52,62,'Hello!',16,RED),56,84)}${speech(148,50,70,40,T(148,62,'¡Hola!',16,'#1f9c5a'),144,84)}
+ ${T(100,60,'=',22,VIO,'middle','beat')}
+ ${sh(56,192,30)}${at(56,190,.84,K('orange',{eyes:'happy',mouth:'open',mouthCls:'chew',armR:-80}))}
+ ${sh(144,192,30)}${at(144,190,.84,cat({eyes:'happy',mouth:'open',mouthCls:'chew',armL:80,hat:sombrero}))}`;
+
+S.usually=`${bg('#2d2a6e')}
+ <rect x="10" y="14" width="180" height="56" rx="10" fill="#fff"/><rect x="10" y="14" width="180" height="14" rx="7" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6].map(i=>`<rect x="${16+i*25.200}" y="34" width="21" height="30" rx="5" fill="#f4f1fb"/>${i!=3?`<g class="twinkle" style="animation-delay:${i*.15}s">${check(26.500+i*25.200,50,6,3.500)}</g>`:''}`).join('')}
+ ${floor(176,'#1f1b4d')}
+ <ellipse cx="100" cy="176" rx="70" ry="16" fill="${VIO}"/><ellipse cx="100" cy="170" rx="60" ry="12" fill="#7b55d9"/>
+ ${at(100,172,.8,cat(Object.assign({eyes:'closed',mouth:'w',tail:true,armL:20,armR:-20},NL)),'breathe')}
+ ${T(150,110,'z z',16,'#fff','middle','zz')}${pin(40,120)}`;
+
+S.response=`${bg('#e6f1ff')}${floor(184,'#cfe3f7')}
+ <g transform="translate(10,12)"><rect width="100" height="36" rx="14" fill="#fff"/>${T(50,24,'How are you?',11,INK)}</g>
+ <g><g transform="translate(90,56)"><rect width="100" height="36" rx="14" fill="${RED}"/>${T(50,24,'Fine, thanks!',11,'#fff')}</g></g>
+ ${ring(140,74,58,SUN)}
+ ${at(40,198,.6,K('orange',{eyes:'happy',prop:`<g transform="translate(0,-6) scale(.5)">${P.phone}</g>`,armR:-90}))}
+ ${at(160,198,.66,cat({eyes:'happy',mouth:'tongue',armL:90,armsFront:true,propL:`<g transform="translate(0,-6) scale(.5)">${P.phone}</g>`}))}`;
+
+S.dead=`${room('#e9efe0','#d7dfc8')}
+ <rect x="110" y="60" width="60" height="100" rx="12" fill="${INK}"/><rect x="116" y="72" width="48" height="76" rx="4" fill="#3a3148"/>
+ <rect x="126" y="100" width="26" height="14" rx="3" fill="none" stroke="#9aa8c0" stroke-width="2.500"/><rect x="152" y="104" width="4" height="6" fill="#9aa8c0"/><rect x="129" y="103" width="4" height="8" fill="${RED}" class="glow"/>
+ ${T(140,134,'0%',12,RED)}${cross(180,50,7,5)}
+ <path d="M60,176 q-4,-22 -16,-30" fill="none" stroke="#9bb86a" stroke-width="4" stroke-linecap="round"/><circle cx="42" cy="146" r="8" fill="#c9b07a"/><path d="M50,178 h22 l-3,14 h-16 Z" fill="${ORA}"/>
+ ${at(80,196,.6,cat({eyes:'closed',mouth:'wavy',headCls:'tilt',armR:-100,armsFront:true}))}`;
+
+S.rise=`${bg('#ffd9a8')}
+ <g style="animation:aufgang 4s ease-out infinite alternate"><g transform="translate(100,150)">${sun(0,0,26)}</g></g><style>@keyframes aufgang{from{transform:translateY(20px)}to{transform:translateY(-70px)}}</style>
+ ${hills('#8fe0a8','#6fd08f',150)}
+ ${arrow(30,140,30,60,RED,7,'glow')}
+ <g transform="translate(160,186)"><path d="M-10,-30 q10,-14 20,0" fill="none" stroke="${RED}" stroke-width="5"/><ellipse cx="0" cy="-16" rx="12" ry="14" fill="#fff"/><path d="M12,-22 l8,4 -8,4 Z" fill="${ORA}"/><circle cx="5" cy="-20" r="1.800" fill="${INK}"/><path d="M-4,-2 v8 M4,-2 v8" stroke="${ORA}" stroke-width="2"/></g>${note(176,130,RED,0)}
+ ${at(100,198,.6,cat({eyes:'closed',mouth:'big',armL:150,armR:-150,armsFront:true}))}`;
+
+S.animal=`${park()}${sun(30,24,9)}
+ ${at(46,190,.76,P.dog({happy:true}))}
+ <g transform="translate(116,150)"><g class="float"><ellipse cx="0" cy="0" rx="26" ry="12" fill="#cbb8f5"/><circle cx="-22" cy="-4" r="12" fill="#cbb8f5"/><path d="M-32,-12 l-10,-8 M-34,-6 l-12,0 M-32,2 l-10,6" stroke="${RED}" stroke-width="3" stroke-linecap="round"/><circle cx="-26" cy="-6" r="1.800" fill="${INK}"/><circle cx="-18" cy="-6" r="1.800" fill="${INK}"/><path d="M-26,0 q4,3 8,0" fill="none" stroke="${INK}" stroke-width="1.500"/><path d="M24,0 q16,-8 20,4 q-10,6 -20,0" fill="#cbb8f5"/></g></g>
+ <g class="flutter"><g transform="translate(160,60)"><ellipse cx="0" cy="0" rx="10" ry="7" fill="${SKY}"/><circle cx="9" cy="-4" r="5" fill="${SKY}"/><path d="M13,-4 l6,2 -6,2 Z" fill="${ORA}"/><g class="flap"><path d="M-2,-2 q-10,-16 -16,-2 Z" fill="#2f6fd0"/></g></g></g>
+ ${at(170,196,.5,cat({eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}`;
+
+S.factor=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ ${[[36,'☀',SUN],[86,'💧',SKY],[136,'♥',RED]].map(([x,l,c],i)=>`<g class="float" style="animation-delay:${i*.3}s"><circle cx="${x}" cy="50" r="20" fill="#fff"/>${i==0?`<g transform="translate(${x},50) scale(.6)">${sun(0,0,12)}</g>`:i==1?`<path d="${tear(x,40)}" fill="${SKY}" transform="translate(${-x},${-40}) scale(1)" style="transform:none"/><path d="M${x},38 q-10,14 0,22 q10,-8 0,-22 Z" fill="${SKY}"/>`:heartS(x,52,1,RED)}</g>${arrow(x+4,74,96,116,'#b9b0d6',3)}`).join('')}
+ ${T(62,56,'+',18,VIO)}${T(112,56,'+',18,VIO)}
+ ${sprout(176,186,60,true)}${arrow(120,150,156,150,RED,5,'glow')}
+ ${at(70,198,.6,cat({hat:glasses,eyes:'happy',armR:-110,armsFront:true}))}`;
+
+S.decade=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <rect x="10" y="20" width="180" height="76" rx="10" fill="#fff"/><rect x="10" y="20" width="180" height="14" rx="7" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6,7,8,9].map(i=>`<rect x="${17+(i%5)*34}" y="${40+Math.floor(i/5)*27}" width="30" height="22" rx="5" fill="#f4f1fb"/>${T(32+(i%5)*34,56+Math.floor(i/5)*27,String(2016+i),9,i==9?RED:'#9aa8c0')}`).join('')}
+ ${T(100,124,'10 years',18,RED,'middle','beat')}
+ ${at(46,196,.36,cat({tail:false,eyes:'happy'}))}${arrow(70,170,120,170,VIO,5,'glow')}${at(156,196,.66,cat({eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}`;
+
+S.article=`${room('#e6f1ff','#c98a4b',166)}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <g transform="rotate(-4 120 90)"><rect x="70" y="24" width="110" height="130" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${T(125,46,'NEWS',16,INK)}<path d="M78,54 h94" stroke="${INK}" stroke-width="2"/>
+ <rect x="78" y="62" width="50" height="60" fill="#fff3cf" stroke="${RED}" stroke-width="3" class="glow"/><path d="M84,74 h38 M84,84 h38 M84,94 h38 M84,104 h26" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/>
+ <rect x="136" y="62" width="36" height="28" fill="#cdeeff"/><path d="M136,100 h36 M136,110 h36 M78,132 h94 M78,142 h70" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/></g>
+ ${at(40,198,.66,cat({hat:glasses,eyes:'happy',tail:false,armR:-110,armsFront:true,prop:`<g transform="translate(6,10) rotate(-60) scale(.8)">${lupe}</g>`}))}`;
+
+/* Tag 119–122: shoot, east, save, artist, scene · stock, career, despite, central, thus · treatment, beyond, exactly, protect, approach · lie, size, fund, serious, occur */
+S.shoot=`${park()}${sun(30,24,9)}
+ ${sh(54,192,30)}${at(54,190,.88,cat({eyes:'happy',mouth:'tongue',armR:-90,armsFront:true,prop:`<g transform="translate(4,-4)"><rect x="-6" y="-10" width="30" height="12" rx="4" fill="${SKY}"/><rect x="-4" y="0" width="9" height="14" rx="3" fill="#2f6fd0"/><rect x="2" y="-18" width="12" height="9" rx="3" fill="${SUN}"/><rect x="24" y="-7" width="8" height="5" fill="${ORA}"/></g>`}))}
+ <path d="M96,120 q30,-14 60,6" fill="none" stroke="${SKY}" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 7" class="glow"/>
+ <path class="drip" d="${tear(150,120)}" fill="${SKY}"/><path class="drip" style="animation-delay:.4s" d="${tear(164,112)}" fill="${SKY}"/>
+ ${at(164,190,.7,K('orange',{eyes:'closed',mouth:'big',armL:120,armR:-120,armsFront:true}),'hop')}${T(120,70,'splash!',14,SKY,'middle','beat')}`;
+
+S.east=`${bg('#ffe9d6')}${kompass('E')}
+ <g class="wiggle" style="transform-origin:100px 96px"><path d="M136,96 l-36,-10 v20 Z" fill="${RED}"/><path d="M64,96 l36,-10 v20 Z" fill="#9aa8c0"/></g><circle cx="100" cy="96" r="5" fill="${INK}"/>
+ ${arrow(170,96,192,96,RED,6,'glow')}
+ <path d="M0,184 h200 v16 h-200 Z" fill="#8fe0a8"/><g transform="translate(182,184) scale(.8)">${sun(0,0,12)}</g>
+ ${at(34,200,.5,cat({eyes:'happy',armR:-110,armsFront:true}))}`;
+
+S.save=`${room('#e3fbf5','#bff0de')}
+ <g transform="translate(130,150)"><ellipse cx="0" cy="0" rx="44" ry="32" fill="${SKY}"/><circle cx="-36" cy="-6" r="10" fill="${SKY}"/><path d="M-20,-28 l6,-12 8,10 Z M16,-28 l-4,-12 -8,10 Z" fill="#2f6fd0"/><ellipse cx="-44" cy="-4" rx="7" ry="6" fill="#8dc0ff"/><circle cx="-30" cy="-12" r="2.500" fill="${INK}"/><rect x="-10" y="-34" width="22" height="5" rx="2" fill="${INK}"/><rect x="-28" y="24" width="10" height="14" rx="3" fill="#2f6fd0"/><rect x="18" y="24" width="10" height="14" rx="3" fill="#2f6fd0"/><path d="M44,-4 q12,-8 6,6" fill="none" stroke="#2f6fd0" stroke-width="3"/></g>
+ <g class="drop" style="animation-duration:1.600s">${coin(130,96,9)}</g>
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'happy',armR:-130,armsFront:true,prop:coin(0,-8,8)}))}
+ ${T(170,70,'+1',18,RED,'middle','beat')}`;
+
+S.artist=`${room('#fff1c9','#e4b77a')}${papel(12,10,190)}
+ <path d="M106,180 l20,-120 M170,180 l-20,-120 M138,180 v-100" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/>
+ <rect x="102" y="50" width="72" height="84" rx="3" fill="#fff" stroke="#b07a45" stroke-width="3"/><circle cx="138" cy="84" r="16" fill="${SUN}"/><circle cx="124" cy="106" r="10" fill="${RED}"/><circle cx="152" cy="108" r="12" fill="${SKY}"/><path d="M112,60 q20,10 50,-2" stroke="${VIO}" stroke-width="5" fill="none" stroke-linecap="round" class="draw"/>
+ ${sh(50,192,32)}${at(50,190,.9,cat({bow:false,hat:barett,eyes:'happy',mouth:'tongue',armR:-110,armRcls:'bob',armsFront:true,armL:40,propL:`<ellipse cx="-4" cy="6" rx="16" ry="11" fill="#e4c58a"/><circle cx="-10" cy="2" r="3" fill="${RED}"/><circle cx="-2" cy="8" r="3" fill="${SKY}"/><circle cx="4" cy="1" r="3" fill="${MINT}"/>`,prop:`<path d="M0,2 l10,-22" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><path d="M10,-20 l3,-7" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>`}))}`;
+
+S.scene=`${bg('#3b2a4a')}${floor(170,'#8a5a30')}
+ <path d="M0,0 h26 q-6,90 0,170 h-26 Z M200,0 h-26 q6,90 0,170 h26 Z" fill="${RED}"/><path d="M26,0 h148 v16 q-74,16 -148,0 Z" fill="#b52f29"/>
+ <rect x="30" y="30" width="140" height="140" fill="#cdeeff"/><circle cx="60" cy="56" r="12" fill="${SUN}"/><path d="M30,140 q70,-30 140,0 v30 h-140 Z" fill="#8fe0a8"/>${tree(150,150,1.300)}
+ ${at(80,166,.5,cat({eyes:'happy',mouth:'open',armR:-120,armsFront:true}))}${at(120,166,.5,K('orange',{eyes:'happy',armL:120,armsFront:true}))}
+ <g transform="translate(100,190) rotate(-6) scale(.7)">${klappe}</g>${T(100,26,'1',12,'#fff')}`;
+
+S.stock=`${room('#fff1c9','#e4b77a')}
+ ${[0,1,2].map(r=>`<rect x="70" y="${40+r*46}" width="120" height="6" rx="2" fill="#b07a45"/>${[0,1,2,3].map(c=>`<rect x="${76+c*28}" y="${14+r*46}" width="22" height="26" rx="3" fill="${[RED,SUN,MINT,SKY][(r+c)%4]}"/>`).join('')}`).join('')}
+ <path d="M70,10 v132 M190,10 v132" stroke="#8a5a30" stroke-width="5"/>
+ ${T(130,166,'× 12',16,RED,'middle','beat')}
+ ${at(36,192,.76,cat({hat:glasses,eyes:'happy',armR:-96,armsFront:true,prop:`<rect x="-10" y="-22" width="20" height="26" rx="2" fill="#c98a4b"/><rect x="-7" y="-18" width="14" height="18" fill="#fff"/><path d="M-4,-12 l3,3 5,-6" fill="none" stroke="${MINT}" stroke-width="2"/>`}))}`;
+
+S.career=`${bg('#e6f1ff')}
+ ${[0,1,2,3].map(i=>`<rect x="${20+i*44}" y="${160-i*36}" width="50" height="${40+i*36}" fill="${['#cfe3f7','#b9d6f2','#a3c9ee','#8dbcea'][i]}"/>`).join('')}
+ ${at(44,160,.3,cat({tail:false,hat:cap}))}${at(88,124,.3,cat({tail:false,mid:tie}))}${at(132,88,.3,cat({tail:false,mid:tie,hat:glasses}))}
+ ${at(176,52,.34,cat({tail:false,mid:tie,hat:crown,eyes:'happy',armL:130,armR:-130,armsFront:true}),'hop')}
+ <path d="M30,120 L70,90 L114,54 L156,20" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="5 6"/>${arrow(146,28,160,16,RED,5,'glow')}`;
+
+S.despite=`${bg('#b9c9dd')}
+ <g class="cloud"><ellipse cx="100" cy="24" rx="80" ry="18" fill="#7a8aa6"/></g>
+ ${[20,50,80,110,140,170].map((x,i)=>`<path class="drop" style="animation-delay:${i*.17}s" d="M${x},44 l-6,16" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ ${hills('#8fe0a8','#6fd08f',170)}<ellipse cx="150" cy="188" rx="30" ry="5" fill="#5cc3ff" opacity=".7"/>
+ ${at(80,188,.9,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true,feet:'run'}),'hop')}
+ <g transform="translate(140,160)"><g class="jump">${P.ball(RED)}</g></g>${note(40,110,SUN,0)}`;
+
+S.central=`${park(176)}${cloud(30,22,.6)}
+ ${hausK(30,150,.44,SKY)}${hausK(170,150,.44,VIO,'#ffe2b8')}${hausK(40,196,.44,MINT)}${hausK(164,196,.44,SUN,'#fff')}
+ <circle cx="100" cy="140" r="34" fill="#f3d9a4"/><circle cx="100" cy="140" r="18" fill="#5cc3ff"/><path d="M100,140 v-26" stroke="#9aa8c0" stroke-width="4"/><path class="drip" d="${tear(92,112)}" fill="#fff"/><path class="drip" style="animation-delay:.5s" d="${tear(108,112)}" fill="#fff"/>
+ ${ring(100,140,42,RED)}${pin(100,90)}
+ <path d="M52,140 h14 M134,140 h14 M100,186 v-10" stroke="${RED}" stroke-width="3" stroke-dasharray="3 4"/>`;
+
+S.thus=`${bg('#e6f1ff')}
+ ${panel(8,40,80,100)}${panel(112,40,80,100)}
+ <ellipse cx="48" cy="64" rx="24" ry="9" fill="#9aa8c0"/>${[34,48,62].map((x,i)=>`<path class="drop" style="animation-delay:${i*.2}s" d="M${x},78 l-4,12" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ <g transform="translate(152,128) scale(.6)">${P.house()}</g>${at(152,128,.2,cat({tail:false,eyes:'happy'}))}
+ <g class="beat">${arrow(90,90,110,90,RED,7)}</g>
+ ${floor(184,'#cfe3f7')}${at(100,200,.44,cat({hat:glasses,eyes:'happy',armR:-140,armsFront:true}))}`;
+
+S.treatment=`${room('#e3fbf5','#bff0de')}
+ <g class="beat"><circle cx="164" cy="40" r="18" fill="#fff"/><path d="M164,30 v20 M154,40 h20" stroke="${RED}" stroke-width="6" stroke-linecap="round"/></g>
+ ${sh(126,192,30)}${at(126,190,.84,K('orange',{eyes:'happy',mouth:'w',armL:110,armsFront:true,propL:`<g transform="translate(0,-4)"><rect x="-10" y="-8" width="20" height="16" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/><path d="M-10,-2 h20 M-10,3 h20" stroke="#cbc2e6" stroke-width="1"/></g>`}))}
+ ${sh(50,192,30)}${at(50,190,.86,cat({mid:kittel,hat:glasses,eyes:'happy',armR:-96,armRcls:'bob',armsFront:true}))}
+ ${heart(90,100,1,RED,0)}${spark(96,150,7,MINT,0)}`;
+
+S.beyond=`${bg('#cdeeff')}${sun(160,26,9)}${cloud(40,24,.7)}
+ <g transform="translate(150,120) scale(.5)">${P.house()}</g>
+ <path d="M-20,200 q110,-190 240,0 Z" fill="#6fd08f"/><path d="M20,200 q60,-80 100,-104" fill="none" stroke="#f3d9a4" stroke-width="8" stroke-linecap="round" stroke-dasharray="1 14"/>
+ ${arcArrow(60,150,146,84,-36,RED,4,'7 8')}
+ ${at(40,196,.6,cat({eyes:'happy',armR:-140,armsFront:true}))}`;
+
+S.exactly=`${bg('#fff1c9')}<circle cx="100" cy="92" r="80" fill="#ffe7a3"/>${floor(186,'#ffe08a')}
+ <circle cx="100" cy="92" r="60" fill="#fff" stroke="${INK}" stroke-width="6"/>${[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<path transform="rotate(${a} 100 92)" d="M100,38 v8" stroke="${INK}" stroke-width="${a%90?2:4}"/>`).join('')}
+ ${T(148,100,'3',20,RED,'middle','beat')}<path d="M100,92 V50" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M100,92 H132" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="92" r="6" fill="${INK}"/>
+ ${ring(148,93,16,RED)}
+ ${at(36,200,.5,cat({eyes:'happy',armR:-140,armsFront:true}))}`;
+
+S.protect=`${bg('#b9c9dd')}<g class="cloud"><ellipse cx="100" cy="20" rx="80" ry="16" fill="#7a8aa6"/></g>
+ ${[14,40,70,130,160,186].map((x,i)=>`<path class="drop" style="animation-delay:${i*.17}s" d="M${x},40 l-5,14" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ ${floor(184,'#9aa8c0')}
+ <path d="M40,96 q60,-70 124,0 q-16,-10 -31,0 q-16,-10 -31,0 q-16,-10 -31,0 q-16,-10 -31,0 Z" fill="${RED}"/><path d="M102,60 v70" stroke="${INK}" stroke-width="3"/>
+ ${sh(90,192,30)}${at(86,190,.84,cat({eyes:'happy',armR:-150,armsFront:true}))}
+ ${at(134,190,.5,K('cream',{eyes:'happy',mouth:'open'}))}${heart(134,130,.7,RED,0)}`;
+
+S.approach=`${park()}${cloud(100,22,.7)}
+ ${sh(160,192,28)}${at(160,190,.8,K('orange',{eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}
+ <g class="road" style="animation-duration:4s;animation-direction:reverse"><g transform="translate(20,190) scale(-.7,.7)"><g class="walkbob">${cat({eyes:'happy',feet:'walk',armL:0,armR:0,armLcls:'slowA',armRcls:'slowB'})}</g></g></g>
+ ${arrow(60,96,116,96,RED,6,'glow')}<path d="M40,196 h20 M70,196 h20 M100,196 h20" stroke="#b07a45" stroke-width="3" stroke-linecap="round" opacity=".5"/>`;
+
+S.lie=`${park(150)}${sun(160,28,10)}${cloud(40,24,.7)}
+ <path d="M20,176 h160 l-10,16 h-140 Z" fill="${RED}"/><path d="M40,176 l-4,16 M70,176 l-2,16 M100,176 v16 M130,176 l2,16 M160,176 l4,16" stroke="#fff" stroke-width="3"/>
+ <g transform="translate(100,172) rotate(-90)"><g transform="scale(.76)">${cat({eyes:'closed',mouth:'w',armL:160,armR:-160,armsFront:true,tail:false})}</g></g>
+ ${flower(20,176,SUN,0)}${flower(184,174,VIO,.5)}${bfly(120,100,ORA,0)}${arrow(30,90,30,130,RED,6,'float')}`;
+
+S.size=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${[['S',36,.44],['M',92,.62],['L',158,.84]].map(([l,x,s],i)=>`${at(x,184,s,i==2?cat({eyes:'happy'}):K(['cream','orange'][i],{eyes:'happy'}))}${T(x,40,l,16+i*6,i==2?RED:'#9aa8c0')}`).join('')}
+ <path d="M14,56 h172" stroke="${INK}" stroke-width="3"/>${[14,36,58,80,102,124,146,168,186].map(x=>`<path d="M${x},56 v8" stroke="${INK}" stroke-width="2"/>`).join('')}
+ ${arrow(20,70,180,70,RED,4,'glow')}`;
+
+S.fund=`${room('#ece6ff','#d6ccf5')}
+ <path d="M70,110 h60 l10,60 q-40,14 -80,0 Z" fill="#c98a4b"/><path d="M76,110 q24,-22 48,0 Z" fill="#b07a45"/><path d="M80,112 h40" stroke="#8a5a30" stroke-width="5" stroke-linecap="round"/>${T(100,152,'♥',26,RED)}
+ ${[[30,60],[100,40],[170,60]].map(([x,y],i)=>`<g style="animation:spende 2.400s ease-in ${i*.5}s infinite">${coin(x,y,9)}</g>`).join('')}<style>@keyframes spende{0%{transform:translate(0,0);opacity:1}80%,100%{transform:translate(0,50px);opacity:0}}</style>
+ ${at(30,196,.5,K('orange',{eyes:'happy',armR:-130,armsFront:true}))}${at(170,196,.5,K('grey',{eyes:'happy',armL:130,armsFront:true}))}
+ ${at(100,200,.36,cat({eyes:'happy',tail:false}))}`;
+
+S.serious=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="110" y="20" width="76" height="90" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M120,40 h56 M120,54 h56 M120,68 h40" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/><circle cx="160" cy="92" r="10" fill="none" stroke="${RED}" stroke-width="3"/>
+ ${sh(70,192,36)}${at(70,190,1,cat({mid:tie,hat:glasses+`<path d="M-26,-92 l16,6 M26,-92 l-16,6" stroke="${INK}" stroke-width="3.500" stroke-linecap="round"/>`,eyes:'open',mouth:'wavy',armL:-150,armR:150,armsFront:true}))}
+ <g opacity=".4">${note(150,150,VIO,0)}</g>${cross(150,150,9,4)}`;
+
+S.occur=`${bg('#2d2a6e')}${spark(30,40,4,'#fff',0)}${spark(170,60,4,'#fff',.6)}${spark(60,110,3,'#fff',1)}
+ <g style="animation:stern 2.600s ease-in infinite"><path d="M150,20 l-50,40" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>${star5(100,62,10,SUN)}</g><style>@keyframes stern{0%{transform:translate(60px,-48px);opacity:0}30%{opacity:1}100%{transform:translate(-60px,48px);opacity:0}}</style>
+ ${floor(180,'#1f1b4d')}${T(150,120,'!',30,SUN,'middle','beat')}
+ ${at(70,192,.86,cat(Object.assign({eyes:'wide',mouth:'o',armR:-150,armsFront:true},NL)))}
+ ${at(140,194,.5,K('orange',{eyes:'wide',line:'#b9b0d6'}))}`;
+
+/* Tag 123–126: media, ready, sign, thought, list · individual, simple, quality, pressure, accept · answer, resource, identify, left, meeting · determine, prepare, disease, whatever, success */
+S.media=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g class="float"><rect x="14" y="30" width="60" height="44" rx="6" fill="${INK}"/><rect x="19" y="35" width="50" height="34" fill="${SKY}"/><path d="M38,44 l14,8 -14,8 Z" fill="#fff"/></g>
+ <g class="float" style="animation-delay:.4s"><rect x="84" y="20" width="40" height="52" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${T(104,34,'NEWS',8,INK)}<path d="M90,42 h28 M90,50 h28 M90,58 h18" stroke="#cbc2e6" stroke-width="2.500"/></g>
+ <g class="float" style="animation-delay:.8s"><rect x="138" y="30" width="46" height="34" rx="6" fill="${RED}"/><circle cx="152" cy="47" r="8" fill="#fff"/><path d="M168,40 h10 M168,47 h10 M168,54 h10" stroke="#fff" stroke-width="2"/><path d="M146,30 l-8,-14" stroke="${INK}" stroke-width="2"/></g>
+ <g transform="translate(160,120) scale(.6)">${P.phone}</g>
+ ${sh(90,192,32)}${at(90,190,.88,cat({eyes:'wide',hat:phones,armL:140,armR:-140,armsFront:true}))}`;
+
+S.ready=`${park(150)}${floor(160,'#e0875a')}<path d="M40,160 v40" stroke="#fff" stroke-width="5"/>
+ ${at(70,190,.84,cat({eyes:'open',mouth:'wavy',mid:trikot(RED),armL:-30,armR:60,feet:'run',hat:`<rect x="-30" y="-86" width="60" height="10" rx="3" fill="${SUN}"/>`}))}
+ <g class="beat"><circle cx="150" cy="50" r="28" fill="${MINT}"/><path d="M137,50 l9,9 17,-19" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g>
+ ${T(150,104,'3 · 2 · 1',15,RED,'middle','glow')}${spark(110,120,7,SUN,0)}`;
+
+S.sign=`${park(170)}${cloud(40,24,.7)}
+ <path d="M130,190 V60" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/>
+ <g class="pulse" style="transform-origin:130px 60px"><path d="M112,18 h36 l26,26 v36 l-26,26 h-36 l-26,-26 v-36 Z" fill="${RED}" stroke="#fff" stroke-width="4"/>${T(130,70,'STOP',20,'#fff')}</g>
+ ${sh(50,192,30)}${at(50,190,.86,cat({eyes:'wide',mouth:'o',feet:'walk',armR:-110,armsFront:true}))}`;
+
+S.thought=`${bg('#ece6ff')}<circle cx="80" cy="120" r="70" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ ${think(138,52,48,34,`<g transform="translate(120,56) scale(.8)">${P.house()}</g>${heartS(150,40,.9,RED,'beat')}${fishAt(158,64,1,0)}`,-1)}
+ ${sh(70,192,34)}${at(70,190,.96,cat({eyes:'closed',mouth:'w',headCls:'tilt',armR:-150,armsFront:true}))}`;
+
+S.list=`${bg('#e6f1ff')}${floor(166,'#c98a4b')}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <g transform="rotate(-4 130 90)"><rect x="92" y="14" width="80" height="150" rx="3" fill="#fff8c8" stroke="#e0a83a" stroke-width="2"/>
+ ${[0,1,2,3,4].map(i=>`<circle cx="104" cy="${36+i*26}" r="5" fill="none" stroke="${INK}" stroke-width="2"/><path d="M116,${36+i*26} h46" stroke="#cbc2e6" stroke-width="4" stroke-linecap="round"/>${i<3?`<g class="twinkle" style="animation-delay:${i*.3}s">${check(104,36+i*26,4,2.500)}</g>`:''}`).join('')}
+ ${fishAt(150,24,.7,0)}</g>
+ ${at(46,198,.74,cat({eyes:'happy',mouth:'tongue',tail:false,armR:-84,armRcls:'bob',prop:`<path d="M0,2 l12,-16" stroke="${SUN}" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.individual=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g opacity=".4">${[20,52,148,180].map((x,i)=>at(x,160,.4,K('grey',{}))).join('')}${[36,164].map(x=>at(x,190,.4,K('grey',{}))).join('')}</g>
+ <path d="M100,-10 L50,190 h100 Z" fill="#fff6c8" opacity=".5"/>
+ ${at(100,188,.84,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${ring(100,130,58,RED)}${T(160,50,'1',30,RED,'middle','beat')}`;
+
+S.simple=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${panel(12,30,80,90)}${panel(108,30,80,90)}
+ <path d="M24,96 q10,-50 20,-10 t16,-20 q10,40 20,-16 M30,60 q20,30 40,-10 M26,110 q30,-20 54,-4" fill="none" stroke="#9aa8c0" stroke-width="2.500"/>${cross(80,42,5,4)}
+ <circle cx="148" cy="75" r="24" fill="${SUN}"/><g class="beat">${check(176,42,6,4)}</g>
+ ${at(148,198,.56,cat({eyes:'happy',mouth:'w',armL:-150,armR:150,armsFront:true}))}`;
+
+S.quality=`${bg('#ece6ff')}<circle cx="100" cy="90" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ <g class="pulse" style="transform-origin:100px 80px"><path d="M84,110 l-12,40 28,-16 28,16 -12,-40 Z" fill="${RED}"/><circle cx="100" cy="80" r="40" fill="${SUN}" stroke="#e0a83a" stroke-width="4"/>${star5(100,80,22,'#fff')}</g>
+ ${[60,80,100,120,140].map((x,i)=>`<g class="twinkle" style="animation-delay:${i*.2}s">${star5(x,26,7,SUN)}</g>`).join('')}
+ ${at(40,198,.5,cat({eyes:'spark',mouth:'o',armR:-140,armsFront:true}))}${at(164,198,.4,K('orange',{eyes:'happy'}))}`;
+
+S.pressure=`${room('#ffe9d6','#ffd9bd')}
+ <path d="M80,170 q-30,-70 20,-76 q50,6 20,76 Z" fill="${RED}" class="pulse" style="transform-origin:100px 170px"/><ellipse cx="88" cy="118" rx="8" ry="12" fill="#fff" opacity=".4"/>
+ <path d="M100,170 q4,10 -4,16" fill="none" stroke="${INK}" stroke-width="2"/>
+ <path d="M60,90 l-14,-10 M140,90 l14,-10 M100,76 v-18" stroke="${ORA}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <circle cx="160" cy="40" r="22" fill="#fff" stroke="${INK}" stroke-width="3"/><path d="M146,40 a14,14 0 0 1 28,0" fill="none" stroke="${RED}" stroke-width="4"/><path d="M160,40 l10,-10" stroke="${INK}" stroke-width="3" stroke-linecap="round" class="wiggle" style="transform-origin:160px 40px"/>
+ ${at(36,196,.6,cat({eyes:'wide',mouth:'wavy',armL:150,armR:-150,armsFront:true}))}`;
+
+S.accept=`${park()}${cloud(100,22,.7)}
+ ${sh(56,192,30)}${at(56,190,.86,K('orange',{eyes:'happy',armR:-90,armsFront:true}))}
+ <g class="givemove"><g transform="translate(92,150)">${bouquet}</g></g>
+ ${sh(144,192,30)}${at(144,190,.86,cat({eyes:'happy',mouth:'open',armL:100,armsFront:true}))}
+ <g class="beat"><circle cx="150" cy="50" r="20" fill="${MINT}"/>${T(150,57,'Yes',14,'#fff')}</g>${heart(110,100,.9,RED,0)}`;
+
+S.answer=`${bg('#fff1c9')}
+ <rect x="50" y="14" width="140" height="80" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(100,64,'2 + 2 =',20,'#fff')}<g>${T(164,66,'4',30,SUN)}</g>${ring(164,56,20,RED)}
+ ${floor(184,'#ffe08a')}
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'open',armR:-155,armsFront:true}))}
+ ${at(150,194,.5,K('white',{hat:glasses.replace(/#fff/g,INK),eyes:'happy'}))}<g class="beat">${check(176,130,7,5)}</g>`;
+
+S.resource=`${bg('#cdeeff')}${sun(160,26,9)}${hills('#8fe0a8','#6fd08f',150)}
+ ${[[36,'#5cc3ff',`<path d="M36,84 q-12,16 0,26 q12,-10 0,-26 Z" fill="#fff"/>`],[100,'#b07a45',`<rect x="86" y="92" width="28" height="8" rx="4" fill="#e4b77a"/><rect x="90" y="84" width="20" height="8" rx="4" fill="#e4b77a"/>`],[164,SUN,`<g transform="translate(164,96) scale(.6)">${sun(0,0,12)}</g>`]].map(([x,c,inn],i)=>`<g class="float" style="animation-delay:${i*.3}s"><circle cx="${x}" cy="96" r="26" fill="${c}"/>${inn}</g>`).join('')}
+ ${T(36,140,'water',10,INK)}${T(100,140,'wood',10,INK)}${T(164,140,'sun',10,INK)}
+ ${at(100,200,.5,cat({bow:false,hat:P.hatHard,eyes:'happy',armL:140,armR:-140,armsFront:true}))}`;
+
+S.identify=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="20" y="30" width="160" height="90" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M20,60 h160 M20,90 h160" stroke="#e6e0f5" stroke-width="2"/>
+ ${at(52,116,.36,K('grey',{tail:false}))}${at(100,116,.36,K('orange',{tail:false,mouth:'tongue'}))}${at(148,116,.36,K('cream',{tail:false}))}
+ ${ring(100,90,26,RED)}${arrow(100,10,100,34,RED,5,'float')}
+ ${at(50,198,.6,cat({hat:detHat,eyes:'happy',armR:-140,armsFront:true}))}${T(150,160,'That one!',13,RED,'middle','beat')}`;
+
+S.left=`${bg('#fff1c9')}<rect width="100" height="200" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ <g class="beat">${arrow(96,50,24,50,RED,10)}</g>${T(60,90,'left',18,RED)}
+ <g opacity=".35">${arrow(104,50,176,50,'#9aa8c0',8)}</g>
+ ${sh(100,192,34)}${at(100,190,.92,cat({eyes:'happy',mouth:'open',armL:100,armsFront:true}))}
+ ${ring(54,150,18,RED)}`;
+
+S.meeting=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="130" y="16" width="56" height="40" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M138,46 l12,-12 10,6 14,-14" fill="none" stroke="${RED}" stroke-width="3"/>
+ ${at(50,150,.5,K('orange',{mid:tie,tail:false,eyes:'happy'}))}${at(100,144,.5,K('grey',{mid:tie,tail:false,mouth:'open',armR:-140,armsFront:true}))}${at(150,150,.5,K('white',{mid:tie,tail:false,hat:glasses.replace(/#fff/g,INK)}))}
+ <ellipse cx="100" cy="160" rx="90" ry="22" fill="#c98a4b"/><ellipse cx="100" cy="156" rx="90" ry="20" fill="#e0a868"/>
+ <g transform="translate(60,152) scale(.5)">${P.cup(RED)}</g><g transform="translate(140,152) scale(.5)">${P.cup(SKY)}</g><rect x="90" y="146" width="22" height="14" fill="#fff" transform="rotate(-8 100 152)"/>
+ ${at(100,206,.5,cat({mid:tie,tail:false,eyes:'happy',armL:150,armsFront:true}))}`;
+
+S.determine=`${room('#ece6ff','#d6ccf5')}
+ <path d="M130,170 V70" stroke="#b07a45" stroke-width="5"/><path d="M130,70 h-40 M130,70 h40" stroke="#b07a45" stroke-width="4" class="tilt" style="transform-origin:130px 70px"/>
+ <path d="M76,110 h28 M156,110 h28" stroke="#b07a45" stroke-width="3"/><path d="M90,70 l-12,40 M90,70 l12,40 M170,70 l-12,40 M170,70 l12,40" stroke="${INK}" stroke-width="1.500"/>
+ ${fishAt(90,104,1,0)}<g transform="translate(170,104) scale(.5)">${P.ball(RED)}</g><rect x="112" y="170" width="36" height="8" rx="3" fill="#8a5a30"/>
+ <g class="beat"><circle cx="150" cy="30" r="16" fill="${MINT}"/>${check(150,30,7,5).replace(new RegExp(MINT,'g'),'#fff')}</g>
+ ${at(46,192,.84,cat({hat:glasses,mid:tie,eyes:'open',mouth:'w',armR:-128,armsFront:true}))}`;
+
+S.prepare=`${room('#fff1c9','#e4b77a')}${papel(12,10,190)}
+ ${at(120,186,1.2,P.table(120))}<path d="M56,124 h140 v12 h-140 Z" fill="#c98a4b"/>
+ ${taco(90,116,1)}${taco(124,116,1)}<g opacity=".5">${taco(158,116,1)}</g>
+ <path d="M176,100 h16 q0,14 -8,14 q-8,0 -8,-14 Z" fill="${RED}"/><ellipse cx="184" cy="100" rx="8" ry="2.500" fill="#3aa568"/>
+ ${sh(40,192,28)}${at(40,190,.84,cat({bow:false,hat:P.hatChef,eyes:'happy',mouth:'tongue',armR:-90,armRcls:'bob',armsFront:true,mid:`<path d="M-18,-44 h36 v36 h-36 Z" fill="#fff" opacity=".9"/>`}))}
+ ${T(150,70,'mmm',14,RED,'middle','glow')}`;
+
+S.disease=`${room('#e3fbf5','#bff0de',170)}
+ <g transform="translate(120,186) scale(1.5)">${P.bed}</g>
+ ${at(84,164,.56,K('orange',{tail:false,eyes:'closed',mouth:'wavy',hat:`<rect x="-24" y="-112" width="48" height="12" rx="5" fill="#bfe9ff"/>`}))}<path d="M92,150 q40,-22 100,0 v24 h-100 Z" fill="${SKY}"/>
+ ${thermo(160,60,.8,RED)}
+ <g class="float"><circle cx="40" cy="50" r="12" fill="#b9e08a"/>${[0,60,120,180,240,300].map(a=>`<path transform="rotate(${a} 40 50)" d="M40,38 v-7" stroke="#8fc45a" stroke-width="3" stroke-linecap="round"/>`).join('')}<circle cx="36" cy="48" r="1.500" fill="${INK}"/><circle cx="44" cy="48" r="1.500" fill="${INK}"/></g>${cross(40,50,16,4)}
+ ${at(30,194,.6,cat({mid:kittel,eyes:'happy',armR:-96,armsFront:true,prop:`<g transform="translate(4,4)"><path d="M-10,-4 h20 q0,10 -10,10 q-10,0 -10,-10 Z" fill="${RED}"/><ellipse cx="0" cy="-4" rx="10" ry="2.500" fill="#ffd98a"/></g>`}))}`;
+
+S.whatever=`${bg('#fff1c9')}${floor(150,MINT)}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ ${fishAt(36,140,1.600,0)}${taco(86,140,1.100)}<g transform="translate(130,144) scale(.9)">${P.cup(SKY)}</g><circle cx="172" cy="134" r="12" fill="${RED}"/><path d="M172,122 q3,-7 8,-7" stroke="#3aa568" stroke-width="2.500" fill="none"/>
+ ${[36,86,130,172].map((x,i)=>`<g class="twinkle" style="animation-delay:${i*.3}s">${check(x,100,6,4)}</g>`).join('')}
+ <path d="M14,160 h172" stroke="${RED}" stroke-width="3" stroke-dasharray="7 7" class="glow"/>
+ ${at(100,206,.56,cat({eyes:'happy',mouth:'tongue',tail:false,armL:140,armR:-140,armsFront:true}))}`;
+
+S.success=`${bg('#fff3cf')}${burst(30,40,RED,0)}${burst(170,40,VIO,.5)}${burst(100,24,MINT,1)}
+ <path d="M10,200 L100,110 L190,200 Z" fill="#9aa8c0"/><path d="M100,110 l-16,16 10,-2 6,8 8,-8 8,2 Z" fill="#fff"/>
+ ${at(100,120,.6,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true,prop:`<g transform="translate(0,-14)"><path d="M-10,-12 h20 q0,16 -10,16 q-10,0 -10,-16 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="1.500"/><rect x="-3" y="4" width="6" height="6" fill="#e0a83a"/><rect x="-8" y="10" width="16" height="4" fill="#e0a83a"/></g>`}),'hop')}
+ ${[0,1,2,3,4,5].map(i=>`<rect class="conf" style="animation-delay:${i*.3}s" x="${24+i*30}" y="60" width="6" height="10" fill="${[RED,SUN,MINT,SKY,VIO,ORA][i]}"/>`).join('')}`;
+
+/* Tag 127–130: argue, particularly, amount, ability, staff · recognize, indicate, character, growth, loss · degree, wonder, attack, herself, region · television, training, pretty, trade, election */
+S.argue=`${park()}${cloud(100,18,.6)}
+ ${speech(50,46,60,36,`<g transform="translate(50,56) scale(1.4)">${P.fish}</g>`,56,80)}${speech(150,46,60,36,`<g transform="translate(150,58) scale(.8)">${P.ball(RED)}</g>`,144,80)}
+ ${T(100,56,'≠',24,RED,'middle','beat')}<g class="beat">${blitz(100,100,1,SUN)}</g>
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'open',mouth:'open',mouthCls:'chew',armR:-110,armRcls:'bob',armsFront:true,hat:`<path d="M-24,-88 l14,5 M24,-88 l-14,5" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${sh(144,192,30)}${at(144,190,.84,K('orange',{eyes:'open',mouth:'open',mouthCls:'chew',armL:110,armLcls:'bob',armsFront:true}))}`;
+
+S.particularly=`${bg('#fff1c9')}${floor(160,MINT)}<rect y="160" width="200" height="8" fill="#9be6d8"/>
+ <g opacity=".55">${fishAt(30,150,1.500,0)}${fishAt(170,150,1.500,0)}</g>
+ <g class="hop"><g transform="translate(100,130) scale(2.800)"><path d="M-9,0 l-8,-6 v12 Z" fill="${SUN}"/><ellipse cx="0" cy="0" rx="10" ry="6.500" fill="${SUN}" stroke="#e0a83a" stroke-width=".8"/><circle cx="5" cy="-1.500" r="1.400" fill="${INK}"/></g></g>
+ ${ring(100,128,44,RED)}${heart(100,60,1,RED,0)}${arrow(100,30,100,74,RED,6,'float')}
+ ${at(40,206,.56,cat({eyes:'spark',mouth:'tongue',tail:false,armR:-130,armsFront:true}))}`;
+
+S.amount=`${bg('#e3fbf5')}${floor(176,'#bff0de')}
+ ${[[40,1],[100,4],[160,9]].map(([x,n],i)=>`<path d="M${x-22},120 h44 l-4,56 h-36 Z" fill="#fff" opacity=".8" stroke="#cbc2e6" stroke-width="3"/>${Array.from({length:n},(_,k)=>`<circle cx="${x-12+(k%3)*12}" cy="${166-Math.floor(k/3)*12}" r="5.500" fill="${[SKY,SUN,RED][i]}"/>`).join('')}${T(x,106,String(n),18,i==2?RED:'#9aa8c0',i==2?'middle':'middle',i==2?'beat':'')}`).join('')}
+ ${arrow(30,60,170,60,VIO,5,'glow')}${T(100,44,'how much?',13,VIO)}
+ ${at(100,206,.44,cat({eyes:'wide',armR:-140,armsFront:true,tail:false}))}`;
+
+S.ability=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ ${[[40,60,RED],[100,34,SKY],[160,60,MINT]].map(([x,y,c],i)=>`<g style="transform-origin:100px 150px;animation:jong 1.800s linear ${-i*.6}s infinite"><circle cx="100" cy="50" r="10" fill="${c}"/></g>`).join('')}<style>@keyframes jong{0%{transform:translate(-50px,30px)}25%{transform:translate(-26px,-22px)}50%{transform:translate(0,-34px)}75%{transform:translate(26px,-22px)}100%{transform:translate(50px,30px)}}</style>
+ ${sh(100,192,34)}${at(100,190,.92,cat({eyes:'happy',mouth:'tongue',armL:120,armR:-120,armsFront:true}))}
+ ${spark(30,120,8,SUN,0)}${spark(170,120,8,SUN,.5)}<g class="twinkle">${star5(160,30,10,SUN)}</g>`;
+
+S.staff=`${room('#e3fbf5','#bff0de')}
+ <rect x="30" y="14" width="140" height="26" rx="6" fill="${RED}"/>${T(100,33,'TEAM',14,'#fff')}
+ ${[['orange',36],['grey',78],['cream',122],['white',164]].map(([n,x],i)=>at(x,186,.56,K(n,{eyes:'happy',mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="${MINT}" opacity=".95"/><rect x="-10" y="-34" width="20" height="10" rx="2" fill="#fff"/>`,hat:i%2?cap:''}))).join('')}
+ <path d="M10,70 h180 v126 h-180 Z" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8" class="glow" rx="10"/>
+ ${at(100,74,.3,cat({mid:tie,tail:false,eyes:'happy',armL:130,armR:-130,armsFront:true}))}`;
+
+S.recognize=`${park()}${cloud(40,24,.7)}
+ ${think(60,50,34,26,at(60,70,.3,K('orange',{tail:false,hat:cap})),1)}
+ ${T(100,60,'=',22,RED,'middle','beat')}
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'spark',mouth:'o',armR:-140,armsFront:true}))}
+ ${sh(146,192,30)}${at(146,190,.84,K('orange',{eyes:'happy',hat:cap,armL:125,armLcls:'wave',armsFront:true}))}
+ <g class="beat"><g transform="translate(170,50) scale(.7)">${P.bulb}</g></g>`;
+
+S.indicate=`${park(170)}${cloud(150,24,.7)}
+ <path d="M150,176 V70" stroke="#b07a45" stroke-width="5"/><path d="M110,70 h60 l14,12 -14,12 h-60 Z" fill="${SUN}"/><path d="M190,106 h-60 l-14,12 14,12 h60 Z" fill="${SKY}" opacity=".5"/>
+ <g class="glow">${ring(150,82,34,RED)}</g>
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'open',armR:-115,armRcls:'bob',armsFront:true}))}
+ <path d="M96,120 l20,-16" stroke="${RED}" stroke-width="4" stroke-dasharray="5 6" stroke-linecap="round"/>`;
+
+S.character=`${room('#ece6ff','#d6ccf5')}
+ <g transform="translate(120,96)"><path d="M-60,-60 h56 v110 h-56 Z M4,-60 h56 v110 h-56 Z" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M-52,20 h40 M-52,32 h40 M12,20 h40 M12,32 h28" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/></g>
+ <g>${at(92,96,.34,K('orange',{tail:false,hat:crown,mid:`<path d="M-20,-52 q-30,10 -50,-6 q20,26 50,22 Z" fill="${RED}"/>`,eyes:'happy'}))}</g>
+ <g style="animation-delay:.5s">${at(152,96,.34,K('grey',{tail:false,hat:pirat,eyes:'happy'}))}</g>
+ ${spark(184,40,7,SUN,0)}
+ ${at(34,196,.6,cat({hat:glasses,eyes:'spark',mouth:'open',armR:-110,armsFront:true}))}`;
+
+S.growth=`${bg('#d9f7e1')}${sun(30,26,10)}${floor(176,'#b07a45')}
+ ${sprout(36,176,10)}${sprout(80,176,30)}${sprout(124,176,54)}
+ <g class="grow" style="transform-origin:168px 176px;transform-box:view-box">${tree(168,176,1.800)}</g>
+ <path d="M30,150 L76,130 L120,104 L160,70" fill="none" stroke="${INK}" stroke-width="2.500" stroke-dasharray="5 6"/>${arrow(150,78,166,62,RED,6,'glow')}
+ <path class="drip" d="${tear(60,90)}" fill="${SKY}"/>
+ ${at(100,206,.4,cat({eyes:'happy',tail:false,armL:140,armR:-140,armsFront:true}))}`;
+
+S.loss=`${park()}${cloud(40,50,.7)}
+ <g class="rise" style="animation-duration:5s"><ellipse cx="140" cy="60" rx="16" ry="20" fill="${RED}"/><path d="M140,80 q-6,20 4,40" fill="none" stroke="${INK}" stroke-width="1.500"/></g>
+ ${arrow(170,110,170,50,VIO,4,'glow')}
+ ${sh(70,192,32)}${at(70,190,.9,cat({eyes:'wide',mouth:'wavy',armR:-150,armsFront:true}))}
+ <path class="sweat" d="${tear(40,104)}" fill="${SKY}"/>${T(140,150,'oh no',14,VIO,'middle','glow')}`;
+
+S.degree=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ ${sh(90,192,36)}${at(90,190,1,cat({bow:false,hat:doktorhut,eyes:'happy',mouth:'big',armR:-120,armsFront:true,prop:`<g transform="rotate(30)"><rect x="-6" y="-34" width="12" height="38" rx="5" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/><rect x="-7" y="-20" width="14" height="7" fill="${RED}"/></g>`}))}
+ ${burst(160,50,RED,0)}${spark(30,60,8,SUN,.4)}<g class="twinkle">${star5(160,120,9,SUN)}</g>`;
+
+S.wonder=`${bg('#2d2a6e')}${spark(30,30,5,'#fff',0)}${spark(80,50,4,'#fff',.4)}${spark(150,24,5,'#fff',.8)}${spark(176,70,4,'#fff',1.2)}${spark(110,90,3,'#fff',.6)}
+ <circle cx="160" cy="46" r="18" fill="#fff6c8"/><circle cx="168" cy="40" r="15" fill="#2d2a6e"/>
+ ${T(60,100,'?',34,SUN,'middle','beat')}${T(96,70,'?',20,'#fff','middle','glow')}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#1f1b4d"/>
+ ${at(110,186,.9,cat(Object.assign({eyes:'spark',mouth:'o',headCls:'tilt',armR:-150,armsFront:true},NL)))}`;
+
+S.attack=`${room('#fff1c9','#e4b77a')}
+ <g transform="translate(150,166)"><g class="wiggle"><circle r="20" fill="${SKY}"/><path d="M-16,-8 q16,-14 32,0 M-18,4 q18,-12 36,0 M-12,14 q12,-8 24,0" fill="none" stroke="#2f6fd0" stroke-width="2.500"/></g><path d="M18,10 q20,10 10,20 q-16,6 -30,-4" fill="none" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/></g>
+ <g transform="translate(74,150) rotate(24)"><g class="float" style="animation-duration:.6s"><g transform="scale(-.86,.86)">${cat({eyes:'wide',mouth:'big',armL:-110,armR:-110,armsFront:true,feet:'run'})}</g></g></g>
+ <path d="M10,90 h40 M4,110 h50" stroke="${ORA}" stroke-width="4" stroke-linecap="round" class="glow"/>${burst(128,140,ORA,0)}${T(150,110,'rawr!',14,RED,'middle','beat')}`;
+
+S.herself=`${room('#ffe9d6','#ffd9bd')}
+ ${sh(70,192,34)}${at(70,190,.96,cat({eyes:'happy',mouth:'big',armL:-150,armR:-90,armsFront:true}))}
+ ${block(150,186,SKY,'A')}${block(150,154,RED,'B')}${block(150,122,SUN,'C')}<g class="twinkle">${star5(150,76,9,SUN)}</g>
+ <g class="glow"><path d="M30,120 q-24,-50 20,-70" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" stroke-dasharray="7 7"/><path d="M50,50 l-12,-2 M50,50 l-4,12" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>
+ <g opacity=".3">${at(184,70,.3,K('grey',{}))}</g>`;
+
+S.region=`${bg('#cdeeff')}
+ <path d="M14,50 q30,-20 60,-6 q30,-14 60,6 q30,0 50,20 q-10,30 -30,40 q10,30 -20,50 q-30,10 -50,-10 q-30,10 -50,-20 q-30,-20 -20,-80 Z" fill="#8fe0a8" stroke="#fff" stroke-width="3"/>
+ <path d="M74,44 q10,40 -10,80 M134,50 q-20,50 0,110 M24,110 q60,-10 150,10" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 4"/>
+ <path d="M74,48 q30,-12 58,4 q-16,34 -4,62 q-34,-8 -62,6 q14,-36 8,-72 Z" fill="${SUN}" class="glow"/>
+ ${pin(100,90)}${kaktus(40,150,.5)}${tree(160,90,.6)}
+ ${at(170,196,.46,cat({eyes:'happy',armL:140,armsFront:true}))}`;
+
+S.television=`${room('#2d2a6e','#1f1b4d')}
+ <rect x="70" y="30" width="120" height="84" rx="8" fill="${INK}"/><rect x="77" y="37" width="106" height="70" rx="3" fill="#cdeeff" class="glow"/>
+ <clipPath id="tv"><rect x="77" y="37" width="106" height="70"/></clipPath><g clip-path="url(#tv)"><path d="M77,96 q53,-18 106,0 v12 h-106 Z" fill="#8fe0a8"/>${at(130,104,.3,K('orange',{feet:'run',armL:120,armR:-120,armsFront:true}))}</g>
+ <rect x="122" y="114" width="16" height="12" fill="#9aa8c0"/><rect x="100" y="126" width="60" height="6" rx="3" fill="#9aa8c0"/>
+ <ellipse cx="50" cy="184" rx="44" ry="10" fill="${VIO}"/>
+ ${at(50,186,.76,cat(Object.assign({eyes:'spark',tail:false,armR:-60,prop:`<rect x="-5" y="-16" width="10" height="20" rx="3" fill="#9aa8c0"/><circle cx="0" cy="-10" r="2.500" fill="${RED}"/>`},NL)))}`;
+
+S.training=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="10" y="14" width="80" height="30" rx="8" fill="#fff"/>${[0,1,2].map(i=>`<g class="twinkle" style="animation-delay:${i*.3}s">${check(26+i*24,30,5,3)}</g>`).join('')}
+ ${sh(110,192,36)}${at(110,190,.96,cat({eyes:'closed',mouth:'big',armL:150,armR:-150,armsFront:true,mid:trikot(RED),hat:`<rect x="-30" y="-86" width="60" height="10" rx="3" fill="${SKY}"/>`}))}
+ <g class="hop"><g transform="translate(110,50) scale(1.5)">${hantel}</g></g>
+ <path class="sweat" d="${tear(60,110)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(160,110)}" fill="${SKY}"/>
+ ${at(30,196,.4,K('grey',{hat:cap,mouth:'open',armR:-125,armsFront:true}))}`;
+
+S.pretty=`${bg('#fff1c9')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${papel(10,10,190)}
+ ${sh(100,192,38)}${at(100,190,1.04,cat({eyes:'happy',mouth:'w',headCls:'tilt',bow:false,hat:`${[[-26,-96,RED],[-10,-104,SUN],[8,-104,VIO],[24,-96,ORA]].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="9" fill="${c}"/><circle cx="${x}" cy="${y}" r="3" fill="#fff"/>`).join('')}<ellipse cx="-36" cy="-92" rx="6" ry="3" fill="#3aa568"/><ellipse cx="36" cy="-92" rx="6" ry="3" fill="#3aa568"/>`,armL:-40,armR:40,armsFront:true}))}
+ ${spark(34,70,9,RED,0)}${spark(166,70,9,RED,.5)}${spark(160,140,7,SUN,1)}${heart(40,130,.8,RED,0)}`;
+
+S.trade=`${park()}${sun(30,24,9)}
+ ${sh(50,192,30)}${at(50,190,.84,cat({eyes:'happy',mouth:'open',armR:-90,armsFront:true}))}
+ ${sh(150,192,30)}${at(150,190,.84,K('orange',{eyes:'happy',mouth:'open',armL:90,armsFront:true}))}
+ <g style="animation:tauschA 3s ease-in-out infinite alternate">${fishAt(84,140,1.400,0)}</g><g style="animation:tauschB 3s ease-in-out infinite alternate">${coin(118,140,9)}</g>
+ <style>@keyframes tauschA{from{transform:translateX(0)}to{transform:translateX(34px)}}@keyframes tauschB{from{transform:translateX(0)}to{transform:translateX(-34px)}}</style>
+ ${arcArrow(70,110,130,110,22,RED,4,'')}${arcArrow(130,170,70,170,22,RED,4,'')}`;
+
+S.election=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="100" y="110" width="80" height="68" rx="4" fill="${SKY}"/><rect x="96" y="102" width="88" height="12" rx="3" fill="#2f6fd0"/><rect x="124" y="105" width="32" height="5" rx="2" fill="${INK}"/>${check(140,146,12,7).replace(new RegExp(MINT,'g'),'#fff')}
+ <g class="drop" style="animation-duration:2s"><rect x="128" y="60" width="24" height="30" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/>${cross(140,75,5,3)}</g>
+ ${[RED,SUN,MINT].map((c,i)=>`<circle cx="${30+i*22}" cy="34" r="9" fill="${c}"/>`).join('')}${T(52,62,'vote',13,INK)}
+ ${sh(50,192,30)}${at(50,190,.86,cat({eyes:'happy',mouth:'open',armR:-125,armsFront:true}))}`;
+
+/* Tag 131–134: everybody, physical, lay, general, feeling · standard, bill, message, fail, outside · arrive, analysis, benefit, forward, lawyer · present, section, environmental, glass, skill */
+const teddy=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><circle cx="-12" cy="-44" r="7" fill="#c98a4b"/><circle cx="12" cy="-44" r="7" fill="#c98a4b"/><ellipse cx="0" cy="-10" rx="16" ry="18" fill="#c98a4b"/><circle cx="0" cy="-34" r="15" fill="#d9a56a"/><ellipse cx="0" cy="-8" rx="9" ry="11" fill="#f0c98a"/><circle cx="-5" cy="-37" r="1.800" fill="${INK}"/><circle cx="5" cy="-37" r="1.800" fill="${INK}"/><ellipse cx="0" cy="-31" rx="3" ry="2" fill="${INK}"/><ellipse cx="-17" cy="-14" rx="6" ry="9" fill="#c98a4b"/><ellipse cx="17" cy="-14" rx="6" ry="9" fill="#c98a4b"/><ellipse cx="-9" cy="6" rx="7" ry="6" fill="#c98a4b"/><ellipse cx="9" cy="6" rx="7" ry="6" fill="#c98a4b"/></g>`;
+const mappe=`<g transform="translate(0,22)"><rect x="-16" y="-12" width="32" height="22" rx="3" fill="#8a5a30"/><path d="M-6,-12 v-5 h12 v5" fill="none" stroke="#5a3a1a" stroke-width="3"/><rect x="-3" y="-4" width="6" height="5" fill="${SUN}"/></g>`;
+
+S.everybody=`${bg('#2d2a6e')}${papel(10,6,194)}${burst(30,60,SUN,0)}${burst(170,60,RED,.5)}
+ ${floor(184,'#1f1b4d')}<circle cx="100" cy="184" r="80" fill="#ffe89a" opacity=".15"/>
+ ${[['grey',26,.44],['cream',62,.48],['white',138,.48],['orange',174,.44]].map(([n,x,s],i)=>`<g class="dance" style="animation-delay:${i*.15}s">${at(x,188,s,K(n,{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true,line:'#cbc2e6'}))}</g>`).join('')}
+ <g class="dance">${at(100,192,.6,cat(Object.assign({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true},NL)))}</g>
+ ${note(60,100,SUN,0)}${note(140,96,MINT,.7)}`;
+
+S.physical=`${bg('#e3fbf5')}<circle cx="100" cy="100" r="80" fill="#fff" opacity=".6"/>${floor(184,'#bff0de')}
+ ${sh(100,192,38)}${at(100,190,1,cat({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true,mid:trikot(SKY),hat:`<rect x="-30" y="-86" width="60" height="10" rx="3" fill="${RED}"/>`}),'pulse')}
+ ${lbl(40,60,70,110)}${lbl(160,60,130,110)}${lbl(40,160,80,170)}
+ ${heartS(160,150,1,RED,'beat')}<path d="M140,150 h8 l4,-8 6,16 4,-8 h8" fill="none" stroke="#fff" stroke-width="1.500"/>`;
+
+S.lay=`${room('#fff1c9','#e4b77a')}
+ ${at(120,186,1.2,P.table(120))}<path d="M56,124 h140 v12 h-140 Z" fill="${RED}"/><path d="M56,124 h140" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/>
+ <g transform="translate(96,122)">${P.plate(26)}</g><g transform="translate(160,122)">${P.plate(26)}</g>
+ <g class="drop" style="animation-duration:2.200s"><g transform="translate(128,112)">${P.plate(26)}</g></g>${arrow(128,60,128,90,RED,6,'glow')}
+ ${sh(36,192,26)}${at(36,190,.8,cat({eyes:'happy',armR:-120,armRcls:'bob',armsFront:true}))}`;
+
+S.general=`${bg('#e6f1ff')}${floor(184,'#cfe3f7')}
+ <circle cx="100" cy="80" r="64" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ ${[[76,60,RED],[124,60,SKY],[76,104,SUN],[124,104,MINT]].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="14" fill="${c}"/>`).join('')}
+ <circle cx="100" cy="80" r="74" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${T(100,20,'all',16,RED,'middle','beat')}
+ <g opacity=".5"><circle cx="24" cy="150" r="8" fill="${VIO}"/></g>${T(24,176,'one',10,'#9aa8c0')}
+ ${at(160,200,.5,cat({hat:glasses,eyes:'happy',armL:140,armsFront:true}))}`;
+
+S.feeling=`${bg('#ffe9d6')}<circle cx="100" cy="110" r="76" fill="#ffdcc0"/>${floor(186,'#ffd9bd')}
+ ${face(40,40,SUN,5)}${face(100,24,SKY,-4)}${face(160,40,MINT,5)}
+ <path d="M40,58 q20,30 44,44 M100,42 v50 M160,58 q-20,30 -44,44" stroke="${VIO}" stroke-width="2.500" stroke-dasharray="4 5" fill="none"/>
+ ${sh(100,192,34)}${at(100,190,.9,cat({eyes:'closed',mouth:'w',armL:-40,armR:40,armsFront:true,mid:`<g transform="translate(0,-30)">${heartS(0,0,1.300,RED,'beat')}</g>`}))}`;
+
+S.standard=`${bg('#e3fbf5')}${floor(170,MINT)}<rect y="170" width="200" height="8" fill="#9be6d8"/>
+ <path d="M10,96 h180" stroke="${RED}" stroke-width="3" stroke-dasharray="8 7"/>${T(176,90,'std',10,RED)}
+ ${[[40,74],[90,74],[140,74]].map(([x,h],i)=>`<rect x="${x-16}" y="${170-h}" width="32" height="${h}" rx="4" fill="${SKY}"/><g class="twinkle" style="animation-delay:${i*.3}s">${check(x,80,6,4)}</g>`).join('')}
+ <rect x="172" y="120" width="20" height="50" rx="4" fill="#9aa8c0" opacity=".6"/>${cross(182,106,5,3)}
+ ${at(100,206,.44,cat({bow:false,hat:P.hatHard,eyes:'happy',tail:false,armR:-140,armsFront:true}))}`;
+
+S.bill=`${room('#fff1c9','#e4b77a')}
+ ${at(130,186,1.1,P.table(110))}<path d="M70,124 h120 v12 h-120 Z" fill="#c98a4b"/>
+ <g transform="translate(150,120)">${P.plate(26)}</g>
+ <g class="sway" style="transform-origin:110px 60px"><rect x="88" y="50" width="44" height="70" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M96,62 h28 M96,72 h28 M96,82 h18" stroke="#cbc2e6" stroke-width="2.500"/><path d="M96,96 h28" stroke="${INK}" stroke-width="2"/>${T(110,112,'$12',11,RED)}</g>
+ ${ring(110,86,44,RED)}
+ ${at(40,192,.8,cat({eyes:'wide',mouth:'o',armR:-110,armsFront:true}))}${at(176,150,.4,K('grey',{mid:tie,tail:false,eyes:'happy'}))}`;
+
+S.message=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="100" y="24" width="84" height="140" rx="12" fill="${INK}"/><rect x="106" y="34" width="72" height="116" rx="4" fill="#fff"/>
+ <rect x="112" y="44" width="46" height="20" rx="8" fill="#e6e0f5"/>${T(135,58,'Hi!',10,INK)}
+ <g class="hop"><rect x="124" y="74" width="50" height="24" rx="8" fill="${RED}"/>${heartS(138,88,.6,'#fff')}${T(158,90,'you',9,'#fff')}</g>
+ <g class="beat"><circle cx="180" cy="30" r="10" fill="${RED}"/>${T(180,34,'1',11,'#fff')}</g>
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'happy',mouth:'open',armR:-100,armsFront:true}))}${T(70,60,'ding',13,VIO,'middle','glow')}`;
+
+S.fail=`${room('#e9efe0','#d7dfc8')}
+ <g transform="rotate(6 140 80)"><rect x="100" y="24" width="80" height="106" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${[0,1,2].map(i=>`<path d="M124,${46+i*22} h46" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>${cross(112,46+i*22,4,3)}`).join('')}<g class="beat">${T(150,122,'F',26,RED)}</g></g>
+ ${sh(56,192,32)}${at(56,190,.9,cat({eyes:'closed',mouth:'wavy',headCls:'tilt',armL:150,armR:-150,armsFront:true}))}
+ <path class="sweat" d="${tear(30,104)}" fill="${SKY}"/>
+ ${at(160,196,.44,K('orange',{eyes:'happy',armL:100,armsFront:true}))}${heart(140,150,.6,RED,0)}`;
+
+S.outside=`${bg('#cdeeff')}${sun(170,26,9)}${hills('#8fe0a8','#6fd08f',160)}
+ <rect x="0" y="40" width="80" height="160" fill="#fff8e6"/><path d="M-10,40 h100 l-10,-22 h-90 Z" fill="${RED}"/><rect x="20" y="70" width="40" height="40" rx="3" fill="#bfe9ff" stroke="#fff" stroke-width="4"/>
+ <rect x="46" y="130" width="34" height="70" fill="#8a5a30"/>
+ ${flower(110,186,RED,0)}${flower(180,180,SUN,.5)}${bfly(150,90,ORA,0)}
+ ${at(136,192,.76,cat({eyes:'closed',mouth:'big',armL:140,armR:-140,armsFront:true}))}
+ ${arrow(86,150,108,150,RED,6,'glow')}`;
+
+S.arrive=`${park(170)}${cloud(40,24,.7)}
+ <g transform="translate(160,170) scale(.9)">${P.house()}</g>${pin(160,70)}
+ <g class="road" style="animation-duration:3s;animation-direction:reverse"><g transform="translate(60,192) scale(-.76,.76)"><g class="walkbob">${cat({eyes:'happy',mouth:'open',feet:'walk',armL:0,armLcls:'slowA',armR:-20,prop:`<g transform="translate(0,22)">${koffer}</g>`})}</g></g></g>
+ <path d="M10,196 h110" stroke="#f3d9a4" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+ <g class="beat">${check(110,60,10,6)}</g>`;
+
+S.analysis=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="90" y="20" width="100" height="100" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="3"/>
+ <rect x="100" y="80" width="12" height="30" fill="${SKY}"/><rect x="118" y="60" width="12" height="50" fill="${MINT}"/><rect x="136" y="40" width="12" height="70" fill="${RED}"/><circle cx="168" cy="50" r="12" fill="${SUN}"/><path d="M168,50 v-12 a12,12 0 0 1 10,18 Z" fill="${SKY}"/>
+ <path d="M100,34 l18,10 18,-14" fill="none" stroke="${INK}" stroke-width="2" stroke-dasharray="3 4"/>
+ ${sh(50,192,32)}${at(50,190,.9,cat({hat:glasses,eyes:'wide',armR:-100,armRcls:'bob',armsFront:true,prop:`<g transform="translate(6,10) rotate(-60)">${lupe}</g>`}))}
+ ${T(150,150,'hmm...',13,VIO,'middle','glow')}`;
+
+S.benefit=`${park()}${sun(160,28,10)}
+ <rect x="110" y="110" width="12" height="80" rx="4" fill="#b07a45"/><circle cx="116" cy="84" r="40" fill="#4fc27f"/>
+ ${[[100,70],[130,66],[120,98]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="${RED}"/>`).join('')}
+ <path d="M60,150 a56,36 0 0 1 112,0" fill="#000" opacity=".08"/>
+ ${at(60,190,.76,cat({eyes:'closed',mouth:'w',armR:-70,prop:`<circle cx="2" cy="-8" r="7" fill="${RED}"/>`}))}
+ ${T(30,50,'+',34,MINT.length?'#1f9c83':MINT,'middle','beat')}${T(60,50,'+',24,'#1f9c83','middle','beat')}
+ ${heart(170,120,.8,RED,0)}`;
+
+S.forward=`${park(160)}${floor(172,'#f3d9a4')}
+ <g class="beat">${arrow(60,60,150,60,RED,10)}</g>
+ ${[40,70,100].map((x,i)=>pawK(x,186-(i%2)*8,90,'#b07a45')).join('')}
+ <g transform="translate(140,186) scale(-.84,.84)"><g class="walkbob">${cat({eyes:'happy',feet:'walk',armL:0,armR:-110,armLcls:'slowA',armsFront:true})}</g></g>`;
+
+S.lawyer=`${room('#ece6ff','#d6ccf5')}
+ <path d="M150,150 V60" stroke="#b07a45" stroke-width="5"/><path d="M116,60 h68" stroke="#b07a45" stroke-width="4"/><path d="M116,60 l-12,34 h24 Z M184,60 l-12,34 h24 Z" fill="none" stroke="${INK}" stroke-width="1.500"/><path d="M102,94 h28 q-14,12 -28,0 M170,94 h28 q-14,12 -28,0" fill="${SUN}"/><rect x="134" y="150" width="32" height="8" rx="3" fill="#8a5a30"/>
+ <rect x="110" y="16" width="30" height="24" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/>${T(125,33,'§',16,INK)}
+ ${sh(60,192,34)}${at(60,190,.94,cat({mid:tie,hat:glasses,eyes:'happy',mouth:'open',armL:120,armsFront:true,armR:-20,prop:mappe}))}`;
+
+S.present=`${bg('#fff3cf')}<circle cx="100" cy="110" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ <g class="hop"><g transform="translate(100,170) scale(2.600)">${P.gift(RED,SUN)}</g></g>
+ ${spark(40,60,10,SUN,0)}${spark(164,56,9,VIO,.5)}${spark(160,140,7,SUN,1)}
+ ${at(36,200,.5,cat({eyes:'spark',mouth:'o',armR:-140,armsFront:true}))}${papel(8,10,190)}`;
+
+S.section=`${bg('#e6f1ff')}${floor(184,'#cfe3f7')}
+ <circle cx="100" cy="90" r="66" fill="#fff"/><path d="M100,90 L100,24 A66,66 0 0 1 157,123 Z" fill="${RED}" class="pulse" style="transform-origin:100px 90px"/>
+ <path d="M100,90 L157,123 A66,66 0 0 1 43,123 Z" fill="${SKY}" opacity=".5"/><path d="M100,90 L43,123 A66,66 0 0 1 100,24 Z" fill="${SUN}" opacity=".5"/>
+ ${lbl(170,40,136,66)}${T(176,30,'A',16,RED)}
+ ${at(30,200,.5,cat({hat:glasses,eyes:'happy',armR:-140,armsFront:true}))}`;
+
+S.environmental=`${bg('#d9f7e1')}${sun(30,26,9)}
+ <g class="float"><circle cx="110" cy="84" r="54" fill="#5cc3ff"/><path d="M84,50 q20,-12 30,4 q2,18 -16,22 q-18,0 -14,-26 Z M120,90 q22,-8 30,12 q-4,22 -22,24 q-14,-12 -8,-36 Z M70,100 q12,0 14,12 q-6,10 -14,2 Z" fill="#6fd08f"/><circle cx="98" cy="82" r="3" fill="${INK}"/><circle cx="122" cy="82" r="3" fill="${INK}"/><path d="M102,94 q8,7 16,0" fill="none" stroke="${INK}" stroke-width="2.500" stroke-linecap="round"/></g>
+ <path d="M60,150 q50,24 100,0" fill="none" stroke="#3aa568" stroke-width="4" stroke-linecap="round"/>${heart(160,40,.9,RED,0)}
+ ${floor(184,'#8fe0a8')}${tree(176,186,1)}
+ ${at(44,198,.6,cat({eyes:'happy',armR:-96,armsFront:true,prop:`<g transform="translate(4,2)">${sprout(0,6,16)}</g>`}))}`;
+
+S.glass=`${bg('#e3fbf5')}${floor(170,MINT)}<rect y="170" width="200" height="8" fill="#9be6d8"/>
+ <path d="M84,70 h64 l-8,100 h-48 Z" fill="#fff" opacity=".75" stroke="#bfe9ff" stroke-width="4"/><path d="M89,110 h54 l-5,58 h-44 Z" fill="${SKY}" opacity=".8"/>
+ <path d="M96,82 l-3,60" stroke="#fff" stroke-width="5" stroke-linecap="round" class="glow"/>
+ <circle class="bubble" cx="110" cy="150" r="4" fill="#fff"/><circle class="bubble" style="animation-delay:1s" cx="126" cy="156" r="3" fill="#fff"/>
+ ${spark(160,70,8,'#fff',0)}
+ ${at(40,206,.6,cat({eyes:'happy',tail:false,armR:-120,armsFront:true}))}`;
+
+S.skill=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <path d="M30,96 h140" stroke="${INK}" stroke-width="2"/><path d="M30,96 v88 M170,96 v88" stroke="#b07a45" stroke-width="5"/>
+ <g class="sway" style="transform-origin:100px 96px">${at(100,96,.6,cat({eyes:'happy',mouth:'tongue',armL:100,armR:-100,feet:'walk',prop:`<path d="M-50,0 h100" stroke="${RED}" stroke-width="3"/>`}))}</g>
+ ${[40,60,140,160].map((x,i)=>`<g class="twinkle" style="animation-delay:${i*.2}s">${star5(x,60,7,SUN)}</g>`).join('')}
+ ${at(100,200,.4,K('orange',{eyes:'wide',mouth:'o'}))}`;
+
+/* Tag 135–138: sister, professor, operation, financial, crime · stage, ok, compare, authority, miss · design, sort, act, knowledge, gun · station, strategy, clearly, discuss, indeed */
+const keks=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#d9a56a" stroke="#b07a45" stroke-width="1.500"/><circle cx="${x-r*.3}" cy="${y-r*.2}" r="${r*.16}" fill="#5a3a1a"/><circle cx="${x+r*.3}" cy="${y+r*.1}" r="${r*.16}" fill="#5a3a1a"/><circle cx="${x}" cy="${y+r*.45}" r="${r*.14}" fill="#5a3a1a"/>`;
+S.sister=`${park()}${cloud(40,26,.7)}
+ ${sh(64,192,34)}${at(64,190,.94,cat({eyes:'happy',armR:-70}))}
+ ${sh(140,192,24)}${at(140,190,.64,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true,bow:false,hat:`<g transform="translate(0,-120)"><path d="M-15,-9 L15,9 L15,-9 L-15,9 Z" fill="${SUN}"/><circle r="5" fill="#e0a83a"/></g>`}),'hop')}
+ ${ring(140,156,40,RED)}${arrow(184,60,164,104,RED,6,'float')}${heart(100,110,.8,RED,0)}`;
+
+S.professor=`${bg('#fff1c9')}
+ <rect x="80" y="14" width="110" height="80" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(135,48,'E = mc²',16,'#fff')}<path d="M96,66 q10,-10 20,0 t20,0 t20,0" fill="none" stroke="#fff" stroke-width="2"/>
+ ${floor(184,'#ffe08a')}
+ ${sh(56,192,34)}${at(56,190,.94,K('grey',{hat:glasses.replace(/#fff/g,INK)+bart,mid:tie,mouth:'open',armR:-128,armRcls:'bob',armsFront:true,prop:`<path d="M0,4 l12,-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ <g transform="translate(150,170)">${[RED,SKY,SUN].map((c,i)=>`<rect x="-20" y="${-i*9}" width="40" height="8" rx="2" fill="${c}"/>`).join('')}</g>`;
+
+S.operation=`${room('#e3fbf5','#bff0de')}
+ <rect x="80" y="130" width="110" height="10" rx="4" fill="#9aa8c0"/><path d="M90,140 v40 M180,140 v40" stroke="#7a8aa6" stroke-width="5"/>
+ <g transform="translate(136,130) rotate(-90)">${teddy(0,0,.9)}</g>
+ <path d="M130,110 l12,8" stroke="${INK}" stroke-width="1.500" stroke-dasharray="2 3"/><g class="beat">${heartS(150,96,.6,RED)}</g>
+ <circle cx="150" cy="40" r="20" fill="#fff6c8" class="glow"/><path d="M150,0 v20" stroke="#9aa8c0" stroke-width="4"/>
+ ${sh(44,192,30)}${at(44,190,.86,cat({mid:kittel,eyes:'happy',mouth:'tongue',armR:-84,armRcls:'bob',armsFront:true,hat:`<path d="M-30,-98 q30,-22 60,0 v8 h-60 Z" fill="${MINT}"/>`,prop:`<path d="M0,2 l12,-14" stroke="#9aa8c0" stroke-width="2"/><path d="M12,-12 q8,-2 10,6" fill="none" stroke="${RED}" stroke-width="1.500"/>`}))}`;
+
+S.financial=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="96" y="20" width="90" height="70" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M106,74 l16,-18 14,8 20,-26 16,10" fill="none" stroke="${MINT}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+ ${[0,1,2,3].map(k=>`<ellipse cx="120" cy="${172-k*8}" rx="14" ry="5" fill="${SUN}" stroke="#e0a83a" stroke-width="1.500"/>`).join('')}${[0,1].map(k=>`<ellipse cx="156" cy="${172-k*8}" rx="14" ry="5" fill="${SUN}" stroke="#e0a83a" stroke-width="1.500"/>`).join('')}
+ <rect x="140" y="110" width="40" height="22" rx="3" fill="#8fe0a8" stroke="#3aa568" stroke-width="1.500"/><circle cx="160" cy="121" r="6" fill="#3aa568" opacity=".5"/>
+ ${at(46,192,.84,cat({mid:tie,hat:glasses,eyes:'happy',armR:-96,armsFront:true,prop:`<rect x="-10" y="-22" width="20" height="26" rx="3" fill="#5a4a6c"/><rect x="-7" y="-19" width="14" height="7" fill="#bff0de"/>${[0,1,2].map(i=>`<circle cx="${-5+i*5}" cy="-6" r="1.500" fill="#fff"/><circle cx="${-5+i*5}" cy="-1" r="1.500" fill="#fff"/>`).join('')}`}))}`;
+
+S.crime=`${room('#fff1c9','#e4b77a')}
+ <rect x="110" y="110" width="80" height="8" rx="3" fill="#b07a45"/><path d="M118,118 v60 M182,118 v60" stroke="#8a5a30" stroke-width="6"/>
+ <path d="M130,82 h40 l-4,28 h-32 Z" fill="#fff" opacity=".8" stroke="#cbc2e6" stroke-width="2"/><rect x="128" y="76" width="44" height="8" rx="3" fill="${RED}"/>${keks(142,100,6)}${keks(156,98,6)}
+ <g opacity=".7">${keks(96,150,4)}${keks(84,164,3)}${keks(70,174,2.500)}</g>
+ ${at(40,192,.6,K('orange',{eyes:'wide',mouth:'o',feet:'walk',armR:-70,prop:keks(0,-6,8),hat:`<rect x="-30" y="-92" width="60" height="16" rx="6" fill="${INK}"/><circle cx="-11" cy="-84" r="7" fill="#fff"/><circle cx="11" cy="-84" r="7" fill="#fff"/><circle cx="-11" cy="-84" r="3" fill="${INK}"/><circle cx="11" cy="-84" r="3" fill="${INK}"/>`}))}
+ ${T(100,50,'!',30,RED,'middle','beat')}
+ ${at(170,196,.4,cat({hat:detHat,eyes:'wide',armL:100,armsFront:true}))}`;
+
+S.stage=`${bg('#3b2a4a')}<path d="M100,-10 L40,150 h120 Z" fill="#fff6c8" opacity=".22"/>
+ <path d="M0,0 h28 q-6,80 0,150 h-28 Z M200,0 h-28 q6,80 0,150 h28 Z" fill="${RED}"/><path d="M28,0 h144 v14 q-72,16 -144,0 Z" fill="#b52f29"/>
+ <rect x="10" y="150" width="180" height="50" fill="#8a5a30"/><rect x="10" y="146" width="180" height="8" fill="#b07a45"/>${ring(100,160,80,SUN)}
+ ${at(100,150,.5,cat(Object.assign({eyes:'happy',armL:130,armR:-130,armsFront:true},NL)))}
+ ${[30,60,90,120,150].map(x=>`<circle class="glow" cx="${x+10}" cy="158" r="3" fill="${SUN}"/>`).join('')}`;
+
+S.ok=`${bg('#e3fbf5')}<circle cx="100" cy="100" r="80" fill="#fff" opacity=".6"/>${floor(184,'#bff0de')}
+ ${speech(150,46,50,36,T(150,60,'OK!',20,'#1f9c83'),130,80)}
+ ${sh(86,192,36)}${at(86,190,1,cat({eyes:'happy',mouth:'open',armR:-120,armsFront:true,prop:`<g transform="translate(0,-8)"><rect x="-6" y="-2" width="12" height="14" rx="4" fill="${INK}"/><rect x="-5" y="-18" width="8" height="18" rx="4" fill="${INK}"/></g>`}))}
+ <g class="beat">${check(160,130,10,6)}</g>`;
+
+S.compare=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g transform="translate(46,110) scale(2)">${P.fish}</g><g transform="translate(150,110) scale(3.400)">${P.fish}</g>
+ ${T(100,116,'<',34,RED,'middle','beat')}
+ <path d="M24,140 h44 M112,146 h78" stroke="${INK}" stroke-width="2"/><path d="M24,134 v12 M68,134 v12 M112,140 v12 M190,140 v12" stroke="${INK}" stroke-width="2"/>
+ ${at(100,202,.56,cat({hat:glasses,eyes:'open',headCls:'tilt',armL:140,armR:-140,armsFront:true}))}`;
+
+S.authority=`${park(166)}${floor(172,'#6b7a99')}
+ <g class="pulse" style="transform-origin:150px 60px"><circle cx="150" cy="60" r="26" fill="${RED}" stroke="#fff" stroke-width="4"/><rect x="134" y="54" width="32" height="12" rx="2" fill="#fff"/></g><path d="M150,86 v90" stroke="#9aa8c0" stroke-width="5"/>
+ ${sh(80,192,34)}${at(80,190,.94,K('grey',{hat:polcap,mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="#2f6fd0"/>${star5(-10,-32,5,SUN)}`,eyes:'open',mouth:'w',armR:-100,armsFront:true}))}
+ <ellipse cx="124" cy="140" rx="11" ry="12" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/>
+ ${at(24,194,.4,cat({eyes:'wide',armL:20,armR:-20}))}`;
+
+S.miss=`${room('#e9efe0','#d7dfc8')}
+ <rect x="110" y="20" width="76" height="86" rx="6" fill="#cfe4d8" stroke="#fff" stroke-width="5"/><circle cx="166" cy="40" r="9" fill="#fff6c8"/>
+ ${think(60,46,36,28,at(60,70,.34,K('orange',{tail:false,eyes:'happy'}))+heartS(84,34,.6,RED,'beat'),1)}
+ ${sh(110,192,34)}${at(110,190,.94,cat({eyes:'closed',mouth:'wavy',headCls:'tilt',armL:-40,armR:40,armsFront:true,mid:`<g transform="translate(0,-26)"><rect x="-13" y="-15" width="26" height="30" rx="2" fill="#fff" stroke="#b07a45" stroke-width="3"/><circle cx="0" cy="-2" r="6" fill="${ORA}"/></g>`}))}
+ <path class="sweat" d="${tear(150,110)}" fill="${SKY}"/>`;
+
+S.design=`${room('#e6f1ff','#c98a4b',166)}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <rect x="76" y="30" width="114" height="100" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M76,54 h114 M76,78 h114 M76,102 h114 M104,30 v100 M132,30 v100 M160,30 v100" stroke="#e6e0f5" stroke-width="1"/>
+ <path d="M96,110 q0,-50 36,-50 q36,0 36,50 Z" fill="none" stroke="${SKY}" stroke-width="3" class="draw"/><circle cx="132" cy="60" r="4" fill="${RED}"/><path d="M96,118 h72" stroke="${INK}" stroke-width="1.500"/><path d="M96,114 v8 M168,114 v8" stroke="${INK}" stroke-width="1.500"/>
+ <path d="M176,140 l-30,24 h30 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/>
+ ${at(40,196,.76,cat({hat:glasses,mouth:'tongue',tail:false,armR:-100,armRcls:'bob',armsFront:true,prop:`<path d="M0,2 l14,-18" stroke="${SUN}" stroke-width="4" stroke-linecap="round"/>`}))}`;
+
+S.sort=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${[[40,RED,'circle'],[100,SKY,'rect'],[160,SUN,'tri']].map(([x,c,t],i)=>`<path d="M${x-26},110 h52 l-5,50 h-42 Z" fill="#fff" stroke="#cbc2e6" stroke-width="3"/>${[0,1,2].map(k=>{const xx=x-12+k*12,yy=148-(k%2)*12;return t=='circle'?`<circle cx="${xx}" cy="${yy}" r="6" fill="${c}"/>`:t=='rect'?`<rect x="${xx-5}" y="${yy-5}" width="10" height="10" fill="${c}"/>`:`<path d="M${xx-6},${yy+5} l6,-11 6,11 Z" fill="${c}"/>`}).join('')}`).join('')}
+ <g class="drop" style="animation-duration:2s"><circle cx="40" cy="70" r="6" fill="${RED}"/></g><g class="drop" style="animation-duration:2s;animation-delay:.6s"><rect x="95" y="65" width="10" height="10" fill="${SKY}"/></g>
+ ${T(100,40,'type',14,VIO,'middle','glow')}
+ ${at(100,206,.46,cat({eyes:'happy',tail:false,armL:140,armR:-140,armsFront:true}))}`;
+
+S.act=`${bg('#3b2a4a')}<path d="M100,-10 L30,186 h140 Z" fill="#fff6c8" opacity=".22"/>${floor(176,'#8a5a30')}
+ <path d="M0,0 h26 q-6,90 0,176 h-26 Z M200,0 h-26 q6,90 0,176 h26 Z" fill="${RED}"/>
+ ${at(100,182,.94,cat(Object.assign({bow:false,hat:crown,eyes:'closed',mouth:'big',armL:60,armR:-140,armsFront:true,mid:`<path d="M-20,-52 q-30,10 -50,-6 q20,26 50,22 Z" fill="${VIO}"/>`,prop:`<g transform="translate(0,-10)"><ellipse cx="0" cy="0" rx="9" ry="11" fill="#fff"/><circle cx="-3" cy="-2" r="1.800" fill="${INK}"/><circle cx="3" cy="-2" r="1.800" fill="${INK}"/></g>`},NL)))}
+ ${speech(160,50,40,28,T(160,58,'To be...',9,INK),150,76)}`;
+
+S.knowledge=`${bg('#ece6ff')}<circle cx="100" cy="96" r="82" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ ${[[RED,0],[SKY,1],[SUN,2],[MINT,3]].map(([c,i])=>`<rect x="${120-i*3}" y="${160-i*14}" width="60" height="12" rx="2" fill="${c}"/>`).join('')}
+ <g class="beat"><g transform="translate(60,36) scale(1.2)">${P.bulb}</g></g>
+ ${[[30,80,'A'],[100,30,'+'],[150,60,'?']].map(([x,y,l],i)=>`<g class="float" style="animation-delay:${i*.4}s">${T(x,y,l,18,VIO)}</g>`).join('')}
+ ${sh(60,192,32)}${at(60,190,.9,cat({hat:glasses,eyes:'happy',armL:8,armR:-8,mid:openBook}))}`;
+
+S.gun=`${park()}${sun(30,24,9)}
+ <g transform="translate(110,100) scale(2.200)"><rect x="-16" y="-10" width="40" height="13" rx="4" fill="${SKY}"/><rect x="-14" y="1" width="11" height="18" rx="3" fill="#2f6fd0"/><rect x="-4" y="-20" width="16" height="11" rx="3" fill="${SUN}"/><rect x="24" y="-7" width="8" height="6" fill="${ORA}"/><path d="M-2,3 q2,7 8,5" fill="none" stroke="#2f6fd0" stroke-width="2"/></g>
+ <path class="drip" d="${tear(186,90)}" fill="${SKY}"/><path d="M178,90 h14" stroke="${SKY}" stroke-width="3" stroke-dasharray="3 4" class="glow"/>
+ ${T(110,40,'water',14,SKY)}
+ ${at(40,198,.6,cat({eyes:'happy',mouth:'tongue',armR:-130,armsFront:true}))}${at(170,198,.44,K('orange',{eyes:'happy',mouth:'open'}))}`;
+
+S.station=`${bg('#cdeeff')}${cloud(30,22,.6)}
+ <rect x="10" y="50" width="180" height="16" rx="4" fill="${RED}"/><path d="M30,66 v70 M170,66 v70" stroke="#9aa8c0" stroke-width="5"/>
+ <rect x="70" y="72" width="60" height="20" rx="3" fill="#fff"/>${T(100,87,'Station',11,INK)}
+ <g class="ring">${at(160,96,.3,P.clock(28,120))}</g>
+ <g class="road" style="animation-duration:5s"><g transform="translate(110,150)"><rect x="-70" y="-34" width="140" height="34" rx="8" fill="${SKY}"/><rect x="-60" y="-28" width="22" height="14" rx="2" fill="#fff"/><rect x="-30" y="-28" width="22" height="14" rx="2" fill="#fff"/><rect x="0" y="-28" width="22" height="14" rx="2" fill="#fff"/><rect x="30" y="-28" width="22" height="14" rx="2" fill="#fff"/><circle cx="-40" cy="2" r="7" fill="${INK}"/><circle cx="40" cy="2" r="7" fill="${INK}"/></g></g>
+ <rect x="0" y="158" width="200" height="6" fill="#7a8aa6"/>${floor(164,'#cfd8e6')}
+ ${at(40,200,.5,cat({eyes:'happy',armR:-20,prop:`<g transform="translate(0,22)">${koffer}</g>`}))}`;
+
+S.strategy=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="70" y="16" width="120" height="110" rx="6" fill="#3aa568" stroke="#fff" stroke-width="4"/><path d="M130,16 v110" stroke="#fff" stroke-width="2"/><circle cx="130" cy="71" r="14" fill="none" stroke="#fff" stroke-width="2"/>
+ ${[[90,40],[100,96],[116,66]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="${RED}"/>`).join('')}${[[160,40],[170,90]].map(([x,y])=>cross(x,y,5,3).replace(new RegExp(RED,'g'),'#fff')).join('')}
+ <path d="M122,66 q20,-30 40,-10" fill="none" stroke="${SUN}" stroke-width="3" stroke-dasharray="5 5" class="draw"/>${arrow(158,54,166,60,SUN,3)}
+ ${sh(40,192,30)}${at(40,190,.84,cat({hat:cap,eyes:'happy',mouth:'open',armR:-128,armsFront:true,prop:`<path d="M0,2 l10,-26" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}`;
+
+S.clearly=`${bg('#cdeeff')}${sun(160,30,10)}${hills('#8fe0a8','#6fd08f',160)}
+ <g opacity=".35"><circle cx="40" cy="90" r="30" fill="#fff"/><g transform="translate(40,90) scale(2)" style="filter:blur(2px)">${P.fish}</g></g>${T(40,140,'?',18,'#9aa8c0')}
+ <circle cx="140" cy="90" r="36" fill="#fff" stroke="${INK}" stroke-width="5"/><g transform="translate(140,90) scale(2.600)">${P.fish}</g><path d="M166,116 l22,22" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>
+ ${arrow(74,90,98,90,RED,6,'glow')}${spark(170,60,7,SUN,0)}
+ ${at(100,200,.5,cat({hat:glasses,eyes:'spark',mouth:'open',armR:-140,armsFront:true}))}`;
+
+S.discuss=`${room('#fff1c9','#e4b77a')}
+ ${speech(50,40,60,36,`<g transform="translate(50,50) scale(1.400)">${P.fish}</g>${T(72,44,'?',14,RED)}`,56,74)}${speech(150,40,60,36,dots(150,50,VIO),144,74)}
+ <ellipse cx="100" cy="168" rx="50" ry="12" fill="#c98a4b"/><g transform="translate(86,160) scale(.5)">${P.cup(RED)}</g><g transform="translate(116,160) scale(.5)">${P.cup(SKY)}</g>
+ ${at(40,190,.7,cat({eyes:'happy',mouth:'open',mouthCls:'chew',armR:-110,armsFront:true}))}
+ ${at(160,190,.7,K('orange',{eyes:'open',headCls:'tilt',armL:150,armsFront:true}))}`;
+
+S.indeed=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <circle cx="130" cy="80" r="44" fill="#fff" stroke="${INK}" stroke-width="5"/><g transform="translate(130,80) scale(3.200)">${P.fish}</g><path d="M100,112 l-26,26" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>
+ <g class="beat"><circle cx="176" cy="36" r="16" fill="${MINT}"/>${check(176,36,7,5).replace(new RegExp(MINT,'g'),'#fff')}</g>
+ ${T(40,60,'Yes!',16,RED,'middle','beat')}
+ ${at(50,200,.66,cat({hat:detHat,eyes:'happy',mouth:'open',armR:-120,armsFront:true}))}`;
+
+/* Tag 139–142: truth, song, example, democratic, check · environment, leg, various, rather, guess · executive, prove, hang, entire, rock · forget, claim, remove, manager, enjoy */
+S.truth=`${room('#fff1c9','#e4b77a')}
+ ${speech(60,40,84,44,`${T(40,52,'I ate',11,INK)}<g transform="translate(84,48) scale(1.300)">${P.fish}</g>`,60,80)}
+ <g class="beat"><circle cx="150" cy="40" r="22" fill="${MINT}"/>${check(150,40,10,6).replace(new RegExp(MINT,'g'),'#fff')}</g>
+ <g transform="translate(150,176)">${P.plate(30)}</g><path d="M140,168 h18 M146,164 v8 M152,164 v8" stroke="#cbc2e6" stroke-width="2"/>
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'w',armL:-150,armsFront:true,armR:-100}))}${heart(110,120,.8,RED,0)}`;
+
+S.song=`${bg('#2d2a6e')}${papel(10,6,194)}${floor(184,'#1f1b4d')}
+ <circle cx="100" cy="150" r="70" fill="#ffe89a" opacity=".15"/>
+ ${at(100,190,.96,cat(Object.assign({eyes:'closed',mouth:'big',mouthCls:'chew',hat:sombrero,bow:false,armL:40,armR:-50,armRcls:'bob',armsFront:true,mid:guitar},NL)))}
+ ${note(30,90,SUN,0)}${note(170,80,MINT,.6)}${note(150,130,RED,1.2)}${note(46,140,SKY,1.6)}
+ <path d="M20,60 q10,-8 20,0 t20,0" fill="none" stroke="#fff" stroke-width="2" class="glow"/>`;
+
+S.example=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <rect x="20" y="20" width="160" height="40" rx="8" fill="#fff"/>${T(60,46,'fruit',16,INK)}${arrow(100,40,126,40,VIO,4)}
+ <circle cx="154" cy="40" r="12" fill="${RED}"/><path d="M154,28 q3,-6 7,-6" stroke="#3aa568" stroke-width="2.500" fill="none"/>
+ <g class="hop"><circle cx="140" cy="130" r="26" fill="${RED}"/><path d="M140,104 q4,-12 14,-12" stroke="#3aa568" stroke-width="4" fill="none"/><ellipse cx="130" cy="120" rx="5" ry="8" fill="#fff" opacity=".4"/></g>
+ ${T(140,176,'e.g.',14,RED,'middle','beat')}
+ ${sh(54,192,30)}${at(54,190,.86,cat({hat:glasses,eyes:'happy',mouth:'open',armR:-110,armsFront:true}))}`;
+
+S.democratic=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="20" y="16" width="160" height="34" rx="8" fill="#fff"/>${fishAt(60,33,1.200,0)}${T(84,39,'3',14,RED,'middle','beat')}<g transform="translate(130,34) scale(.5)">${P.ball(RED)}</g>${T(152,39,'1',14,'#9aa8c0')}
+ ${[['orange',30,1],['grey',74,1],[null,118,1],['cream',166,0]].map(([n,x,v],i)=>`${at(x,190,.5,n?K(n,{eyes:'happy',armR:-155,armsFront:true}):cat({eyes:'happy',armR:-155,armsFront:true}))}${v?`<g transform="translate(${x+18},112)">${fishAt(0,0,.9,0)}</g>`:`<g transform="translate(${x+18},112) scale(.4)">${P.ball(RED)}</g>`}`).join('')}
+ <path d="M10,96 h180" stroke="${VIO}" stroke-width="2" stroke-dasharray="5 6"/>`;
+
+S.check=`${room('#e6f1ff','#c98a4b',166)}<rect y="166" width="200" height="8" fill="#e0a868"/>
+ <g transform="rotate(-4 130 90)"><rect x="92" y="20" width="84" height="130" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ ${[0,1,2,3].map(i=>`<rect x="100" y="${34+i*28}" width="14" height="14" rx="3" fill="none" stroke="${INK}" stroke-width="2"/><path d="M122,${41+i*28} h46" stroke="#cbc2e6" stroke-width="4" stroke-linecap="round"/>${i<3?`<g class="twinkle" style="animation-delay:${i*.3}s">${check(107,41+i*28,5,3)}</g>`:''}`).join('')}</g>
+ ${at(46,198,.76,cat({hat:glasses,eyes:'wide',tail:false,armR:-100,armRcls:'bob',armsFront:true,prop:`<g transform="translate(6,10) rotate(-60) scale(.9)">${lupe}</g>`}))}`;
+
+S.environment=`${bg('#cdeeff')}${sun(160,28,10)}${cloud(40,24,.7)}
+ ${hills('#8fe0a8','#6fd08f',140)}<path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#5cc3ff"/>
+ ${tree(40,150,1.200)}${tree(80,146,.8)}${kaktus(160,150,.7)}${bfly(120,90,ORA,0)}
+ ${fishAt(60,186,1,0)}
+ <circle cx="100" cy="104" r="92" fill="none" stroke="${MINT}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${at(124,158,.44,cat({eyes:'closed',headCls:'tilt',armL:140,armR:-140,armsFront:true}))}`;
+
+S.leg=`${bg('#ece6ff')}<circle cx="100" cy="100" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(90,190,40)}
+ ${at(90,188,1.06,cat({eyes:'happy',mouth:'open',feet:'walk',armL:60,armR:-60}))}
+ ${ring(90,172,26,RED)}${arrow(170,130,128,162,RED,6,'float')}`;
+
+S.various=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${[[30,60,'ball'],[80,50,'fish'],[130,60,'cup'],[170,50,'book'],[50,120,'gift'],[150,120,'star']].map(([x,y,t],i)=>`<g class="float" style="animation-delay:${i*.3}s"><g transform="translate(${x},${y})">${t=='ball'?P.ball(RED):t=='fish'?`<g transform="scale(1.600)">${P.fish}</g>`:t=='cup'?`<g transform="scale(.7)">${P.cup(SKY)}</g>`:t=='book'?`<g transform="scale(.8)">${P.book(MINT)}</g>`:t=='gift'?P.gift(VIO,SUN):star5(0,0,12,SUN)}</g></g>`).join('')}
+ ${sh(100,192,30)}${at(100,190,.8,cat({eyes:'spark',mouth:'o',armL:140,armR:-140,armsFront:true}))}`;
+
+S.rather=`${room('#ece6ff','#d6ccf5')}
+ <g opacity=".45"><g transform="translate(40,60) scale(1.400)">${P.ball(RED)}</g></g>${cross(40,60,14,5)}
+ ${arcArrow(70,60,120,90,-20,VIO,4,'6 7')}
+ <ellipse cx="130" cy="176" rx="60" ry="14" fill="${VIO}"/><ellipse cx="130" cy="170" rx="52" ry="10" fill="#7b55d9"/>
+ ${at(130,172,.8,cat({eyes:'closed',mouth:'w',armL:20,armR:-20}),'breathe')}
+ ${T(176,100,'z z',16,VIO,'middle','zz')}<g class="beat">${check(176,50,8,5)}</g>`;
+
+S.guess=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <g class="wiggle" style="transform-origin:140px 160px">${at(140,184,1,P.boxClosed(70,60))}</g>${T(140,160,'?',30,'#fff','middle','beat')}
+ ${think(60,44,40,30,`<g transform="translate(46,50) scale(.8)">${P.ball(RED)}</g>${T(62,56,'/',16,VIO)}${fishAt(78,50,1.100,0)}`,1)}
+ ${sh(56,192,30)}${at(56,190,.86,cat({eyes:'open',headCls:'tilt',armR:-150,armsFront:true}))}`;
+
+S.executive=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="100" y="14" width="90" height="70" rx="3" fill="#bfe9ff" stroke="#fff" stroke-width="4"/>${[0,1,2].map(i=>`<rect x="${110+i*26}" y="${40+i*8}" width="18" height="${44-i*8}" fill="#9aa8c0" opacity=".6"/>`).join('')}
+ <rect x="60" y="130" width="130" height="50" rx="4" fill="#8a5a30"/><rect x="54" y="124" width="142" height="10" rx="3" fill="#b07a45"/>
+ <path d="M104,124 l6,-14 h30 l6,14 Z" fill="${SUN}"/>${T(125,122,'BOSS',8,INK)}
+ ${at(150,128,.6,cat({mid:tie,hat:glasses,tail:false,eyes:'happy',armL:150,armsFront:true}))}<rect x="60" y="128" width="130" height="6" fill="#b07a45"/>
+ ${at(30,194,.44,K('orange',{mid:tie,eyes:'happy',armR:-96,armsFront:true,prop:`<rect x="-8" y="-18" width="16" height="20" fill="#fff"/>`}))}`;
+
+S.prove=`${room('#ece6ff','#d6ccf5')}
+ ${speech(140,36,70,34,T(140,48,'See? Proof!',11,RED),120,66)}
+ <rect x="110" y="80" width="70" height="56" rx="4" fill="#fff" stroke="#b07a45" stroke-width="4"/><rect x="116" y="86" width="58" height="44" fill="#cdeeff"/>${at(145,130,.3,cat({tail:false,eyes:'happy',prop:fishAt(4,-6,1.200,0),armR:-90}))}
+ <g class="beat">${check(184,84,7,5)}</g>
+ ${sh(50,192,32)}${at(50,190,.9,cat({eyes:'happy',mouth:'open',armR:-110,armRcls:'bob',armsFront:true}))}
+ ${at(170,198,.4,K('grey',{eyes:'wide',mouth:'o'}))}`;
+
+S.hang=`${room('#fff1c9','#e4b77a')}
+ <path d="M10,40 h180" stroke="${INK}" stroke-width="2"/>
+ ${[[36,RED],[84,SKY],[132,SUN]].map(([x,c],i)=>`<g class="sway" style="transform-origin:${x}px 40px;animation-delay:${i*.3}s"><path d="M${x-14},44 h28 l6,10 -8,4 v26 h-24 v-26 l-8,-4 Z" fill="${c}"/><rect x="${x-3}" y="36" width="6" height="10" rx="2" fill="#b07a45"/></g>`).join('')}
+ <g class="sway" style="transform-origin:172px 40px"><rect x="162" y="44" width="20" height="26" rx="6" fill="${VIO}"/><rect x="169" y="36" width="6" height="10" rx="2" fill="#b07a45"/></g>
+ ${sh(100,192,30)}${at(100,190,.8,cat({eyes:'happy',armR:-160,armRcls:'bob',armsFront:true,armL:30,propL:`<g transform="translate(-2,8)"><path d="M-14,-4 h28 l-4,16 h-20 Z" fill="#c98a4b"/><path d="M-10,-6 q10,-8 20,0" fill="#fff"/></g>`}))}`;
+
+S.entire=`${bg('#fff1c9')}<circle cx="100" cy="96" r="80" fill="#ffe7a3"/>
+ <g class="pulse" style="transform-origin:100px 96px"><ellipse cx="100" cy="110" rx="60" ry="14" fill="#fff"/><path d="M50,110 v-40 a50,14 0 0 1 100,0 v40 a50,14 0 0 1 -100,0" fill="#ffd98a"/><ellipse cx="100" cy="70" rx="50" ry="14" fill="#fff8e6"/><path d="M50,90 a50,14 0 0 0 100,0" fill="none" stroke="${RED}" stroke-width="5"/>${[70,100,130].map(x=>`<circle cx="${x}" cy="${x==100?66:70}" r="6" fill="${RED}"/>`).join('')}</g>
+ ${ring(100,90,72,RED)}${T(170,40,'100%',13,RED,'middle','beat')}
+ ${floor(186,'#ffe08a')}${at(34,200,.56,cat({eyes:'spark',mouth:'tongue',armR:-140,armsFront:true}))}`;
+
+S.rock=`${park(170)}${sun(160,28,10)}${cloud(40,24,.7)}
+ <path d="M50,186 q-10,-60 40,-70 q50,-14 70,30 q14,26 0,40 Z" fill="#9aa8c0"/><path d="M80,130 q20,-8 34,6 M110,160 l20,-12 M70,160 q10,8 20,2" stroke="#7a8aa6" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M130,186 q0,-20 20,-20 q18,0 20,20 Z" fill="#b9c4d8"/>
+ ${at(100,118,.5,cat({eyes:'happy',armL:20,armR:-20}))}
+ ${kaktus(24,186,.7)}${arrow(30,90,56,130,RED,6,'float')}`;
+
+S.forget=`${room('#e9efe0','#d7dfc8')}
+ ${think(140,50,40,30,`<g opacity=".4">${keyP?`<g transform="translate(140,56)">${keyP}</g>`:''}</g>${T(140,66,'?',30,RED,'middle','beat')}`,-1)}
+ <rect x="20" y="30" width="50" height="130" rx="4" fill="#b07a45"/><circle cx="62" cy="100" r="4" fill="${SUN}"/><rect x="34" y="84" width="14" height="18" rx="3" fill="${SUN}"/><path d="M37,84 v-5 a4,4 0 0 1 8,0 v5" fill="none" stroke="#e0a83a" stroke-width="2.500"/>
+ ${sh(110,192,34)}${at(110,190,.94,cat({eyes:'wide',mouth:'wavy',armL:150,armR:-150,armsFront:true}))}
+ <path class="sweat" d="${tear(150,110)}" fill="${SKY}"/>`;
+
+S.claim=`${park()}${cloud(40,24,.7)}
+ <g transform="translate(120,180) scale(1.6)"><g class="jump">${P.ball(RED)}</g></g>
+ <path d="M150,186 v-70" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M150,116 l26,8 -26,8 Z" fill="${SUN}"/>
+ ${speech(60,40,56,34,T(60,52,'Mine!',15,RED),64,72)}
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'big',armR:-100,armRcls:'bob',armsFront:true}))}
+ ${at(180,196,.4,K('grey',{eyes:'wide',headCls:'tilt'}))}`;
+
+S.remove=`${room('#fff1c9','#e4b77a')}
+ ${rahmen(96,30,84,96,`<rect x="102" y="36" width="72" height="84" fill="#cdeeff"/><circle cx="150" cy="56" r="8" fill="${SUN}"/><path d="M102,104 q36,-16 72,0 v16 h-72 Z" fill="#8fe0a8"/>`)}
+ <g class="glow"><circle cx="124" cy="80" r="12" fill="${VIO}" opacity=".5"/><path d="M116,74 q8,-8 16,0 M118,86 q6,6 12,0" stroke="#5a4a6c" stroke-width="2" fill="none"/></g>
+ ${arcArrow(112,96,70,130,14,RED,4,'6 7')}
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'happy',mouth:'tongue',armR:-120,armRcls:'bob',armsFront:true,prop:`<rect x="-10" y="-14" width="20" height="14" rx="3" fill="${SUN}"/><rect x="-10" y="-4" width="20" height="5" fill="#fff"/>`}))}
+ ${spark(150,96,7,'#fff',0)}`;
+
+S.manager=`${room('#e3fbf5','#bff0de')}
+ <rect x="110" y="14" width="80" height="60" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${[0,1,2].map(i=>`<circle cx="122" cy="${28+i*16}" r="4" fill="${[RED,SUN,MINT][i]}"/><path d="M132,${28+i*16} h48" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ ${at(120,192,.5,K('orange',{eyes:'happy',bow:false,hat:P.hatHard}))}${at(160,192,.5,K('grey',{eyes:'happy',hat:cap}))}
+ ${sh(50,192,32)}${at(50,190,.9,cat({mid:tie+nameTag,eyes:'happy',mouth:'open',armR:-110,armRcls:'bob',armsFront:true,armL:30,propL:`<rect x="-10" y="-8" width="20" height="26" rx="2" fill="#c98a4b"/><rect x="-7" y="-4" width="14" height="18" fill="#fff"/>`}))}
+ ${arrow(92,130,112,150,RED,4,'glow')}`;
+
+S.enjoy=`${bg('#cdeeff')}${sun(160,30,12)}
+ <path d="M0,150 q50,-10 100,0 t100,0 v50 h-200 Z" fill="#5cc3ff"/><path d="M0,170 h200 v30 h-200 Z" fill="#f3d9a4"/>
+ <path d="M40,176 v-70" stroke="#b07a45" stroke-width="3"/><path d="M4,110 q36,-40 72,0 q-9,-6 -18,0 q-9,-6 -18,0 q-9,-6 -18,0 q-9,-6 -18,0 Z" fill="${RED}"/>
+ <path d="M70,186 h70 l10,-20" fill="none" stroke="${SUN}" stroke-width="6" stroke-linecap="round"/>
+ <g transform="translate(108,180) rotate(-70)"><g transform="scale(.6)">${cat({eyes:'closed',mouth:'w',tail:false,armL:140,armR:-60,armsFront:true,hat:glasses.replace(/#fff/g,INK),prop:`<g transform="translate(0,-6) scale(.5)">${P.cup(ORA)}</g>`})}</g></g>
+ ${note(150,90,RED,0)}${heart(120,110,.8,RED,.5)}`;
+
+/* Tag 143–146: network, legal, religious, final, main · science, memory, card, above, seat · cell, establish, nice, trial, expert · spring, firm, radio, visit, management */
+S.network=`${bg('#2d2a6e')}${spark(20,20,3,'#fff',0)}${spark(180,180,3,'#fff',.6)}
+ ${[[100,40],[40,100],[160,100],[70,170],[130,170]].map(([x,y],i,a)=>a.slice(i+1).map(([x2,y2])=>`<path d="M${x},${y} L${x2},${y2}" stroke="#7b55d9" stroke-width="2"/>`).join('')).join('')}
+ <path d="M100,40 L40,100 L70,170 L130,170 L160,100 Z" fill="none" stroke="${SUN}" stroke-width="3" stroke-dasharray="6 8" class="glow"/>
+ ${[[100,40,null],[40,100,'orange'],[160,100,'grey'],[70,170,'cream'],[130,170,'white']].map(([x,y,n])=>`<circle cx="${x}" cy="${y}" r="22" fill="#fff"/>${at(x,y+18,.3,n?K(n,{tail:false,eyes:'happy'}):cat({tail:false,eyes:'happy'}))}`).join('')}`;
+
+S.legal=`${room('#ece6ff','#d6ccf5')}
+ <rect x="100" y="24" width="80" height="106" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${T(140,56,'§',30,INK)}<path d="M112,72 h56 M112,84 h56 M112,96 h36" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>
+ <g class="beat"><circle cx="164" cy="116" r="16" fill="${MINT}"/>${check(164,116,7,5).replace(new RegExp(MINT,'g'),'#fff')}</g>
+ ${sh(50,192,32)}${at(50,190,.9,cat({mid:tie,hat:glasses,eyes:'happy',armR:-110,armsFront:true}))}
+ <g transform="translate(150,170)"><rect x="-22" y="-6" width="44" height="10" rx="3" fill="#8a5a30"/><g transform="rotate(-30)"><rect x="-12" y="-26" width="24" height="12" rx="3" fill="#b07a45"/><rect x="-2" y="-14" width="4" height="20" fill="#8a5a30"/></g></g>`;
+
+S.religious=`${bg('#ffd9a8')}<circle cx="100" cy="70" r="40" fill="#ffe89a" class="glow"/>${hills('#8fe0a8','#6fd08f',166)}
+ <rect x="70" y="90" width="60" height="80" fill="#fff8e6"/><path d="M64,90 l36,-30 36,30 Z" fill="${RED}"/><rect x="92" y="34" width="16" height="30" fill="#fff8e6"/><path d="M88,34 l12,-12 12,12 Z" fill="${RED}"/><circle cx="100" cy="48" r="5" fill="${SUN}" class="wiggle"/>
+ <path d="M90,170 v-30 a10,10 0 0 1 20,0 v30 Z" fill="#8a5a30"/><circle cx="100" cy="110" r="8" fill="${SKY}"/><path d="M100,102 v16 M92,110 h16" stroke="#fff" stroke-width="1.500"/>
+ <rect x="150" y="150" width="7" height="22" rx="2" fill="#fff"/><path class="beat" d="M153.500,140 q-4,6 0,10 q4,-4 0,-10 Z" fill="${ORA}"/>
+ ${at(36,194,.66,cat({eyes:'closed',mouth:'w',armL:-40,armR:40,armsFront:true,headCls:'tilt'}))}${note(120,30,VIO,0)}`;
+
+S.final=`${park(150)}${floor(156,'#e0875a')}<path d="M0,176 h200" stroke="#fff" stroke-width="2" opacity=".8"/>
+ <path d="M150,156 V70 M190,156 V70" stroke="#9aa8c0" stroke-width="4"/><rect x="150" y="70" width="40" height="18" fill="#fff"/>${[0,1,2,3].map(i=>`<rect x="${150+i*10}" y="${70+(i%2)*9}" width="10" height="9" fill="${INK}"/>`).join('')}
+ ${T(170,58,'END',13,RED,'middle','beat')}
+ <g transform="translate(110,184) scale(-.8,.8)"><g class="runbob">${cat({eyes:'closed',mouth:'big',armL:140,armR:-140,armsFront:true,feet:'run',mid:trikot(RED)})}</g></g>
+ ${[0,1,2,3].map(i=>`<rect class="conf" style="animation-delay:${i*.3}s" x="${30+i*30}" y="40" width="6" height="10" fill="${[RED,SUN,MINT,VIO][i]}"/>`).join('')}`;
+
+S.main=`${park(176)}${cloud(30,22,.6)}
+ <rect x="10" y="130" width="34" height="46" rx="3" fill="#b07a45" opacity=".6"/><rect x="156" y="130" width="34" height="46" rx="3" fill="#b07a45" opacity=".6"/>
+ <rect x="60" y="60" width="80" height="116" rx="6" fill="${RED}"/><rect x="70" y="72" width="60" height="104" rx="30" fill="#b52f29"/><circle cx="122" cy="126" r="5" fill="${SUN}"/>
+ <path d="M52,60 h96 l-10,-16 h-76 Z" fill="${SUN}"/>${T(100,57,'MAIN',11,INK)}
+ ${arrow(100,4,100,30,RED,6,'float')}${spark(40,70,8,SUN,0)}${spark(160,70,8,SUN,.5)}
+ ${at(170,200,.44,cat({eyes:'happy',armL:140,armsFront:true}))}`;
+
+S.science=`${room('#e3fbf5','#bff0de')}
+ ${at(130,186,1.1,P.table(110))}<path d="M70,124 h120 v12 h-120 Z" fill="#c98a4b"/>
+ <path d="M100,70 h16 v20 l16,30 q2,6 -6,6 h-36 q-8,0 -6,-6 l16,-30 Z" fill="#fff" opacity=".8" stroke="#cbc2e6" stroke-width="2"/><path d="M93,108 h30 l8,14 q1,4 -5,4 h-36 q-6,0 -5,-4 Z" fill="${MINT}"/>
+ <circle class="bubble" cx="106" cy="100" r="4" fill="${MINT}"/><circle class="bubble" style="animation-delay:.8s" cx="112" cy="90" r="3" fill="${MINT}"/>
+ <rect x="150" y="80" width="12" height="44" rx="6" fill="#fff" opacity=".8" stroke="#cbc2e6" stroke-width="2"/><rect x="152" y="100" width="8" height="22" rx="4" fill="${VIO}"/>
+ ${gear(176,40,12,SUN,6)}
+ ${at(40,192,.8,cat({mid:kittel,hat:glasses,eyes:'spark',mouth:'o',armR:-100,armsFront:true}))}`;
+
+S.memory=`${room('#ece6ff','#d6ccf5')}
+ ${think(130,56,56,40,`<rect x="96" y="30" width="68" height="50" rx="3" fill="#f3d9a4" stroke="#b07a45" stroke-width="2"/>${at(118,78,.24,cat({tail:false,eyes:'happy'}))}${at(144,78,.24,K('orange',{tail:false,eyes:'happy'}))}${heartS(131,42,.5,RED,'beat')}`,-1)}
+ ${sh(60,192,34)}${at(60,190,.94,cat({eyes:'closed',mouth:'w',headCls:'tilt',armR:-150,armsFront:true}))}
+ <g transform="translate(160,170)"><rect x="-20" y="-14" width="40" height="28" rx="3" fill="${RED}"/><rect x="-20" y="-14" width="8" height="28" fill="#b52f29"/>${T(4,4,'♥',14,'#fff')}</g>`;
+
+S.card=`${bg('#e3fbf5')}${floor(170,MINT)}<rect y="170" width="200" height="8" fill="#9be6d8"/>
+ <g transform="rotate(-10 80 100)"><rect x="50" y="56" width="60" height="88" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${heartS(80,100,1.600,RED)}${T(60,74,'A',12,RED)}</g>
+ <g class="float"><g transform="rotate(8 140 100)"><rect x="110" y="56" width="60" height="88" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>${star5(140,100,16,SUN)}${T(120,74,'K',12,INK)}</g></g>
+ ${at(40,206,.56,cat({eyes:'happy',mouth:'tongue',tail:false,armR:-130,armsFront:true}))}`;
+
+S.above=`${park()}${cloud(30,60,.6)}
+ <g class="float"><g transform="translate(100,40)"><ellipse cx="0" cy="0" rx="14" ry="10" fill="${SKY}"/><circle cx="12" cy="-6" r="7" fill="${SKY}"/><path d="M18,-6 l8,2 -8,3 Z" fill="${ORA}"/><circle cx="14" cy="-7" r="1.600" fill="${INK}"/><g class="flap"><path d="M-2,-2 q-14,-20 -22,-2 Z" fill="#2f6fd0"/></g></g></g>
+ <path d="M100,60 v44" stroke="${RED}" stroke-width="3" stroke-dasharray="5 6"/>${arrow(100,96,100,62,RED,5,'glow')}
+ ${sh(100,192,34)}${at(100,190,.9,cat({eyes:'wide',mouth:'o',headCls:'tilt'}))}`;
+
+S.seat=`${room('#fff1c9','#e4b77a')}
+ <g class="pulse" style="transform-origin:120px 178px"><rect x="86" y="60" width="68" height="70" rx="10" fill="${RED}"/><rect x="80" y="124" width="80" height="18" rx="6" fill="#d93a33"/><path d="M90,142 v36 M150,142 v36" stroke="#8a5a30" stroke-width="7" stroke-linecap="round"/></g>
+ ${ring(120,110,62,SUN)}${arrow(180,40,160,70,RED,6,'float')}
+ ${at(36,194,.66,cat({eyes:'happy',feet:'walk',armR:-100,armsFront:true}))}`;
+
+S.cell=`${bg('#e3fbf5')}
+ <circle cx="110" cy="96" r="80" fill="#fff" stroke="${INK}" stroke-width="6"/>
+ <g class="pulse" style="transform-origin:110px 96px"><path d="M60,96 q0,-50 50,-46 q54,2 50,50 q-4,44 -52,42 q-48,-2 -48,-46 Z" fill="#bff0de" stroke="${MINT}" stroke-width="4"/><circle cx="116" cy="92" r="18" fill="${VIO}"/><circle cx="120" cy="88" r="6" fill="#5a4a6c"/>${[[84,80],[90,116],[140,116],[136,66]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="4" fill="${SUN}"/>`).join('')}</g>
+ ${floor(186,'#bff0de')}
+ ${at(30,200,.5,cat({mid:kittel,hat:glasses,eyes:'spark',armR:-140,armsFront:true}))}${T(170,180,'×100',12,VIO)}`;
+
+S.establish=`${park(170)}${sun(30,24,9)}
+ <rect x="70" y="80" width="100" height="90" rx="4" fill="#fff8e6"/><path d="M62,80 h116 l-8,-22 h-100 Z" fill="${SKY}"/><rect x="104" y="120" width="30" height="50" rx="3" fill="#b07a45"/><rect x="80" y="96" width="80" height="16" rx="3" fill="${SUN}"/>${T(120,109,'OPEN',11,INK)}
+ <path d="M60,150 h120" stroke="${RED}" stroke-width="5"/><g class="chew" style="transform-origin:120px 150px;transform-box:view-box"><path d="M112,140 l16,20 M128,140 l-16,20" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/></g>
+ ${burst(176,40,RED,0)}${T(120,50,'2026',14,RED,'middle','beat')}
+ ${at(34,196,.6,cat({mid:tie,eyes:'happy',mouth:'open',armR:-110,armsFront:true}))}`;
+
+S.nice=`${park()}${sun(160,28,10)}
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'open',armR:-90,armsFront:true,prop:`<g transform="translate(4,0)"><path d="M0,6 v-18" stroke="#3aa568" stroke-width="3"/><circle cx="0" cy="-16" r="7" fill="${RED}"/><circle cx="0" cy="-16" r="2.500" fill="${SUN}"/></g>`}))}
+ ${sh(146,192,28)}${at(146,190,.8,K('grey',{eyes:'spark',mouth:'open',armL:120,armsFront:true}))}
+ ${heart(104,100,1,RED,0)}${heart(120,80,.7,RED,.7)}${spark(30,60,7,SUN,0)}`;
+
+S.trial=`${room('#ece6ff','#d6ccf5')}
+ <rect x="100" y="80" width="90" height="100" rx="4" fill="#8a5a30"/><rect x="94" y="74" width="102" height="12" rx="3" fill="#b07a45"/>
+ ${at(145,78,.56,K('grey',{tail:false,hat:glasses.replace(/#fff/g,INK),eyes:'open',mouth:'w',armR:-100,armRcls:'throwarm',armsFront:true,mid:`<path d="M-24,-48 h48 v40 h-48 Z" fill="${INK}"/><path d="M-6,-48 l6,12 6,-12" fill="#fff"/>`,prop:`<rect x="-10" y="-22" width="20" height="10" rx="3" fill="#b07a45"/><rect x="-2" y="-12" width="4" height="16" fill="#8a5a30"/>`}))}<rect x="100" y="74" width="90" height="12" fill="#b07a45"/>
+ ${T(145,140,'?',30,SUN,'middle','beat')}
+ <g transform="translate(30,186)">${P.plate(22)}</g><path d="M22,180 h14" stroke="#cbc2e6" stroke-width="2"/>
+ ${at(60,196,.5,cat({eyes:'wide',mouth:'wavy',armL:-150,armR:150,armsFront:true}))}`;
+
+S.expert=`${bg('#fff3cf')}<circle cx="100" cy="96" r="82" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ ${sh(90,192,36)}${at(90,190,1,cat({hat:glasses+doktorhut,bow:false,eyes:'happy',mouth:'open',armR:-128,armsFront:true,mid:`<circle cx="0" cy="-28" r="9" fill="${SUN}"/>${star5(0,-28,5,'#fff')}`}))}
+ ${[150,166,182].map((x,i)=>`<g class="twinkle" style="animation-delay:${i*.2}s">${star5(x,40,7,SUN)}</g>`).join('')}
+ <g transform="translate(166,176)">${[RED,SKY,MINT].map((c,i)=>`<rect x="-18" y="${-i*9}" width="36" height="8" rx="2" fill="${c}"/>`).join('')}</g>`;
+
+S.spring=`${bg('#d9f7e1')}${sun(160,28,10)}${cloud(40,24,.7)}${hills('#8fe0a8','#6fd08f',150)}
+ ${flower(30,180,RED,0)}${flower(60,190,SUN,.3)}${flower(140,186,VIO,.6)}${flower(176,176,RED,.9)}${flower(100,194,ORA,1.2)}
+ <rect x="150" y="100" width="8" height="60" rx="3" fill="#b07a45"/><circle cx="154" cy="84" r="30" fill="#bff0c8"/>${[[140,74],[166,80],[150,98],[160,62]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="#fff"/><circle cx="${x}" cy="${y}" r="2" fill="${SUN}"/>`).join('')}
+ ${bfly(60,90,ORA,0)}${bfly(110,70,VIO,.5)}
+ ${at(84,180,.7,cat({eyes:'closed',mouth:'w',headCls:'tilt',armL:140,armR:-140,armsFront:true}))}`;
+
+S.firm=`${bg('#cdeeff')}${cloud(30,24,.7)}${floor(176,'#8fe0a8')}
+ <rect x="50" y="40" width="100" height="136" rx="4" fill="${SKY}"/><rect x="60" y="20" width="80" height="22" rx="4" fill="${RED}"/>${T(100,36,'CAT Co.',12,'#fff')}
+ ${[0,1,2,3].map(r=>[0,1,2].map(c=>`<rect x="${62+c*28}" y="${54+r*24}" width="18" height="14" rx="2" fill="${(r*3+c)%4?'#bfe9ff':SUN}"/>`).join('')).join('')}<rect x="90" y="150" width="20" height="26" fill="#2f6fd0"/>
+ ${at(30,196,.44,cat({mid:tie,eyes:'happy',armR:-20,prop:mappe}))}${at(172,196,.4,K('orange',{mid:tie,feet:'walk'}))}`;
+
+S.radio=`${room('#fff1c9','#e4b77a')}
+ ${at(130,186,1.1,P.table(100))}<path d="M76,124 h110 v12 h-110 Z" fill="#c98a4b"/>
+ <rect x="96" y="76" width="76" height="48" rx="8" fill="${RED}"/><circle cx="118" cy="100" r="14" fill="#5a2a2a"/><circle cx="118" cy="100" r="8" fill="#b52f29"/><rect x="140" y="88" width="24" height="8" rx="2" fill="#fff"/><circle cx="146" cy="110" r="4" fill="${SUN}"/><circle cx="160" cy="110" r="4" fill="${SUN}"/><path d="M160,76 l14,-30" stroke="${INK}" stroke-width="2"/>
+ <path d="M180,50 q8,8 0,18 M188,44 q12,14 0,30" fill="none" stroke="${VIO}" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${note(90,50,RED,0)}${note(130,40,SKY,.6)}
+ ${at(36,192,.8,cat({eyes:'closed',mouth:'open',armL:140,armR:-140,armsFront:true}),'dance')}`;
+
+S.visit=`${park(170)}${cloud(40,24,.7)}
+ <g transform="translate(140,176) scale(1.1)">${P.house(RED,'#fff8e6')}</g>
+ ${at(170,176,.4,K('orange',{eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true,armL:30,propL:`<g transform="translate(-2,10) scale(.7)">${P.gift(VIO,SUN)}</g>`}))}
+ ${T(100,60,'ding dong',13,RED,'middle','beat')}`;
+
+S.management=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="20" y="14" width="160" height="80" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ <rect x="84" y="22" width="32" height="18" rx="4" fill="${RED}"/>${[36,84,132].map((x,i)=>`<rect x="${x}" y="64" width="32" height="18" rx="4" fill="${[SKY,MINT,SUN][i]}"/><path d="M100,40 V52 H${x+16} V64" fill="none" stroke="${INK}" stroke-width="2"/>`).join('')}
+ ${at(100,194,.7,cat({mid:tie,hat:glasses,eyes:'happy',mouth:'open',armL:120,armR:-120,armsFront:true}))}
+ ${at(30,196,.4,K('orange',{eyes:'happy'}))}${at(170,196,.4,K('grey',{eyes:'happy'}))}`;
+
+/* Tag 147–150: avoid, imagine, tonight, huge, finish · yourself, theory, impact, respond, statement · maintain, charge, popular, traditional, onto · reveal, direction, weapon, employee, cultural */
+S.avoid=`${park()}${cloud(150,24,.7)}
+ <ellipse cx="110" cy="186" rx="34" ry="8" fill="#5cc3ff"/><ellipse class="ripple" cx="110" cy="186" rx="18" ry="4" fill="none" stroke="#fff" stroke-width="2"/>
+ ${arcArrow(40,150,180,150,60,RED,5,'9 9')}
+ <g transform="translate(150,170)"><g class="jump" style="animation-duration:.8s"><g transform="scale(-.7,.7)">${cat({eyes:'wide',mouth:'o',armL:120,armR:-120,armsFront:true,feet:'run'})}</g></g></g>
+ <path d="M96,130 l28,28 M124,130 l-28,28" stroke="${RED}" stroke-width="5" stroke-linecap="round" opacity=".6"/>`;
+
+S.imagine=`${room('#ece6ff','#d6ccf5')}
+ ${think(120,56,68,46,`<path d="M70,90 q50,-10 100,0 v8 h-100 Z" fill="#8fe0a8"/><g class="float"><g transform="translate(120,74) scale(.4)">${cat({tail:false,eyes:'happy',armL:150,armR:-150,armsFront:true,mid:`<path d="M-20,-52 q-30,10 -50,-6 q20,26 50,22 Z" fill="${RED}"/>`})}</g></g>${star5(86,36,6,SUN)}${star5(158,40,5,SUN)}<circle cx="150" cy="30" r="7" fill="#fff6c8"/>`,-1)}
+ ${sh(50,192,32)}${at(50,190,.9,cat({eyes:'closed',mouth:'w',headCls:'tilt',armL:-40,armR:40,armsFront:true}))}`;
+
+S.tonight=`${bg('#2d2a6e')}${spark(30,30,5,'#fff',0)}${spark(90,20,4,'#fff',.5)}${spark(180,80,4,'#fff',1)}${papel(40,6,194)}
+ <circle cx="160" cy="36" r="18" fill="#fff6c8"/><circle cx="168" cy="30" r="15" fill="#2d2a6e"/>
+ ${floor(184,'#1f1b4d')}
+ <rect x="14" y="90" width="50" height="40" rx="6" fill="#fff"/><rect x="14" y="90" width="50" height="12" rx="6" fill="${RED}"/>${T(39,124,'today',10,INK)}${ring(39,112,30,SUN)}
+ <g class="dance">${at(104,190,.8,cat(Object.assign({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true},NL)))}</g>
+ <g class="dance" style="animation-delay:.2s">${at(160,190,.6,K('orange',{eyes:'happy',mouth:'open',armL:140,armR:-140,armsFront:true,line:'#cbc2e6'}))}</g>${note(130,110,SUN,0)}`;
+
+S.huge=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <g class="pulse" style="transform-origin:110px 184px"><g transform="translate(118,150) scale(7)">${P.fish}</g></g>
+ <path d="M190,60 v120" stroke="${RED}" stroke-width="3"/><path d="M184,60 h12 M184,180 h12" stroke="${RED}" stroke-width="3"/>
+ ${at(24,196,.36,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}${T(40,60,'WOW',18,RED,'middle','beat')}`;
+
+S.finish=`${room('#fff1c9','#e4b77a')}
+ ${rahmen(96,26,90,104,`<rect x="102" y="32" width="78" height="92" fill="#cdeeff"/><circle cx="160" cy="52" r="9" fill="${SUN}"/><path d="M102,104 q38,-18 78,0 v20 h-78 Z" fill="#8fe0a8"/><path d="M120,104 l12,-26 12,26 Z" fill="${RED}"/>`)}
+ <g class="beat"><circle cx="180" cy="30" r="14" fill="${MINT}"/>${check(180,30,6,4).replace(new RegExp(MINT,'g'),'#fff')}</g>
+ ${T(140,160,'Done!',16,RED,'middle','beat')}
+ ${sh(46,192,30)}${at(46,190,.86,cat({bow:false,hat:barett,eyes:'closed',mouth:'big',armL:150,armR:-150,armsFront:true}))}${spark(90,60,8,SUN,0)}`;
+
+S.yourself=`${room('#e3fbf5','#bff0de')}
+ <rect x="110" y="24" width="70" height="150" rx="30" fill="#bfe9ff" stroke="#b07a45" stroke-width="5"/>
+ <g opacity=".55">${flipAt(145,166,.6,cat({tail:false,eyes:'happy',armR:-125,armsFront:true}))}</g>
+ ${sh(56,192,32)}${at(56,190,.9,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arcArrow(90,80,120,80,-16,RED,4,'5 6')}${T(60,50,'you',16,RED,'middle','beat')}`;
+
+S.theory=`${bg('#fff1c9')}
+ <rect x="60" y="14" width="130" height="90" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>
+ <circle cx="90" cy="50" r="12" fill="none" stroke="#fff" stroke-width="2.500"/>${arrow(106,50,124,50,'#fff',3)}<path d="M134,40 h20 v20 h-20 Z" fill="none" stroke="#fff" stroke-width="2.500"/>${T(170,58,'?',22,SUN,'middle','beat')}<path d="M76,82 h90" stroke="#fff" stroke-width="2" stroke-dasharray="6 6"/>
+ ${floor(184,'#ffe08a')}
+ ${sh(50,192,32)}${at(50,190,.9,cat({hat:glasses,eyes:'open',mouth:'w',headCls:'tilt',armR:-128,armsFront:true}))}
+ <g class="beat"><g transform="translate(150,150) scale(.8)">${P.bulb}</g></g>`;
+
+S.impact=`${bg('#ffe9d6')}${floor(176,'#ffd9bd')}
+ <g class="hop" style="animation-duration:.8s"><g transform="translate(110,150) scale(1.5)">${P.ball(RED)}</g></g>
+ ${burst(110,170,ORA,0)}<path d="M70,176 l-16,-10 M150,176 l16,-10 M80,186 h-24 M140,186 h24" stroke="${ORA}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <ellipse class="ripple" cx="110" cy="182" rx="40" ry="8" fill="none" stroke="${VIO}" stroke-width="3"/>
+ ${T(110,60,'BOOM',22,RED,'middle','beat')}
+ ${at(30,196,.5,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+S.respond=`${park()}${cloud(100,18,.6)}
+ ${speech(50,44,60,34,T(50,56,'Hello?',13,INK),56,76)}
+ <g class="beat">${speech(150,60,60,34,T(150,72,'Hi!',16,RED),144,92)}</g>
+ ${arcArrow(84,40,120,50,-10,VIO,3,'4 5')}
+ ${sh(56,192,30)}${at(56,190,.84,K('orange',{eyes:'happy',armR:-80}))}
+ ${sh(144,192,30)}${at(144,190,.84,cat({eyes:'happy',mouth:'open',mouthCls:'chew',armL:125,armLcls:'wave',armsFront:true}))}`;
+
+S.statement=`${room('#e6f1ff','#cfe3f7')}
+ ${pult(100,RED)}
+ ${at(100,150,.7,cat({mid:tie,tail:false,eyes:'open',mouth:'open',mouthCls:'chew',armR:-140,armsFront:true}))}${pult(100,RED)}
+ ${speech(160,40,60,40,`<path d="M140,34 h40 M140,44 h40 M140,54 h26" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`,140,70)}
+ ${at(24,198,.36,K('orange',{prop:`<rect x="-3" y="-16" width="6" height="18" rx="2" fill="#9aa8c0"/>`,armR:-100,armsFront:true}))}${at(176,198,.36,K('grey',{armL:100,armsFront:true}))}`;
+
+S.maintain=`${park(170)}${sun(30,24,9)}
+ <g transform="translate(120,172) scale(.9)">${P.car(RED)}</g>
+ ${gear(176,60,12,SUN,6)}
+ ${sh(46,192,28)}${at(46,190,.8,cat({bow:false,hat:cap,eyes:'happy',mouth:'tongue',armR:-84,armRcls:'bob',armsFront:true,prop:`<path d="M0,4 v-24" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><circle cx="0" cy="-24" r="7" fill="none" stroke="#9aa8c0" stroke-width="4"/>`}))}
+ <path d="M120,100 q10,-10 0,-20 q-10,-10 0,-20" fill="none" stroke="${MINT}" stroke-width="3" class="glow"/><g class="beat">${check(150,90,8,5)}</g>`;
+
+S.charge=`${room('#e3fbf5','#bff0de')}
+ <rect x="110" y="40" width="60" height="110" rx="10" fill="${INK}"/><rect x="116" y="50" width="48" height="90" rx="4" fill="#fff"/>
+ <rect x="124" y="60" width="32" height="70" rx="4" fill="none" stroke="#9aa8c0" stroke-width="3"/><rect x="134" y="54" width="12" height="6" fill="#9aa8c0"/>
+ <rect x="127" y="63" width="26" height="64" rx="2" fill="${MINT}" style="transform-origin:140px 127px;transform-box:view-box;animation:ladung 3s ease-in-out infinite alternate"/><style>@keyframes ladung{from{transform:scaleY(.15)}to{transform:scaleY(1)}}</style>
+ <g class="beat">${blitz(140,96,1.200,SUN)}</g>
+ <path d="M140,150 q0,30 -40,30 h-30" fill="none" stroke="${INK}" stroke-width="3"/><rect x="60" y="174" width="12" height="12" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ ${at(34,194,.6,cat({eyes:'happy',armR:-100,armsFront:true}))}`;
+
+S.popular=`${bg('#fff3cf')}<circle cx="100" cy="110" r="80" fill="#ffe7a3"/>${floor(186,'#ffe08a')}
+ ${at(26,186,.4,K('orange',{eyes:'spark',armR:-140,armsFront:true}))}${at(60,190,.4,K('grey',{eyes:'spark'}))}${at(140,190,.4,K('cream',{eyes:'spark'}))}${at(174,186,.4,K('white',{eyes:'spark',armL:140,armsFront:true}))}
+ ${at(100,180,.76,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true,hat:glasses.replace(/#fff/g,INK)}),'hop')}
+ ${heart(40,100,.9,RED,0)}${heart(160,100,.9,RED,.4)}${heart(100,60,1.1,RED,.8)}${heart(70,70,.7,RED,1.2)}${heart(134,74,.7,RED,1.6)}
+ ${star5(100,24,12,SUN)}`;
+
+S.traditional=`${bg('#fff8e6')}${papel(10,6,194)}${floor(184,'#e4b77a')}
+ ${kaktus(170,184,.9)}
+ <g transform="translate(34,150)"><path d="M-14,34 q-8,-30 0,-50 h28 q8,20 0,50 Z" fill="${ORA}"/><path d="M-14,-4 h28 M-16,14 h32" stroke="${SKY}" stroke-width="4"/><path d="M-12,4 l4,6 4,-6 4,6 4,-6 4,6 4,-6" fill="none" stroke="#fff" stroke-width="2"/><ellipse cx="0" cy="-16" rx="14" ry="4" fill="#b5571a"/></g>
+ ${sh(104,192,36)}${at(104,190,.96,cat({eyes:'happy',mouth:'open',bow:false,hat:sombrero,armL:40,armR:-50,armRcls:'bob',armsFront:true,mid:`<path d="M-26,-50 q26,14 52,0 l4,40 q-30,12 -60,0 Z" fill="${RED}"/><path d="M-24,-30 l8,8 8,-8 8,8 8,-8 8,8 8,-8" fill="none" stroke="${SUN}" stroke-width="3"/><path d="M-26,-16 h52" stroke="${MINT}" stroke-width="3"/>`+guitar}))}
+ ${note(150,90,RED,0)}${note(60,100,MINT,.7)}`;
+
+S.onto=`${room('#fff1c9','#e4b77a')}
+ ${at(130,186,1.2,P.table(110))}<path d="M66,124 h130 v12 h-130 Z" fill="#c98a4b"/>
+ ${arcArrow(30,150,120,104,50,RED,5,'8 8')}
+ <g opacity=".3">${at(30,190,.6,cat({tail:false}))}</g>
+ <g transform="translate(130,122)"><g class="jump" style="animation-duration:.9s"><g transform="scale(.66)">${cat({eyes:'happy',mouth:'open',armL:120,armR:-120,armsFront:true})}</g></g></g>`;
+
+S.reveal=`${bg('#3b2a4a')}<path d="M100,-10 L30,186 h140 Z" fill="#fff6c8" opacity=".22"/>${floor(176,'#8a5a30')}
+ <g transform="translate(110,170) scale(2)">${P.gift(SUN,RED)}</g>${spark(110,110,10,SUN,0)}${spark(150,130,8,'#fff',.5)}${spark(76,140,7,'#fff',1)}
+ <g style="animation:tuch 3s ease-in-out infinite alternate"><path d="M70,110 q40,-30 80,0 v66 q-40,10 -80,0 Z" fill="${VIO}"/><path d="M70,110 q40,-30 80,0" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/></g><style>@keyframes tuch{0%,20%{transform:translate(0,0)}80%,100%{transform:translate(70px,-60px) rotate(20deg)}}</style>
+ ${at(36,190,.66,cat(Object.assign({eyes:'happy',mouth:'big',armR:-120,armsFront:true},NL)))}${T(110,50,'Ta-da!',16,SUN,'middle','beat')}`;
+
+S.direction=`${park(170)}${cloud(40,24,.7)}
+ <path d="M100,186 V50" stroke="#b07a45" stroke-width="5"/>
+ <path d="M100,56 h50 l12,11 -12,11 h-50 Z" fill="${RED}"/><path d="M100,86 h-50 l-12,11 12,11 h50 Z" fill="${SKY}"/><path d="M100,116 h44 l12,11 -12,11 h-44 Z" fill="${SUN}"/>
+ <g class="spin" style="animation-duration:6s;transform-origin:100px 30px"><path d="M100,14 l6,16 -6,16 -6,-16 Z" fill="${INK}"/></g>
+ ${sh(40,192,26)}${at(40,190,.74,cat({eyes:'open',headCls:'tilt',armR:-150,armsFront:true,armL:30,propL:`<g transform="translate(0,6)"><path d="M-14,-8 l9,3 10,-3 9,3 v16 l-9,-3 -10,3 -9,-3 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>`}))}`;
+
+S.weapon=`${room('#ffe9d6','#ffd9bd')}
+ <g class="beat"><g transform="translate(150,90) rotate(20)"><rect x="-5" y="-60" width="10" height="70" rx="5" fill="${SKY}"/><rect x="-14" y="8" width="28" height="7" rx="3" fill="${SUN}"/><rect x="-4" y="15" width="8" height="16" rx="3" fill="#b07a45"/></g></g>${T(150,150,'toy',13,SKY)}
+ ${sh(60,192,32)}${at(60,190,.9,cat({eyes:'happy',mouth:'big',hat:`<path d="M-30,-106 q0,-28 30,-28 q30,0 30,28 Z" fill="#9aa8c0"/><rect x="-4" y="-142" width="8" height="10" fill="${RED}"/>`,bow:false,armR:-130,armRcls:'bob',armsFront:true,armL:40,prop:`<rect x="-4" y="-44" width="8" height="48" rx="4" fill="#bfe9ff" stroke="#9aa8c0" stroke-width="1.500"/><rect x="-10" y="-2" width="20" height="5" rx="2" fill="${SUN}"/>`,propL:`<path d="M-14,-14 h28 v14 q0,14 -14,18 q-14,-4 -14,-18 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/>${star5(0,-2,6,RED)}`}))}
+ ${T(120,40,'en garde!',12,VIO,'middle','glow')}`;
+
+S.employee=`${room('#e3fbf5','#bff0de')}
+ <rect x="110" y="16" width="76" height="50" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><g class="ring">${at(130,42,.3,P.clock(28,270))}</g>${T(162,46,'9–5',12,INK)}
+ <rect x="100" y="120" width="90" height="60" rx="4" fill="#c98a4b"/><rect x="94" y="114" width="102" height="10" rx="3" fill="#b07a45"/><rect x="130" y="92" width="36" height="24" rx="3" fill="${INK}"/><rect x="133" y="95" width="30" height="18" fill="${SKY}"/>
+ ${sh(50,192,32)}${at(50,190,.9,cat({mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="${SKY}" opacity=".95"/>`+nameTag,eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${ring(50,160,22,RED)}`;
+
+S.cultural=`${bg('#fff8e6')}${papel(8,6,194)}${floor(184,'#e4b77a')}
+ <path d="M160,26 v20" stroke="${INK}" stroke-width="2"/><g class="sway" style="transform-origin:160px 26px"><g transform="translate(160,66)">${[0,60,120,180,240,300].map((a,i)=>`<path transform="rotate(${a})" d="M-6,-14 L0,-34 L6,-14 Z" fill="${[RED,SUN,MINT,SKY,VIO,ORA][i]}"/>`).join('')}<circle r="16" fill="${VIO}"/><path d="M-16,0 h32 M-13,-8 h26 M-13,8 h26" stroke="${SUN}" stroke-width="2.500"/></g></g>
+ ${taco(36,176,1.200)}<g transform="translate(150,186) rotate(-10) scale(.5)">${guitar}</g>
+ ${[[30,60,RED],[60,90,SUN],[40,120,VIO]].map(([x,y,c],i)=>`<g class="float" style="animation-delay:${i*.4}s"><circle cx="${x}" cy="${y}" r="9" fill="${c}"/><circle cx="${x}" cy="${y}" r="3" fill="#fff"/></g>`).join('')}
+ ${sh(100,192,32)}${at(100,190,.86,cat({eyes:'happy',mouth:'big',hat:sombrero,bow:false,armL:140,armR:-140,armsFront:true}),'dance')}`;
+
+/* Tag 151–155: contain, peace, pain, apply, measure · wide, shake, interview, manage, particular · camera, structure, politics, perform, bit · weight, suddenly, discover, candidate, production · treat, trip, evening, affect, inside */
+const pyramide=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})">${[0,1,2,3].map(i=>`<rect x="${-40+i*9}" y="${-12-i*12}" width="${80-i*18}" height="12" fill="${i%2?'#e4c58a':'#d9a56a'}"/>`).join('')}<rect x="-6" y="-60" width="12" height="12" fill="#c98a4b"/><path d="M-5,0 v-48 h10 v48" fill="#b07a45" opacity=".6"/></g>`;
+S.contain=`${bg('#e3fbf5')}${floor(170,MINT)}<rect y="170" width="200" height="8" fill="#9be6d8"/>
+ <path d="M70,60 h80 v100 q0,10 -10,10 h-60 q-10,0 -10,-10 Z" fill="#fff" opacity=".7" stroke="#cbc2e6" stroke-width="3"/><rect x="64" y="50" width="92" height="14" rx="5" fill="${RED}"/>
+ ${[[90,150],[112,152],[132,148],[100,132],[124,130],[110,112]].map(([x,y],i)=>keks(x,y,10)).join('')}
+ ${lbl(176,100,136,120)}${T(176,90,'6',16,RED)}
+ ${at(30,206,.56,cat({eyes:'spark',mouth:'tongue',tail:false,armR:-130,armsFront:true}))}`;
+
+S.peace=`${bg('#cdeeff')}${sun(160,30,10)}${cloud(40,30,.8)}${hills('#8fe0a8','#6fd08f',160)}
+ <g class="float"><g transform="translate(100,50)"><ellipse cx="0" cy="0" rx="16" ry="11" fill="#fff"/><circle cx="14" cy="-7" r="8" fill="#fff"/><path d="M21,-7 l8,2 -8,3 Z" fill="${ORA}"/><circle cx="16" cy="-9" r="1.600" fill="${INK}"/><g class="flap"><path d="M-2,-2 q-16,-22 -26,-2 Z" fill="#eaf2ff"/></g><path d="M24,-2 q10,4 14,-4" fill="none" stroke="#3aa568" stroke-width="2.500"/><ellipse cx="38" cy="-8" rx="4" ry="2" fill="#4fc27f"/></g></g>
+ ${sh(70,190,28)}${at(70,188,.8,cat({eyes:'closed',mouth:'w',armR:-70}))}${sh(126,190,28)}${at(126,188,.8,K('orange',{eyes:'closed',mouth:'w',armL:70}))}
+ ${heart(98,110,1,RED,0)}`;
+
+S.pain=`${room('#ffe9d6','#ffd9bd')}
+ <rect x="130" y="130" width="50" height="50" rx="4" fill="#b07a45"/>
+ ${burst(112,170,RED,0)}
+ ${sh(70,192,34)}${at(70,190,.94,cat({eyes:'closed',mouth:'o',armL:150,armR:-150,armsFront:true,feet:'walk'}),'hop')}
+ <g transform="translate(100,180) rotate(-20)"><rect x="-10" y="-4" width="20" height="8" rx="4" fill="#f3d9a4"/><rect x="-3" y="-4" width="6" height="8" fill="#fff8e6"/></g>
+ ${T(120,60,'Ouch!',18,RED,'middle','beat')}<path class="sweat" d="${tear(36,104)}" fill="${SKY}"/>`;
+
+S.apply=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="110" y="80" width="80" height="100" rx="4" fill="#8a5a30"/><rect x="104" y="74" width="92" height="12" rx="3" fill="#b07a45"/>
+ ${at(150,78,.5,K('grey',{mid:tie,tail:false,hat:glasses.replace(/#fff/g,INK),eyes:'happy'}))}<rect x="110" y="74" width="80" height="12" fill="#b07a45"/>${T(150,130,'JOBS',14,SUN)}
+ <g class="givemove"><g transform="translate(92,110) rotate(-8)"><rect x="-12" y="-16" width="24" height="32" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/><circle cx="0" cy="-6" r="5" fill="${INK}"/><path d="M-7,5 h14 M-7,10 h10" stroke="#cbc2e6" stroke-width="2"/></g></g>
+ ${sh(46,192,30)}${at(46,190,.86,cat({mid:tie,eyes:'happy',mouth:'open',armR:-96,armsFront:true}))}`;
+
+S.measure=`${room('#fff1c9','#e4b77a')}
+ <rect x="150" y="20" width="16" height="158" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/>${[0,1,2,3,4,5,6,7].map(i=>`<path d="M150,${34+i*18} h${i%2?6:10}" stroke="${INK}" stroke-width="2"/>`).join('')}
+ ${at(100,178,.7,K('orange',{eyes:'happy',armL:20,armR:-20}))}
+ <path d="M70,96 h80" stroke="${RED}" stroke-width="3" stroke-dasharray="6 6"/><g class="beat">${T(176,100,'40',14,RED)}</g>
+ ${at(36,192,.6,cat({hat:glasses,eyes:'happy',armR:-140,armRcls:'bob',armsFront:true}))}`;
+
+S.wide=`${bg('#cdeeff')}${cloud(40,24,.7)}${hills('#8fe0a8','#6fd08f',120)}
+ <path d="M0,140 q100,-20 200,0 v60 h-200 Z" fill="#5cc3ff"/><path class="ripple" d="M40,170 q10,-6 20,0 M130,180 q10,-6 20,0" fill="none" stroke="#fff" stroke-width="2"/>
+ <g class="glow"><path d="M14,110 h172" stroke="${RED}" stroke-width="5" stroke-linecap="round"/><path d="M14,110 l12,-8 M14,110 l12,8 M186,110 l-12,-8 M186,110 l-12,8" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>
+ ${at(22,150,.36,cat({eyes:'wide',tail:false}))}${at(180,150,.3,K('orange',{tail:false,armL:125,armLcls:'wave',armsFront:true}))}`;
+
+S.shake=`${room('#fff1c9','#e4b77a')}
+ <path d="M130,60 q-8,8 0,16 M170,60 q8,8 0,16 M124,100 q-8,8 0,16 M176,100 q8,8 0,16" fill="none" stroke="${VIO}" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${sh(70,192,34)}${at(70,190,.94,cat({eyes:'closed',mouth:'big',armR:-110,armRcls:'throwarm',armsFront:true,prop:`<g transform="translate(6,-14)"><rect x="-10" y="-22" width="20" height="34" rx="6" fill="${SKY}"/><rect x="-7" y="-28" width="14" height="8" rx="2" fill="#9aa8c0"/><circle cx="0" cy="-4" r="4" fill="#fff"/></g>`}),'shiver')}
+ ${note(150,140,RED,0)}${T(150,40,'shake!',14,RED,'middle','beat')}`;
+
+S.interview=`${room('#e6f1ff','#cfe3f7')}
+ ${speech(60,40,50,34,T(60,54,'?',22,RED),64,72)}${speech(146,40,56,34,dots(146,50,VIO),140,72)}
+ ${at(46,190,.76,K('grey',{mid:tie,eyes:'open',mouth:'open',armR:-90,armsFront:true,prop:`<rect x="-3" y="-18" width="6" height="18" rx="2" fill="#9aa8c0"/><circle cx="0" cy="-22" r="6" fill="${INK}"/>`}))}
+ ${at(150,190,.8,cat({eyes:'happy',mouth:'open',mouthCls:'chew',armL:120,armsFront:true}))}
+ <rect x="86" y="150" width="28" height="20" rx="3" fill="${INK}"/><circle cx="100" cy="160" r="6" fill="${SKY}"/><circle class="glow" cx="110" cy="154" r="2.500" fill="${RED}"/>`;
+
+S.manage=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${sh(100,192,36)}${at(100,190,.96,cat({eyes:'happy',mouth:'tongue',armL:150,armR:-150,armsFront:true}))}
+ <g class="spin" style="animation-duration:3s;transform-origin:36px 76px">${P.plate(26).replace('<','<g transform="translate(36,76)"><')}</g></g>
+ <g class="spin" style="animation-duration:3s;transform-origin:164px 76px">${P.plate(26).replace('<','<g transform="translate(164,76)"><')}</g></g>
+ <path d="M36,80 v20 M164,80 v20" stroke="#b07a45" stroke-width="3"/>
+ <g class="beat">${check(100,36,10,6)}</g>${spark(60,40,7,SUN,0)}${spark(140,40,7,SUN,.5)}`;
+
+S.particular=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ ${[30,64,98,132,166].map((x,i)=>`<circle cx="${x}" cy="80" r="14" fill="${i==3?RED:'#cbc2e6'}"/>`).join('')}
+ ${ring(132,80,22,RED)}${arrow(132,24,132,50,RED,6,'float')}${T(132,126,'this one',12,RED,'middle','beat')}
+ ${at(60,200,.6,cat({hat:glasses,eyes:'happy',armR:-130,armsFront:true}))}`;
+
+S.camera=`${bg('#fff1c9')}<circle cx="110" cy="96" r="78" fill="#ffe7a3"/>${floor(184,'#ffe08a')}
+ <g class="pulse" style="transform-origin:110px 96px"><rect x="54" y="60" width="112" height="76" rx="12" fill="${INK}"/><rect x="74" y="48" width="34" height="16" rx="5" fill="${INK}"/><circle cx="110" cy="98" r="28" fill="#5a4a6c"/><circle cx="110" cy="98" r="20" fill="${SKY}"/><circle cx="104" cy="92" r="6" fill="#fff" opacity=".7"/><rect x="140" y="68" width="16" height="10" rx="3" fill="${SUN}"/><circle cx="68" cy="72" r="4" fill="${RED}"/></g>
+ <g class="twinkle">${spark(160,50,14,'#fff',0)}</g>${T(40,40,'click!',14,RED,'middle','beat')}
+ ${at(30,200,.5,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.structure=`${bg('#cdeeff')}${cloud(30,24,.7)}${floor(180,'#8fe0a8')}
+ <path d="M50,180 L100,30 L150,180" fill="none" stroke="#7a8aa6" stroke-width="6" stroke-linejoin="round"/><path d="M62,144 h76 M74,108 h52 M86,72 h28 M62,144 l64,-36 M138,144 l-64,-36 M74,108 l40,-36 M126,108 l-40,-36" stroke="#9aa8c0" stroke-width="3"/>
+ ${[[100,30],[62,144],[138,144],[74,108],[126,108]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="${RED}"/>`).join('')}
+ ${at(170,200,.5,cat({bow:false,hat:P.hatHard,eyes:'happy',armL:140,armsFront:true}))}`;
+
+S.politics=`${room('#e6f1ff','#cfe3f7')}
+ <path d="M10,150 q90,-40 180,0 v30 h-180 Z" fill="#8a5a30"/><path d="M30,130 q70,-28 140,0" fill="none" stroke="#b07a45" stroke-width="8"/>
+ ${at(50,128,.36,K('orange',{mid:tie,tail:false,armR:-155,armsFront:true}))}${at(100,116,.36,K('grey',{mid:tie,tail:false}))}${at(150,128,.36,K('cream',{mid:tie,tail:false,armL:155,armsFront:true}))}
+ <path d="M100,60 V20" stroke="#b07a45" stroke-width="3"/><g class="flower" style="transform-origin:100px 28px"><rect x="101" y="20" width="10" height="18" fill="#1f9c5a"/><rect x="111" y="20" width="10" height="18" fill="#fff"/><circle cx="116" cy="29" r="2.500" fill="#b07a45"/><rect x="121" y="20" width="10" height="18" fill="${RED}"/></g>
+ ${pult(100,RED)}
+ ${speech(160,50,40,26,T(160,58,'vote!',10,RED),150,74)}`;
+
+S.perform=`${bg('#3b2a4a')}<path d="M100,-10 L30,186 h140 Z" fill="#fff6c8" opacity=".22"/>${floor(176,'#8a5a30')}${papel(6,30,170)}
+ <path d="M0,0 h26 q-6,90 0,176 h-26 Z M200,0 h-26 q6,90 0,176 h26 Z" fill="${RED}"/>
+ <g class="dance">${at(100,182,.9,cat(Object.assign({eyes:'closed',mouth:'big',armL:150,armR:-150,armsFront:true,mid:`<path d="M-30,-10 q30,26 60,0 l8,16 q-38,22 -76,0 Z" fill="${RED}"/><path d="M-32,2 q32,22 64,0" fill="none" stroke="${SUN}" stroke-width="3"/>`},NL)))}</g>
+ ${note(50,80,SUN,0)}${note(150,70,MINT,.7)}<g class="rise">${flower(60,190,RED,0)}</g>`;
+
+S.bit=`${bg('#fff1c9')}${floor(160,MINT)}<rect y="160" width="200" height="8" fill="#9be6d8"/>
+ <g opacity=".5"><ellipse cx="60" cy="150" rx="40" ry="10" fill="#fff"/><path d="M28,150 v-24 a32,9 0 0 1 64,0 v24 a32,9 0 0 1 -64,0" fill="#ffd98a"/><ellipse cx="60" cy="126" rx="32" ry="9" fill="#fff8e6"/></g>
+ <g class="hop"><path d="M140,150 l14,-8 v10 Z" fill="#ffd98a" stroke="#e0a83a" stroke-width="1.500"/><circle cx="148" cy="142" r="2.500" fill="${RED}"/></g>
+ ${ring(146,146,20,RED)}${arrow(180,100,160,130,RED,5,'float')}${T(150,90,'a bit',13,RED,'middle','beat')}
+ ${at(100,206,.5,cat({eyes:'wide',mouth:'wavy',tail:false,armR:-130,armsFront:true}))}`;
+
+S.weight=`${room('#e3fbf5','#bff0de')}
+ <rect x="80" y="130" width="100" height="14" rx="6" fill="#9aa8c0"/><rect x="96" y="144" width="68" height="34" rx="6" fill="#7a8aa6"/><circle cx="130" cy="162" r="13" fill="#fff" stroke="${INK}" stroke-width="3"/><path d="M130,162 l7,-9" stroke="${RED}" stroke-width="3" stroke-linecap="round" class="wiggle" style="transform-origin:130px 162px"/>
+ ${at(130,130,.6,cat({eyes:'wide',mouth:'o',armL:20,armR:-20,tail:true}))}
+ ${T(40,70,'4 kg',18,RED,'middle','beat')}
+ <g transform="translate(40,170) scale(.8)">${hantel}</g>`;
+
+S.suddenly=`${bg('#cdeeff')}
+ <g class="cloud"><ellipse cx="110" cy="30" rx="60" ry="18" fill="#7a8aa6"/><ellipse cx="80" cy="24" rx="30" ry="16" fill="#9aa8c0"/></g>
+ ${[60,90,120,150].map((x,i)=>`<path class="drop" style="animation-delay:${i*.2}s" d="M${x},50 l-6,16" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ <g class="beat">${blitz(150,70,1.300,SUN)}</g>${hills('#8fe0a8','#6fd08f',166)}
+ ${sh(80,192,32)}${at(80,190,.9,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}),'hop')}
+ ${T(30,60,'!',34,RED,'middle','beat')}`;
+
+S.discover=`${park(160)}${sun(160,26,9)}${kaktus(180,170,.6)}
+ <path d="M80,186 q30,-30 70,0 Z" fill="#b07a45"/><path d="M100,176 h40 v-18 h-40 Z" fill="#c98a4b" stroke="#8a5a30" stroke-width="2"/><path d="M100,158 q20,-22 40,0 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="2" class="lid" style="transform-origin:100px 158px;transform-box:view-box"/>
+ ${spark(120,140,10,SUN,0)}${spark(146,130,7,'#fff',.4)}${coin(112,170,5)}${coin(126,172,5)}
+ ${sh(46,192,30)}${at(46,190,.86,cat({hat:detHat,eyes:'spark',mouth:'o',armR:-110,armsFront:true,armL:40,propL:`<path d="M0,10 v-34" stroke="#b07a45" stroke-width="3"/><path d="M-8,-24 h16 l-3,-14 h-10 Z" fill="#9aa8c0"/>`}))}`;
+
+S.candidate=`${room('#e6f1ff','#cfe3f7')}
+ ${[[36,'orange',SKY],[100,null,RED],[164,'grey',SUN]].map(([x,n,c],i)=>`<rect x="${x-26}" y="20" width="52" height="60" rx="4" fill="#fff" stroke="${c}" stroke-width="3"/>${at(x,76,.3,n?K(n,{tail:false,mid:tie}):cat({tail:false,mid:tie,eyes:'happy'}))}${T(x,96,String(i+1),12,c)}`).join('')}
+ ${ring(100,54,40,RED)}
+ ${sh(100,192,32)}${at(100,190,.84,cat({mid:tie,eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}))}
+ ${T(160,150,'Vote 2',12,RED,'middle','beat')}`;
+
+S.production=`${room('#e3fbf5','#bff0de',170)}
+ <rect x="0" y="150" width="200" height="14" rx="4" fill="#5a4a6c"/><g class="road" style="animation-duration:1.200s"><path d="M-40,157 h320" stroke="#9aa8c0" stroke-width="4" stroke-dasharray="6 14"/></g>
+ ${[30,80,130,180].map((x,i)=>`<rect x="${x-12}" y="126" width="24" height="24" rx="3" fill="${[RED,SUN,MINT,SKY][i]}"/>`).join('')}
+ <path d="M60,40 h80 v30 h-80 Z" fill="#9aa8c0"/><path d="M100,70 v30" stroke="#7a8aa6" stroke-width="6" class="hop"/>${gear(80,54,10,SUN,4)}${gear(120,54,10,RED,4,true)}
+ ${T(170,40,'×100',14,RED,'middle','beat')}
+ ${at(30,206,.4,cat({bow:false,hat:P.hatHard,eyes:'happy',tail:false}))}`;
+
+S.treat=`${park()}${sun(30,24,9)}
+ ${sh(60,192,32)}${at(60,190,.88,cat({eyes:'happy',mouth:'open',armR:-90,armsFront:true,prop:`<g transform="translate(4,-4)"><path d="M-8,0 l8,22 8,-22 Z" fill="#e4b77a"/><circle cx="0" cy="-6" r="9" fill="${SUN}"/><circle cx="-4" cy="-13" r="6" fill="#fff8e6"/><circle cx="2" cy="-18" r="2.500" fill="${RED}"/></g>`}))}
+ ${sh(146,192,26)}${at(146,190,.7,K('cream',{eyes:'spark',mouth:'tongue',armL:120,armR:-120,armsFront:true}),'hop')}
+ ${heart(104,100,1,RED,0)}${T(146,90,'yum!',13,RED,'middle','beat')}`;
+
+S.trip=`${bg('#cdeeff')}${sun(160,26,9)}${cloud(30,50,.6)}
+ <g class="float"><path d="M40,40 l60,-12 8,8 -44,18 -6,18 -10,-16 -14,2 Z" fill="#fff" stroke="#cbc2e6" stroke-width="2"/></g>
+ <path d="M0,160 h200 v40 h-200 Z" fill="#f3d9a4"/>${pyramide(150,160,1)}${kaktus(100,162,.6)}
+ <path d="M20,120 q40,-40 90,-20" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="6 7"/>${pin(150,90)}
+ ${at(40,198,.66,cat({eyes:'happy',mouth:'open',hat:sombrero,bow:false,armR:-20,armL:125,armLcls:'wave',armsFront:true,prop:`<g transform="translate(0,22)">${koffer}</g>`}))}`;
+
+S.evening=`${bg('#ffb37a')}<rect width="200" height="60" fill="#ff9a5a"/><circle cx="100" cy="130" r="34" fill="${SUN}"/>
+ <path d="M0,130 h200 v70 h-200 Z" fill="#5a4a6c"/><path d="M70,140 h60 M80,152 h40 M90,164 h20" stroke="${SUN}" stroke-width="4" stroke-linecap="round" opacity=".7" class="glow"/>
+ ${spark(30,30,4,'#fff',0)}${spark(170,40,4,'#fff',.6)}
+ <rect x="20" y="150" width="70" height="7" rx="3" fill="#3a3148"/><rect x="28" y="157" width="6" height="30" fill="#3a3148"/><rect x="76" y="157" width="6" height="30" fill="#3a3148"/>
+ ${at(54,152,.56,cat(Object.assign({eyes:'closed',mouth:'w',headCls:'tilt'},NL)))}${T(150,30,'7 pm',13,'#fff')}`;
+
+S.affect=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g transform="translate(40,70) scale(.9)">${sun(0,0,16)}</g>
+ <path d="M64,84 q30,10 50,40" fill="none" stroke="${SUN}" stroke-width="4" stroke-dasharray="6 7" class="glow"/>${arrow(108,116,118,128,SUN,5)}
+ <g class="grow" style="transform-origin:140px 184px;transform-box:view-box">${sprout(140,184,60,true)}</g>
+ <path d="M124,184 h32 l-4,-14 h-24 Z" fill="${ORA}"/>
+ ${at(60,200,.5,cat({hat:glasses,eyes:'happy',armR:-110,armsFront:true}))}${T(100,60,'→',22,RED,'middle','beat')}`;
+
+S.inside=`${bg('#cdeeff')}${cloud(40,24,.7)}${hills('#8fe0a8','#6fd08f',166)}
+ <rect x="40" y="70" width="130" height="110" rx="4" fill="#fff8e6"/><path d="M30,70 h150 l-14,-34 h-122 Z" fill="${RED}"/>
+ <rect x="74" y="92" width="62" height="56" rx="4" fill="#ffe89a" stroke="#fff" stroke-width="5"/><clipPath id="ins"><rect x="76" y="94" width="58" height="52"/></clipPath><g clip-path="url(#ins)">${at(105,156,.5,cat({tail:false,eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}</g>
+ ${[20,180].map((x,i)=>`<path class="drop" style="animation-delay:${i*.3}s" d="M${x},40 l-5,14" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ ${arrow(20,120,62,120,RED,6,'glow')}`;
+
+/* Tag 156–160: conference, unit, style, adult, worry · range, mention, deep, edge, specific · writer, trouble, necessary, throughout, challenge · fear, shoulder, institution, middle, sea · dream, bar, property, instead, improve */
+S.conference=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="20" y="10" width="160" height="26" rx="6" fill="${RED}"/>${T(100,29,'CONFERENCE',12,'#fff')}
+ <rect x="110" y="46" width="76" height="50" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M120,84 l14,-14 12,8 18,-22" fill="none" stroke="${MINT}" stroke-width="3"/>
+ ${pult(60,SKY)}${at(60,150,.56,cat({mid:tie,tail:false,eyes:'happy',mouth:'open',mouthCls:'chew',armR:-140,armsFront:true}))}${pult(60,SKY)}
+ ${[110,140,170].map((x,i)=>at(x,198,.36,K(['orange','grey','cream'][i],{tail:false,eyes:'happy'}))).join('')}${[124,156].map((x,i)=>at(x,176,.3,K(['white','orange'][i],{tail:false}))).join('')}`;
+
+S.unit=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${[0,1,2].map(r=>[0,1,2].map(c=>`<rect x="${70+c*28}" y="${50+r*28}" width="26" height="26" rx="4" fill="${r==2&&c==0?RED:'#cbc2e6'}"/>`).join('')).join('')}
+ <g class="hop"><rect x="30" y="126" width="26" height="26" rx="4" fill="${RED}"/></g>${T(43,116,'1',16,RED,'middle','beat')}
+ ${arcArrow(56,134,70,112,-8,VIO,3,'4 5')}
+ ${at(160,200,.5,cat({hat:glasses,eyes:'happy',armL:140,armsFront:true}))}`;
+
+S.style=`${room('#ece6ff','#d6ccf5')}
+ <rect x="120" y="24" width="66" height="150" rx="28" fill="#bfe9ff" stroke="#b07a45" stroke-width="5"/>
+ ${sh(70,192,36)}${at(70,190,1,cat({eyes:'happy',mouth:'w',headCls:'tilt',hat:fedora+glasses.replace(/#fff/g,INK),mid:`<path d="M-24,-46 q24,10 48,0 v36 h-48 Z" fill="${SKY}"/><path d="M-6,-44 l6,10 6,-10" fill="#fff"/>`,armR:-140,armsFront:true}))}
+ ${spark(30,50,9,SUN,0)}${spark(110,40,7,SUN,.5)}${spark(150,140,7,'#fff',1)}${star5(30,120,8,SUN)}`;
+
+S.adult=`${park()}${cloud(40,24,.7)}
+ ${sh(70,192,36)}${at(70,190,1,cat({eyes:'happy',mid:tie,armR:-70,armL:30,propL:`<g transform="translate(0,-10)">${mappe}</g>`}))}
+ ${sh(146,192,20)}${at(146,190,.5,cat({eyes:'happy',mouth:'open',armL:130,armsFront:true}))}
+ ${ring(70,120,66,RED)}<path d="M176,190 v-110" stroke="${INK}" stroke-width="2"/><path d="M170,80 h12 M170,190 h12 M170,136 h8" stroke="${INK}" stroke-width="2"/>`;
+
+S.worry=`${room('#e9efe0','#d7dfc8')}
+ ${think(140,50,40,30,`<path d="M124,44 q16,-12 32,0 q-16,10 -32,0" fill="#9aa8c0"/><path d="M132,56 l-3,8 M140,56 l-3,8 M148,56 l-3,8" stroke="${SKY}" stroke-width="2" stroke-linecap="round"/>${T(164,44,'?',14,RED)}`,-1)}
+ ${sh(70,192,34)}${at(70,190,.94,cat({eyes:'open',mouth:'wavy',armL:150,armR:-150,armsFront:true,hat:`<path d="M-24,-88 l12,-5 M24,-88 l-12,-5" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`}),'shiver')}
+ <path class="sweat" d="${tear(30,100)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(112,96)}" fill="${SKY}"/>`;
+
+S.range=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <path d="M20,90 h160" stroke="#cbc2e6" stroke-width="8" stroke-linecap="round"/><path d="M60,90 h80" stroke="${RED}" stroke-width="8" stroke-linecap="round" class="glow"/>
+ <circle cx="60" cy="90" r="9" fill="#fff" stroke="${RED}" stroke-width="4"/><circle cx="140" cy="90" r="9" fill="#fff" stroke="${RED}" stroke-width="4"/>
+ ${T(60,66,'3',16,RED)}${T(140,66,'8',16,RED)}${T(20,116,'0',11,'#9aa8c0')}${T(180,116,'10',11,'#9aa8c0')}
+ ${[0,1,2,3,4,5,6,7,8,9,10].map(i=>`<path d="M${20+i*16},98 v6" stroke="${INK}" stroke-width="1.500"/>`).join('')}
+ ${at(100,202,.56,cat({eyes:'happy',armL:130,armR:-130,armsFront:true}))}`;
+
+S.mention=`${park()}${cloud(150,24,.7)}
+ ${speech(70,44,100,50,`${T(40,54,'...and',10,'#9aa8c0')}<g class="beat"><g transform="translate(84,52) scale(1.600)">${P.fish}</g></g>${T(112,54,'...',12,'#9aa8c0')}`,60,90)}
+ ${ring(84,50,20,RED)}
+ ${sh(56,192,30)}${at(56,190,.84,cat({eyes:'happy',mouth:'open',mouthCls:'chew',armR:-110,armsFront:true}))}
+ ${sh(150,192,28)}${at(150,190,.78,K('orange',{eyes:'spark',mouth:'o',armL:150,armsFront:true}))}`;
+
+S.deep=`${bg('#cdeeff')}<path d="M0,40 q50,-10 100,0 t100,0 v160 h-200 Z" fill="#5cc3ff"/><path d="M0,110 h200 v90 h-200 Z" fill="#2f6fd0"/><path d="M0,160 h200 v40 h-200 Z" fill="#1f3f8f"/>
+ <g class="swim">${fishAt(150,80,1.400,0)}</g><circle class="bubble" cx="60" cy="150" r="4" fill="#fff" opacity=".7"/><circle class="bubble" style="animation-delay:1s" cx="70" cy="170" r="3" fill="#fff" opacity=".7"/>
+ <path d="M20,44 v140" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/>${arrow(20,170,20,190,'#fff',5,'glow')}
+ <g class="float">${at(100,180,.5,cat(Object.assign({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true,hat:`<circle cx="0" cy="-70" r="50" fill="#bfe9ff" opacity=".25" stroke="#fff" stroke-width="3"/>`},NL)))}</g>
+ ${T(170,180,'50 m',12,'#fff')}`;
+
+S.edge=`${bg('#cdeeff')}${cloud(150,40,.7)}${sun(170,90,8)}
+ <path d="M0,110 h110 v90 h-110 Z" fill="#b07a45"/><path d="M0,104 h110 v14 h-110 Z" fill="#6fd08f"/>
+ <path d="M110,104 v96" stroke="${RED}" stroke-width="4" stroke-dasharray="7 7" class="glow"/>${arrow(160,60,120,98,RED,6,'float')}
+ ${at(84,106,.6,cat({eyes:'wide',mouth:'wavy',armL:120,armR:-120,armsFront:true}),'shiver')}
+ <circle class="snow" cx="116" cy="120" r="3" fill="#8a5a30"/><circle class="snow" style="animation-delay:-1.500s" cx="122" cy="120" r="2" fill="#8a5a30"/>`;
+
+S.specific=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ ${[[40,50],[80,40],[120,56],[160,44],[60,100],[140,104]].map(([x,y],i)=>`<g opacity="${i==2?1:.35}">${fishAt(x,y,1.400,0).replace(/#ff8a3c|#ffa53c/g,i==2?RED:'#9aa8c0')}</g>`).join('')}
+ <g class="glow"><circle cx="120" cy="56" r="20" fill="none" stroke="${RED}" stroke-width="3"/><path d="M120,30 v14 M120,68 v14 M94,56 h14 M132,56 h14" stroke="${RED}" stroke-width="3"/></g>
+ ${at(100,200,.6,cat({hat:glasses,eyes:'open',armR:-130,armRcls:'bob',armsFront:true}))}${T(40,150,'exactly this',10,RED)}`;
+
+S.writer=`${room('#fff1c9','#e4b77a')}
+ ${at(120,186,1.1,P.table(110))}<path d="M60,124 h120 v12 h-120 Z" fill="#c98a4b"/>
+ <rect x="96" y="96" width="56" height="28" rx="4" fill="${INK}"/>${[0,1,2,3,4,5].map(i=>`<rect x="${100+i*8.500}" y="104" width="6" height="5" rx="1" fill="#fff"/><rect x="${100+i*8.500}" y="113" width="6" height="5" rx="1" fill="#fff"/>`).join('')}<rect x="104" y="62" width="40" height="36" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/><path d="M110,72 h28 M110,80 h28 M110,88 h16" stroke="${INK}" stroke-width="1.800"/>
+ ${[0,1].map(i=>`<g transform="translate(${170+i*8},${116-i*4}) rotate(${i*20})"><ellipse cx="0" cy="0" rx="8" ry="7" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>`).join('')}
+ ${at(44,192,.8,cat({hat:glasses,eyes:'open',mouth:'tongue',armR:-70,armRcls:'bob',armsFront:true}))}${T(60,50,'tap tap',12,VIO,'middle','glow')}`;
+
+S.trouble=`${room('#fff1c9','#e4b77a')}
+ <g transform="translate(140,170) rotate(80)"><path d="M-14,10 q-8,-30 0,-44 h28 q8,14 0,44 Z" fill="${SKY}"/></g><ellipse cx="110" cy="182" rx="24" ry="5" fill="#bfe9ff"/><path d="M96,176 q-6,-14 -16,-12" fill="none" stroke="#3aa568" stroke-width="3"/><circle cx="78" cy="162" r="6" fill="${RED}"/>
+ <path d="M150,100 q20,-20 30,0 q-20,20 -6,34 q16,10 -10,20" fill="none" stroke="${VIO}" stroke-width="3" stroke-linecap="round"/><circle cx="160" cy="150" r="12" fill="${VIO}"/>
+ ${T(140,50,'uh-oh',16,RED,'middle','beat')}
+ ${sh(46,192,30)}${at(46,190,.86,cat({eyes:'wide',mouth:'wavy',armL:150,armR:-150,armsFront:true}))}<path class="sweat" d="${tear(80,96)}" fill="${SKY}"/>`;
+
+S.necessary=`${bg('#cdeeff')}<g class="cloud"><ellipse cx="100" cy="22" rx="80" ry="16" fill="#7a8aa6"/></g>
+ ${[14,44,74,134,164,190].map((x,i)=>`<path class="drop" style="animation-delay:${i*.17}s" d="M${x},42 l-5,14" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>`).join('')}
+ ${hills('#8fe0a8','#6fd08f',170)}
+ <path d="M50,100 q54,-64 112,0 q-14,-9 -28,0 q-14,-9 -28,0 q-14,-9 -28,0 q-14,-9 -28,0 Z" fill="${RED}"/><path d="M106,66 v70" stroke="${INK}" stroke-width="3"/>
+ ${at(92,190,.84,cat({eyes:'happy',armR:-150,armsFront:true}))}
+ <g class="beat"><circle cx="170" cy="120" r="16" fill="${RED}"/>${T(170,128,'!',22,'#fff')}</g>`;
+
+S.throughout=`${bg('#d9f7e1')}${sun(160,26,9)}
+ <path d="M0,70 h200 v130 h-200 Z" fill="#8fe0a8"/><path d="M0,70 h200" stroke="#b07a45" stroke-width="3"/>${[10,50,90,130,170].map(x=>`<path d="M${x},58 v22" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/>`).join('')}
+ ${[[20,110],[60,100],[100,112],[140,100],[180,112],[40,150],[80,144],[120,152],[160,146],[20,186],[60,190],[140,190],[180,184]].map(([x,y],i)=>flower(x,y,[RED,SUN,VIO,ORA][i%4],i*.15)).join('')}
+ <rect x="6" y="84" width="188" height="110" rx="14" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="9 8" class="glow"/>
+ ${at(100,196,.5,cat({eyes:'closed',mouth:'w',armL:140,armR:-140,armsFront:true}))}`;
+
+S.challenge=`${bg('#cdeeff')}${cloud(30,50,.7)}${sun(170,26,9)}
+ <path d="M40,200 L120,40 L200,200 Z" fill="#9aa8c0"/><path d="M120,40 l-20,40 12,-8 8,12 10,-14 10,10 Z" fill="#fff"/>
+ <path d="M120,40 v-26" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M120,14 l20,7 -20,7 Z" fill="${RED}"/>
+ <path d="M60,190 q20,-50 40,-80" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="6 7"/>
+ ${at(56,196,.56,cat({eyes:'open',mouth:'w',armR:-140,armsFront:true,mid:backpack,hat:`<path d="M-24,-88 l14,5 M24,-88 l-14,5" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${T(30,110,'!',30,RED,'middle','beat')}`;
+
+S.fear=`${room('#3b2a4a','#5a4a6c')}
+ <path d="M150,0 v70" stroke="#cbc2e6" stroke-width="1.500"/><g class="sway" style="transform-origin:150px 0px"><g transform="translate(150,80)"><circle r="9" fill="${INK}" stroke="#cbc2e6" stroke-width="1.500"/><path d="M-8,-4 l-10,-6 M-9,2 l-11,2 M-6,7 l-8,8 M8,-4 l10,-6 M9,2 l11,2 M6,7 l8,8" stroke="#cbc2e6" stroke-width="1.800" stroke-linecap="round"/><circle cx="-3" cy="-1" r="1.800" fill="#fff"/><circle cx="3" cy="-1" r="1.800" fill="#fff"/><path d="M-3,4 q3,3 6,0" fill="none" stroke="#fff" stroke-width="1.200"/></g></g>
+ ${sh(70,192,34)}${at(70,190,.94,cat(Object.assign({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true},NL)),'shiver')}
+ ${T(30,50,'eek!',14,SUN,'middle','beat')}`;
+
+S.shoulder=`${bg('#ece6ff')}<circle cx="100" cy="100" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(100,190,40)}
+ ${at(100,188,1.06,cat({eyes:'happy',mouth:'open'}))}
+ <g class="float"><g transform="translate(132,104)"><ellipse cx="0" cy="0" rx="9" ry="7" fill="${SKY}"/><circle cx="7" cy="-5" r="5" fill="${SKY}"/><path d="M11,-5 l6,2 -6,2 Z" fill="${ORA}"/><circle cx="8" cy="-6" r="1.200" fill="${INK}"/></g></g>
+ ${ring(130,116,20,RED)}${arrow(180,60,150,96,RED,6,'float')}`;
+
+S.institution=`${bg('#cdeeff')}${cloud(30,24,.7)}${cloud(170,36,.6)}
+ <path d="M24,84 L100,40 L176,84 Z" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="2"/><circle cx="100" cy="66" r="8" fill="${SUN}"/>
+ <rect x="28" y="84" width="144" height="12" fill="#dfe6f2"/>${T(100,94,'MUSEUM',9,INK)}${[40,66,92,118,144].map(x=>`<rect x="${x}" y="98" width="10" height="58" rx="3" fill="#f4f7fb" stroke="#b9c4d8" stroke-width="1.600"/>`).join('')}
+ <rect x="22" y="156" width="156" height="10" fill="#dfe6f2"/><rect x="14" y="166" width="172" height="10" fill="#cfd8e6"/>${floor(176,'#8fe0a8')}
+ ${at(40,198,.44,cat({eyes:'happy',armR:-110,armsFront:true}))}${at(160,198,.4,K('orange',{eyes:'happy'}))}`;
+
+S.middle=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ ${at(36,186,.6,K('orange',{eyes:'happy'}))}${at(164,186,.6,K('grey',{eyes:'happy'}))}
+ ${sh(100,192,30)}${at(100,188,.76,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}
+ ${ring(100,140,46,RED)}${arrow(100,20,100,70,RED,7,'float')}
+ <path d="M20,100 h54 M126,100 h54" stroke="${VIO}" stroke-width="3" stroke-dasharray="5 6"/>`;
+
+S.sea=`${bg('#cdeeff')}${sun(160,30,12)}${cloud(40,24,.7)}
+ <path d="M0,90 q25,-10 50,0 t50,0 t50,0 t50,0 v110 h-200 Z" fill="#5cc3ff"/><path d="M0,130 q25,-8 50,0 t50,0 t50,0 t50,0 v70 h-200 Z" fill="#2f6fd0" opacity=".5"/>
+ <g class="sway" style="transform-origin:100px 110px"><path d="M60,104 h80 l-12,22 h-56 Z" fill="${RED}"/><path d="M100,104 v-50 l30,40 Z" fill="#fff"/>${at(84,104,.3,cat({tail:false,eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}</g>
+ <g class="swim">${fishAt(40,160,1.400,0)}</g>${fishAt(150,176,1,0)}<path class="ripple" d="M20,112 q10,-6 20,0 M160,116 q10,-6 20,0" fill="none" stroke="#fff" stroke-width="2"/>`;
+
+S.dream=`${bg('#2d2a6e')}${spark(20,24,4,'#fff',0)}${spark(180,30,4,'#fff',.6)}
+ ${think(120,54,60,40,`<path d="M70,84 q50,-12 100,0 v6 h-100 Z" fill="#8fe0a8"/>${pyramide(146,84,.4)}${at(100,84,.24,cat({tail:false,eyes:'happy'}))}${at(118,84,.22,K('orange',{tail:false,eyes:'happy'}))}${heartS(110,36,.7,RED,'beat')}<circle cx="156" cy="34" r="7" fill="${SUN}"/>`,-1)}
+ ${floor(176,'#1f1b4d')}<ellipse cx="80" cy="178" rx="64" ry="14" fill="${VIO}"/><ellipse cx="80" cy="172" rx="56" ry="10" fill="#7b55d9"/>
+ ${at(80,174,.8,cat(Object.assign({eyes:'closed',mouth:'w',armL:20,armR:-20},NL)),'breathe')}
+ ${T(150,140,'z z',16,'#fff','middle','zz')}`;
+
+S.bar=`${room('#fff1c9','#e4b77a')}${papel(10,6,194)}
+ <rect x="30" y="120" width="170" height="60" fill="#8a5a30"/><rect x="24" y="112" width="176" height="12" rx="4" fill="#b07a45"/>
+ ${[[70,RED],[104,SUN],[138,MINT]].map(([x,c],i)=>`<path d="M${x-9},84 h18 l-3,28 h-12 Z" fill="${c}"/><path d="M${x+2},84 l6,-14" stroke="${INK}" stroke-width="1.500"/><circle cx="${x-4}" cy="82" r="4" fill="${[SUN,RED,ORA][i]}"/>`).join('')}
+ ${at(170,112,.5,K('orange',{tail:false,eyes:'happy',mid:tie,armL:120,armsFront:true}))}<rect x="140" y="112" width="60" height="12" fill="#b07a45"/>
+ ${T(100,60,'JUGOS',14,RED)}
+ ${at(30,196,.6,cat({eyes:'happy',mouth:'tongue',armR:-110,armsFront:true}))}`;
+
+S.property=`${park(170)}${sun(30,24,9)}
+ <g transform="translate(110,170) scale(1.1)">${P.house(RED,'#fff8e6')}</g>${tree(170,170,1)}
+ <path d="M40,186 h150" stroke="#b07a45" stroke-width="3"/>${[44,72,100,128,156,184].map(x=>`<path d="M${x},172 v20" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/>`).join('')}
+ <path d="M60,150 v30" stroke="#8a5a30" stroke-width="3"/><rect x="38" y="130" width="46" height="22" rx="3" fill="#fff" stroke="${RED}" stroke-width="2"/>${T(61,146,'MINE',10,RED)}
+ ${at(26,198,.5,cat({eyes:'happy',mouth:'open',armR:-110,armsFront:true,prop:`<g transform="translate(2,-4)">${keyP}</g>`}))}`;
+
+S.instead=`${room('#e3fbf5','#bff0de')}
+ ${at(120,186,1.1,P.table(110))}<path d="M60,124 h130 v12 h-130 Z" fill="#c98a4b"/>
+ <g opacity=".4"><path d="M84,84 h24 l-3,40 h-18 Z" fill="#fff" stroke="#cbc2e6" stroke-width="2"/></g>${cross(96,104,12,5)}
+ <g class="hop"><path d="M140,84 h24 l-3,40 h-18 Z" fill="#fff" opacity=".8" stroke="#cbc2e6" stroke-width="2"/><path d="M142,100 h20 l-2,22 h-16 Z" fill="${SKY}"/></g><g class="beat">${check(152,66,8,5)}</g>
+ ${arcArrow(100,74,144,74,-16,VIO,4,'5 6')}
+ ${at(36,192,.76,cat({eyes:'happy',armR:-110,armsFront:true}))}`;
+
+S.improve=`${bg('#fff3cf')}${burst(30,40,RED,0)}${burst(176,36,VIO,.6)}${papel(8,10,120)}
+ ${[[30,24],[70,50],[110,84],[150,124]].map(([x,h],i)=>`<rect class="grow" style="transform-origin:${x+16}px 176px;transform-box:view-box;animation-delay:${i*.3}s" x="${x}" y="${176-h}" width="32" height="${h}" rx="4" fill="${[SKY,MINT,SUN,RED][i]}"/>`).join('')}
+ ${floor(176,'#ffe08a')}
+ <path d="M40,140 L84,116 L124,82 L160,44" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="5 6"/>${arrow(150,54,168,36,RED,6,'glow')}
+ ${at(166,54,.4,cat({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true}),'hop')}
+ ${[60,100,140].map((x,i)=>`<g class="twinkle" style="animation-delay:${i*.2}s">${star5(x,190,7,SUN)}</g>`).join('')}`;
