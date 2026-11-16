@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Gatita</title>
+<title>Canela</title>
 <style>
 :root{--bg:#fff6fb;--ink:#3a2a4a;--soft:#7a6a8c;--pink:#ff5fa2;color-scheme:light}
 *{box-sizing:border-box}
@@ -70,8 +70,8 @@ p{margin:0;color:var(--soft)}
 </head>
 <body>
 <div id="hero"></div>
-<h1>Gatita</h1>
-<p>Prueba 1 · en construcción</p>
+<h1>Canela</h1>
+<p>Prueba 2 · en construcción</p>
 <script>
 const INK='#3a2a4a', OUT='#cbc2e6';
 function arm(side,ang,o,prop,cls){
@@ -79,15 +79,16 @@ function arm(side,ang,o,prop,cls){
   return `<g transform="translate(${x},-42) rotate(${ang})"><g class="${cls||''}"><ellipse cx="0" cy="12" rx="7" ry="14" fill="${o.fur}" stroke="${o.out}" stroke-width="1.6"/>${prop?`<g transform="translate(0,26) rotate(${-ang})">${prop}</g>`:''}</g></g>`;
 }
 function cat(o){
-  o=Object.assign({fur:'#ffffff',out:OUT,belly:'#fff7fb',eyes:'open',mouth:'w',armL:18,armR:-18,armsFront:false,bow:true,prop:'',armRcls:'',armLcls:'',headCls:'',mid:'',extra:'',tail:true},o);
-  const S=`stroke="${o.out}" stroke-width="1.6"`;
+  o=Object.assign({fur:'#2f2b3d',out:'#1b1825',belly:'#454059',eyes:'open',mouth:'w',armL:18,armR:-18,armsFront:false,bow:true,prop:'',armRcls:'',armLcls:'',headCls:'',mid:'',extra:'',tail:true},o);
+  const S=`stroke="${o.out}" stroke-width="1.6"`, L='#ffffff';
   const arms=arm('L',o.armL,o,'',o.armLcls)+arm('R',o.armR,o,o.prop,o.armRcls);
+  const eye=x=>`<ellipse cx="${x}" cy="-74" rx="7" ry="8.5" fill="#ffd94d"/><ellipse cx="${x}" cy="-73.5" rx="3.6" ry="6" fill="#1b1825"/><circle cx="${x+2.4}" cy="-77.5" r="2.3" fill="#fff"/><circle cx="${x-2}" cy="-70.5" r="1" fill="#fff"/>`;
   let eyes='';
-  if(o.eyes==='open') eyes=`<g class="blink"><ellipse cx="-14" cy="-74" rx="6" ry="7.5" fill="${INK}"/><circle cx="-12" cy="-77.5" r="2.4" fill="#fff"/><circle cx="-16" cy="-71" r="1.1" fill="#fff"/><ellipse cx="14" cy="-74" rx="6" ry="7.5" fill="${INK}"/><circle cx="16" cy="-77.5" r="2.4" fill="#fff"/><circle cx="12" cy="-71" r="1.1" fill="#fff"/></g>`;
-  if(o.eyes==='happy') eyes=`<path d="M-20,-72 q6,-8 12,0 M8,-72 q6,-8 12,0" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`;
-  if(o.eyes==='closed') eyes=`<path d="M-20,-74 q6,6 12,0 M8,-74 q6,6 12,0" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round"/>`;
-  if(o.eyes==='wide') eyes=`<circle cx="-14" cy="-75" r="7.5" fill="#fff" stroke="${INK}" stroke-width="2"/><circle cx="-14" cy="-75" r="3.2" fill="${INK}"/><circle cx="14" cy="-75" r="7.5" fill="#fff" stroke="${INK}" stroke-width="2"/><circle cx="14" cy="-75" r="3.2" fill="${INK}"/>`;
-  let mouth=`<path d="M-6,-61 q3,4 6,0 q3,4 6,0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/>`;
+  if(o.eyes==='open') eyes=`<g class="blink">${eye(-14)}${eye(14)}</g>`;
+  if(o.eyes==='happy') eyes=`<path d="M-20,-72 q6,-8 12,0 M8,-72 q6,-8 12,0" fill="none" stroke="${L}" stroke-width="2.8" stroke-linecap="round"/>`;
+  if(o.eyes==='closed') eyes=`<path d="M-20,-74 q6,6 12,0 M8,-74 q6,6 12,0" fill="none" stroke="${L}" stroke-width="2.8" stroke-linecap="round"/>`;
+  if(o.eyes==='wide') eyes=`<circle cx="-14" cy="-75" r="8" fill="#ffd94d"/><circle cx="-14" cy="-75" r="3" fill="#1b1825"/><circle cx="14" cy="-75" r="8" fill="#ffd94d"/><circle cx="14" cy="-75" r="3" fill="#1b1825"/>`;
+  let mouth=`<path d="M-6,-61 q3,4 6,0 q3,4 6,0" fill="none" stroke="${L}" stroke-width="1.8" stroke-linecap="round"/>`;
   if(o.mouth==='open') mouth=`<g class="${o.mouthCls||''}"><ellipse cx="0" cy="-58" rx="4.5" ry="5.5" fill="#b23a5a"/><ellipse cx="0" cy="-55.5" rx="2.6" ry="2.2" fill="#ff8fab"/></g>`;
   if(o.mouth==='o') mouth=`<ellipse cx="0" cy="-58" rx="3" ry="3.6" fill="#b23a5a"/>`;
   const bow=o.bow?`<g transform="translate(-24,-104) rotate(-18)"><path d="M0,0 L-11,-7 V7 Z M0,0 L11,-7 V7 Z" fill="#ff5fa2"/><circle r="3.4" fill="#ff8fc0"/></g>`:'';
@@ -103,10 +104,10 @@ function cat(o){
     <polygon points="32,-86 27,-117 6,-100" fill="${o.fur}" ${S} stroke-linejoin="round"/><polygon points="27,-92 25,-108 13,-99" fill="#ff9eb5"/>
     <ellipse cx="0" cy="-74" rx="36" ry="31" fill="${o.fur}" ${S}/>
     ${eyes}
-    <ellipse cx="-25" cy="-62" rx="6.5" ry="4" fill="#ff8fab" opacity=".65"/><ellipse cx="25" cy="-62" rx="6.5" ry="4" fill="#ff8fab" opacity=".65"/>
-    <path d="M-3.2,-67 h6.4 l-3.2,3.6 z" fill="#ff6f91"/>
+    <ellipse cx="-25" cy="-62" rx="6.5" ry="4" fill="#ff8fab" opacity=".75"/><ellipse cx="25" cy="-62" rx="6.5" ry="4" fill="#ff8fab" opacity=".75"/>
+    <path d="M-3.2,-67 h6.4 l-3.2,3.6 z" fill="#ff8fab"/>
     ${mouth}
-    <path d="M-31,-67 l-15,-3 M-31,-62 l-15,2 M31,-67 l15,-3 M31,-62 l15,2" stroke="${INK}" stroke-opacity=".35" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M-31,-67 l-15,-3 M-31,-62 l-15,2 M31,-67 l15,-3 M31,-62 l15,2" stroke="${L}" stroke-opacity=".75" stroke-width="1.4" stroke-linecap="round"/>
     ${bow}
   </g>
   ${o.armsFront?arms:''}
@@ -116,7 +117,7 @@ const at=(x,y,s,inner,cls)=>`<g transform="translate(${x},${y}) scale(${s})"><g 
 const heart=(x,y,s,c,d)=>`<path class="heart" style="animation-delay:${d}s" transform="translate(${x},${y}) scale(${s})" d="M0,4 C-8,-4 -4,-10 0,-5 C4,-10 8,-4 0,4 Z" fill="${c}"/>`;
 
 
-document.getElementById('hero').innerHTML=`<svg viewBox="0 0 240 220" role="img" aria-label="Gatita saluda">
+document.getElementById('hero').innerHTML=`<svg viewBox="0 0 240 220" role="img" aria-label="Canela saluda">
  <circle cx="120" cy="112" r="92" fill="#ffc9e0"/><circle cx="40" cy="40" r="16" fill="#ffc93c" opacity=".7"/><circle cx="206" cy="64" r="10" fill="#2fc7a8" opacity=".7"/><circle cx="200" cy="176" r="14" fill="#9b6bff" opacity=".5"/>
  <ellipse cx="120" cy="200" rx="64" ry="9" fill="${INK}" opacity=".12"/>
  ${at(116,198,1.45,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}</svg>`;
