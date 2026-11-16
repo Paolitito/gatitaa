@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Canela Wörter 1–50</title>
+<title>Canela Wörter 1–150</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{/* Layout: zehn Tage untereinander, je fünf Karten im Raster */
@@ -20,6 +20,7 @@ section{display:flex;flex-direction:column;gap:10px}
 .word{font-family:var(--display);font-weight:800;font-size:1.35rem;line-height:1}
 .es{color:var(--soft);font-size:.9rem}
 .badge{align-self:flex-start;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--k);border-radius:99px;padding:1px 9px;margin-bottom:3px}
+.sent{margin-top:5px;font-weight:700;font-size:.92rem;line-height:1.25}.sent b{color:var(--red);background:#ffe9d6;border-radius:5px;padding:0 3px}.ses{color:var(--soft);font-size:.82rem;line-height:1.25}
 .missing{aspect-ratio:1;display:grid;place-items:center;background:#eee;color:#999}
 .blink{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
 @keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
@@ -150,7 +151,7 @@ section{display:flex;flex-direction:column;gap:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 
 </style></head><body><main>
-<header><h1>Die ersten 50 Wörter</h1><p>Zehn Tage mit je fünf Wörtern. Jede Szene ist einzeln gezeichnet, mit Canela in der Hauptrolle.</p></header>
+<header><h1>Die ersten 150 Wörter</h1><p>30 Tage mit je fünf Wörtern. Tag 1 bis 10 sind die Bild-Wörter, ab Tag 11 geht es nach Häufigkeit. Grammatik-Wörter haben einen kleinen Satz, in dem das Wort markiert ist.</p></header>
 <div id="days"></div>
 </main><script>
 const INK='#3a2a4a', RED='#f2453d', SUN='#ffc93c', MINT='#2fc7a8', SKY='#4f9dff', VIO='#9b6bff', ORA='#ff9a3c';
@@ -218,6 +219,49 @@ const flower=(x,y,c,d)=>`<g class="flower" style="animation-delay:${d||0}s"><pat
 const tree=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="-4" y="-22" width="8" height="24" rx="2" fill="#b07a45"/><circle cx="0" cy="-36" r="20" fill="#4fc27f"/><circle cx="-12" cy="-28" r="12" fill="#62d08f"/><circle cx="12" cy="-28" r="12" fill="#62d08f"/></g>`;
 const thermo=(x,y,lvl,c)=>`<rect x="${x-7}" y="${y}" width="14" height="76" rx="7" fill="#fff" stroke="#b9c9dd" stroke-width="2"/><circle cx="${x}" cy="${y+80}" r="12" fill="${c}" stroke="#b9c9dd" stroke-width="2"/><rect x="${x-3}" y="${y+78-lvl}" width="6" height="${lvl}" fill="${c}"/>`;
 const S={};
+/* Bausteine für Requisiten: alle mit Ursprung unten in der Mitte, per at(x,y,s,...) platzieren */
+const T=(x,y,str,size,c,anchor,cls)=>`<text class="${cls||''}" x="${x}" y="${y}" text-anchor="${anchor||'middle'}" font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" font-size="${size}" fill="${c}">${str}</text>`;
+const arrow=(x1,y1,x2,y2,c,w,cls)=>{w=w||4;const a=Math.atan2(y2-y1,x2-x1),h=w*2.6;const p=(d)=>`${(x2-h*Math.cos(a+d)).toFixed(1)},${(y2-h*Math.sin(a+d)).toFixed(1)}`;return `<g class="${cls||''}"><path d="M${x1},${y1} L${x2},${y2} M${p(.5)} L${x2},${y2} L${p(-.5)}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></g>`;};
+const arcArrow=(x1,y1,x2,y2,hgt,c,w,dash,cls)=>{w=w||4;const cx=(x1+x2)/2,cy=Math.min(y1,y2)-hgt;const a=Math.atan2(y2-cy,x2-cx),h=w*2.6;const p=(d)=>`${(x2-h*Math.cos(a+d)).toFixed(1)},${(y2-h*Math.sin(a+d)).toFixed(1)}`;return `<g class="${cls||''}"><path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" ${dash?`stroke-dasharray="${dash}"`:''}/><path d="M${p(.5)} L${x2},${y2} L${p(-.5)}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></g>`;};
+const think=(x,y,rx,ry,inner,dir)=>{dir=dir||-1;return `<circle cx="${x+dir*rx*.75}" cy="${y+ry+10}" r="5" fill="#fff"/><circle cx="${x+dir*rx*.95}" cy="${y+ry+20}" r="3" fill="#fff"/><ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#fff"/><ellipse cx="${x-rx*.5}" cy="${y-ry*.5}" rx="${rx*.55}" ry="${ry*.6}" fill="#fff"/><ellipse cx="${x+rx*.5}" cy="${y-ry*.4}" rx="${rx*.6}" ry="${ry*.65}" fill="#fff"/>${inner||''}`;};
+const speech=(x,y,w,h,inner,tx,ty)=>`<path d="M${x-w/2+8},${y-h/2} h${w-16} q8,0 8,8 v${h-16} q0,8 -8,8 h${-(w-16)} q-8,0 -8,-8 v${-(h-16)} q0,-8 8,-8 Z" fill="#fff"/><path d="M${x-6},${y+h/2-1} L${tx},${ty} L${x+8},${y+h/2-1} Z" fill="#fff"/>${inner||''}`;
+const cross=(x,y,r,w)=>`<path d="M${x-r},${y-r} L${x+r},${y+r} M${x+r},${y-r} L${x-r},${y+r}" stroke="${RED}" stroke-width="${w||6}" stroke-linecap="round"/>`;
+const check=(x,y,r,w)=>`<path d="M${x-r},${y} l${r*.7},${r*.8} L${x+r},${y-r*.8}" fill="none" stroke="${MINT}" stroke-width="${w||6}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const ring=(x,y,r,c,cls)=>`<g class="${cls||'spin'}"><circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${c||RED}" stroke-width="4" stroke-dasharray="10 9" stroke-linecap="round"/></g>`;
+const P={};
+P.fish=`<path d="M-9,0 l-8,-6 v12 Z" fill="#ff8a3c"/><ellipse cx="0" cy="0" rx="10" ry="6.5" fill="#ffa53c"/><circle cx="5" cy="-1.5" r="1.6" fill="${INK}"/>`;
+P.ball=(c1,c2)=>`<circle cx="0" cy="-12" r="12" fill="${c1||RED}"/><path d="M-12,-12 q12,-9 24,0 M-12,-12 q12,9 24,0" fill="none" stroke="${c2||'#fff'}" stroke-width="2.4"/><circle cx="-4" cy="-17" r="2.6" fill="#fff" opacity=".6"/>`;
+P.boxBack=(w)=>`<rect x="${-w/2}" y="-12" width="${w}" height="14" fill="#8a5a30"/>`;
+P.boxFront=(w,h)=>`<path d="M${-w/2},0 l-18,-16 h18 l12,16 Z" fill="#e4b77a"/><path d="M${w/2},0 l18,-16 h-18 l-12,16 Z" fill="#e4b77a"/><rect x="${-w/2}" y="0" width="${w}" height="${h}" rx="3" fill="#d9a56a"/><rect x="-7" y="0" width="14" height="${h}" fill="#c98a4b" opacity=".6"/>`;
+P.boxClosed=(w,h)=>`<rect x="${-w/2}" y="${-h}" width="${w}" height="${h}" rx="3" fill="#d9a56a"/><rect x="-7" y="${-h}" width="14" height="${h}" fill="#c98a4b" opacity=".6"/><rect x="${-w/2}" y="${-h}" width="${w}" height="7" fill="#e4b77a"/>`;
+P.house=(roof,wall)=>`<rect x="24" y="-78" width="10" height="22" rx="2" fill="#c98a4b"/><rect x="-36" y="-52" width="72" height="52" rx="4" fill="${wall||'#ffd166'}"/><path d="M-44,-50 L0,-88 L44,-50 Z" fill="${roof||RED}" stroke="${roof||RED}" stroke-width="5" stroke-linejoin="round"/><rect x="-26" y="-30" width="18" height="30" rx="8" fill="${VIO}"/><circle cx="-12" cy="-14" r="1.8" fill="${SUN}"/><rect x="4" y="-40" width="22" height="20" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/>`;
+P.school=`<rect x="-14" y="-92" width="28" height="34" fill="#ffd98a"/><path d="M-19,-90 L0,-108 L19,-90 Z" fill="${RED}" stroke="${RED}" stroke-width="3" stroke-linejoin="round"/><circle cx="0" cy="-78" r="8" fill="#fff" stroke="#b07a45" stroke-width="2"/><path d="M0,-78 v-5 M0,-78 h4" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/><rect x="-46" y="-60" width="92" height="60" rx="3" fill="#ffd98a"/><rect x="-50" y="-66" width="100" height="10" rx="4" fill="${RED}"/><rect x="-38" y="-46" width="16" height="16" rx="3" fill="#bfe9ff" stroke="#fff" stroke-width="2.5"/><rect x="22" y="-46" width="16" height="16" rx="3" fill="#bfe9ff" stroke="#fff" stroke-width="2.5"/><path d="M-11,0 v-24 a11,11 0 0 1 22,0 v24 Z" fill="${VIO}"/>${T(0,-36,'ABC',10,RED)}`;
+P.dog=(o)=>{o=o||{};const c=o.c||'#e8b06a',d=o.d||'#d99a52',e=o.e||'#b9773a';return `<path class="wiggle" d="M34,-38 q18,-6 15,-28" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round"/><rect x="12" y="-28" width="11" height="26" rx="5.5" fill="${d}"/><rect x="-16" y="-26" width="11" height="24" rx="5.5" fill="${d}"/><ellipse cx="4" cy="-34" rx="36" ry="24" fill="${c}"/><ellipse cx="16" cy="-42" rx="11" ry="8" fill="${d}"/><rect x="24" y="-26" width="12" height="26" rx="6" fill="${c}"/><rect x="-28" y="-24" width="12" height="24" rx="6" fill="${c}"/><path d="M-42,-44 q14,8 28,0" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round"/><circle cx="-28" cy="-37" r="4" fill="${SUN}"/><g class="tilt" style="transform-origin:-28px -44px"><ellipse cx="-48" cy="-68" rx="9" ry="17" fill="${e}" transform="rotate(18 -48 -68)"/><ellipse cx="-8" cy="-70" rx="9" ry="17" fill="${e}" transform="rotate(-18 -8 -70)"/><circle cx="-28" cy="-66" r="25" fill="${c}"/><ellipse cx="-30" cy="-56" rx="14" ry="11" fill="#fff3dc"/><ellipse cx="-30" cy="-62" rx="5" ry="3.8" fill="${INK}"/>${o.happy?`<path d="M-44,-73 q4.500,-5 9,0 M-23,-73 q4.500,-5 9,0" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`:`<circle cx="-39" cy="-74" r="3.4" fill="${INK}"/><circle cx="-38" cy="-75" r="1.2" fill="#fff"/><circle cx="-18" cy="-74" r="3.4" fill="${INK}"/><circle cx="-17" cy="-75" r="1.2" fill="#fff"/>`}<path d="M-36,-54 q6,5 12,0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/><path class="chew" d="M-33,-52 h6 v6 a3,3 0 0 1 -6,0 Z" fill="#ff7a59"/></g>`;};
+P.person=(o)=>{o=Object.assign({shirt:SUN,stripe:ORA,pants:'#2f6fd0',hair:'#7a4a21',skin:'#ffcf9e',shoes:RED,long:false,beard:false,wave:true,hat:'',skirt:false,happy:false},o||{});
+ return `<rect x="-14" y="-40" width="11" height="34" rx="5" fill="${o.skin}"/><rect x="3" y="-40" width="11" height="34" rx="5" fill="${o.skin}"/><ellipse cx="-11" cy="-4" rx="11" ry="6" fill="${o.shoes}"/><ellipse cx="11" cy="-4" rx="11" ry="6" fill="${o.shoes}"/>
+ ${o.skirt?`<path d="M-22,-58 h44 l8,26 h-60 Z" fill="${o.pants}"/>`:`<rect x="-20" y="-56" width="40" height="24" rx="7" fill="${o.pants}"/>`}
+ ${o.long?`<path d="M-27,-124 q-6,34 -2,54 h58 q4,-20 -2,-54 Z" fill="${o.hair}"/>`:''}
+ <rect x="-34" y="-88" width="11" height="36" rx="5.5" fill="${o.skin}" transform="rotate(12 -29 -86)"/>
+ ${o.wave?`<g transform="translate(24,-84)"><g class="wave"><rect x="-5.500" y="-36" width="11" height="38" rx="5.500" fill="${o.skin}" transform="rotate(28)"/><circle cx="19" cy="-36" r="7" fill="${o.skin}"/></g></g>`:`<rect x="23" y="-88" width="11" height="36" rx="5.500" fill="${o.skin}" transform="rotate(-12 29 -86)"/>`}
+ <rect x="-24" y="-94" width="48" height="46" rx="12" fill="${o.shirt}"/><rect x="-24" y="-78" width="48" height="8" fill="${o.stripe}"/>
+ <circle cx="-26" cy="-116" r="5.500" fill="${o.skin}"/><circle cx="26" cy="-116" r="5.500" fill="${o.skin}"/><circle cx="0" cy="-118" r="26" fill="${o.skin}"/>
+ <path d="M-26,-120 q-2,-30 26,-30 q28,0 26,30 q-8,-14 -20,-14 q-6,6 -18,4 q-8,0 -14,10 Z" fill="${o.hair}"/>
+ ${o.happy?`<path d="M-14,-113 q4,-5 8,0 M6,-113 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>`:`<circle cx="-10" cy="-114" r="3.200" fill="${INK}"/><circle cx="10" cy="-114" r="3.200" fill="${INK}"/><circle cx="-9" cy="-115" r="1.100" fill="#fff"/><circle cx="11" cy="-115" r="1.100" fill="#fff"/>`}
+ ${o.beard?`<path d="M-12,-106 q6,-5 12,0 q6,-5 12,0 q-2,7 -12,3 q-10,4 -12,-3 Z" fill="${o.hair}"/>`:`<path d="M-8,-104 q8,7 16,0" fill="none" stroke="${INK}" stroke-width="2.200" stroke-linecap="round"/>`}
+ <ellipse cx="-16" cy="-106" rx="5" ry="3" fill="#ff7a59" opacity=".5"/><ellipse cx="16" cy="-106" rx="5" ry="3" fill="#ff7a59" opacity=".5"/>${o.hat}`;};
+P.cup=(c)=>`<path d="M14,-20 q12,0 10,9 q-2,7 -10,6" fill="none" stroke="${c||RED}" stroke-width="4.500"/><path d="M-15,-26 h30 v16 q0,10 -10,10 h-10 q-10,0 -10,-10 Z" fill="${c||RED}"/><ellipse cx="0" cy="-26" rx="15" ry="4" fill="#7a4a21"/>`;
+P.book=(c)=>`<rect x="-14" y="-36" width="28" height="36" rx="3" fill="${c||SKY}"/><rect x="-14" y="-36" width="6" height="36" fill="#00000022"/><rect x="-4" y="-28" width="14" height="8" rx="2" fill="#fff" opacity=".85"/>`;
+P.table=(w,c)=>`<rect x="${-w/2+8}" y="-44" width="10" height="44" rx="4" fill="#8a5a30"/><rect x="${w/2-18}" y="-44" width="10" height="44" rx="4" fill="#8a5a30"/><rect x="${-w/2}" y="-56" width="${w}" height="14" rx="7" fill="${c||'#c98a4b'}"/>`;
+P.door=(c)=>`<rect x="-30" y="-104" width="60" height="104" rx="6" fill="#b07a45"/><rect x="-24" y="-98" width="48" height="98" fill="${c||SKY}"/><rect x="-17" y="-90" width="34" height="34" rx="5" fill="#ffffff44"/><rect x="-17" y="-48" width="34" height="38" rx="5" fill="#ffffff44"/><circle cx="16" cy="-50" r="4" fill="${SUN}"/>`;
+P.gift=(c,r)=>`<rect x="-13" y="-22" width="26" height="22" rx="3" fill="${c||VIO}"/><rect x="-3" y="-22" width="6" height="22" fill="${r||SUN}"/><rect x="-13" y="-14" width="26" height="5" fill="${r||SUN}"/><path d="M0,-22 q-10,-12 -12,-2 q2,4 12,2 Z M0,-22 q10,-12 12,-2 q-2,4 -12,2 Z" fill="${r||SUN}"/>`;
+P.clock=(r,h,m)=>`<circle cx="0" cy="${-r}" r="${r}" fill="#fff" stroke="${INK}" stroke-width="${r*.14}"/>${[0,90,180,270].map(a=>`<path transform="rotate(${a} 0 ${-r})" d="M0,${-r*1.82} v${r*.18}" stroke="${INK}" stroke-width="${r*.09}" stroke-linecap="round"/>`).join('')}<path transform="rotate(${h||60} 0 ${-r})" d="M0,${-r} v${-r*.45}" stroke="${INK}" stroke-width="${r*.12}" stroke-linecap="round"/><g class="spin" style="animation-duration:6s"><circle cx="0" cy="${-r}" r="${r*.8}" fill="none"/><path d="M0,${-r} v${-r*.68}" stroke="${RED}" stroke-width="${r*.08}" stroke-linecap="round"/></g><circle cx="0" cy="${-r}" r="${r*.1}" fill="${INK}"/>`;
+P.car=(c)=>`<path d="M-34,-24 q5,-28 22,-28 h22 q16,0 22,28 Z" fill="${c||RED}"/><path d="M-27,-26 q4,-20 16,-20 h20 q11,0 16,20 Z" fill="#bfe9ff"/><rect x="-52" y="-28" width="104" height="24" rx="10" fill="${c||RED}"/><rect x="44" y="-22" width="9" height="7" rx="3" fill="${SUN}"/><circle cx="-28" cy="-4" r="11" fill="${INK}"/><circle cx="-28" cy="-4" r="5" fill="#dfe6f2"/><circle cx="28" cy="-4" r="11" fill="${INK}"/><circle cx="28" cy="-4" r="5" fill="#dfe6f2"/>`;
+P.bed=`<rect x="-52" y="-52" width="14" height="52" rx="6" fill="#b07a45"/><rect x="40" y="-30" width="12" height="30" rx="5" fill="#b07a45"/><rect x="-48" y="-26" width="96" height="18" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="1.4"/><ellipse cx="-24" cy="-28" rx="18" ry="8" fill="#fff" stroke="#cbc2e6" stroke-width="1.4"/><path d="M-8,-24 q26,-14 56,0 v16 h-56 Z" fill="${SKY}"/>`;
+P.phone=`<rect x="-11" y="-38" width="22" height="38" rx="5" fill="${INK}"/><rect x="-8" y="-34" width="16" height="28" rx="2" fill="#bfe9ff"/>`;
+P.plate=(w)=>`<ellipse cx="0" cy="-5" rx="${w}" ry="${w*.24}" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><ellipse cx="0" cy="-5" rx="${w*.72}" ry="${w*.15}" fill="#f4f1fb"/>`;
+P.bulb=`<g class="glow"><circle cx="0" cy="-22" r="22" fill="#fff6c8" opacity=".7"/></g><path d="M-10,-12 q-8,-22 10,-24 q18,2 10,24 Z" fill="${SUN}"/><rect x="-6" y="-12" width="12" height="8" rx="2" fill="#9aa8c0"/>`;
+P.hatChef=`<path d="M-24,-100 q-14,-26 10,-28 q14,-16 28,0 q24,2 10,28 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><rect x="-24" y="-104" width="48" height="10" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/>`;
+P.hatHard=`<path d="M-30,-98 q0,-34 30,-34 q30,0 30,34 Z" fill="${SUN}"/><rect x="-36" y="-102" width="72" height="8" rx="4" fill="#e0a83a"/>`;
 /* Tag 1 */
 S.house=`${bg('#cdeeff')}${sun(162,36,14)}${cloud(42,34,1)}${hills('#8fe0a8','#6fd08f')}
  <rect x="126" y="52" width="14" height="30" rx="2" fill="#c98a4b"/>
@@ -763,11 +807,679 @@ S.beautiful=`${bg('#cdeeff')}${sun(34,34,12)}
  ${sh(100,188,34)}${at(100,186,.98,cat({bow:false,hat:crown,eyes:'spark',mouth:'open',armL:30,armR:-110,armsFront:true,prop:bouquet}))}
  ${bfly(40,96,ORA,0)}${bfly(150,84,VIO,2.5)}
  ${spark(60,60,6,'#fff',0)}${spark(140,50,7,'#fff',.6)}${spark(176,120,5,SUN,1.2)}${spark(24,130,5,SUN,.3)}`;
+/* Tag 11–14: the, be, to, of, and · a, in, that, have, I · it, for, not, on, with · he, as, you, do, at */
+const CB='#2f2b3d', CO='#1b1825';
+const paw=(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="${r||9}" ry="${(r||9)*.67}" fill="${CB}" stroke="${CO}" stroke-width="1.4"/>`;
+const park=(y)=>`${bg('#cdeeff')}${hills('#8fe0a8','#6fd08f',y||166)}`;
 
-const WORDS=[{"w": "house", "t": "Nomen", "es": "la casa", "day": 1}, {"w": "eat", "t": "Verb", "es": "comer", "day": 1}, {"w": "happy", "t": "Adjektiv", "es": "feliz", "day": 1}, {"w": "water", "t": "Nomen", "es": "el agua", "day": 1}, {"w": "dog", "t": "Nomen", "es": "el perro", "day": 1}, {"w": "book", "t": "Nomen", "es": "el libro", "day": 2}, {"w": "read", "t": "Verb", "es": "leer", "day": 2}, {"w": "big", "t": "Adjektiv", "es": "grande", "day": 2}, {"w": "small", "t": "Adjektiv", "es": "pequeño", "day": 2}, {"w": "hand", "t": "Nomen", "es": "la mano", "day": 2}, {"w": "car", "t": "Nomen", "es": "el coche / el carro", "day": 3}, {"w": "run", "t": "Verb", "es": "correr", "day": 3}, {"w": "hot", "t": "Adjektiv", "es": "caliente", "day": 3}, {"w": "cold", "t": "Adjektiv", "es": "frío", "day": 3}, {"w": "door", "t": "Nomen", "es": "la puerta", "day": 3}, {"w": "bed", "t": "Nomen", "es": "la cama", "day": 4}, {"w": "sit", "t": "Verb", "es": "sentarse", "day": 4}, {"w": "eye", "t": "Nomen", "es": "el ojo", "day": 4}, {"w": "food", "t": "Nomen", "es": "la comida", "day": 4}, {"w": "blue", "t": "Adjektiv", "es": "azul", "day": 4}, {"w": "table", "t": "Nomen", "es": "la mesa", "day": 5}, {"w": "chair", "t": "Nomen", "es": "la silla", "day": 5}, {"w": "play", "t": "Verb", "es": "jugar", "day": 5}, {"w": "ball", "t": "Nomen", "es": "la pelota", "day": 5}, {"w": "green", "t": "Adjektiv", "es": "verde", "day": 5}, {"w": "fish", "t": "Nomen", "es": "el pez / el pescado", "day": 6}, {"w": "cup", "t": "Nomen", "es": "la taza", "day": 6}, {"w": "give", "t": "Verb", "es": "dar", "day": 6}, {"w": "love", "t": "Verb", "es": "amar / querer", "day": 6}, {"w": "heart", "t": "Nomen", "es": "el corazón", "day": 6}, {"w": "friend", "t": "Nomen", "es": "el amigo / la amiga", "day": 7}, {"w": "family", "t": "Nomen", "es": "la familia", "day": 7}, {"w": "laugh", "t": "Verb", "es": "reír", "day": 7}, {"w": "mother", "t": "Nomen", "es": "la madre", "day": 7}, {"w": "boy", "t": "Nomen", "es": "el niño / el chico", "day": 7}, {"w": "school", "t": "Nomen", "es": "la escuela", "day": 8}, {"w": "write", "t": "Verb", "es": "escribir", "day": 8}, {"w": "walk", "t": "Verb", "es": "caminar", "day": 8}, {"w": "box", "t": "Nomen", "es": "la caja", "day": 8}, {"w": "dark", "t": "Adjektiv", "es": "oscuro", "day": 8}, {"w": "night", "t": "Nomen", "es": "la noche", "day": 9}, {"w": "star", "t": "Nomen", "es": "la estrella", "day": 9}, {"w": "fly", "t": "Verb", "es": "volar", "day": 9}, {"w": "phone", "t": "Nomen", "es": "el teléfono", "day": 9}, {"w": "music", "t": "Nomen", "es": "la música", "day": 9}, {"w": "open", "t": "Verb", "es": "abrir", "day": 10}, {"w": "throw", "t": "Verb", "es": "lanzar / tirar", "day": 10}, {"w": "head", "t": "Nomen", "es": "la cabeza", "day": 10}, {"w": "foot", "t": "Nomen", "es": "el pie", "day": 10}, {"w": "beautiful", "t": "Adjektiv", "es": "hermoso / bonito", "day": 10}];
-const KC={"Nomen": "#4f9dff", "Verb": "#f2453d", "Adjektiv": "#9b6bff"};
+S.the=`${bg('#ffe9d6')}<path d="M100,-10 L34,186 h132 Z" fill="#fff6c8"/><ellipse cx="100" cy="186" rx="66" ry="10" fill="#fff0a8"/>
+ ${floor(186,'#ffd9bd')}
+ <g opacity=".28">${at(26,184,.6,K('orange'))}${at(176,184,.6,K('grey'))}</g>
+ <rect x="86" y="-4" width="28" height="14" rx="5" fill="${INK}"/>
+ ${at(100,186,.98,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arrow(170,34,140,66,RED,5,'float')}${spark(40,60,6,SUN,0)}${spark(60,120,5,SUN,.7)}`;
+
+const nameTag=`<g transform="translate(0,-26)"><rect x="-19" y="-10" width="38" height="22" rx="4" fill="#fff"/><rect x="-19" y="-10" width="38" height="8" rx="4" fill="${RED}"/>${T(0,8,'Canela',9,INK)}</g>`;
+S.be=`${bg('#e3fbf5')}<circle cx="100" cy="98" r="80" fill="#f0fdf8"/>
+ ${[[24,40,RED],[170,34,VIO],[30,130,SUN],[176,120,MINT],[100,18,SKY]].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="5" fill="${c}"/>`).join('')}
+ ${floor(184,'#bff0de')}${sh(100,190,38)}
+ ${at(100,186,1.05,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open',eyes:'happy',extra:nameTag}))}`;
+
+S.to=`${park()}${sun(30,30,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(158,178,.86,P.house())}
+ <g class="road"><path d="M60,150 h70" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(112,150,128,150,RED,5)}
+ <g transform="translate(44,190) scale(-.62,.62)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk'})}</g></g>`;
+
+const mug=(c)=>`<path d="M22,-34 q22,0 18,18 q-4,12 -18,10" fill="none" stroke="${c}" stroke-width="7"/><path d="M-26,-44 h52 v28 q0,16 -16,16 h-20 q-16,0 -16,-16 Z" fill="${c}"/><ellipse cx="0" cy="-44" rx="26" ry="7" fill="#5cc3ff"/><ellipse class="ripple" cx="0" cy="-44" rx="12" ry="3" fill="none" stroke="#fff" stroke-width="1.5"/>`;
+S.of=`${bg('#d6f1ff')}<circle cx="116" cy="96" r="76" fill="#e6f7ff"/>
+ ${floor(176,'#9fd4f0')}
+ ${at(120,176,2,mug(MINT))}
+ <path class="drip" d="${tear(120,36)}" fill="${SKY}"/><path class="drip" style="animation-delay:.55s" d="${tear(120,36)}" fill="${SKY}"/>
+ ${at(40,190,.66,cat({armR:-100,armRcls:'bob',mouth:'tongue'}))}`;
+
+S.and=`${park()}${cloud(44,34,.8)}
+ ${sh(54,190,28)}${at(54,188,.82,cat({eyes:'happy'}))}
+ ${at(146,188,.74,P.dog({happy:true}))}
+ <g class="beat"><path d="M100,92 v30 M85,107 h30" stroke="${VIO}" stroke-width="9" stroke-linecap="round"/></g>`;
+
+S.a=`${bg('#e3fbf5')}<circle cx="100" cy="60" r="44" fill="#fff" opacity=".7"/>
+ ${floor(184,'#bff0de')}${sh(100,190,36)}
+ ${at(100,74,1.9,P.ball(RED))}${ring(100,52,36,VIO)}
+ ${at(100,186,.95,cat({armL:155,armR:-155,armsFront:true,eyes:'happy',mouth:'open'}))}`;
+
+S.in=`${bg('#fff1c9')}<circle cx="100" cy="90" r="74" fill="#ffe7a3"/>
+ ${floor(180,'#ffe08a')}${sh(100,188,60)}
+ ${at(100,128,1,P.boxBack(100))}
+ ${at(100,170,.9,cat({tail:false,eyes:'happy',armL:20,armR:-20}),'peek')}
+ ${at(100,128,1,P.boxFront(100,56))}${paw(74,128)}${paw(126,128)}
+ ${arcArrow(176,40,140,104,10,RED,5,'','float')}`;
+
+S.that=`${bg('#4a4496')}
+ ${spark(30,40,4,'#fff',0)}${spark(90,26,4,'#fff',.6)}${spark(60,90,3.5,'#fff',1.1)}${spark(186,100,4,'#fff',.3)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <g class="beat">${star5(160,44,18,SUN,`stroke="${SUN}" stroke-width="4"`)}</g>${ring(160,44,30,'#fff')}
+ <path d="M84,118 L140,62" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" class="glow"/>
+ ${at(50,190,.86,cat(Object.assign({armR:-128,armsFront:true,mouth:'open'},NL)))}`;
+
+S.have=`${bg('#ece6ff')}<circle cx="100" cy="100" r="82" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({eyes:'happy',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-6) scale(1.25)">${P.book(SKY)}</g>`}),'sway')}
+ ${heart(150,70,1,RED,0)}${spark(40,60,6,SUN,.4)}${spark(166,130,5,VIO,1)}`;
+
+S.I=`${bg('#fff3cf')}<circle cx="100" cy="104" r="78" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({armL:-50,armR:50,armsFront:true,eyes:'happy',mouth:'open'}))}
+ ${ring(100,104,82,RED)}${arrow(26,22,58,58,RED,6,'float')}`;
+
+S.it=`${bg('#e3fbf5')}
+ ${floor(180,'#bff0de')}
+ <rect x="112" y="132" width="60" height="50" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><rect x="106" y="126" width="72" height="10" rx="5" fill="#f4f1fb" stroke="#cbc2e6" stroke-width="1.6"/>
+ ${at(142,126,1.8,P.ball(SKY))}${ring(142,104,34,RED)}
+ ${arrow(176,36,158,70,RED,5,'float')}
+ ${sh(50,190,28)}${at(50,188,.84,cat({armR:-96,armRcls:'bob'}))}`;
+
+S.for=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="82" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(100,190,38)}
+ ${at(100,186,1.02,cat({eyes:'happy',mouth:'open',tail:true}))}
+ <g class="float">${at(100,180,2.3,P.gift(VIO,SUN))}<g transform="translate(132,148) rotate(14)"><rect x="-10" y="-8" width="24" height="16" rx="3" fill="#fff"/><path d="${heartP}" transform="translate(2,2) scale(.5)" fill="${RED}"/></g></g>
+ ${paw(70,150,10)}${paw(130,150,10)}
+ ${heart(40,70,1,RED,0)}${heart(160,60,.8,'#ff8a7a',1.1)}`;
+
+S.not=`${bg('#e6f1ff')}${cloud(150,40,.9)}
+ <g opacity=".85">${sun(52,52,18)}</g>${cross(52,52,24,7)}
+ ${thermo(176,70,18,SKY)}
+ ${floor(182,'#cfe3f7')}${sh(108,190,36)}
+ ${at(108,186,1,cat({eyes:'happy',armR:-96,prop:`<g transform="translate(0,12)">${P.cup(RED)}</g>`,extra:winter}))}
+ <circle class="smoke" cx="140" cy="118" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="146" cy="114" r="4" fill="#fff"/>`;
+
+S.on=`${bg('#fff1c9')}
+ <rect x="130" y="16" width="52" height="46" rx="8" fill="#bfe9ff" stroke="#fff" stroke-width="5"/>
+ ${floor(176,'#e4b77a')}
+ ${at(100,186,1.25,P.table(130))}
+ ${at(100,118,.78,cat({eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arcArrow(24,50,62,104,6,RED,5,'','float')}`;
+
+S.with=`${park(170)}${sun(170,30,10)}
+ ${sh(50,190,28)}${at(50,188,.8,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}
+ <g transform="translate(84,188)"><g class="roll">${P.ball(RED)}</g></g>
+ ${at(152,188,.72,P.dog({happy:true}))}
+ ${heart(100,80,1.1,RED,0)}`;
+
+S.he=`${park()}${cloud(40,36,.8)}
+ ${sh(124,190,28)}${at(124,188,1,P.person())}
+ ${arrow(184,26,158,56,RED,6,'float')}${ring(124,70,40,RED)}
+ ${at(36,192,.56,cat({armR:-100,armRcls:'bob'}))}`;
+
+S.as=`${bg('#e3fbf5')}${cloud(40,24,.7)}
+ ${floor(184,'#bff0de')}
+ <path d="M10,76 h180" stroke="${VIO}" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/>
+ ${at(58,184,1.22,P.house())}
+ ${at(154,184,.93,cat({eyes:'happy',armL:40,armR:-60}))}
+ <g class="beat"><path d="M98,134 h16 M98,144 h16" stroke="${VIO}" stroke-width="6" stroke-linecap="round"/></g>`;
+
+S.you=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="84" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(92,190,38)}
+ ${at(92,186,1.04,cat({eyes:'spark',mouth:'open',armR:-60}))}
+ <g class="pulse" style="transform-origin:138px 134px"><ellipse cx="138" cy="134" rx="24" ry="22" fill="${CB}" stroke="${CO}" stroke-width="1.8"/><ellipse cx="138" cy="140" rx="10" ry="8" fill="#ff8a7a"/><circle cx="124" cy="126" r="4.5" fill="#ff8a7a"/><circle cx="138" cy="120" r="4.5" fill="#ff8a7a"/><circle cx="152" cy="126" r="4.5" fill="#ff8a7a"/></g>
+ ${heart(40,60,1.1,RED,0)}${heart(170,70,.8,RED,1)}${spark(30,130,6,SUN,.5)}`;
+
+S.do=`${bg('#e3fbf5')}
+ ${floor(184,'#bff0de')}
+ ${speech(132,62,104,70,`<g transform="translate(112,62) scale(2.2)">${P.fish}</g>${T(160,78,'?',40,RED)}`,84,112)}
+ ${sh(54,190,30)}${at(54,188,.86,cat({armR:-110,armRcls:'bob',mouth:'open'}))}
+ ${at(158,190,.56,K('orange',{headCls:'tilt'}))}`;
+
+S.at=`${park()}${cloud(30,30,.7)}${cloud(176,44,.6)}
+ ${at(100,174,1.3,P.school)}
+ <g class="hop"><path d="M100,2 q-13,0 -13,13 q0,9 13,22 q13,-13 13,-22 q0,-13 -13,-13 Z" fill="${RED}"/><circle cx="100" cy="15" r="5" fill="#fff"/></g>
+ <path d="M86,174 q-6,12 -18,26 h64 q-12,-14 -18,-26 Z" fill="#f3d9a4"/>
+ ${at(100,194,.46,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+/* Tag 15–18: this, but, his, by, from · they, we, say, her, she · or, an, will, my, all · would, there, their, what, so */
+const room=(wall,fl,y)=>`${bg(wall)}${floor(y||178,fl)}`;
+S.this=`${bg('#fff1c9')}<circle cx="104" cy="100" r="80" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(96,190,38)}
+ ${at(96,186,1.06,cat({eyes:'happy',armR:-96,armsFront:true,prop:`<g transform="translate(4,14) scale(1.25)">${P.cup(RED)}</g>`}))}
+ ${ring(136,128,30,VIO)}${arrow(176,84,160,104,RED,5,'float')}
+ <circle class="smoke" cx="130" cy="96" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="140" cy="92" r="4" fill="#fff"/>`;
+
+S.but=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <path d="M124,20 l-10,36 16,-6 -8,40 14,-8 -8,50" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="glow"/>
+ ${sh(66,190,44)}${at(70,188,1.08,P.dog())}
+ ${sh(164,190,14)}${at(164,188,.46,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}),'hop')}`;
+
+S.his=`${park()}${cloud(150,30,.8)}
+ ${sh(62,190,28)}${at(62,188,.96,P.person({wave:false,happy:true}))}
+ ${at(150,188,1.9,P.ball(SKY))}${ring(150,165,32,VIO)}
+ ${arcArrow(92,96,140,128,26,VIO,4,'6 8')}`;
+
+S.by=`${room('#fff1c9','#e4b77a')}
+ <rect x="14" y="30" width="34" height="42" rx="4" fill="#fff" stroke="#b07a45" stroke-width="4"/><circle cx="31" cy="46" r="7" fill="${SUN}"/>
+ ${at(132,180,1.36,P.door(SKY))}<rect x="96" y="178" width="72" height="9" rx="4" fill="#5fd3c0"/>
+ ${sh(58,190,30)}${at(58,188,.9,cat({eyes:'happy',armR:-60}))}
+ <path d="M82,160 h12 M82,160 l4,-4 M82,160 l4,4 M94,160 l-4,-4 M94,160 l-4,4" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round"/>`;
+
+S.from=`${park()}${sun(170,28,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(46,176,.9,P.school)}
+ <g class="road"><path d="M96,146 h70" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(164,146,182,146,RED,5)}
+ <g transform="translate(148,192) scale(-.6,.6)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',mid:backpack})}</g></g>`;
+
+S.they=`${park(170)}${cloud(40,30,.8)}
+ <rect x="36" y="78" width="150" height="116" rx="24" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(76,188,.72,K('orange',{armR:-110,eyes:'happy',mouth:'open'}))}${flipAt(150,188,.72,K('grey',{armR:-110,eyes:'happy',mouth:'open'}))}
+ ${sh(113,190,12,'shadow')}<g transform="translate(113,150)"><g class="jump">${P.ball(RED)}</g></g>
+ ${at(20,196,.4,cat({armR:-100,armRcls:'bob'}))}`;
+
+S.we=`${bg('#ffe9d6')}<circle cx="104" cy="104" r="82" fill="#ffdcc0"/>
+ ${floor(186,'#ffd9bd')}
+ <ellipse cx="106" cy="124" rx="78" ry="70" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${at(78,188,.92,cat({armL:-40,armR:-62,eyes:'happy',mouth:'open'}),'sway')}
+ ${at(134,188,.92,K('orange',{armL:62,armR:40,eyes:'happy',mouth:'open'}),'sway')}
+ ${heart(106,60,1.1,RED,0)}`;
+
+S.say=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(132,56,112,56,T(132,66,'Hello!',26,RED),88,104)}
+ <path d="M96,118 q8,6 0,14 M106,112 q12,10 0,26" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${sh(60,190,34)}${at(60,188,.96,cat({mouth:'big',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.her=`${park()}${cloud(40,30,.8)}
+ ${sh(64,190,32)}${at(64,188,.94,K('white',{eyes:'happy',hat:earflower}))}
+ ${at(152,188,1.6,P.book(VIO))}${ring(152,160,36,RED)}
+ ${arcArrow(98,104,140,126,24,RED,4,'6 8')}`;
+
+S.she=`${bg('#ffe9d6')}<circle cx="118" cy="100" r="78" fill="#ffdcc0"/>
+ ${floor(186,'#ffd9bd')}${sh(122,190,38)}
+ ${at(122,188,1.04,K('white',{eyes:'happy',hat:earflower,armR:-125,armRcls:'wave',armsFront:true}))}
+ ${arrow(184,22,160,52,RED,6,'float')}
+ ${at(34,192,.54,cat({armR:-100,armRcls:'bob',eyes:'happy'}))}${heart(62,110,.9,RED,0)}`;
+
+S.or=`${bg('#ece6ff')}
+ <circle cx="46" cy="62" r="34" fill="#fff"/><circle cx="154" cy="62" r="34" fill="#fff"/>
+ ${at(46,82,1.7,P.ball(RED))}${at(154,88,1.3,P.book(SKY))}
+ <circle class="glow" cx="46" cy="62" r="38" fill="none" stroke="${VIO}" stroke-width="4"/><circle class="glow" style="animation-delay:.7s" cx="154" cy="62" r="38" fill="none" stroke="${VIO}" stroke-width="4"/>
+ ${T(100,76,'?',44,RED,'middle','beat')}
+ ${floor(186,'#d6ccf5')}${sh(100,192,30)}${at(100,190,.84,cat({eyes:'wide',mouth:'o',headCls:'tilt',armL:60,armR:-60}))}`;
+
+S.an=`${bg('#ece6ff')}
+ <rect x="34" y="20" width="132" height="96" rx="10" fill="#fff" stroke="#b07a45" stroke-width="7"/>
+ <g class="blink"><path d="M50,68 Q100,26 150,68 Q100,110 50,68 Z" fill="#fff" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><circle cx="100" cy="68" r="21" fill="${SKY}"/><circle cx="100" cy="68" r="9.5" fill="${INK}"/><circle cx="106" cy="61" r="4.5" fill="#fff"/></g>
+ ${floor(184,'#d6ccf5')}${sh(100,192,28)}
+ ${at(100,192,.62,cat({armR:-158,armRcls:'bob',armsFront:true,mouth:'open'}))}`;
+
+S.will=`${bg('#fff1c9')}
+ ${think(134,58,48,32,`<g transform="translate(134,72)">${P.plate(34)}</g><g transform="translate(134,56) scale(2)">${P.fish}</g>`,-1)}
+ ${floor(150,MINT)}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ ${at(62,190,.9,cat({eyes:'spark',mouth:'tongue',armL:60,armR:-60,prop:knife,propL:fork,tail:false}))}
+ ${floor(168,MINT)}<g transform="translate(62,186)">${P.plate(36)}</g>
+ ${arcArrow(120,128,170,128,-14,RED,5,'','glow')}`;
+
+S.my=`${room('#cfc8f5','#b5addf')}
+ <rect x="100" y="22" width="76" height="34" rx="6" fill="#fff" stroke="#b07a45" stroke-width="4"/>${pawprint(124,40,0)}${T(152,46,'C',20,RED)}
+ ${at(124,186,1.5,P.bed)}
+ ${sh(44,192,26)}${at(44,190,.74,cat({eyes:'happy',armR:-100,armRcls:'bob'}))}
+ ${heart(84,96,1,RED,0)}`;
+
+S.all=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <path d="M10,70 q0,-16 16,-16 h148 q16,0 16,16" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,54 v-16" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>
+ ${at(26,186,.48,K('orange',{eyes:'happy'}),'hop')}${at(62,186,.54,K('grey',{eyes:'happy'}))}${at(100,186,.6,cat({eyes:'happy',mouth:'open'}),'hop')}${at(138,186,.54,K('white',{eyes:'happy'}))}${at(174,186,.48,K('cream',{eyes:'happy'}),'hop')}`;
+
+S.would=`${bg('#ece6ff')}
+ ${think(136,56,48,32,`<g transform="translate(128,58) scale(2.3)">${P.fish}</g>${heartS(164,44,1,RED,'beat')}`,-1)}
+ ${floor(184,'#d6ccf5')}${sh(62,190,34)}
+ ${at(62,188,.96,cat({eyes:'spark',armL:-42,armR:42,armsFront:true,headCls:'tilt'}))}
+ ${spark(24,60,6,SUN,0)}${spark(180,130,6,SUN,.8)}`;
+
+S.there=`${bg('#cdeeff')}${sun(30,30,10)}${cloud(110,26,.7)}
+ <path d="M90,200 Q120,90 200,84 V200 Z" fill="#8fe0a8"/><path d="M0,176 q50,-14 100,0 t100,0 v24 h-200 Z" fill="#6fd08f"/>
+ ${at(166,100,.9,P.ball(RED))}${ring(166,89,20,RED)}
+ <path d="M80,124 Q120,70 152,84" fill="none" stroke="${VIO}" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" class="glow"/>
+ ${sh(48,192,30)}${at(48,190,.88,cat({armR:-126,armsFront:true,mouth:'open'}))}`;
+
+S.their=`${park()}${cloud(30,30,.7)}
+ ${at(104,172,1.34,P.house(SKY,'#ffe2b8'))}
+ ${at(50,192,.5,K('orange',{eyes:'happy',armR:-125,armRcls:'wave',armsFront:true}))}${at(158,192,.5,K('grey',{eyes:'happy',armL:125,armLcls:'wave',armsFront:true}))}
+ ${arcArrow(50,128,74,104,10,RED,4,'6 8')}${arcArrow(158,128,136,104,10,RED,4,'6 8')}`;
+
+S.what=`${bg('#ece6ff')}<circle cx="120" cy="104" r="70" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}${sh(124,190,46)}
+ <g transform="translate(124,186)"><g class="ring">${P.boxClosed(84,70)}${T(0,-22,'?',40,RED)}</g></g>
+ ${[[90,60,0],[150,50,.8],[170,90,1.5]].map(([x,y,d])=>`<g transform="translate(${x},${y})">${T(0,0,'?',20,VIO,'middle','rise').replace('<text','<text style="animation-delay:'+d+'s"')}</g>`).join('')}
+ ${at(40,192,.76,cat({eyes:'wide',mouth:'o',headCls:'tilt',armR:-70}))}`;
+
+S.so=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${sh(124,190,60)}
+ <g class="pulse" style="transform-origin:124px 184px"><circle cx="124" cy="110" r="74" fill="${RED}"/><path d="M50,110 q74,-54 148,0 M50,110 q74,54 148,0" fill="none" stroke="#fff" stroke-width="7"/><circle cx="98" cy="74" r="12" fill="#fff" opacity=".5"/></g>
+ <path d="M30,96 l-14,-10 M24,116 h-16 M34,78 l-8,-14" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(30,192,.5,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+/* Tag 19–22: up, out, if, about, who · get, which, go, me, when · make, can, like, time, no · just, him, know, take, people */
+S.up=`${bg('#cdeeff')}${cloud(40,40,.8)}${cloud(170,90,.6)}
+ <rect x="150" y="0" width="50" height="200" fill="#ffd98a"/><rect x="160" y="30" width="26" height="26" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/><rect x="160" y="110" width="26" height="26" rx="4" fill="#bfe9ff" stroke="#fff" stroke-width="3"/>
+ ${floor(186,'#8fe0a8')}
+ <path d="M84,196 V10 M136,196 V10" stroke="#b07a45" stroke-width="7" stroke-linecap="round"/><path d="M84,30 h52 M84,58 h52 M84,86 h52 M84,114 h52 M84,142 h52 M84,170 h52" stroke="#c98a4b" stroke-width="6" stroke-linecap="round"/>
+ ${at(110,144,.8,cat({armL:150,armR:-150,armsFront:true,eyes:'happy'}),'float')}
+ ${arrow(34,170,34,60,RED,8,'float')}`;
+
+S.out=`${bg('#e3fbf5')}<circle cx="130" cy="80" r="60" fill="#f0fdf8"/>
+ ${floor(184,'#bff0de')}${sh(60,190,44)}${sh(146,190,26,'shadow')}
+ ${at(60,140,1,P.boxBack(80))}${at(60,140,1,P.boxFront(80,46))}
+ ${arcArrow(66,128,128,84,34,RED,5,'8 10')}
+ ${at(146,186,.86,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open'}),'jump')}
+ ${spark(96,40,6,SUN,0)}${spark(180,60,6,VIO,.7)}`;
+
+const panel=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>`;
+S.if=`${bg('#fff1c9')}
+ ${panel(8,40,84,120)}${panel(108,40,84,120)}
+ <g transform="translate(52,146) rotate(9) scale(-.56,.56)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',mouth:'open'})}</g></g>
+ <path d="M14,90 h14 M12,104 h10" stroke="${VIO}" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${at(150,150,.56,cat({eyes:'closed',mouth:'big',armL:30,armR:-30}))}
+ <g transform="translate(176,58) scale(.6)">${sun(0,0,14)}</g>
+ <path class="sweat" d="${tear(126,96)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(174,104)}" fill="${SKY}"/>
+ ${arrow(94,100,106,100,RED,6,'glow')}`;
+
+S.about=`${bg('#ece6ff')}<circle cx="100" cy="100" r="86" fill="#f6f2ff"/>
+ ${at(158,170,.66,cat({tail:false,eyes:'happy'}),'peek')}
+ <rect x="44" y="26" width="108" height="150" rx="8" fill="${SKY}"/><rect x="44" y="26" width="14" height="150" fill="#2f6fd0"/>
+ <rect x="66" y="42" width="76" height="78" rx="8" fill="#bfe9ff"/>
+ <g transform="translate(104,82)"><g class="swim"><g transform="scale(3)">${P.fish}</g></g></g>
+ <circle class="bubble" cx="126" cy="64" r="3" fill="#fff"/><circle class="bubble" style="animation-delay:1.2s" cx="80" cy="100" r="2.5" fill="#fff"/>
+ <path d="M70,138 h66 M70,152 h44" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".85"/>
+ ${paw(152,96,8)}`;
+
+S.who=`${room('#fff1c9','#e4b77a')}
+ ${at(128,180,1.4,P.door(MINT))}
+ <rect x="110" y="56" width="36" height="40" rx="6" fill="#bfe9ff" stroke="#fff" stroke-width="3"/>
+ <path d="M116,96 v-14 q0,-12 12,-12 q12,0 12,12 v14 Z M119,72 l1,-10 6,6 Z M137,72 l-1,-10 -6,6 Z" fill="${INK}" opacity=".55" class="peek"/>
+ ${T(128,40,'?',34,RED,'middle','beat')}
+ <path d="M176,100 l10,-6 M178,112 h12 M176,124 l10,6" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${sh(44,192,28)}${at(44,190,.8,cat({eyes:'wide',mouth:'o',headCls:'tilt'}))}`;
+
+S.get=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ <g class="hop"><path d="M76,10 q24,-16 48,0 l-18,30 h-12 Z" fill="${SKY}" opacity=".85"/><path d="M82,14 l14,26 M118,14 l-14,26" stroke="#fff" stroke-width="1.6"/>${at(100,72,1.5,P.gift(VIO,SUN))}</g>
+ ${at(100,188,.98,cat({armL:135,armR:-135,armsFront:true,eyes:'spark',mouth:'open'}))}
+ ${spark(30,70,6,RED,0)}${spark(172,60,6,RED,.7)}`;
+
+S.which=`${bg('#fff1c9')}
+ <rect x="10" y="104" width="180" height="10" rx="5" fill="#c98a4b"/>
+ ${[[42,RED,0],[100,SKY,.6],[158,MINT,1.2]].map(([x,c,d])=>`${at(x,104,1.5,P.cup(c))}<circle class="glow" style="animation-delay:${d}s" cx="${x+3}" cy="80" r="34" fill="none" stroke="${VIO}" stroke-width="4"/>`).join('')}
+ ${T(100,40,'?',36,RED,'middle','beat')}
+ ${floor(186,'#ffe08a')}${at(100,194,.62,cat({eyes:'wide',mouth:'o',headCls:'tilt',armL:60,armR:-60}))}`;
+
+S.go=`${park(160)}${cloud(120,30,.8)}
+ ${floor(172,'#6b7a99')}<g class="road"><path d="M-40,188 h320" stroke="#fff" stroke-width="4" stroke-dasharray="18 22"/></g>
+ <path d="M30,172 v-70" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><rect x="16" y="38" width="28" height="70" rx="10" fill="${INK}"/><circle cx="30" cy="54" r="8" fill="#5a4a6c"/><circle cx="30" cy="74" r="8" fill="#5a4a6c"/><circle cx="30" cy="94" r="8" fill="#4fe08a"/><circle class="glow" cx="30" cy="94" r="14" fill="#4fe08a" opacity=".45"/>
+ <g transform="translate(110,186) scale(-.8,.8)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy',mid:backpack})}</g></g>
+ ${arrow(150,110,188,110,MINT,8,'glow')}`;
+
+S.me=`${park(170)}${sun(30,30,10)}
+ ${flipAt(164,190,.6,K('orange',{armR:-120,armsFront:true,eyes:'happy'}))}
+ <g transform="translate(112,128)"><g class="hop">${P.ball(RED)}</g></g>
+ <path d="M146,116 Q118,84 92,112" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ ${sh(56,192,32)}${at(56,190,.92,cat({armL:100,armR:-100,eyes:'happy',mouth:'open'}))}
+ ${arrow(20,22,40,56,RED,6,'float')}`;
+
+S.when=`${bg('#fff1c9')}<circle cx="128" cy="96" r="70" fill="#ffe7a3"/>
+ ${at(130,150,1,P.clock(50,40))}
+ ${T(40,56,'?',40,RED,'middle','beat')}
+ ${floor(160,MINT)}<rect y="160" width="200" height="7" fill="#9be6d8"/>
+ <g transform="translate(130,188)">${P.plate(40)}</g>
+ ${at(46,194,.7,cat({mouth:'wavy',armL:60,armR:-60,prop:knife,propL:fork,tail:false}))}`;
+
+S.make=`${bg('#fff1c9')}<path d="M0,40 h200 M0,80 h200 M0,120 h200 M40,0 v140 M80,0 v140 M120,0 v140 M160,0 v140" stroke="#ffe39a" stroke-width="2"/>
+ <path d="M140,22 h46" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M150,22 v14 a6,8 0 0 0 12,0 v-14" fill="#b9c4d8"/><path d="M172,22 v22" stroke="#b9c4d8" stroke-width="3"/><circle cx="172" cy="48" r="7" fill="none" stroke="#b9c4d8" stroke-width="3"/>
+ ${at(88,176,.98,cat({bow:false,hat:P.hatChef,eyes:'happy',armL:40,armR:-30,armsFront:true,tail:false,mouth:'tongue'}))}
+ ${floor(144,'#c98a4b')}<rect y="144" width="200" height="8" fill="#e0a868"/>
+ <path d="M96,150 h70 q0,34 -35,34 q-35,0 -35,-34 Z" fill="${SKY}"/><ellipse cx="131" cy="150" rx="35" ry="8" fill="#ffe9a8"/>
+ <g transform="translate(126,144)"><g class="pen"><path d="M0,0 L-14,-34" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><ellipse cx="2" cy="4" rx="7" ry="5" fill="#b07a45"/></g></g>
+ <circle class="puff" cx="150" cy="138" r="6" fill="#fff"/><circle class="puff" style="animation-delay:1s" cx="110" cy="136" r="5" fill="#fff"/>
+ <ellipse cx="40" cy="160" rx="16" ry="9" fill="#fff8e6"/><ellipse cx="60" cy="168" rx="10" ry="7" fill="#fff8e6"/>`;
+
+S.can=`${bg('#cdeeff')}${sun(30,30,10)}
+ <g class="scroll" style="animation-duration:12s">${cloud(60,60,.9,'')}${cloud(170,130,.7,'')}${cloud(260,60,.9,'')}${cloud(370,130,.7,'')}</g>
+ <path d="M0,190 q50,-10 100,0 t100,0 v10 h-200 Z" fill="#8fe0a8"/>
+ ${sh(100,192,24,'shadow')}
+ <g transform="translate(100,160)"><g class="float">
+  <path class="flower" d="M-22,-48 Q-48,-10 -44,26 Q-22,12 0,24 Q22,12 44,26 Q48,-10 22,-48 Z" fill="${RED}"/>
+  ${cat({armL:-46,armR:46,armsFront:true,eyes:'happy',mouth:'open',mid:`<g transform="translate(0,-30)">${star5(0,0,9,SUN)}</g>`})}
+ </g></g>
+ ${arrow(170,150,170,90,RED,6,'float')}${spark(40,90,6,SUN,0)}${spark(150,50,6,'#fff',.6)}`;
+
+S.like=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="82" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(100,190,38)}
+ ${at(100,186,1.04,cat({eyes:'spark',mouth:'tongue',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-14)">${P.plate(30)}<g transform="translate(0,-12) scale(1.6)">${P.fish}</g></g>`}))}
+ ${heart(40,70,1.2,RED,0)}${heart(160,60,1,RED,.8)}${heart(150,110,.7,'#ff8a7a',1.5)}${heart(54,116,.7,'#ff8a7a',2)}`;
+
+S.time=`${bg('#e3fbf5')}<circle cx="110" cy="100" r="82" fill="#f0fdf8"/>
+ ${floor(186,'#bff0de')}${sh(112,190,46)}
+ <g class="ring"><circle cx="78" cy="42" r="14" fill="${RED}"/><circle cx="146" cy="42" r="14" fill="${RED}"/><path d="M84,170 l-10,16 M140,170 l10,16" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>${at(112,176,1,P.clock(62,300))}<rect x="107" y="38" width="10" height="12" rx="3" fill="${INK}"/></g>
+ <path d="M36,40 l-12,-8 M30,58 h-14 M190,40 l8,-6" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(26,194,.46,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+S.no=`${bg('#ffe9d6')}<circle cx="96" cy="104" r="80" fill="#ffdcc0"/>
+ ${floor(184,'#ffd9bd')}${sh(92,190,38)}
+ <g class="beat"><circle cx="160" cy="48" r="28" fill="#fff"/>${cross(160,48,14,8)}</g>
+ <g transform="translate(160,186)">${P.plate(30)}<circle cx="-6" cy="-16" r="9" fill="#4fc27f"/><circle cx="6" cy="-18" r="9" fill="#62d08f"/><circle cx="0" cy="-24" r="8" fill="#4fc27f"/><rect x="-3" y="-12" width="6" height="8" fill="#9be8b4"/></g>
+ ${at(92,186,1.02,cat({eyes:'closed',mouth:'wavy',armL:20,armR:-92,armsFront:true,headCls:'shiver'}))}
+ <ellipse cx="140" cy="146" rx="13" ry="12" fill="${CB}" stroke="${CO}" stroke-width="1.6"/>`;
+
+S.just=`${bg('#fff1c9')}
+ ${at(100,158,.92,cat({mouth:'wavy',armL:70,armR:-70,prop:knife,propL:fork,tail:false}))}
+ ${floor(140,MINT)}<g fill="#fff" opacity=".35">${[0,40,80,120,160].map(x=>`<rect x="${x}" y="140" width="20" height="20"/><rect x="${x+20}" y="160" width="20" height="20"/><rect x="${x}" y="180" width="20" height="20"/>`).join('')}</g>
+ <g transform="translate(100,180)">${P.plate(80)}</g>
+ <g transform="translate(100,168) scale(.9)">${P.fish}</g>${ring(100,168,18,RED)}
+ ${arrow(160,120,122,156,RED,4,'float')}`;
+
+S.him=`${park()}${cloud(100,30,.8)}
+ ${sh(44,192,28)}${at(44,190,.8,cat({armR:-92,eyes:'happy'}))}
+ <g transform="translate(78,160)"><g class="givemove">${P.ball(RED)}</g></g>
+ ${sh(150,190,28)}${at(150,188,.9,P.person({wave:false,happy:true}))}
+ ${arrow(192,20,172,50,RED,6,'float')}`;
+
+S.know=`${bg('#fff3cf')}<circle cx="100" cy="110" r="76" fill="#ffe7a3"/>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,54,1.1,P.bulb)}
+ <path d="M60,26 l-12,-8 M140,26 l12,-8 M100,2 v-2 M52,46 h-14 M148,46 h14" stroke="${SUN}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(100,186,.94,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true}))}`;
+
+const shelfBooks=(y,cs)=>cs.map((c,i)=>c?`<rect x="${128+i*11}" y="${y-30}" width="9" height="30" rx="2" fill="${c}"/>`:'').join('');
+S.take=`${room('#ece6ff','#d6ccf5')}
+ <rect x="120" y="20" width="70" height="160" rx="6" fill="#b07a45"/><rect x="126" y="26" width="58" height="46" fill="#8a5a30"/><rect x="126" y="78" width="58" height="46" fill="#8a5a30"/><rect x="126" y="130" width="58" height="44" fill="#8a5a30"/>
+ ${shelfBooks(72,[RED,SUN,MINT,VIO,SKY])}${shelfBooks(124,[SKY,null,ORA,RED,MINT])}${shelfBooks(174,[VIO,SUN,RED,SKY,ORA])}
+ ${sh(62,190,34)}${at(62,188,.92,cat({eyes:'happy',armR:-112,armsFront:true,armRcls:'bob',prop:`<g transform="translate(0,6) scale(.6)">${P.book(SUN)}</g>`}))}
+ ${arcArrow(138,96,108,104,16,RED,4,'6 8')}`;
+
+S.people=`${park()}${sun(34,30,10)}${cloud(150,30,.8)}
+ ${at(32,188,.6,P.person({shirt:SKY,stripe:'#2f6fd0',hair:'#3a2a4a',long:true,skirt:true,pants:VIO,wave:false,happy:true}))}
+ ${at(76,188,.74,P.person({shirt:MINT,stripe:'#1f9c83',hair:'#3a2a4a',skin:'#c98a5a',pants:'#3a2a4a',beard:true,wave:false}))}
+ ${at(124,188,.68,P.person({shirt:RED,stripe:'#b52f29',hair:'#e0a83a',skin:'#ffe0c2',long:true,pants:'#2f6fd0'}))}
+ ${at(168,188,.56,P.person({shirt:SUN,stripe:ORA,hair:'#7a4a21',skin:'#e0a070',wave:false,happy:true}))}
+ ${at(100,198,.3,cat({eyes:'happy'}))}`;
+/* Tag 23–26: into, year, your, good, some · could, them, see, other, than · then, now, look, only, come · its, over, think, also, back */
+S.into=`${park()}${cloud(30,30,.7)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ ${at(150,180,1.36,P.house())}<rect x="114.600" y="139.200" width="24.500" height="40.800" rx="10" fill="${INK}"/>
+ <g class="road"><path d="M70,150 h40" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(102,150,120,158,RED,5)}
+ <circle class="puff" cx="22" cy="182" r="6" fill="#fff"/><circle class="puff" style="animation-delay:.8s" cx="14" cy="176" r="5" fill="#fff"/>
+ <g transform="translate(56,190) rotate(9) scale(-.6,.6)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>`;
+
+const sTree=(x,y,c1,c2,extra)=>`<g transform="translate(${x},${y})"><rect x="-3" y="-16" width="6" height="18" rx="2" fill="#b07a45"/><circle cx="0" cy="-26" r="14" fill="${c1}"/><circle cx="-8" cy="-20" r="8" fill="${c2}"/><circle cx="8" cy="-20" r="8" fill="${c2}"/>${extra||''}</g>`;
+S.year=`${bg('#fff8f0')}<circle cx="100" cy="100" r="88" fill="#fff"/>
+ <g class="spin" style="animation-duration:20s"><circle cx="100" cy="100" r="62" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="12 10" stroke-linecap="round"/></g>
+ <path d="M100,12 v176 M12,100 h176" stroke="#f0e6dc" stroke-width="2"/>
+ ${sTree(100,44,'#9be8b4','#b7efc8',`<circle cx="-6" cy="-30" r="3" fill="${RED}"/><circle cx="7" cy="-24" r="3" fill="${SUN}"/><circle cx="0" cy="-18" r="3" fill="${VIO}"/>`)}
+ ${sTree(164,112,'#4fc27f','#62d08f')}<g transform="translate(178,70) scale(.5)">${sun(0,0,12)}</g>
+ ${sTree(100,186,ORA,'#ffc93c',`<path class="sweat" d="M-14,-10 l4,3 -4,3 -4,-3 Z" fill="${ORA}"/><path class="sweat" style="animation-delay:.6s" d="M12,-8 l4,3 -4,3 -4,-3 Z" fill="${RED}"/>`)}
+ ${sTree(36,112,'#eaf7ff','#fff')}<circle class="snow" cx="24" cy="60" r="2" fill="#bfe9ff"/><circle class="snow" style="animation-delay:-2s" cx="46" cy="60" r="2" fill="#bfe9ff"/>
+ ${at(100,128,.46,cat({eyes:'happy'}))}`;
+
+S.your=`${bg('#e3fbf5')}<circle cx="100" cy="92" r="80" fill="#f0fdf8"/>
+ ${floor(184,'#bff0de')}${sh(100,190,38)}
+ ${at(100,180,.98,cat({eyes:'happy',mouth:'open'}))}
+ <g class="float"><g transform="translate(100,188) scale(2.1)">${P.book(SKY)}</g>${paw(66,150,10)}${paw(134,150,10)}</g>
+ ${arrow(40,150,24,184,RED,5,'glow')}${arrow(160,150,176,184,RED,5,'glow')}
+ ${spark(40,50,6,SUN,0)}${spark(166,56,6,SUN,.7)}`;
+
+S.good=`${bg('#fff1c9')}<circle cx="100" cy="104" r="78" fill="#ffe7a3"/>
+ <g class="twinkle">${star5(64,34,13,SUN)}</g><g class="twinkle" style="animation-delay:.4s">${star5(100,24,15,SUN)}</g><g class="twinkle" style="animation-delay:.8s">${star5(136,34,13,SUN)}</g>
+ ${floor(184,'#ffe08a')}${sh(96,190,38)}
+ ${at(96,186,1,cat({eyes:'happy',mouth:'tongue',armR:-130,armsFront:true,prop:`<g transform="translate(0,-6)">${check(0,0,10,5)}</g>`}))}
+ <g transform="translate(164,188)">${P.plate(26)}<path d="M-14,-6 a14,14 0 0 1 28,0 Z" fill="#ffcf5c" stroke="#e0a83a" stroke-width="1.6"/><circle cx="-4" cy="-14" r="2.5" fill="${RED}"/><circle cx="5" cy="-14" r="2.5" fill="#4fc27f"/></g>
+ <circle class="smoke" cx="160" cy="160" r="4.5" fill="#fff"/><circle class="smoke" style="animation-delay:1.2s" cx="170" cy="158" r="4" fill="#fff"/>`;
+
+const fishAt=(x,y,s,r)=>`<g transform="translate(${x},${y}) rotate(${r||0}) scale(${s})">${P.fish}</g>`;
+S.some=`${bg('#fff1c9')}
+ ${at(60,170,.86,cat({eyes:'happy',mouth:'tongue',tail:false}))}
+ ${floor(142,'#c98a4b')}<rect y="142" width="200" height="8" fill="#e0a868"/>
+ <path d="M112,136 h76 q0,40 -38,40 q-38,0 -38,-40 Z" fill="${SKY}"/><ellipse cx="150" cy="136" rx="38" ry="9" fill="#2f6fd0"/>
+ ${fishAt(130,130,1.3,-20)}${fishAt(150,126,1.3,10)}${fishAt(170,130,1.3,-8)}${fishAt(140,120,1.3,24)}${fishAt(162,118,1.3,-30)}
+ <g transform="translate(58,186)">${P.plate(40)}</g>${fishAt(48,176,1.3,8)}${fishAt(70,178,1.3,-12)}
+ ${arcArrow(134,108,78,160,30,RED,4,'6 8')}`;
+
+S.could=`${room('#fff1c9','#e4b77a')}
+ ${at(164,180,1.2,P.door(SKY))}
+ ${at(118,190,.56,K('orange',{headCls:'tilt',armL:110,armsFront:true}))}
+ ${speech(60,40,56,44,T(60,54,'?',30,RED),64,74)}
+ ${sh(54,192,34)}${at(54,190,.9,cat({mouth:'open',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-2)">${P.boxClosed(54,40)}</g>`}))}`;
+
+const binoc=`<g><rect x="-24" y="-84" width="20" height="18" rx="6" fill="${INK}" stroke="#7a6a8c" stroke-width="1.6"/><rect x="4" y="-84" width="20" height="18" rx="6" fill="${INK}" stroke="#7a6a8c" stroke-width="1.6"/><circle cx="-14" cy="-75" r="5" fill="#bfe9ff"/><circle cx="14" cy="-75" r="5" fill="#bfe9ff"/></g>`;
+S.them=`${bg('#cdeeff')}${sun(30,30,10)}
+ <path d="M90,200 Q120,120 200,116 V200 Z" fill="#8fe0a8"/><path d="M0,178 q50,-14 100,0 t100,0 v22 h-200 Z" fill="#6fd08f"/>
+ ${at(146,126,.36,K('orange',{eyes:'happy'}),'hop')}${at(172,124,.36,K('grey',{eyes:'happy'}))}
+ <ellipse cx="159" cy="104" rx="34" ry="28" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 8"/>
+ <path d="M78,116 L124,100 M78,124 L126,116" stroke="#fff" stroke-width="3" stroke-dasharray="3 8" stroke-linecap="round" class="glow"/>
+ ${sh(48,192,32)}${at(48,190,.9,cat({hat:binoc,armL:150,armR:-150,armsFront:true}))}`;
+
+S.see=`${bg('#4a4496')}
+ ${spark(30,30,4,'#fff',0)}${spark(80,50,3.5,'#fff',.7)}${spark(120,20,4,'#fff',1.2)}${spark(186,90,4,'#fff',.4)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <g class="beat">${star5(166,40,16,SUN,`stroke="${SUN}" stroke-width="4"`)}</g>
+ <path d="M108,188 L120,132 L132,188" fill="none" stroke="#b9c4d8" stroke-width="4" stroke-linecap="round"/>
+ <g transform="translate(120,128) rotate(-42)"><rect x="-34" y="-9" width="62" height="18" rx="6" fill="#dfe6f2"/><rect x="24" y="-12" width="16" height="24" rx="5" fill="${RED}"/><rect x="-42" y="-6" width="10" height="12" rx="3" fill="#9aa8c0"/></g>
+ <path d="M150,96 L160,56" stroke="#fff" stroke-width="2.5" stroke-dasharray="3 8" stroke-linecap="round" class="glow"/>
+ ${at(58,190,.84,cat(Object.assign({armR:-70,eyes:'happy',mouth:'open'},NL)))}`;
+
+S.other=`${bg('#e3fbf5')}
+ <rect x="10" y="118" width="180" height="10" rx="5" fill="#c98a4b"/>
+ <g opacity=".35">${at(54,118,1.8,P.cup(SKY))}</g>${check(54,54,12,6)}
+ ${at(142,118,1.8,P.cup(RED))}${ring(146,88,42,RED)}
+ ${arrow(96,60,118,70,RED,6,'float')}
+ ${floor(186,'#bff0de')}${at(92,196,.6,cat({armR:-120,armsFront:true,armRcls:'bob',eyes:'happy'}))}`;
+
+S.than=`${park(170)}${cloud(150,26,.7)}
+ ${at(62,186,1.5,P.house())}
+ ${at(154,188,.66,P.car(SKY))}
+ ${at(156,152,.36,cat({eyes:'happy',tail:false}))}
+ <g class="beat"><path d="M112,96 l24,14 -24,14" fill="none" stroke="${VIO}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+
+S.then=`${bg('#ece6ff')}
+ ${panel(8,36,84,128)}${panel(108,36,84,128)}
+ ${at(50,152,.56,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}
+ ${at(146,152,.56,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(166,152)"><g class="roll" style="animation-duration:1.2s"><g transform="scale(.7)">${P.ball(RED)}</g></g></g>
+ <circle cx="50" cy="24" r="6" fill="${VIO}"/><circle cx="142" cy="24" r="6" fill="${VIO}"/><circle cx="158" cy="24" r="6" fill="${VIO}"/>
+ ${arrow(92,100,106,100,RED,6,'glow')}`;
+
+S.now=`${bg('#fff1c9')}<circle cx="90" cy="110" r="74" fill="#ffe7a3"/>
+ <g class="ring">${at(158,84,1,P.clock(30,0))}</g>
+ ${arcArrow(150,96,128,128,-12,RED,5,'','float')}
+ <path d="M190,40 l8,-6 M192,54 h8 M126,40 l-8,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(86,180,1,cat({armL:40,armR:-140,armRcls:'munch',armsFront:true,mouth:'open',mouthCls:'chew',prop:P.fish,tail:false}))}
+ ${floor(152,MINT)}<rect y="152" width="200" height="8" fill="#9be6d8"/><g transform="translate(86,184)">${P.plate(40)}</g>${fishAt(78,174,1.3,8)}`;
+
+S.look=`${park(170)}${cloud(40,30,.8)}
+ ${bfly(140,62,ORA,0)}${ring(150,62,30,RED)}
+ <path d="M92,82 l10,-12 M100,96 l14,-6 M84,70 l4,-14" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ <path d="M84,120 L124,80" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ ${sh(52,192,32)}${at(52,190,.92,cat({eyes:'wide',mouth:'o',armR:-128,armsFront:true}))}`;
+
+S.only=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ <g opacity=".3">${at(30,186,.56,K('white'))}${at(74,186,.56,K('orange'))}${at(118,186,.56,K('grey'))}</g>
+ <circle cx="164" cy="140" r="40" fill="#fff" opacity=".7"/>
+ ${at(164,186,.62,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}),'hop')}
+ ${ring(164,140,42,RED)}${arrow(120,60,146,96,RED,6,'float')}`;
+
+S.come=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g class="road"><path d="M100,150 h60" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(112,150,94,150,RED,5)}
+ ${sh(56,190,34)}${at(56,188,.96,cat({eyes:'happy',mouth:'open',armR:-110,armRcls:'wave',armsFront:true}))}
+ <g transform="translate(160,190)"><g class="walkbob"><g transform="scale(.5)">${K('grey',{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g></g>
+ ${heart(108,100,.9,RED,0)}`;
+
+S.its=`${park()}${sun(170,30,10)}
+ ${sh(64,190,40)}${at(68,188,.94,P.dog({happy:true}))}
+ ${at(156,188,1.7,P.ball(SKY))}${ring(156,168,30,RED)}
+ ${arcArrow(96,110,146,134,26,RED,4,'6 8')}`;
+
+S.over=`${bg('#e3fbf5')}${cloud(30,30,.7)}${floor(184,'#bff0de')}
+ ${sh(100,190,40)}${at(100,186,1,P.boxClosed(64,50))}
+ ${arcArrow(24,170,176,170,150,RED,5,'8 10')}
+ <g transform="translate(100,112) rotate(12)"><g class="float"><g transform="scale(.66)">${cat({armL:120,armR:-120,armsFront:true,eyes:'happy',mouth:'open'})}</g></g></g>
+ ${spark(40,60,6,SUN,0)}${spark(170,70,6,VIO,.7)}`;
+
+S.think=`${bg('#ece6ff')}
+ ${think(134,54,50,32,`${T(110,66,'?',34,RED)}<g transform="translate(142,60) scale(1.5)">${P.fish}</g><g transform="translate(166,74) scale(.6)">${P.ball(SKY)}</g>`,-1)}
+ ${floor(184,'#d6ccf5')}${sh(62,190,36)}
+ ${at(62,188,1,cat({headCls:'tilt',armR:-152,armsFront:true}))}
+ <circle class="glow" cx="24" cy="60" r="4" fill="${VIO}"/><circle class="glow" style="animation-delay:.5s" cx="36" cy="44" r="5" fill="${VIO}"/><circle class="glow" style="animation-delay:1s" cx="52" cy="32" r="6" fill="${VIO}"/>`;
+
+S.also=`${park()}${cloud(100,26,.7)}
+ ${sh(56,190,36)}${at(60,188,.8,P.dog({happy:true}))}
+ ${sh(150,190,30)}${at(150,188,.86,cat({eyes:'happy',mouth:'open'}),'hop')}
+ ${heart(40,90,.9,RED,0)}${heart(150,60,.9,RED,.6)}
+ <g class="beat"><circle cx="108" cy="96" r="16" fill="#fff"/><path d="M108,86 v20 M98,96 h20" stroke="${MINT}" stroke-width="6" stroke-linecap="round"/></g>`;
+
+S.back=`${room('#fff1c9','#e4b77a')}
+ <rect x="96" y="34" width="84" height="146" rx="8" fill="#b07a45"/><rect x="104" y="42" width="68" height="138" fill="#cdeeff"/><path d="M104,150 q34,-16 68,0 v30 h-68 Z" fill="#8fe0a8"/><circle cx="156" cy="62" r="9" fill="${SUN}"/>
+ <path d="M104,42 L90,34 V188 L104,180 Z" fill="${SKY}"/>
+ <rect x="100" y="178" width="76" height="9" rx="4" fill="#5fd3c0"/>
+ <rect x="22" y="150" width="36" height="34" rx="6" fill="${RED}"/><path d="M32,150 v-8 q0,-6 8,-6 q8,0 8,6 v8" fill="none" stroke="#b52f29" stroke-width="4"/><path d="M22,164 h36" stroke="#b52f29" stroke-width="3"/>
+ ${sh(120,190,30)}${at(120,188,.86,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ <g class="glow"><path d="M40,60 q24,-34 48,0" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/><path d="M40,60 l-2,-14 M40,60 l13,-5" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>`;
+/* Tag 27–30: after, use, how, our, work · first, well, way, even, new · want, because, any, these, day · most, us, very, thing, man */
+S.after=`${bg('#e3fbf5')}${floor(180,'#bff0de')}
+ <g opacity=".45">${at(44,150,.74,P.school)}</g>${check(44,60,10,6)}
+ <path d="M14,176 h172" stroke="${VIO}" stroke-width="4" stroke-linecap="round"/><circle cx="44" cy="176" r="6" fill="${VIO}"/><circle cx="140" cy="176" r="8" fill="${RED}"/>
+ ${arrow(84,110,110,110,RED,6,'glow')}
+ ${sh(136,170,26,'shadow')}${at(136,168,.74,cat({armL:125,armR:-125,armsFront:true,eyes:'happy',mouth:'open'}),'hop')}
+ <g transform="translate(176,150)"><g class="jump">${P.ball(RED)}</g></g>`;
+
+S.use=`${bg('#ece6ff')}<circle cx="100" cy="100" r="82" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}${sh(100,190,38)}
+ ${at(100,186,1.06,cat({eyes:'happy',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-4) scale(1.15)">${P.phone}<circle class="glow" cx="0" cy="-20" r="5" fill="${RED}"/></g>`}))}
+ ${[[150,80,0],[166,54,1],[40,70,.5]].map(([x,y,d])=>`<g transform="translate(${x},${y})"><g class="rise" style="animation-delay:${d}s"><rect x="-13" y="-9" width="26" height="18" rx="6" fill="#fff"/><path d="${heartP}" transform="translate(0,2) scale(.5)" fill="${RED}"/></g></g>`).join('')}`;
+
+S.how=`${bg('#fff1c9')}
+ ${floor(150,'#c98a4b')}<rect y="150" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(108,112) scale(4.6)">${P.fish}</g>
+ <rect x="22" y="160" width="160" height="20" rx="4" fill="${SUN}"/>${[30,46,62,78,94,110,126,142,158,174].map((x,i)=>`<path d="M${x},160 v${i%2?6:10}" stroke="${INK}" stroke-width="2"/>`).join('')}
+ <path d="M30,62 h156 M30,62 l8,-6 M30,62 l8,6 M186,62 l-8,-6 M186,62 l-8,6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${T(100,44,'?',36,RED,'middle','beat')}
+ ${at(26,150,.42,cat({eyes:'wide',mouth:'o',tail:false}),'peek')}`;
+
+S.our=`${park()}${cloud(30,30,.7)}
+ ${at(100,170,1.4,P.house())}${heartS(100,34,1.4,RED,'beat')}
+ <ellipse cx="100" cy="170" rx="62" ry="30" fill="none" stroke="${VIO}" stroke-width="4" stroke-dasharray="9 8"/>
+ ${at(76,194,.5,cat({eyes:'happy',armR:-62,mouth:'open'}))}${at(124,194,.5,K('orange',{eyes:'happy',armL:62,mouth:'open'}))}`;
+
+const hammer=`<g class="wave"><path d="M0,2 v-30" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><rect x="-12" y="-38" width="26" height="12" rx="3" fill="#9aa8c0"/></g>`;
+S.work=`${bg('#fff1c9')}<path d="M0,60 h200 M0,120 h200" stroke="#ffe39a" stroke-width="2"/>
+ ${floor(184,'#ffe08a')}
+ <rect x="104" y="140" width="90" height="12" rx="3" fill="#c98a4b"/><rect x="112" y="152" width="10" height="34" fill="#8a5a30"/><rect x="176" y="152" width="10" height="34" fill="#8a5a30"/>
+ <path d="M130,140 v-10 M150,140 v-14 M170,140 v-10" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/>
+ ${spark(134,118,7,SUN,0)}${spark(150,104,6,ORA,.25)}
+ ${sh(66,190,36)}${at(66,188,.98,cat({bow:false,hat:P.hatHard,eyes:'happy',armR:-118,armsFront:true,prop:hammer}))}`;
+
+S.first=`${bg('#e3fbf5')}
+ ${[[20,RED,0],[60,SUN,.9],[140,VIO,1.3],[180,SKY,.4],[100,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.5" fill="${c}"/>`).join('')}
+ <rect x="68" y="124" width="64" height="76" rx="4" fill="${SUN}"/>${star5(100,156,14,'#fff')}
+ <rect x="8" y="154" width="60" height="46" rx="4" fill="#cfd8e6"/><rect x="132" y="166" width="60" height="34" rx="4" fill="#e0a070"/>
+ ${at(38,156,.48,K('orange',{eyes:'happy'}))}${at(162,168,.48,K('grey'))}
+ ${at(100,126,.62,cat({armL:130,armR:-130,armsFront:true,eyes:'happy',mouth:'open',mid:`<circle cx="0" cy="-30" r="9" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><path d="M-12,-52 L0,-38 L12,-52" fill="none" stroke="${RED}" stroke-width="4"/>`}),'hop')}`;
+
+const guitar=`<g transform="rotate(-24)"><rect x="-4" y="-78" width="8" height="58" rx="3" fill="#8a5a30"/><rect x="-7" y="-88" width="14" height="14" rx="3" fill="${INK}"/><ellipse cx="0" cy="-8" rx="20" ry="16" fill="${ORA}"/><ellipse cx="0" cy="-28" rx="14" ry="12" fill="${ORA}"/><circle cx="0" cy="-14" r="6" fill="#5a2a4a"/><path d="M0,-78 V4" stroke="#fff" stroke-width="1"/></g>`;
+S.well=`${bg('#ece6ff')}<circle cx="100" cy="104" r="80" fill="#f6f2ff"/>
+ <g class="twinkle">${star5(60,30,11,SUN)}</g><g class="twinkle" style="animation-delay:.4s">${star5(100,20,13,SUN)}</g><g class="twinkle" style="animation-delay:.8s">${star5(140,30,11,SUN)}</g>
+ ${floor(184,'#d6ccf5')}${sh(100,190,38)}
+ ${at(100,186,1.02,cat({eyes:'happy',mouth:'open',armL:60,armR:10,armRcls:'wave',armsFront:true,mid:`<g transform="translate(2,-16)">${guitar}</g>`,headCls:'tilt'}))}
+ ${note(30,110,RED,0)}${note(170,100,VIO,.8)}${note(160,60,SKY,1.6)}`;
+
+S.way=`${bg('#cdeeff')}${sun(30,28,10)}${floor(70,'#8fe0a8')}
+ <path d="M120,200 C150,160 60,140 110,104 C140,84 150,80 150,74" fill="none" stroke="#f3d9a4" stroke-width="22" stroke-linecap="round"/>
+ <g class="road"><path d="M120,200 C150,160 60,140 110,104 C140,84 150,80 150,74" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="8 12"/></g>
+ ${at(154,76,.5,P.school)}${tree(30,110,.6)}${tree(180,150,.7)}
+ <path d="M70,150 v-40" stroke="#b07a45" stroke-width="4" stroke-linecap="round"/><path d="M56,100 h30 l8,8 -8,8 h-30 Z" fill="${RED}"/>
+ ${at(44,196,.7,cat({armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-28)"><path d="M-22,-12 l14,4 16,-4 14,4 v22 l-14,-4 -16,4 -14,-4 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.6"/><path d="M-12,2 q8,-8 16,0 t10,-4" fill="none" stroke="${RED}" stroke-width="2" stroke-dasharray="2 3"/></g>`}))}`;
+
+S.even=`${park(170)}${cloud(100,26,.7)}
+ ${at(30,192,.42,K('cream',{armR:-120,armRcls:'throwarm',armsFront:true,eyes:'happy'}))}
+ <g transform="translate(46,140)"><g class="throwball"><g transform="scale(1.6)">${P.ball(RED)}</g></g></g>
+ <path d="M48,130 q54,-70 108,10" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+ <path d="M130,84 l8,-12 M140,92 l14,-6" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${sh(162,192,28)}${at(162,190,.78,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+S.new=`${bg('#fff3cf')}<circle cx="112" cy="104" r="80" fill="#ffe7a3"/>
+ ${floor(180,'#ffe08a')}${sh(116,188,70)}
+ ${at(116,184,1.3,P.car(SKY))}
+ <path d="M96,118 q-18,-22 -22,-4 q4,8 22,4 Z M96,118 q18,-22 22,-4 q-4,8 -22,4 Z" fill="${RED}"/><circle cx="96" cy="118" r="5" fill="#ff8a7a"/><path d="M96,120 v34" stroke="${RED}" stroke-width="5"/>
+ ${spark(60,100,8,'#fff',0)}${spark(176,110,7,'#fff',.5)}${spark(150,80,6,SUN,1)}${spark(84,166,5,'#fff',1.4)}
+ <g transform="translate(172,60) rotate(16)"><path d="M-16,-10 h24 l10,10 -10,10 h-24 Z" fill="${MINT}"/><circle cx="8" cy="0" r="2.5" fill="#fff"/></g>
+ ${at(26,194,.5,cat({eyes:'spark',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}`;
+
+S.want=`${bg('#fff1c9')}
+ <rect x="96" y="56" width="100" height="10" rx="5" fill="#c98a4b"/><path d="M110,66 l-8,14 M182,66 l8,14" stroke="#8a5a30" stroke-width="4" stroke-linecap="round"/>
+ <g transform="translate(146,56)">${P.plate(34)}</g>${fishAt(146,44,2.2,0)}${ring(146,42,34,RED)}
+ ${floor(184,'#ffe08a')}${sh(66,190,36)}
+ ${at(66,188,.98,cat({eyes:'spark',mouth:'tongue',armL:30,armR:-160,armRcls:'bob',armsFront:true}),'hop')}
+ ${heart(110,110,.9,RED,0)}${heart(24,70,.8,RED,.9)}`;
+
+S.because=`${bg('#ffe9d6')}
+ <g class="beat"><g transform="translate(150,52) scale(3.4)"><path d="${heartP}" fill="${RED}"/></g><path d="M139,40 q3,-4 6,0 M155,40 q3,-4 6,0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M142,50 q8,8 16,0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g>
+ ${floor(186,'#ffd9bd')}
+ ${at(56,190,.8,cat({armL:-40,armR:-62,eyes:'happy',mouth:'open'}),'sway')}${at(104,190,.8,K('orange',{armL:62,armR:40,eyes:'happy'}),'sway')}
+ ${arcArrow(90,96,128,66,20,VIO,5,'')}`;
+
+S.any=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="104" y="20" width="84" height="164" rx="10" fill="#fff" stroke="#b9c9dd" stroke-width="3"/><rect x="112" y="28" width="68" height="148" rx="6" fill="#eaf7ff"/><path d="M112,76 h68 M112,126 h68" stroke="#b9c9dd" stroke-width="3"/>
+ <path d="M104,20 l-22,10 v150 l22,4 Z" fill="#f4f8ff" stroke="#b9c9dd" stroke-width="3" stroke-linejoin="round"/>
+ ${T(146,64,'?',30,RED,'middle','beat')}<circle cx="130" cy="120" r="2.5" fill="#c98a4b"/><path d="M160,28 q-6,14 12,16 M168,28 q-4,8 10,10" fill="none" stroke="#b9c9dd" stroke-width="1.6"/>
+ ${sh(46,192,30)}${at(46,190,.86,cat({mouth:'wavy',armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-16)">${P.plate(26)}</g>`}))}`;
+
+S.these=`${bg('#ece6ff')}<circle cx="110" cy="104" r="78" fill="#f6f2ff"/>
+ ${floor(184,'#d6ccf5')}
+ ${[[RED,0,0],[SKY,4,-16],[SUN,-3,-32],[MINT,3,-48],[VIO,-2,-64]].map(([c,dx,dy])=>`<rect x="${112+dx}" y="${168+dy}" width="64" height="15" rx="3" fill="${c}"/><rect x="${118+dx}" y="${172+dy}" width="18" height="7" rx="2" fill="#fff" opacity=".8"/>`).join('')}
+ <rect x="102" y="92" width="86" height="96" rx="14" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 8"/>
+ ${sh(54,190,34)}${at(54,188,.94,cat({eyes:'happy',mouth:'open',armR:-84,armsFront:true}))}`;
+
+S.day=`${bg('#cdeeff')}${sun(150,44,22)}${cloud(40,36,.9)}${cloud(100,70,.6)}
+ <path d="M30,60 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round" class="float"/>
+ ${hills('#8fe0a8','#6fd08f',160)}
+ <path d="M30,178 l40,-12 100,6 -30,22 h-90 Z" fill="${RED}"/><path d="M50,172 l-20,18 M90,170 l-20,24 M130,172 l-18,22" stroke="#fff" stroke-width="5" opacity=".8"/>
+ <path d="M134,166 h32 l-4,20 h-24 Z" fill="#c98a4b"/><path d="M136,166 q14,-22 28,0" fill="none" stroke="#8a5a30" stroke-width="3"/>
+ ${at(84,184,.8,cat({eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}
+ ${flower(16,190,SUN,0)}${flower(186,188,VIO,.5)}`;
+
+S.most=`${bg('#4a4496')}
+ ${spark(20,30,4,'#fff',0)}${spark(186,150,4,'#fff',.8)}${spark(110,20,3.5,'#fff',1.3)}
+ <path d="M0,176 q50,-18 100,0 t100,0 v24 h-200 Z" fill="#373278"/>
+ <g opacity=".6">${star5(78,70,12,SUN)}${star5(112,62,17,SUN)}</g>
+ <circle class="glow" cx="156" cy="62" r="38" fill="#ffe89a" opacity=".35"/>
+ <g class="beat">${star5(156,62,28,SUN,`stroke="${SUN}" stroke-width="5"`)}<path d="M142,30 l4,-12 6,8 4,-10 4,10 6,-8 4,12 Z" fill="${RED}"/></g>
+ <path d="M80,122 L130,84" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" class="glow"/>
+ ${at(46,190,.84,cat(Object.assign({armR:-128,armsFront:true,eyes:'spark',mouth:'open'},NL)))}`;
+
+S.us=`${park()}${cloud(100,26,.7)}
+ <path d="M100,200 q-6,-20 0,-40" fill="none" stroke="#f3d9a4" stroke-width="20" stroke-linecap="round"/>
+ ${sh(68,190,30)}${sh(134,190,30)}
+ ${at(68,188,.86,cat({armL:125,armLcls:'wave',armR:-50,armsFront:true,eyes:'happy',mouth:'open'}))}
+ ${at(134,188,.86,K('orange',{armR:-125,armRcls:'wave',armL:50,armsFront:true,eyes:'happy',mouth:'open'}))}
+ <ellipse cx="101" cy="134" rx="84" ry="62" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9"/>
+ ${arrow(100,198,100,172,RED,6,'float')}`;
+
+const burst=(x,y,c,d)=>`<g class="twinkle" style="animation-delay:${d}s" stroke="${c}" stroke-width="3.5" stroke-linecap="round">${[0,45,90,135,180,225,270,315].map(a=>`<path transform="rotate(${a} ${x} ${y})" d="M${x},${y-8} v-12"/>`).join('')}<circle cx="${x}" cy="${y}" r="4" fill="${c}" stroke="none"/></g>`;
+S.very=`${bg('#fff3cf')}
+ ${burst(34,40,RED,0)}${burst(164,34,VIO,.5)}${burst(100,22,SKY,1)}${burst(176,110,MINT,1.4)}${burst(22,116,ORA,.8)}
+ ${floor(184,'#ffe08a')}${sh(100,190,40,'shadow')}
+ ${at(100,186,1.04,cat({armL:140,armR:-140,armsFront:true,eyes:'happy',mouth:'big'}),'jump')}
+ ${heart(60,130,.9,RED,0)}${heart(142,126,.9,RED,.7)}`;
+
+S.thing=`${bg('#e3fbf5')}<circle cx="128" cy="110" r="64" fill="#f0fdf8"/>
+ ${floor(184,'#bff0de')}${sh(130,190,40)}
+ <g class="ring"><path d="M130,96 q-8,-10 0,-20 q8,-10 0,-20" fill="none" stroke="#9aa8c0" stroke-width="3"/><circle class="glow" cx="130" cy="52" r="6" fill="${RED}"/>
+  <rect x="96" y="96" width="68" height="74" rx="20" fill="${VIO}"/><circle cx="130" cy="124" r="14" fill="#fff"/><circle class="blink" cx="130" cy="124" r="7" fill="${INK}"/>
+  <rect x="108" y="148" width="44" height="8" rx="4" fill="${SUN}"/><path d="M96,130 h-14 v-14 M164,130 h14 v14" fill="none" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="108" y="170" width="12" height="16" rx="3" fill="#9aa8c0"/><rect x="140" y="170" width="12" height="16" rx="3" fill="#9aa8c0"/></g>
+ <g class="spin" style="animation-duration:5s"><circle cx="176" cy="60" r="10" fill="none" stroke="${MINT}" stroke-width="5" stroke-dasharray="5 5"/></g>
+ ${T(170,112,'?',26,RED,'middle','beat')}
+ ${at(38,192,.76,cat({eyes:'wide',mouth:'o',headCls:'tilt',armR:-84,armRcls:'bob'}))}`;
+
+const fedora=`<ellipse cx="0" cy="-140" rx="34" ry="7" fill="#5a4a6c"/><path d="M-22,-140 q0,-24 22,-24 q22,0 22,24 Z" fill="#5a4a6c"/><rect x="-22" y="-146" width="44" height="6" fill="${RED}"/>`;
+S.man=`${park()}${sun(30,30,10)}${cloud(160,30,.8)}
+ ${sh(112,190,32)}${at(112,188,1.06,P.person({shirt:SKY,stripe:'#2f6fd0',pants:'#3a2a4a',hair:'#3a2a4a',shoes:'#7a4a21',beard:true,hat:fedora}))}
+ ${at(38,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+const WORDS=[{"w": "house", "t": "Nomen", "es": "la casa", "day": 1}, {"w": "eat", "t": "Verb", "es": "comer", "day": 1}, {"w": "happy", "t": "Adjektiv", "es": "feliz", "day": 1}, {"w": "water", "t": "Nomen", "es": "el agua", "day": 1}, {"w": "dog", "t": "Nomen", "es": "el perro", "day": 1}, {"w": "book", "t": "Nomen", "es": "el libro", "day": 2}, {"w": "read", "t": "Verb", "es": "leer", "day": 2}, {"w": "big", "t": "Adjektiv", "es": "grande", "day": 2}, {"w": "small", "t": "Adjektiv", "es": "pequeño", "day": 2}, {"w": "hand", "t": "Nomen", "es": "la mano", "day": 2}, {"w": "car", "t": "Nomen", "es": "el coche / el carro", "day": 3}, {"w": "run", "t": "Verb", "es": "correr", "day": 3}, {"w": "hot", "t": "Adjektiv", "es": "caliente", "day": 3}, {"w": "cold", "t": "Adjektiv", "es": "frío", "day": 3}, {"w": "door", "t": "Nomen", "es": "la puerta", "day": 3}, {"w": "bed", "t": "Nomen", "es": "la cama", "day": 4}, {"w": "sit", "t": "Verb", "es": "sentarse", "day": 4}, {"w": "eye", "t": "Nomen", "es": "el ojo", "day": 4}, {"w": "food", "t": "Nomen", "es": "la comida", "day": 4}, {"w": "blue", "t": "Adjektiv", "es": "azul", "day": 4}, {"w": "table", "t": "Nomen", "es": "la mesa", "day": 5}, {"w": "chair", "t": "Nomen", "es": "la silla", "day": 5}, {"w": "play", "t": "Verb", "es": "jugar", "day": 5}, {"w": "ball", "t": "Nomen", "es": "la pelota", "day": 5}, {"w": "green", "t": "Adjektiv", "es": "verde", "day": 5}, {"w": "fish", "t": "Nomen", "es": "el pez / el pescado", "day": 6}, {"w": "cup", "t": "Nomen", "es": "la taza", "day": 6}, {"w": "give", "t": "Verb", "es": "dar", "day": 6}, {"w": "love", "t": "Verb", "es": "amar / querer", "day": 6}, {"w": "heart", "t": "Nomen", "es": "el corazón", "day": 6}, {"w": "friend", "t": "Nomen", "es": "el amigo / la amiga", "day": 7}, {"w": "family", "t": "Nomen", "es": "la familia", "day": 7}, {"w": "laugh", "t": "Verb", "es": "reír", "day": 7}, {"w": "mother", "t": "Nomen", "es": "la madre", "day": 7}, {"w": "boy", "t": "Nomen", "es": "el niño / el chico", "day": 7}, {"w": "school", "t": "Nomen", "es": "la escuela", "day": 8}, {"w": "write", "t": "Verb", "es": "escribir", "day": 8}, {"w": "walk", "t": "Verb", "es": "caminar", "day": 8}, {"w": "box", "t": "Nomen", "es": "la caja", "day": 8}, {"w": "dark", "t": "Adjektiv", "es": "oscuro", "day": 8}, {"w": "night", "t": "Nomen", "es": "la noche", "day": 9}, {"w": "star", "t": "Nomen", "es": "la estrella", "day": 9}, {"w": "fly", "t": "Verb", "es": "volar", "day": 9}, {"w": "phone", "t": "Nomen", "es": "el teléfono", "day": 9}, {"w": "music", "t": "Nomen", "es": "la música", "day": 9}, {"w": "open", "t": "Verb", "es": "abrir", "day": 10}, {"w": "throw", "t": "Verb", "es": "lanzar / tirar", "day": 10}, {"w": "head", "t": "Nomen", "es": "la cabeza", "day": 10}, {"w": "foot", "t": "Nomen", "es": "el pie", "day": 10}, {"w": "beautiful", "t": "Adjektiv", "es": "hermoso / bonito", "day": 10}, {"w": "the", "t": "Artikel", "es": "el / la", "day": 11, "s": "{The} cat is black.", "ses": "La gata es negra."}, {"w": "be", "t": "Verb", "es": "ser / estar", "day": 11, "s": "I {am} Canela.", "ses": "Yo soy Canela."}, {"w": "to", "t": "Präposition", "es": "a / hacia", "day": 11, "s": "I walk {to} the house.", "ses": "Camino a la casa."}, {"w": "of", "t": "Präposition", "es": "de", "day": 11, "s": "A cup {of} water.", "ses": "Una taza de agua."}, {"w": "and", "t": "Konjunktion", "es": "y", "day": 11, "s": "The cat {and} the dog.", "ses": "La gata y el perro."}, {"w": "a", "t": "Artikel", "es": "un / una", "day": 12, "s": "{A} ball.", "ses": "Una pelota."}, {"w": "in", "t": "Präposition", "es": "en", "day": 12, "s": "The cat is {in} the box.", "ses": "La gata está en la caja."}, {"w": "that", "t": "Pronomen", "es": "que / ese", "day": 12, "s": "{That} is a star.", "ses": "Eso es una estrella."}, {"w": "have", "t": "Verb", "es": "tener / haber", "day": 12, "s": "I {have} a book.", "ses": "Tengo un libro."}, {"w": "I", "t": "Pronomen", "es": "yo", "day": 12, "s": "{I} am a cat.", "ses": "Yo soy una gata."}, {"w": "it", "t": "Pronomen", "es": "eso / lo", "day": 13, "s": "{It} is a ball.", "ses": "Es una pelota."}, {"w": "for", "t": "Präposition", "es": "para / por", "day": 13, "s": "This is {for} you.", "ses": "Esto es para ti."}, {"w": "not", "t": "Adverb", "es": "no", "day": 13, "s": "It is {not} hot.", "ses": "No hace calor."}, {"w": "on", "t": "Präposition", "es": "sobre / en", "day": 13, "s": "The cat is {on} the table.", "ses": "La gata está sobre la mesa."}, {"w": "with", "t": "Präposition", "es": "con", "day": 13, "s": "I play {with} the dog.", "ses": "Juego con el perro."}, {"w": "he", "t": "Pronomen", "es": "él", "day": 14, "s": "{He} is a boy.", "ses": "Él es un niño."}, {"w": "as", "t": "Konjunktion", "es": "como", "day": 14, "s": "Big {as} a house.", "ses": "Grande como una casa."}, {"w": "you", "t": "Pronomen", "es": "tú / usted", "day": 14, "s": "{You} are beautiful.", "ses": "Tú eres hermosa."}, {"w": "do", "t": "Verb", "es": "hacer", "day": 14, "s": "{Do} you like fish?", "ses": "¿Te gusta el pescado?"}, {"w": "at", "t": "Präposition", "es": "en / a", "day": 14, "s": "The cat is {at} school.", "ses": "La gata está en la escuela."}, {"w": "this", "t": "Pronomen", "es": "este / esta", "day": 15, "s": "{This} is my cup.", "ses": "Esta es mi taza."}, {"w": "but", "t": "Konjunktion", "es": "pero", "day": 15, "s": "The dog is big, {but} the cat is small.", "ses": "El perro es grande, pero la gata es pequeña."}, {"w": "his", "t": "Pronomen", "es": "su (de él)", "day": 15, "s": "{His} ball.", "ses": "Su pelota (de él)."}, {"w": "by", "t": "Präposition", "es": "por", "day": 15, "s": "The cat is {by} the door.", "ses": "La gata está junto a la puerta."}, {"w": "from", "t": "Präposition", "es": "de / desde", "day": 15, "s": "I walk {from} school.", "ses": "Camino desde la escuela."}, {"w": "they", "t": "Pronomen", "es": "ellos / ellas", "day": 16, "s": "{They} play.", "ses": "Ellos juegan."}, {"w": "we", "t": "Pronomen", "es": "nosotros", "day": 16, "s": "{We} are friends.", "ses": "Nosotros somos amigos."}, {"w": "say", "t": "Verb", "es": "decir", "day": 16}, {"w": "her", "t": "Pronomen", "es": "su (de ella) / la", "day": 16, "s": "{Her} book.", "ses": "Su libro (de ella)."}, {"w": "she", "t": "Pronomen", "es": "ella", "day": 16, "s": "{She} is my mother.", "ses": "Ella es mi madre."}, {"w": "or", "t": "Konjunktion", "es": "o", "day": 17, "s": "The ball {or} the book?", "ses": "¿La pelota o el libro?"}, {"w": "an", "t": "Artikel", "es": "un / una", "day": 17, "s": "{An} eye.", "ses": "Un ojo."}, {"w": "will", "t": "Verb", "es": "(futuro)", "day": 17, "s": "I {will} eat.", "ses": "Voy a comer."}, {"w": "my", "t": "Pronomen", "es": "mi", "day": 17, "s": "This is {my} bed.", "ses": "Esta es mi cama."}, {"w": "all", "t": "Pronomen", "es": "todo / todos", "day": 17, "s": "{All} the cats.", "ses": "Todos los gatos."}, {"w": "would", "t": "Verb", "es": "(condicional)", "day": 18, "s": "I {would} like a fish.", "ses": "Me gustaría un pescado."}, {"w": "there", "t": "Adverb", "es": "allí / ahí", "day": 18, "s": "The ball is {there}.", "ses": "La pelota está allí."}, {"w": "their", "t": "Pronomen", "es": "su (de ellos)", "day": 18, "s": "{Their} house.", "ses": "Su casa (de ellos)."}, {"w": "what", "t": "Pronomen", "es": "qué", "day": 18, "s": "{What} is in the box?", "ses": "¿Qué hay en la caja?"}, {"w": "so", "t": "Adverb", "es": "así / tan", "day": 18, "s": "{So} big!", "ses": "¡Tan grande!"}, {"w": "up", "t": "Adverb", "es": "arriba", "day": 19, "s": "The cat goes {up}.", "ses": "La gata sube."}, {"w": "out", "t": "Adverb", "es": "fuera", "day": 19, "s": "The cat is {out} of the box.", "ses": "La gata está fuera de la caja."}, {"w": "if", "t": "Konjunktion", "es": "si", "day": 19, "s": "{If} I run, I am hot.", "ses": "Si corro, tengo calor."}, {"w": "about", "t": "Präposition", "es": "sobre / acerca de", "day": 19, "s": "A book {about} fish.", "ses": "Un libro sobre peces."}, {"w": "who", "t": "Pronomen", "es": "quién", "day": 19, "s": "{Who} is at the door?", "ses": "¿Quién está en la puerta?"}, {"w": "get", "t": "Verb", "es": "conseguir / obtener", "day": 20}, {"w": "which", "t": "Pronomen", "es": "cuál", "day": 20, "s": "{Which} cup?", "ses": "¿Cuál taza?"}, {"w": "go", "t": "Verb", "es": "ir", "day": 20}, {"w": "me", "t": "Pronomen", "es": "me / mí", "day": 20, "s": "Give {me} the ball!", "ses": "¡Dame la pelota!"}, {"w": "when", "t": "Adverb", "es": "cuándo / cuando", "day": 20, "s": "{When} do we eat?", "ses": "¿Cuándo comemos?"}, {"w": "make", "t": "Verb", "es": "hacer / fabricar", "day": 21}, {"w": "can", "t": "Verb", "es": "poder", "day": 21, "s": "I {can} fly!", "ses": "¡Puedo volar!"}, {"w": "like", "t": "Verb", "es": "gustar", "day": 21}, {"w": "time", "t": "Nomen", "es": "el tiempo", "day": 21}, {"w": "no", "t": "Sonstiges", "es": "no", "day": 21, "s": "{No}!", "ses": "¡No!"}, {"w": "just", "t": "Adverb", "es": "solo / justo", "day": 22, "s": "{Just} a small fish.", "ses": "Solo un pescado pequeño."}, {"w": "him", "t": "Pronomen", "es": "lo / le (a él)", "day": 22, "s": "I give {him} the ball.", "ses": "Le doy la pelota (a él)."}, {"w": "know", "t": "Verb", "es": "saber / conocer", "day": 22}, {"w": "take", "t": "Verb", "es": "tomar / llevar", "day": 22}, {"w": "people", "t": "Nomen", "es": "la gente", "day": 22}, {"w": "into", "t": "Präposition", "es": "dentro de / en", "day": 23, "s": "The cat runs {into} the house.", "ses": "La gata entra corriendo en la casa."}, {"w": "year", "t": "Nomen", "es": "el año", "day": 23}, {"w": "your", "t": "Pronomen", "es": "tu / su", "day": 23, "s": "This is {your} book.", "ses": "Este es tu libro."}, {"w": "good", "t": "Adjektiv", "es": "bueno", "day": 23}, {"w": "some", "t": "Pronomen", "es": "algunos / algo de", "day": 23, "s": "I eat {some} fish.", "ses": "Como algo de pescado."}, {"w": "could", "t": "Verb", "es": "podría / podía", "day": 24, "s": "{Could} you open the door?", "ses": "¿Podrías abrir la puerta?"}, {"w": "them", "t": "Pronomen", "es": "los / les", "day": 24, "s": "I see {them}.", "ses": "Los veo."}, {"w": "see", "t": "Verb", "es": "ver", "day": 24}, {"w": "other", "t": "Adjektiv", "es": "otro", "day": 24, "s": "The {other} cup.", "ses": "La otra taza."}, {"w": "than", "t": "Konjunktion", "es": "que (comparación)", "day": 24, "s": "The house is bigger {than} the car.", "ses": "La casa es más grande que el coche."}, {"w": "then", "t": "Adverb", "es": "entonces / luego", "day": 25, "s": "I read, {then} I play.", "ses": "Leo, luego juego."}, {"w": "now", "t": "Adverb", "es": "ahora", "day": 25, "s": "I eat {now}.", "ses": "Como ahora."}, {"w": "look", "t": "Verb", "es": "mirar", "day": 25}, {"w": "only", "t": "Adverb", "es": "solo / solamente", "day": 25, "s": "{Only} the cat is black.", "ses": "Solo la gata es negra."}, {"w": "come", "t": "Verb", "es": "venir", "day": 25}, {"w": "its", "t": "Pronomen", "es": "su (de eso)", "day": 26, "s": "The dog and {its} ball.", "ses": "El perro y su pelota."}, {"w": "over", "t": "Präposition", "es": "sobre / encima de", "day": 26, "s": "The cat jumps {over} the box.", "ses": "La gata salta por encima de la caja."}, {"w": "think", "t": "Verb", "es": "pensar", "day": 26}, {"w": "also", "t": "Adverb", "es": "también", "day": 26, "s": "The dog is {also} happy.", "ses": "El perro también está feliz."}, {"w": "back", "t": "Adverb", "es": "atrás / de vuelta", "day": 26, "s": "I am {back}!", "ses": "¡Ya regresé!"}, {"w": "after", "t": "Präposition", "es": "después de", "day": 27, "s": "{After} school, I play.", "ses": "Después de la escuela, juego."}, {"w": "use", "t": "Verb", "es": "usar", "day": 27}, {"w": "how", "t": "Adverb", "es": "cómo", "day": 27, "s": "{How} big is the fish?", "ses": "¿Qué tan grande es el pez?"}, {"w": "our", "t": "Pronomen", "es": "nuestro", "day": 27, "s": "{Our} house.", "ses": "Nuestra casa."}, {"w": "work", "t": "Verb", "es": "trabajar", "day": 27}, {"w": "first", "t": "Adjektiv", "es": "primero", "day": 28}, {"w": "well", "t": "Adverb", "es": "bien", "day": 28, "s": "I play music {well}.", "ses": "Toco música bien."}, {"w": "way", "t": "Nomen", "es": "el camino / la manera", "day": 28}, {"w": "even", "t": "Adverb", "es": "incluso", "day": 28, "s": "{Even} the small cat can throw.", "ses": "Incluso la gata pequeña puede lanzar."}, {"w": "new", "t": "Adjektiv", "es": "nuevo", "day": 28}, {"w": "want", "t": "Verb", "es": "querer", "day": 29}, {"w": "because", "t": "Konjunktion", "es": "porque", "day": 29, "s": "I am happy {because} I have a friend.", "ses": "Estoy feliz porque tengo una amiga."}, {"w": "any", "t": "Pronomen", "es": "cualquier / algún", "day": 29, "s": "Is there {any} food?", "ses": "¿Hay algo de comida?"}, {"w": "these", "t": "Pronomen", "es": "estos / estas", "day": 29, "s": "{These} are my books.", "ses": "Estos son mis libros."}, {"w": "day", "t": "Nomen", "es": "el día", "day": 29}, {"w": "most", "t": "Adverb", "es": "la mayoría / más", "day": 30, "s": "The {most} beautiful star.", "ses": "La estrella más hermosa."}, {"w": "us", "t": "Pronomen", "es": "nos / nosotros", "day": 30, "s": "Come with {us}!", "ses": "¡Ven con nosotros!"}, {"w": "very", "t": "Adverb", "es": "muy", "day": 30, "s": "I am {very} happy!", "ses": "¡Estoy muy feliz!"}, {"w": "thing", "t": "Nomen", "es": "la cosa", "day": 30}, {"w": "man", "t": "Nomen", "es": "el hombre", "day": 30}];
+const KC={"Nomen": "#4f9dff", "Verb": "#f2453d", "Adjektiv": "#9b6bff", "Artikel": "#2fc7a8", "Pronomen": "#2fc7a8", "Pr\u00e4position": "#2fc7a8", "Konjunktion": "#2fc7a8", "Adverb": "#2fc7a8", "Sonstiges": "#2fc7a8"};
 const only=location.hash?location.hash.slice(1).split('-').map(Number):null;
-let h='';for(let d=1;d<=10;d++){if(only&&!only.includes(d))continue;const ws=WORDS.filter(w=>w.day===d);
-h+=`<section><h2>Tag ${d}</h2><div class="grid">`+ws.map(w=>`<article class="card" style="--k:${KC[w.t]}">${S[w.w]?`<svg viewBox="0 0 200 200" role="img" aria-label="${w.w}">${S[w.w]}</svg>`:'<div class="missing">fehlt</div>'}<div class="meta"><span class="badge">${w.t}</span><span class="word">${w.w}</span><span class="es">${w.es}</span></div></article>`).join('')+`</div></section>`;}
+let h='';for(let d=1;d<=30;d++){if(only&&!only.includes(d))continue;const ws=WORDS.filter(w=>w.day===d);
+h+=`<section><h2>Tag ${d}</h2><div class="grid">`+ws.map(w=>`<article class="card" style="--k:${KC[w.t]}">${S[w.w]?`<svg viewBox="0 0 200 200" role="img" aria-label="${w.w}">${S[w.w]}</svg>`:'<div class="missing">fehlt</div>'}<div class="meta"><span class="badge">${w.t}</span><span class="word">${w.w}</span><span class="es">${w.es}</span>${w.s?`<span class="sent">${w.s.replace(/\{(.+?)\}/,'<b>$1</b>')}</span><span class="ses">${w.ses}</span>`:''}</div></article>`).join('')+`</div></section>`;}
 document.getElementById('days').innerHTML=h;
 </script></body></html>

@@ -1,0 +1,1054 @@
+[
+{
+"w": "house",
+"t": "Nomen",
+"es": "la casa",
+"day": 1
+},
+{
+"w": "eat",
+"t": "Verb",
+"es": "comer",
+"day": 1
+},
+{
+"w": "happy",
+"t": "Adjektiv",
+"es": "feliz",
+"day": 1
+},
+{
+"w": "water",
+"t": "Nomen",
+"es": "el agua",
+"day": 1
+},
+{
+"w": "dog",
+"t": "Nomen",
+"es": "el perro",
+"day": 1
+},
+{
+"w": "book",
+"t": "Nomen",
+"es": "el libro",
+"day": 2
+},
+{
+"w": "read",
+"t": "Verb",
+"es": "leer",
+"day": 2
+},
+{
+"w": "big",
+"t": "Adjektiv",
+"es": "grande",
+"day": 2
+},
+{
+"w": "small",
+"t": "Adjektiv",
+"es": "pequeño",
+"day": 2
+},
+{
+"w": "hand",
+"t": "Nomen",
+"es": "la mano",
+"day": 2
+},
+{
+"w": "car",
+"t": "Nomen",
+"es": "el coche / el carro",
+"day": 3
+},
+{
+"w": "run",
+"t": "Verb",
+"es": "correr",
+"day": 3
+},
+{
+"w": "hot",
+"t": "Adjektiv",
+"es": "caliente",
+"day": 3
+},
+{
+"w": "cold",
+"t": "Adjektiv",
+"es": "frío",
+"day": 3
+},
+{
+"w": "door",
+"t": "Nomen",
+"es": "la puerta",
+"day": 3
+},
+{
+"w": "bed",
+"t": "Nomen",
+"es": "la cama",
+"day": 4
+},
+{
+"w": "sit",
+"t": "Verb",
+"es": "sentarse",
+"day": 4
+},
+{
+"w": "eye",
+"t": "Nomen",
+"es": "el ojo",
+"day": 4
+},
+{
+"w": "food",
+"t": "Nomen",
+"es": "la comida",
+"day": 4
+},
+{
+"w": "blue",
+"t": "Adjektiv",
+"es": "azul",
+"day": 4
+},
+{
+"w": "table",
+"t": "Nomen",
+"es": "la mesa",
+"day": 5
+},
+{
+"w": "chair",
+"t": "Nomen",
+"es": "la silla",
+"day": 5
+},
+{
+"w": "play",
+"t": "Verb",
+"es": "jugar",
+"day": 5
+},
+{
+"w": "ball",
+"t": "Nomen",
+"es": "la pelota",
+"day": 5
+},
+{
+"w": "green",
+"t": "Adjektiv",
+"es": "verde",
+"day": 5
+},
+{
+"w": "fish",
+"t": "Nomen",
+"es": "el pez / el pescado",
+"day": 6
+},
+{
+"w": "cup",
+"t": "Nomen",
+"es": "la taza",
+"day": 6
+},
+{
+"w": "give",
+"t": "Verb",
+"es": "dar",
+"day": 6
+},
+{
+"w": "love",
+"t": "Verb",
+"es": "amar / querer",
+"day": 6
+},
+{
+"w": "heart",
+"t": "Nomen",
+"es": "el corazón",
+"day": 6
+},
+{
+"w": "friend",
+"t": "Nomen",
+"es": "el amigo / la amiga",
+"day": 7
+},
+{
+"w": "family",
+"t": "Nomen",
+"es": "la familia",
+"day": 7
+},
+{
+"w": "laugh",
+"t": "Verb",
+"es": "reír",
+"day": 7
+},
+{
+"w": "mother",
+"t": "Nomen",
+"es": "la madre",
+"day": 7
+},
+{
+"w": "boy",
+"t": "Nomen",
+"es": "el niño / el chico",
+"day": 7
+},
+{
+"w": "school",
+"t": "Nomen",
+"es": "la escuela",
+"day": 8
+},
+{
+"w": "write",
+"t": "Verb",
+"es": "escribir",
+"day": 8
+},
+{
+"w": "walk",
+"t": "Verb",
+"es": "caminar",
+"day": 8
+},
+{
+"w": "box",
+"t": "Nomen",
+"es": "la caja",
+"day": 8
+},
+{
+"w": "dark",
+"t": "Adjektiv",
+"es": "oscuro",
+"day": 8
+},
+{
+"w": "night",
+"t": "Nomen",
+"es": "la noche",
+"day": 9
+},
+{
+"w": "star",
+"t": "Nomen",
+"es": "la estrella",
+"day": 9
+},
+{
+"w": "fly",
+"t": "Verb",
+"es": "volar",
+"day": 9
+},
+{
+"w": "phone",
+"t": "Nomen",
+"es": "el teléfono",
+"day": 9
+},
+{
+"w": "music",
+"t": "Nomen",
+"es": "la música",
+"day": 9
+},
+{
+"w": "open",
+"t": "Verb",
+"es": "abrir",
+"day": 10
+},
+{
+"w": "throw",
+"t": "Verb",
+"es": "lanzar / tirar",
+"day": 10
+},
+{
+"w": "head",
+"t": "Nomen",
+"es": "la cabeza",
+"day": 10
+},
+{
+"w": "foot",
+"t": "Nomen",
+"es": "el pie",
+"day": 10
+},
+{
+"w": "beautiful",
+"t": "Adjektiv",
+"es": "hermoso / bonito",
+"day": 10
+},
+{
+"w": "the",
+"t": "Artikel",
+"es": "el / la",
+"day": 11,
+"s": "{The} cat is black.",
+"ses": "La gata es negra."
+},
+{
+"w": "be",
+"t": "Verb",
+"es": "ser / estar",
+"day": 11,
+"s": "I {am} Canela.",
+"ses": "Yo soy Canela."
+},
+{
+"w": "to",
+"t": "Präposition",
+"es": "a / hacia",
+"day": 11,
+"s": "I walk {to} the house.",
+"ses": "Camino a la casa."
+},
+{
+"w": "of",
+"t": "Präposition",
+"es": "de",
+"day": 11,
+"s": "A cup {of} water.",
+"ses": "Una taza de agua."
+},
+{
+"w": "and",
+"t": "Konjunktion",
+"es": "y",
+"day": 11,
+"s": "The cat {and} the dog.",
+"ses": "La gata y el perro."
+},
+{
+"w": "a",
+"t": "Artikel",
+"es": "un / una",
+"day": 12,
+"s": "{A} ball.",
+"ses": "Una pelota."
+},
+{
+"w": "in",
+"t": "Präposition",
+"es": "en",
+"day": 12,
+"s": "The cat is {in} the box.",
+"ses": "La gata está en la caja."
+},
+{
+"w": "that",
+"t": "Pronomen",
+"es": "que / ese",
+"day": 12,
+"s": "{That} is a star.",
+"ses": "Eso es una estrella."
+},
+{
+"w": "have",
+"t": "Verb",
+"es": "tener / haber",
+"day": 12,
+"s": "I {have} a book.",
+"ses": "Tengo un libro."
+},
+{
+"w": "I",
+"t": "Pronomen",
+"es": "yo",
+"day": 12,
+"s": "{I} am a cat.",
+"ses": "Yo soy una gata."
+},
+{
+"w": "it",
+"t": "Pronomen",
+"es": "eso / lo",
+"day": 13,
+"s": "{It} is a ball.",
+"ses": "Es una pelota."
+},
+{
+"w": "for",
+"t": "Präposition",
+"es": "para / por",
+"day": 13,
+"s": "This is {for} you.",
+"ses": "Esto es para ti."
+},
+{
+"w": "not",
+"t": "Adverb",
+"es": "no",
+"day": 13,
+"s": "It is {not} hot.",
+"ses": "No hace calor."
+},
+{
+"w": "on",
+"t": "Präposition",
+"es": "sobre / en",
+"day": 13,
+"s": "The cat is {on} the table.",
+"ses": "La gata está sobre la mesa."
+},
+{
+"w": "with",
+"t": "Präposition",
+"es": "con",
+"day": 13,
+"s": "I play {with} the dog.",
+"ses": "Juego con el perro."
+},
+{
+"w": "he",
+"t": "Pronomen",
+"es": "él",
+"day": 14,
+"s": "{He} is a boy.",
+"ses": "Él es un niño."
+},
+{
+"w": "as",
+"t": "Konjunktion",
+"es": "como",
+"day": 14,
+"s": "Big {as} a house.",
+"ses": "Grande como una casa."
+},
+{
+"w": "you",
+"t": "Pronomen",
+"es": "tú / usted",
+"day": 14,
+"s": "{You} are beautiful.",
+"ses": "Tú eres hermosa."
+},
+{
+"w": "do",
+"t": "Verb",
+"es": "hacer",
+"day": 14,
+"s": "{Do} you like fish?",
+"ses": "¿Te gusta el pescado?"
+},
+{
+"w": "at",
+"t": "Präposition",
+"es": "en / a",
+"day": 14,
+"s": "The cat is {at} school.",
+"ses": "La gata está en la escuela."
+},
+{
+"w": "this",
+"t": "Pronomen",
+"es": "este / esta",
+"day": 15,
+"s": "{This} is my cup.",
+"ses": "Esta es mi taza."
+},
+{
+"w": "but",
+"t": "Konjunktion",
+"es": "pero",
+"day": 15,
+"s": "The dog is big, {but} the cat is small.",
+"ses": "El perro es grande, pero la gata es pequeña."
+},
+{
+"w": "his",
+"t": "Pronomen",
+"es": "su (de él)",
+"day": 15,
+"s": "{His} ball.",
+"ses": "Su pelota (de él)."
+},
+{
+"w": "by",
+"t": "Präposition",
+"es": "por",
+"day": 15,
+"s": "The cat is {by} the door.",
+"ses": "La gata está junto a la puerta."
+},
+{
+"w": "from",
+"t": "Präposition",
+"es": "de / desde",
+"day": 15,
+"s": "I walk {from} school.",
+"ses": "Camino desde la escuela."
+},
+{
+"w": "they",
+"t": "Pronomen",
+"es": "ellos / ellas",
+"day": 16,
+"s": "{They} play.",
+"ses": "Ellos juegan."
+},
+{
+"w": "we",
+"t": "Pronomen",
+"es": "nosotros",
+"day": 16,
+"s": "{We} are friends.",
+"ses": "Nosotros somos amigos."
+},
+{
+"w": "say",
+"t": "Verb",
+"es": "decir",
+"day": 16
+},
+{
+"w": "her",
+"t": "Pronomen",
+"es": "su (de ella) / la",
+"day": 16,
+"s": "{Her} book.",
+"ses": "Su libro (de ella)."
+},
+{
+"w": "she",
+"t": "Pronomen",
+"es": "ella",
+"day": 16,
+"s": "{She} is my mother.",
+"ses": "Ella es mi madre."
+},
+{
+"w": "or",
+"t": "Konjunktion",
+"es": "o",
+"day": 17,
+"s": "The ball {or} the book?",
+"ses": "¿La pelota o el libro?"
+},
+{
+"w": "an",
+"t": "Artikel",
+"es": "un / una",
+"day": 17,
+"s": "{An} eye.",
+"ses": "Un ojo."
+},
+{
+"w": "will",
+"t": "Verb",
+"es": "(futuro)",
+"day": 17,
+"s": "I {will} eat.",
+"ses": "Voy a comer."
+},
+{
+"w": "my",
+"t": "Pronomen",
+"es": "mi",
+"day": 17,
+"s": "This is {my} bed.",
+"ses": "Esta es mi cama."
+},
+{
+"w": "all",
+"t": "Pronomen",
+"es": "todo / todos",
+"day": 17,
+"s": "{All} the cats.",
+"ses": "Todos los gatos."
+},
+{
+"w": "would",
+"t": "Verb",
+"es": "(condicional)",
+"day": 18,
+"s": "I {would} like a fish.",
+"ses": "Me gustaría un pescado."
+},
+{
+"w": "there",
+"t": "Adverb",
+"es": "allí / ahí",
+"day": 18,
+"s": "The ball is {there}.",
+"ses": "La pelota está allí."
+},
+{
+"w": "their",
+"t": "Pronomen",
+"es": "su (de ellos)",
+"day": 18,
+"s": "{Their} house.",
+"ses": "Su casa (de ellos)."
+},
+{
+"w": "what",
+"t": "Pronomen",
+"es": "qué",
+"day": 18,
+"s": "{What} is in the box?",
+"ses": "¿Qué hay en la caja?"
+},
+{
+"w": "so",
+"t": "Adverb",
+"es": "así / tan",
+"day": 18,
+"s": "{So} big!",
+"ses": "¡Tan grande!"
+},
+{
+"w": "up",
+"t": "Adverb",
+"es": "arriba",
+"day": 19,
+"s": "The cat goes {up}.",
+"ses": "La gata sube."
+},
+{
+"w": "out",
+"t": "Adverb",
+"es": "fuera",
+"day": 19,
+"s": "The cat is {out} of the box.",
+"ses": "La gata está fuera de la caja."
+},
+{
+"w": "if",
+"t": "Konjunktion",
+"es": "si",
+"day": 19,
+"s": "{If} I run, I am hot.",
+"ses": "Si corro, tengo calor."
+},
+{
+"w": "about",
+"t": "Präposition",
+"es": "sobre / acerca de",
+"day": 19,
+"s": "A book {about} fish.",
+"ses": "Un libro sobre peces."
+},
+{
+"w": "who",
+"t": "Pronomen",
+"es": "quién",
+"day": 19,
+"s": "{Who} is at the door?",
+"ses": "¿Quién está en la puerta?"
+},
+{
+"w": "get",
+"t": "Verb",
+"es": "conseguir / obtener",
+"day": 20
+},
+{
+"w": "which",
+"t": "Pronomen",
+"es": "cuál",
+"day": 20,
+"s": "{Which} cup?",
+"ses": "¿Cuál taza?"
+},
+{
+"w": "go",
+"t": "Verb",
+"es": "ir",
+"day": 20
+},
+{
+"w": "me",
+"t": "Pronomen",
+"es": "me / mí",
+"day": 20,
+"s": "Give {me} the ball!",
+"ses": "¡Dame la pelota!"
+},
+{
+"w": "when",
+"t": "Adverb",
+"es": "cuándo / cuando",
+"day": 20,
+"s": "{When} do we eat?",
+"ses": "¿Cuándo comemos?"
+},
+{
+"w": "make",
+"t": "Verb",
+"es": "hacer / fabricar",
+"day": 21
+},
+{
+"w": "can",
+"t": "Verb",
+"es": "poder",
+"day": 21,
+"s": "I {can} fly!",
+"ses": "¡Puedo volar!"
+},
+{
+"w": "like",
+"t": "Verb",
+"es": "gustar",
+"day": 21
+},
+{
+"w": "time",
+"t": "Nomen",
+"es": "el tiempo",
+"day": 21
+},
+{
+"w": "no",
+"t": "Sonstiges",
+"es": "no",
+"day": 21,
+"s": "{No}!",
+"ses": "¡No!"
+},
+{
+"w": "just",
+"t": "Adverb",
+"es": "solo / justo",
+"day": 22,
+"s": "{Just} a small fish.",
+"ses": "Solo un pescado pequeño."
+},
+{
+"w": "him",
+"t": "Pronomen",
+"es": "lo / le (a él)",
+"day": 22,
+"s": "I give {him} the ball.",
+"ses": "Le doy la pelota (a él)."
+},
+{
+"w": "know",
+"t": "Verb",
+"es": "saber / conocer",
+"day": 22
+},
+{
+"w": "take",
+"t": "Verb",
+"es": "tomar / llevar",
+"day": 22
+},
+{
+"w": "people",
+"t": "Nomen",
+"es": "la gente",
+"day": 22
+},
+{
+"w": "into",
+"t": "Präposition",
+"es": "dentro de / en",
+"day": 23,
+"s": "The cat runs {into} the house.",
+"ses": "La gata entra corriendo en la casa."
+},
+{
+"w": "year",
+"t": "Nomen",
+"es": "el año",
+"day": 23
+},
+{
+"w": "your",
+"t": "Pronomen",
+"es": "tu / su",
+"day": 23,
+"s": "This is {your} book.",
+"ses": "Este es tu libro."
+},
+{
+"w": "good",
+"t": "Adjektiv",
+"es": "bueno",
+"day": 23
+},
+{
+"w": "some",
+"t": "Pronomen",
+"es": "algunos / algo de",
+"day": 23,
+"s": "I eat {some} fish.",
+"ses": "Como algo de pescado."
+},
+{
+"w": "could",
+"t": "Verb",
+"es": "podría / podía",
+"day": 24,
+"s": "{Could} you open the door?",
+"ses": "¿Podrías abrir la puerta?"
+},
+{
+"w": "them",
+"t": "Pronomen",
+"es": "los / les",
+"day": 24,
+"s": "I see {them}.",
+"ses": "Los veo."
+},
+{
+"w": "see",
+"t": "Verb",
+"es": "ver",
+"day": 24
+},
+{
+"w": "other",
+"t": "Adjektiv",
+"es": "otro",
+"day": 24,
+"s": "The {other} cup.",
+"ses": "La otra taza."
+},
+{
+"w": "than",
+"t": "Konjunktion",
+"es": "que (comparación)",
+"day": 24,
+"s": "The house is bigger {than} the car.",
+"ses": "La casa es más grande que el coche."
+},
+{
+"w": "then",
+"t": "Adverb",
+"es": "entonces / luego",
+"day": 25,
+"s": "I read, {then} I play.",
+"ses": "Leo, luego juego."
+},
+{
+"w": "now",
+"t": "Adverb",
+"es": "ahora",
+"day": 25,
+"s": "I eat {now}.",
+"ses": "Como ahora."
+},
+{
+"w": "look",
+"t": "Verb",
+"es": "mirar",
+"day": 25
+},
+{
+"w": "only",
+"t": "Adverb",
+"es": "solo / solamente",
+"day": 25,
+"s": "{Only} the cat is black.",
+"ses": "Solo la gata es negra."
+},
+{
+"w": "come",
+"t": "Verb",
+"es": "venir",
+"day": 25
+},
+{
+"w": "its",
+"t": "Pronomen",
+"es": "su (de eso)",
+"day": 26,
+"s": "The dog and {its} ball.",
+"ses": "El perro y su pelota."
+},
+{
+"w": "over",
+"t": "Präposition",
+"es": "sobre / encima de",
+"day": 26,
+"s": "The cat jumps {over} the box.",
+"ses": "La gata salta por encima de la caja."
+},
+{
+"w": "think",
+"t": "Verb",
+"es": "pensar",
+"day": 26
+},
+{
+"w": "also",
+"t": "Adverb",
+"es": "también",
+"day": 26,
+"s": "The dog is {also} happy.",
+"ses": "El perro también está feliz."
+},
+{
+"w": "back",
+"t": "Adverb",
+"es": "atrás / de vuelta",
+"day": 26,
+"s": "I am {back}!",
+"ses": "¡Ya regresé!"
+},
+{
+"w": "after",
+"t": "Präposition",
+"es": "después de",
+"day": 27,
+"s": "{After} school, I play.",
+"ses": "Después de la escuela, juego."
+},
+{
+"w": "use",
+"t": "Verb",
+"es": "usar",
+"day": 27
+},
+{
+"w": "how",
+"t": "Adverb",
+"es": "cómo",
+"day": 27,
+"s": "{How} big is the fish?",
+"ses": "¿Qué tan grande es el pez?"
+},
+{
+"w": "our",
+"t": "Pronomen",
+"es": "nuestro",
+"day": 27,
+"s": "{Our} house.",
+"ses": "Nuestra casa."
+},
+{
+"w": "work",
+"t": "Verb",
+"es": "trabajar",
+"day": 27
+},
+{
+"w": "first",
+"t": "Adjektiv",
+"es": "primero",
+"day": 28
+},
+{
+"w": "well",
+"t": "Adverb",
+"es": "bien",
+"day": 28,
+"s": "I play music {well}.",
+"ses": "Toco música bien."
+},
+{
+"w": "way",
+"t": "Nomen",
+"es": "el camino / la manera",
+"day": 28
+},
+{
+"w": "even",
+"t": "Adverb",
+"es": "incluso",
+"day": 28,
+"s": "{Even} the small cat can throw.",
+"ses": "Incluso la gata pequeña puede lanzar."
+},
+{
+"w": "new",
+"t": "Adjektiv",
+"es": "nuevo",
+"day": 28
+},
+{
+"w": "want",
+"t": "Verb",
+"es": "querer",
+"day": 29
+},
+{
+"w": "because",
+"t": "Konjunktion",
+"es": "porque",
+"day": 29,
+"s": "I am happy {because} I have a friend.",
+"ses": "Estoy feliz porque tengo una amiga."
+},
+{
+"w": "any",
+"t": "Pronomen",
+"es": "cualquier / algún",
+"day": 29,
+"s": "Is there {any} food?",
+"ses": "¿Hay algo de comida?"
+},
+{
+"w": "these",
+"t": "Pronomen",
+"es": "estos / estas",
+"day": 29,
+"s": "{These} are my books.",
+"ses": "Estos son mis libros."
+},
+{
+"w": "day",
+"t": "Nomen",
+"es": "el día",
+"day": 29
+},
+{
+"w": "most",
+"t": "Adverb",
+"es": "la mayoría / más",
+"day": 30,
+"s": "The {most} beautiful star.",
+"ses": "La estrella más hermosa."
+},
+{
+"w": "us",
+"t": "Pronomen",
+"es": "nos / nosotros",
+"day": 30,
+"s": "Come with {us}!",
+"ses": "¡Ven con nosotros!"
+},
+{
+"w": "very",
+"t": "Adverb",
+"es": "muy",
+"day": 30,
+"s": "I am {very} happy!",
+"ses": "¡Estoy muy feliz!"
+},
+{
+"w": "thing",
+"t": "Nomen",
+"es": "la cosa",
+"day": 30
+},
+{
+"w": "man",
+"t": "Nomen",
+"es": "el hombre",
+"day": 30
+}
+]
