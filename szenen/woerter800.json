@@ -4235,7 +4235,9 @@
 "w": "everybody",
 "t": "Pronomen",
 "es": "todo el mundo",
-"day": 131
+"day": 131,
+"s": "{Everybody} is dancing.",
+"ses": "Todo el mundo está bailando."
 },
 {
 "w": "physical",
@@ -4289,7 +4291,9 @@
 "w": "outside",
 "t": "Adverb",
 "es": "afuera",
-"day": 132
+"day": 132,
+"s": "The cat is {outside}.",
+"ses": "La gata está afuera."
 },
 {
 "w": "arrive",
@@ -4313,7 +4317,9 @@
 "w": "forward",
 "t": "Adverb",
 "es": "hacia adelante",
-"day": 133
+"day": 133,
+"s": "Take one step {forward}.",
+"ses": "Da un paso hacia adelante."
 },
 {
 "w": "lawyer",
@@ -4391,7 +4397,9 @@
 "w": "ok",
 "t": "Sonstiges",
 "es": "vale / está bien",
-"day": 136
+"day": 136,
+"s": "{OK}, let's go!",
+"ses": "¡Está bien, vamos!"
 },
 {
 "w": "compare",
@@ -4457,7 +4465,9 @@
 "w": "clearly",
 "t": "Adverb",
 "es": "claramente",
-"day": 138
+"day": 138,
+"s": "I can see it {clearly}.",
+"ses": "Puedo verlo claramente."
 },
 {
 "w": "discuss",
@@ -4469,7 +4479,9 @@
 "w": "indeed",
 "t": "Adverb",
 "es": "de hecho",
-"day": 138
+"day": 138,
+"s": "It is {indeed} a fish.",
+"ses": "De hecho, es un pez."
 },
 {
 "w": "truth",
@@ -4523,7 +4535,9 @@
 "w": "rather",
 "t": "Adverb",
 "es": "más bien",
-"day": 140
+"day": 140,
+"s": "I would {rather} sleep.",
+"ses": "Prefiero dormir."
 },
 {
 "w": "guess",
@@ -4643,7 +4657,9 @@
 "w": "above",
 "t": "Präposition",
 "es": "encima de",
-"day": 144
+"day": 144,
+"s": "The bird is {above} the cat.",
+"ses": "El pájaro está encima de la gata."
 },
 {
 "w": "seat",
@@ -4727,7 +4743,9 @@
 "w": "tonight",
 "t": "Adverb",
 "es": "esta noche",
-"day": 147
+"day": 147,
+"s": "We dance {tonight}.",
+"ses": "Bailamos esta noche."
 },
 {
 "w": "huge",
@@ -4745,7 +4763,9 @@
 "w": "yourself",
 "t": "Pronomen",
 "es": "tú mismo",
-"day": 148
+"day": 148,
+"s": "Do it {yourself}.",
+"ses": "Hazlo tú mismo."
 },
 {
 "w": "theory",
@@ -4799,7 +4819,9 @@
 "w": "onto",
 "t": "Präposition",
 "es": "sobre / encima de",
-"day": 149
+"day": 149,
+"s": "The cat jumps {onto} the table.",
+"ses": "La gata salta sobre la mesa."
 },
 {
 "w": "reveal",

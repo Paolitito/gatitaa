@@ -23,7 +23,7 @@ S.ability=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>${fl
 
 S.staff=`${room('#e3fbf5','#bff0de')}
  <rect x="30" y="14" width="140" height="26" rx="6" fill="${RED}"/>${T(100,33,'TEAM',14,'#fff')}
- ${[['orange',36],['grey',78],['cream',122],['white',164]].map(([n,x],i)=>at(x,186,.56,K(n,{eyes:'happy',mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="${MINT}" opacity=".95"/>`+nameTag,hat:i%2?cap:''}))).join('')}
+ ${[['orange',36],['grey',78],['cream',122],['white',164]].map(([n,x],i)=>at(x,186,.56,K(n,{eyes:'happy',mid:`<path d="M-22,-46 h44 v34 h-44 Z" fill="${MINT}" opacity=".95"/><rect x="-10" y="-34" width="20" height="10" rx="2" fill="#fff"/>`,hat:i%2?cap:''}))).join('')}
  <path d="M10,70 h180 v126 h-180 Z" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8" class="glow" rx="10"/>
  ${at(100,74,.3,cat({mid:tie,tail:false,eyes:'happy',armL:130,armR:-130,armsFront:true}))}`;
 
