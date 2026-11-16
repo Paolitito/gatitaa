@@ -1,0 +1,127 @@
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.tail{transform-origin:18px -14px;animation:wag 1.6s ease-in-out infinite alternate}
+@keyframes wag{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
+.bob{transform-origin:0 0;animation:bob 1.2s ease-in-out infinite alternate}
+@keyframes bob{from{transform:rotate(-10deg)}to{transform:rotate(8deg)}}
+.wave{transform-origin:0 0;animation:wave .5s ease-in-out infinite alternate}
+@keyframes wave{from{transform:rotate(-20deg)}to{transform:rotate(16deg)}}
+.tilt{transform-origin:0 -45px;animation:tilt 2s ease-in-out infinite alternate}
+@keyframes tilt{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.jump{animation:jump .9s cubic-bezier(.3,0,.3,1) infinite alternate}
+@keyframes jump{from{transform:translateY(0)}to{transform:translateY(-42px)}}
+.hop{animation:hop .6s cubic-bezier(.3,0,.3,1) infinite alternate}
+@keyframes hop{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+.shadow{transform-box:fill-box;transform-origin:center;animation:shadow .9s cubic-bezier(.3,0,.3,1) infinite alternate}
+@keyframes shadow{from{transform:scale(1);opacity:.25}to{transform:scale(.55);opacity:.12}}
+.pulse{transform-origin:0 0;animation:pulse 1.6s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+.beat{transform-box:fill-box;transform-origin:center;animation:beat .6s ease-in-out infinite alternate}
+@keyframes beat{from{transform:scale(1)}to{transform:scale(1.1)}}
+.swim{transform-box:fill-box;transform-origin:center;animation:swim 5s linear infinite}
+@keyframes swim{0%{transform:translateX(-15px) scaleX(1)}45%{transform:translateX(15px) scaleX(1)}50%{transform:translateX(15px) scaleX(-1)}95%{transform:translateX(-15px) scaleX(-1)}100%{transform:translateX(-15px) scaleX(1)}}
+.bubble{animation:bubble 2.4s ease-in infinite}
+@keyframes bubble{0%{transform:translateY(0);opacity:.9}100%{transform:translateY(-34px);opacity:0}}
+.peek{animation:peek 5s ease-in-out infinite}
+@keyframes peek{0%,100%{transform:translate(-3px,3px)}50%{transform:translate(4px,-3px)}}
+.breathe{transform-box:fill-box;transform-origin:center bottom;animation:breathe 2.6s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scaleY(1)}to{transform:scaleY(1.07)}}
+.zz{animation:zz 3s ease-in-out infinite}
+@keyframes zz{0%{transform:translate(0,8px);opacity:0}30%{opacity:1}100%{transform:translate(8px,-14px);opacity:0}}
+.twinkle{animation:twinkle 1.8s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.25}to{opacity:1}}
+.drop{animation:drop .8s linear infinite}
+@keyframes drop{from{transform:translateY(-40px)}to{transform:translateY(170px)}}
+.drip{animation:drip 1.1s ease-in infinite}
+@keyframes drip{0%{transform:translateY(0);opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+.cloud{animation:cloud 4s ease-in-out infinite alternate}
+@keyframes cloud{from{transform:translateX(-6px)}to{transform:translateX(8px)}}
+.ripple{transform-box:fill-box;transform-origin:center;animation:ripple 1.4s ease-out infinite}
+@keyframes ripple{from{transform:scale(.3);opacity:.9}to{transform:scale(1.2);opacity:0}}
+.sway{transform-origin:0 0;animation:sway 2.4s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+.dance{transform-origin:0 0;animation:dance .5s ease-in-out infinite alternate}
+@keyframes dance{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+.shiver{animation:shiver .14s linear infinite alternate}
+@keyframes shiver{from{transform:translateX(-1.4px)}to{transform:translateX(1.4px)}}
+.laugh{animation:laugh .16s linear infinite alternate}
+@keyframes laugh{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.snow{animation:snow 4s linear infinite}
+@keyframes snow{from{transform:translate(0,-30px)}to{transform:translate(12px,210px)}}
+.puff{transform-box:fill-box;transform-origin:center;animation:puff 2.2s ease-out infinite}
+@keyframes puff{0%{transform:translate(0,0) scale(.4);opacity:0}25%{opacity:.9}100%{transform:translate(14px,-12px) scale(1.3);opacity:0}}
+.munch{transform-origin:0 0;animation:munch .7s ease-in-out infinite alternate}
+@keyframes munch{from{transform:rotate(20deg)}to{transform:rotate(-24deg)}}
+.chew{transform-box:fill-box;transform-origin:center;animation:chew .35s ease-in-out infinite alternate}
+@keyframes chew{from{transform:scaleY(1)}to{transform:scaleY(.45)}}
+.rise{animation:rise 2.6s ease-out infinite}
+@keyframes rise{0%{transform:translateY(0) scale(.5);opacity:0}20%{opacity:1}100%{transform:translateY(-46px) scale(1.1);opacity:0}}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 14s linear infinite}
+.spinfast{transform-box:fill-box;transform-origin:center;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.smoke{animation:smoke 3s ease-out infinite}
+@keyframes smoke{0%{transform:translate(0,0) scale(.6);opacity:0}20%{opacity:.9}100%{transform:translate(10px,-34px) scale(1.4);opacity:0}}
+.flower{transform-box:fill-box;transform-origin:center bottom;animation:flw 2s ease-in-out infinite alternate}
+@keyframes flw{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+.wiggle{transform-box:fill-box;transform-origin:center bottom;animation:flw .35s ease-in-out infinite alternate}
+.conf{animation:conf 2.8s linear infinite}
+@keyframes conf{from{transform:translateY(-30px) rotate(0)}to{transform:translateY(220px) rotate(320deg)}}
+.road{animation:road .5s linear infinite}
+@keyframes road{from{transform:translateX(0)}to{transform:translateX(-40px)}}
+.scroll{animation:scroll 6s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-200px)}}
+.footA{animation:footA .26s ease-in-out infinite alternate}
+.footB{animation:footA .26s ease-in-out infinite alternate-reverse}
+@keyframes footA{from{transform:translate(-7px,0)}to{transform:translate(7px,-3px)}}
+.stepA{animation:footA .55s ease-in-out infinite alternate}
+.stepB{animation:footA .55s ease-in-out infinite alternate-reverse}
+.swingA{transform-origin:0 0;animation:swing .26s ease-in-out infinite alternate}
+.swingB{transform-origin:0 0;animation:swing .26s ease-in-out infinite alternate-reverse}
+.slowA{transform-origin:0 0;animation:swing .55s ease-in-out infinite alternate}
+.slowB{transform-origin:0 0;animation:swing .55s ease-in-out infinite alternate-reverse}
+@keyframes swing{from{transform:rotate(-34deg)}to{transform:rotate(34deg)}}
+.runbob{animation:runbob .26s ease-in-out infinite alternate}
+@keyframes runbob{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+.walkbob{animation:runbob .55s ease-in-out infinite alternate}
+.dooropen{transform-box:fill-box;transform-origin:left center;animation:dooropen 3s ease-in-out infinite alternate}
+@keyframes dooropen{0%,15%{transform:scaleX(1)}85%,100%{transform:scaleX(.22)}}
+.lid{transform-box:fill-box;transform-origin:left bottom;animation:lid 2.6s ease-in-out infinite alternate}
+@keyframes lid{0%,15%{transform:rotate(0)}85%,100%{transform:rotate(-58deg)}}
+.float{animation:float 2.2s ease-in-out infinite alternate}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+.ring{transform-box:fill-box;transform-origin:center;animation:ring .1s linear infinite alternate}
+@keyframes ring{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.flip{transform-box:fill-box;transform-origin:left center;animation:flip 2.4s ease-in-out infinite}
+@keyframes flip{0%,20%{transform:scaleX(1)}60%,100%{transform:scaleX(-1)}}
+.draw{stroke-dasharray:80;animation:draw 3s linear infinite}
+@keyframes draw{from{stroke-dashoffset:80}to{stroke-dashoffset:0}}
+.pen{animation:pen .5s ease-in-out infinite alternate}
+@keyframes pen{from{transform:translate(-3px,0)}to{transform:translate(4px,-2px)}}
+.throwball{animation:throwball 1.6s linear infinite}
+@keyframes throwball{0%{transform:translate(0,0)}25%{transform:translate(28px,-34px)}50%{transform:translate(58px,-44px)}75%{transform:translate(88px,-30px)}100%{transform:translate(112px,8px)}}
+.throwarm{transform-origin:0 0;animation:throwarm 1.6s ease-out infinite}
+@keyframes throwarm{0%{transform:rotate(-50deg)}18%{transform:rotate(50deg)}60%,100%{transform:rotate(-50deg)}}
+.givemove{animation:givemove 1.8s ease-in-out infinite alternate}
+@keyframes givemove{0%,15%{transform:translateX(0)}85%,100%{transform:translateX(30px)}}
+.pop{animation:pop 3.2s ease-in-out infinite}
+@keyframes pop{0%,18%{transform:translateY(52px)}36%,78%{transform:translateY(0)}96%,100%{transform:translateY(52px)}}
+.sitdown{animation:sitdown 2.6s ease-in-out infinite}
+@keyframes sitdown{0%{transform:translateY(-16px)}25%,100%{transform:translateY(0)}}
+.sweat{animation:sweat 1.3s ease-in infinite}
+@keyframes sweat{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(20px);opacity:0}}
+.heatw{animation:heatw 1.6s ease-in-out infinite alternate}
+@keyframes heatw{from{transform:translateY(0);opacity:.3}to{transform:translateY(-8px);opacity:.9}}
+.grow{transform-box:fill-box;transform-origin:left center;animation:grow 3s ease-in-out infinite}
+@keyframes grow{0%{transform:scaleX(.05)}70%,100%{transform:scaleX(1)}}
+.glow{animation:glow 1.4s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.35}to{opacity:1}}
+.flap{transform-box:fill-box;transform-origin:center;animation:flap .25s ease-in-out infinite alternate}
+@keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(.35)}}
+.flutter{animation:flutter 5s ease-in-out infinite}
+@keyframes flutter{0%{transform:translate(0,0)}25%{transform:translate(18px,-14px)}50%{transform:translate(34px,4px)}75%{transform:translate(14px,12px)}100%{transform:translate(0,0)}}
+.shoot{animation:shoot 3s ease-in infinite}
+@keyframes shoot{0%{transform:translate(0,0);opacity:0}10%{opacity:1}40%{transform:translate(-90px,50px);opacity:0}100%{transform:translate(-90px,50px);opacity:0}}
+.roll{animation:rollx 2.4s ease-in-out infinite alternate}
+@keyframes rollx{from{transform:translateX(0)}to{transform:translateX(34px)}}
+.toe{transform-box:fill-box;transform-origin:center bottom;animation:flw .3s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
