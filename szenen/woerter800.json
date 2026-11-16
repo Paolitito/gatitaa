@@ -3655,7 +3655,9 @@
 "w": "upon",
 "t": "Präposition",
 "es": "sobre",
-"day": 112
+"day": 112,
+"s": "The cat sits {upon} the box.",
+"ses": "La gata se sienta sobre la caja."
 },
 {
 "w": "agency",
@@ -3685,7 +3687,9 @@
 "w": "recently",
 "t": "Adverb",
 "es": "recientemente",
-"day": 113
+"day": 113,
+"s": "I {recently} got a gift.",
+"ses": "Recibí un regalo recientemente."
 },
 {
 "w": "store",
@@ -3721,7 +3725,9 @@
 "w": "near",
 "t": "Präposition",
 "es": "cerca de",
-"day": 114
+"day": 114,
+"s": "The dog is {near} the tree.",
+"ses": "El perro está cerca del árbol."
 },
 {
 "w": "movement",
@@ -3805,7 +3811,9 @@
 "w": "usually",
 "t": "Adverb",
 "es": "normalmente",
-"day": 117
+"day": 117,
+"s": "I {usually} sleep here.",
+"ses": "Normalmente duermo aquí."
 },
 {
 "w": "response",
@@ -3895,7 +3903,9 @@
 "w": "despite",
 "t": "Präposition",
 "es": "a pesar de",
-"day": 120
+"day": 120,
+"s": "I play {despite} the rain.",
+"ses": "Juego a pesar de la lluvia."
 },
 {
 "w": "central",
@@ -3907,7 +3917,9 @@
 "w": "thus",
 "t": "Adverb",
 "es": "así / por lo tanto",
-"day": 120
+"day": 120,
+"s": "It rains, {thus} I stay home.",
+"ses": "Llueve, por lo tanto me quedo en casa."
 },
 {
 "w": "treatment",
@@ -3919,13 +3931,17 @@
 "w": "beyond",
 "t": "Präposition",
 "es": "más allá de",
-"day": 121
+"day": 121,
+"s": "The house is {beyond} the hill.",
+"ses": "La casa está más allá de la colina."
 },
 {
 "w": "exactly",
 "t": "Adverb",
 "es": "exactamente",
-"day": 121
+"day": 121,
+"s": "It is {exactly} three o'clock.",
+"ses": "Son exactamente las tres."
 },
 {
 "w": "protect",
@@ -4081,7 +4097,9 @@
 "w": "whatever",
 "t": "Pronomen",
 "es": "lo que sea",
-"day": 126
+"day": 126,
+"s": "Eat {whatever} you want.",
+"ses": "Come lo que quieras."
 },
 {
 "w": "success",
@@ -4099,7 +4117,9 @@
 "w": "particularly",
 "t": "Adverb",
 "es": "particularmente",
-"day": 127
+"day": 127,
+"s": "I like fish, {particularly} this one.",
+"ses": "Me gusta el pescado, particularmente este."
 },
 {
 "w": "amount",
@@ -4171,7 +4191,9 @@
 "w": "herself",
 "t": "Pronomen",
 "es": "ella misma",
-"day": 129
+"day": 129,
+"s": "She did it {herself}.",
+"ses": "Lo hizo ella misma."
 },
 {
 "w": "region",

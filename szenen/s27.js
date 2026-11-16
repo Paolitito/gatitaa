@@ -94,7 +94,7 @@ S.event=`${bg('#2d2a6e')}${burst(40,40,SUN,0)}${burst(160,30,RED,.5)}${burst(100
 
 S.official=`${bg('#e6f1ff')}${floor(166,'#c98a4b')}<rect y="166" width="200" height="8" fill="#e0a868"/>
  <g transform="rotate(-4 120 100)"><rect x="80" y="40" width="90" height="116" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M92,60 h66 M92,74 h66 M92,88 h50" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>
- <g class="pop"><circle cx="140" cy="124" r="18" fill="none" stroke="${RED}" stroke-width="4"/>${star5(140,124,9,RED)}</g><path d="M92,132 q8,-10 14,0 t14,0" fill="none" stroke="${INK}" stroke-width="2"/></g>
+ <g><circle cx="140" cy="124" r="18" fill="none" stroke="${RED}" stroke-width="4"/>${star5(140,124,9,RED)}</g><path d="M92,132 q8,-10 14,0 t14,0" fill="none" stroke="${INK}" stroke-width="2"/></g>
  ${at(46,198,.74,cat({mid:tie,hat:glasses,tail:false,armR:-100,armRcls:'throwarm',armsFront:true,prop:`<rect x="-8" y="-4" width="16" height="10" rx="2" fill="#8a5a30"/><rect x="-3" y="-16" width="6" height="12" fill="#b07a45"/>`}))}`;
 
 S.whose=`${park()}${cloud(40,24,.7)}

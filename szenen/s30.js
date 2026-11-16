@@ -99,7 +99,7 @@ S.quickly=`${park(160)}${floor(172,'#e0875a')}<path d="M0,186 h200" stroke="#fff
  <path d="M10,100 h60 M0,120 h70 M14,140 h50" stroke="#fff" stroke-width="5" stroke-linecap="round" class="glow"/>
  <circle class="puff" cx="50" cy="176" r="8" fill="#fff"/><circle class="puff" style="animation-delay:.3s" cx="30" cy="180" r="6" fill="#fff"/>
  <g transform="translate(120,184) rotate(10) scale(-.86,.86)"><g class="runbob" style="animation-duration:.3s">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'closed',mouth:'big'})}</g></g>
- ${blitz?`<g transform="translate(170,50) scale(1.2)" class="beat">${blitz}</g>`:''}`;
+ <g class="beat">${blitz(170,50,1.4,SUN)}</g>`;
 
 S.past=`${room('#ece6ff','#d6ccf5')}
  <rect x="16" y="20" width="84" height="96" rx="4" fill="#f3d9a4" stroke="#b07a45" stroke-width="5"/><g transform="translate(58,108) scale(.4)">${cat({eyes:'happy',tail:false,fur:'#7a6a5a',out:'#5a4a3a',hat:`<circle cx="0" cy="-124" r="9" fill="#e4c58a"/>`})}</g>${T(58,34,'baby',9,'#8a5a30')}

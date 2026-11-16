@@ -47,7 +47,7 @@ S.break=`${room('#ffe9d6','#ffd9bd')}
 
 S.difference=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
  ${panel(12,30,82,110)}${panel(106,30,82,110)}
- ${at(53,128,.5,K('orange',{eyes:'happy',tail:false}))}${at(147,128,.5,K('orange',{eyes:'happy',tail:false,hat:partyhut}))}
+ ${at(53,128,.5,K('orange',{eyes:'happy',tail:false}))}${at(147,128,.5,K('orange',{eyes:'happy',tail:false,hat:partyhut(RED)}))}
  <g class="glow">${ring(147,58,20,RED)}</g>
  ${T(100,96,'≠',30,VIO,'middle','beat')}
  ${at(100,200,.46,cat({eyes:'wide',armR:-140,armsFront:true,prop:`<g transform="translate(4,6) rotate(-40) scale(.8)">${lupe}</g>`}))}`;
