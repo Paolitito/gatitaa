@@ -1719,7 +1719,9 @@
 "w": "both",
 "t": "Pronomen",
 "es": "ambos",
-"day": 51
+"day": 51,
+"s": "{Both} cats are happy.",
+"ses": "Ambos gatos están felices."
 },
 {
 "w": "little",
@@ -1731,13 +1733,17 @@
 "w": "yes",
 "t": "Sonstiges",
 "es": "sí",
-"day": 51
+"day": 51,
+"s": "{Yes}!",
+"ses": "¡Sí!"
 },
 {
 "w": "since",
 "t": "Präposition",
 "es": "desde",
-"day": 52
+"day": 52,
+"s": "I wait {since} the morning.",
+"ses": "Espero desde la mañana."
 },
 {
 "w": "provide",
@@ -1755,7 +1761,9 @@
 "w": "around",
 "t": "Präposition",
 "es": "alrededor de",
-"day": 52
+"day": 52,
+"s": "The cat runs {around} the house.",
+"ses": "La gata corre alrededor de la casa."
 },
 {
 "w": "important",
@@ -1773,13 +1781,17 @@
 "w": "away",
 "t": "Adverb",
 "es": "lejos / fuera",
-"day": 53
+"day": 53,
+"s": "The dog runs {away}.",
+"ses": "El perro se va corriendo."
 },
 {
 "w": "until",
 "t": "Präposition",
 "es": "hasta",
-"day": 53
+"day": 53,
+"s": "I play {until} night.",
+"ses": "Juego hasta la noche."
 },
 {
 "w": "power",
@@ -1803,13 +1815,17 @@
 "w": "often",
 "t": "Adverb",
 "es": "a menudo",
-"day": 54
+"day": 54,
+"s": "I {often} read.",
+"ses": "Leo a menudo."
 },
 {
 "w": "yet",
 "t": "Adverb",
 "es": "todavía / aún",
-"day": 54
+"day": 54,
+"s": "I am not in bed {yet}.",
+"ses": "Todavía no estoy en la cama."
 },
 {
 "w": "line",
@@ -1833,13 +1849,17 @@
 "w": "among",
 "t": "Präposition",
 "es": "entre (varios)",
-"day": 55
+"day": 55,
+"s": "The cat is {among} friends.",
+"ses": "La gata está entre amigos."
 },
 {
 "w": "ever",
 "t": "Adverb",
 "es": "alguna vez",
-"day": 55
+"day": 55,
+"s": "The best day {ever}!",
+"ses": "¡El mejor día de todos!"
 },
 {
 "w": "stand",
@@ -1863,7 +1883,9 @@
 "w": "however",
 "t": "Adverb",
 "es": "sin embargo",
-"day": 56
+"day": 56,
+"s": "It is hot. {However}, I run.",
+"ses": "Hace calor. Sin embargo, corro."
 },
 {
 "w": "member",
@@ -1899,7 +1921,9 @@
 "w": "almost",
 "t": "Adverb",
 "es": "casi",
-"day": 57
+"day": 57,
+"s": "The cup is {almost} full.",
+"ses": "La taza está casi llena."
 },
 {
 "w": "include",
@@ -1923,7 +1947,9 @@
 "w": "later",
 "t": "Adverb",
 "es": "más tarde",
-"day": 58
+"day": 58,
+"s": "I eat now. I play {later}.",
+"ses": "Como ahora. Juego más tarde."
 },
 {
 "w": "community",
@@ -1941,7 +1967,9 @@
 "w": "once",
 "t": "Adverb",
 "es": "una vez",
-"day": 58
+"day": 58,
+"s": "I throw the ball {once}.",
+"ses": "Lanzo la pelota una vez."
 },
 {
 "w": "white",
@@ -1953,7 +1981,9 @@
 "w": "least",
 "t": "Adverb",
 "es": "lo menos",
-"day": 59
+"day": 59,
+"s": "This cat has the {least} fish.",
+"ses": "Esta gata tiene menos pescado."
 },
 {
 "w": "president",
@@ -2031,13 +2061,17 @@
 "w": "nothing",
 "t": "Pronomen",
 "es": "nada",
-"day": 61
+"day": 61,
+"s": "{Nothing} is in the box.",
+"ses": "No hay nada en la caja."
 },
 {
 "w": "ago",
 "t": "Adverb",
 "es": "hace (tiempo)",
-"day": 62
+"day": 62,
+"s": "A year {ago}, I was small.",
+"ses": "Hace un año, yo era pequeña."
 },
 {
 "w": "lead",
@@ -2061,7 +2095,9 @@
 "w": "whether",
 "t": "Konjunktion",
 "es": "si (o no)",
-"day": 62
+"day": 62,
+"s": "I do not know {whether} it is hot or cold.",
+"ses": "No sé si hace calor o frío."
 },
 {
 "w": "watch",
@@ -2073,7 +2109,9 @@
 "w": "together",
 "t": "Adverb",
 "es": "juntos",
-"day": 63
+"day": 63,
+"s": "We play {together}.",
+"ses": "Jugamos juntos."
 },
 {
 "w": "follow",
@@ -2103,7 +2141,9 @@
 "w": "anything",
 "t": "Pronomen",
 "es": "cualquier cosa / algo",
-"day": 64
+"day": 64,
+"s": "I can eat {anything}!",
+"ses": "¡Puedo comer cualquier cosa!"
 },
 {
 "w": "create",
@@ -2121,7 +2161,9 @@
 "w": "already",
 "t": "Adverb",
 "es": "ya",
-"day": 64
+"day": 64,
+"s": "I am {already} in bed.",
+"ses": "Ya estoy en la cama."
 },
 {
 "w": "speak",
@@ -2133,7 +2175,9 @@
 "w": "others",
 "t": "Pronomen",
 "es": "otros",
-"day": 65
+"day": 65,
+"s": "One cat plays. The {others} sit.",
+"ses": "Una gata juega. Los otros están sentados."
 },
 {
 "w": "level",
@@ -2211,7 +2255,9 @@
 "w": "within",
 "t": "Präposition",
 "es": "dentro de",
-"day": 67
+"day": 67,
+"s": "Stay {within} the line.",
+"ses": "Quédate dentro de la línea."
 },
 {
 "w": "grow",
@@ -2283,7 +2329,9 @@
 "w": "himself",
 "t": "Pronomen",
 "es": "él mismo",
-"day": 70
+"day": 70,
+"s": "He reads by {himself}.",
+"ses": "Él lee solo."
 },
 {
 "w": "air",

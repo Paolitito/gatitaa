@@ -151,7 +151,7 @@ section{display:flex;flex-direction:column;gap:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 
 </style></head><body><main>
-<header><h1>250 von 800 Wörtern</h1><p>Jeder Tag hat fünf Wörter. Tag 1 bis 10 sind die Bild-Wörter, ab Tag 11 geht es nach Häufigkeit. Grammatik-Wörter haben einen kleinen Satz, in dem das Wort markiert ist.</p></header>
+<header><h1>350 von 800 Wörtern</h1><p>Jeder Tag hat fünf Wörter. Tag 1 bis 10 sind die Bild-Wörter, ab Tag 11 geht es nach Häufigkeit. Grammatik-Wörter haben einen kleinen Satz, in dem das Wort markiert ist.</p></header>
 <div id="days"></div>
 </main><script>
 const INK='#3a2a4a', RED='#f2453d', SUN='#ffc93c', MINT='#2fc7a8', SKY='#4f9dff', VIO='#9b6bff', ORA='#ff9a3c';
@@ -2121,8 +2121,641 @@ S.far=`${bg('#cdeeff')}${sun(30,28,10)}${cloud(120,30,.7)}
  <path d="M70,150 h60 M70,150 l6,-5 M70,150 l6,5 M130,150 l-6,-5 M130,150 l-6,5" fill="none" stroke="${RED}" stroke-width="3" stroke-linecap="round" class="glow" transform="rotate(-28 100 150)"/>
  ${sh(40,194,28)}${at(40,192,.8,cat({mouth:'wavy',armR:-150,armsFront:true}))}
  <path class="sweat" d="${tear(70,120)}" fill="${SKY}"/>`;
+/* Tag 51–54: black, long, both, little, yes · since, provide, service, around, important · father, away, until, power, hour · game, often, yet, line, political */
+const pawK=(x,y,r,c)=>`<g transform="translate(${x},${y}) rotate(${r})" fill="${c}"><ellipse cx="0" cy="2" rx="5" ry="4"/><circle cx="-5" cy="-4" r="2"/><circle cx="0" cy="-6" r="2"/><circle cx="5" cy="-4" r="2"/></g>`;
+S.black=`${bg('#fff8f0')}
+ ${[[RED,20],[ORA,50],[SUN,80],[MINT,110],[SKY,140],[VIO,170]].map(([c,x])=>`<rect x="${x-11}" y="16" width="22" height="30" rx="6" fill="${c}" opacity=".5"/>`).join('')}
+ <rect x="128" y="60" width="40" height="52" rx="8" fill="${CB}"/>${ring(148,86,38,RED)}
+ ${floor(184,'#f0e6dc')}
+ <path d="M20,150 h36 l-4,32 h-28 Z" fill="#b9c4d8"/><ellipse cx="38" cy="150" rx="18" ry="5" fill="${CB}"/><path d="M52,154 q3,12 0,18 q-3,-6 0,-18" fill="${CB}"/>
+ ${pawK(70,190,-20,CB)}${pawK(160,186,14,CB)}${pawK(184,170,-6,CB)}
+ ${sh(104,190,34)}${at(104,188,.94,cat({eyes:'happy',mouth:'open',armR:-128,armsFront:true}))}`;
 
-const WORDS=[{"w": "house", "t": "Nomen", "es": "la casa", "day": 1}, {"w": "eat", "t": "Verb", "es": "comer", "day": 1}, {"w": "happy", "t": "Adjektiv", "es": "feliz", "day": 1}, {"w": "water", "t": "Nomen", "es": "el agua", "day": 1}, {"w": "dog", "t": "Nomen", "es": "el perro", "day": 1}, {"w": "book", "t": "Nomen", "es": "el libro", "day": 2}, {"w": "read", "t": "Verb", "es": "leer", "day": 2}, {"w": "big", "t": "Adjektiv", "es": "grande", "day": 2}, {"w": "small", "t": "Adjektiv", "es": "pequeño", "day": 2}, {"w": "hand", "t": "Nomen", "es": "la mano", "day": 2}, {"w": "car", "t": "Nomen", "es": "el coche / el carro", "day": 3}, {"w": "run", "t": "Verb", "es": "correr", "day": 3}, {"w": "hot", "t": "Adjektiv", "es": "caliente", "day": 3}, {"w": "cold", "t": "Adjektiv", "es": "frío", "day": 3}, {"w": "door", "t": "Nomen", "es": "la puerta", "day": 3}, {"w": "bed", "t": "Nomen", "es": "la cama", "day": 4}, {"w": "sit", "t": "Verb", "es": "sentarse", "day": 4}, {"w": "eye", "t": "Nomen", "es": "el ojo", "day": 4}, {"w": "food", "t": "Nomen", "es": "la comida", "day": 4}, {"w": "blue", "t": "Adjektiv", "es": "azul", "day": 4}, {"w": "table", "t": "Nomen", "es": "la mesa", "day": 5}, {"w": "chair", "t": "Nomen", "es": "la silla", "day": 5}, {"w": "play", "t": "Verb", "es": "jugar", "day": 5}, {"w": "ball", "t": "Nomen", "es": "la pelota", "day": 5}, {"w": "green", "t": "Adjektiv", "es": "verde", "day": 5}, {"w": "fish", "t": "Nomen", "es": "el pez / el pescado", "day": 6}, {"w": "cup", "t": "Nomen", "es": "la taza", "day": 6}, {"w": "give", "t": "Verb", "es": "dar", "day": 6}, {"w": "love", "t": "Verb", "es": "amar / querer", "day": 6}, {"w": "heart", "t": "Nomen", "es": "el corazón", "day": 6}, {"w": "friend", "t": "Nomen", "es": "el amigo / la amiga", "day": 7}, {"w": "family", "t": "Nomen", "es": "la familia", "day": 7}, {"w": "laugh", "t": "Verb", "es": "reír", "day": 7}, {"w": "mother", "t": "Nomen", "es": "la madre", "day": 7}, {"w": "boy", "t": "Nomen", "es": "el niño / el chico", "day": 7}, {"w": "school", "t": "Nomen", "es": "la escuela", "day": 8}, {"w": "write", "t": "Verb", "es": "escribir", "day": 8}, {"w": "walk", "t": "Verb", "es": "caminar", "day": 8}, {"w": "box", "t": "Nomen", "es": "la caja", "day": 8}, {"w": "dark", "t": "Adjektiv", "es": "oscuro", "day": 8}, {"w": "night", "t": "Nomen", "es": "la noche", "day": 9}, {"w": "star", "t": "Nomen", "es": "la estrella", "day": 9}, {"w": "fly", "t": "Verb", "es": "volar", "day": 9}, {"w": "phone", "t": "Nomen", "es": "el teléfono", "day": 9}, {"w": "music", "t": "Nomen", "es": "la música", "day": 9}, {"w": "open", "t": "Verb", "es": "abrir", "day": 10}, {"w": "throw", "t": "Verb", "es": "lanzar / tirar", "day": 10}, {"w": "head", "t": "Nomen", "es": "la cabeza", "day": 10}, {"w": "foot", "t": "Nomen", "es": "el pie", "day": 10}, {"w": "beautiful", "t": "Adjektiv", "es": "hermoso / bonito", "day": 10}, {"w": "the", "t": "Artikel", "es": "el / la", "day": 11, "s": "{The} cat is black.", "ses": "La gata es negra."}, {"w": "be", "t": "Verb", "es": "ser / estar", "day": 11, "s": "I {am} Canela.", "ses": "Yo soy Canela."}, {"w": "to", "t": "Präposition", "es": "a / hacia", "day": 11, "s": "I walk {to} the house.", "ses": "Camino a la casa."}, {"w": "of", "t": "Präposition", "es": "de", "day": 11, "s": "A cup {of} water.", "ses": "Una taza de agua."}, {"w": "and", "t": "Konjunktion", "es": "y", "day": 11, "s": "The cat {and} the dog.", "ses": "La gata y el perro."}, {"w": "a", "t": "Artikel", "es": "un / una", "day": 12, "s": "{A} ball.", "ses": "Una pelota."}, {"w": "in", "t": "Präposition", "es": "en", "day": 12, "s": "The cat is {in} the box.", "ses": "La gata está en la caja."}, {"w": "that", "t": "Pronomen", "es": "que / ese", "day": 12, "s": "{That} is a star.", "ses": "Eso es una estrella."}, {"w": "have", "t": "Verb", "es": "tener / haber", "day": 12, "s": "I {have} a book.", "ses": "Tengo un libro."}, {"w": "I", "t": "Pronomen", "es": "yo", "day": 12, "s": "{I} am a cat.", "ses": "Yo soy una gata."}, {"w": "it", "t": "Pronomen", "es": "eso / lo", "day": 13, "s": "{It} is a ball.", "ses": "Es una pelota."}, {"w": "for", "t": "Präposition", "es": "para / por", "day": 13, "s": "This is {for} you.", "ses": "Esto es para ti."}, {"w": "not", "t": "Adverb", "es": "no", "day": 13, "s": "It is {not} hot.", "ses": "No hace calor."}, {"w": "on", "t": "Präposition", "es": "sobre / en", "day": 13, "s": "The cat is {on} the table.", "ses": "La gata está sobre la mesa."}, {"w": "with", "t": "Präposition", "es": "con", "day": 13, "s": "I play {with} the dog.", "ses": "Juego con el perro."}, {"w": "he", "t": "Pronomen", "es": "él", "day": 14, "s": "{He} is a boy.", "ses": "Él es un niño."}, {"w": "as", "t": "Konjunktion", "es": "como", "day": 14, "s": "Big {as} a house.", "ses": "Grande como una casa."}, {"w": "you", "t": "Pronomen", "es": "tú / usted", "day": 14, "s": "{You} are beautiful.", "ses": "Tú eres hermosa."}, {"w": "do", "t": "Verb", "es": "hacer", "day": 14, "s": "{Do} you like fish?", "ses": "¿Te gusta el pescado?"}, {"w": "at", "t": "Präposition", "es": "en / a", "day": 14, "s": "The cat is {at} school.", "ses": "La gata está en la escuela."}, {"w": "this", "t": "Pronomen", "es": "este / esta", "day": 15, "s": "{This} is my cup.", "ses": "Esta es mi taza."}, {"w": "but", "t": "Konjunktion", "es": "pero", "day": 15, "s": "The dog is big, {but} the cat is small.", "ses": "El perro es grande, pero la gata es pequeña."}, {"w": "his", "t": "Pronomen", "es": "su (de él)", "day": 15, "s": "{His} ball.", "ses": "Su pelota (de él)."}, {"w": "by", "t": "Präposition", "es": "por", "day": 15, "s": "The cat is {by} the door.", "ses": "La gata está junto a la puerta."}, {"w": "from", "t": "Präposition", "es": "de / desde", "day": 15, "s": "I walk {from} school.", "ses": "Camino desde la escuela."}, {"w": "they", "t": "Pronomen", "es": "ellos / ellas", "day": 16, "s": "{They} play.", "ses": "Ellos juegan."}, {"w": "we", "t": "Pronomen", "es": "nosotros", "day": 16, "s": "{We} are friends.", "ses": "Nosotros somos amigos."}, {"w": "say", "t": "Verb", "es": "decir", "day": 16}, {"w": "her", "t": "Pronomen", "es": "su (de ella) / la", "day": 16, "s": "{Her} book.", "ses": "Su libro (de ella)."}, {"w": "she", "t": "Pronomen", "es": "ella", "day": 16, "s": "{She} is my mother.", "ses": "Ella es mi madre."}, {"w": "or", "t": "Konjunktion", "es": "o", "day": 17, "s": "The ball {or} the book?", "ses": "¿La pelota o el libro?"}, {"w": "an", "t": "Artikel", "es": "un / una", "day": 17, "s": "{An} eye.", "ses": "Un ojo."}, {"w": "will", "t": "Verb", "es": "(futuro)", "day": 17, "s": "I {will} eat.", "ses": "Voy a comer."}, {"w": "my", "t": "Pronomen", "es": "mi", "day": 17, "s": "This is {my} bed.", "ses": "Esta es mi cama."}, {"w": "all", "t": "Pronomen", "es": "todo / todos", "day": 17, "s": "{All} the cats.", "ses": "Todos los gatos."}, {"w": "would", "t": "Verb", "es": "(condicional)", "day": 18, "s": "I {would} like a fish.", "ses": "Me gustaría un pescado."}, {"w": "there", "t": "Adverb", "es": "allí / ahí", "day": 18, "s": "The ball is {there}.", "ses": "La pelota está allí."}, {"w": "their", "t": "Pronomen", "es": "su (de ellos)", "day": 18, "s": "{Their} house.", "ses": "Su casa (de ellos)."}, {"w": "what", "t": "Pronomen", "es": "qué", "day": 18, "s": "{What} is in the box?", "ses": "¿Qué hay en la caja?"}, {"w": "so", "t": "Adverb", "es": "así / tan", "day": 18, "s": "{So} big!", "ses": "¡Tan grande!"}, {"w": "up", "t": "Adverb", "es": "arriba", "day": 19, "s": "The cat goes {up}.", "ses": "La gata sube."}, {"w": "out", "t": "Adverb", "es": "fuera", "day": 19, "s": "The cat is {out} of the box.", "ses": "La gata está fuera de la caja."}, {"w": "if", "t": "Konjunktion", "es": "si", "day": 19, "s": "{If} I run, I am hot.", "ses": "Si corro, tengo calor."}, {"w": "about", "t": "Präposition", "es": "sobre / acerca de", "day": 19, "s": "A book {about} fish.", "ses": "Un libro sobre peces."}, {"w": "who", "t": "Pronomen", "es": "quién", "day": 19, "s": "{Who} is at the door?", "ses": "¿Quién está en la puerta?"}, {"w": "get", "t": "Verb", "es": "conseguir / obtener", "day": 20}, {"w": "which", "t": "Pronomen", "es": "cuál", "day": 20, "s": "{Which} cup?", "ses": "¿Cuál taza?"}, {"w": "go", "t": "Verb", "es": "ir", "day": 20}, {"w": "me", "t": "Pronomen", "es": "me / mí", "day": 20, "s": "Give {me} the ball!", "ses": "¡Dame la pelota!"}, {"w": "when", "t": "Adverb", "es": "cuándo / cuando", "day": 20, "s": "{When} do we eat?", "ses": "¿Cuándo comemos?"}, {"w": "make", "t": "Verb", "es": "hacer / fabricar", "day": 21}, {"w": "can", "t": "Verb", "es": "poder", "day": 21, "s": "I {can} fly!", "ses": "¡Puedo volar!"}, {"w": "like", "t": "Verb", "es": "gustar", "day": 21}, {"w": "time", "t": "Nomen", "es": "el tiempo", "day": 21}, {"w": "no", "t": "Sonstiges", "es": "no", "day": 21, "s": "{No}!", "ses": "¡No!"}, {"w": "just", "t": "Adverb", "es": "solo / justo", "day": 22, "s": "{Just} a small fish.", "ses": "Solo un pescado pequeño."}, {"w": "him", "t": "Pronomen", "es": "lo / le (a él)", "day": 22, "s": "I give {him} the ball.", "ses": "Le doy la pelota (a él)."}, {"w": "know", "t": "Verb", "es": "saber / conocer", "day": 22}, {"w": "take", "t": "Verb", "es": "tomar / llevar", "day": 22}, {"w": "people", "t": "Nomen", "es": "la gente", "day": 22}, {"w": "into", "t": "Präposition", "es": "dentro de / en", "day": 23, "s": "The cat runs {into} the house.", "ses": "La gata entra corriendo en la casa."}, {"w": "year", "t": "Nomen", "es": "el año", "day": 23}, {"w": "your", "t": "Pronomen", "es": "tu / su", "day": 23, "s": "This is {your} book.", "ses": "Este es tu libro."}, {"w": "good", "t": "Adjektiv", "es": "bueno", "day": 23}, {"w": "some", "t": "Pronomen", "es": "algunos / algo de", "day": 23, "s": "I eat {some} fish.", "ses": "Como algo de pescado."}, {"w": "could", "t": "Verb", "es": "podría / podía", "day": 24, "s": "{Could} you open the door?", "ses": "¿Podrías abrir la puerta?"}, {"w": "them", "t": "Pronomen", "es": "los / les", "day": 24, "s": "I see {them}.", "ses": "Los veo."}, {"w": "see", "t": "Verb", "es": "ver", "day": 24}, {"w": "other", "t": "Adjektiv", "es": "otro", "day": 24, "s": "The {other} cup.", "ses": "La otra taza."}, {"w": "than", "t": "Konjunktion", "es": "que (comparación)", "day": 24, "s": "The house is bigger {than} the car.", "ses": "La casa es más grande que el coche."}, {"w": "then", "t": "Adverb", "es": "entonces / luego", "day": 25, "s": "I read, {then} I play.", "ses": "Leo, luego juego."}, {"w": "now", "t": "Adverb", "es": "ahora", "day": 25, "s": "I eat {now}.", "ses": "Como ahora."}, {"w": "look", "t": "Verb", "es": "mirar", "day": 25}, {"w": "only", "t": "Adverb", "es": "solo / solamente", "day": 25, "s": "{Only} the cat is black.", "ses": "Solo la gata es negra."}, {"w": "come", "t": "Verb", "es": "venir", "day": 25}, {"w": "its", "t": "Pronomen", "es": "su (de eso)", "day": 26, "s": "The dog and {its} ball.", "ses": "El perro y su pelota."}, {"w": "over", "t": "Präposition", "es": "sobre / encima de", "day": 26, "s": "The cat jumps {over} the box.", "ses": "La gata salta por encima de la caja."}, {"w": "think", "t": "Verb", "es": "pensar", "day": 26}, {"w": "also", "t": "Adverb", "es": "también", "day": 26, "s": "The dog is {also} happy.", "ses": "El perro también está feliz."}, {"w": "back", "t": "Adverb", "es": "atrás / de vuelta", "day": 26, "s": "I am {back}!", "ses": "¡Ya regresé!"}, {"w": "after", "t": "Präposition", "es": "después de", "day": 27, "s": "{After} school, I play.", "ses": "Después de la escuela, juego."}, {"w": "use", "t": "Verb", "es": "usar", "day": 27}, {"w": "how", "t": "Adverb", "es": "cómo", "day": 27, "s": "{How} big is the fish?", "ses": "¿Qué tan grande es el pez?"}, {"w": "our", "t": "Pronomen", "es": "nuestro", "day": 27, "s": "{Our} house.", "ses": "Nuestra casa."}, {"w": "work", "t": "Verb", "es": "trabajar", "day": 27}, {"w": "first", "t": "Adjektiv", "es": "primero", "day": 28}, {"w": "well", "t": "Adverb", "es": "bien", "day": 28, "s": "I play music {well}.", "ses": "Toco música bien."}, {"w": "way", "t": "Nomen", "es": "el camino / la manera", "day": 28}, {"w": "even", "t": "Adverb", "es": "incluso", "day": 28, "s": "{Even} the small cat can throw.", "ses": "Incluso la gata pequeña puede lanzar."}, {"w": "new", "t": "Adjektiv", "es": "nuevo", "day": 28}, {"w": "want", "t": "Verb", "es": "querer", "day": 29}, {"w": "because", "t": "Konjunktion", "es": "porque", "day": 29, "s": "I am happy {because} I have a friend.", "ses": "Estoy feliz porque tengo una amiga."}, {"w": "any", "t": "Pronomen", "es": "cualquier / algún", "day": 29, "s": "Is there {any} food?", "ses": "¿Hay algo de comida?"}, {"w": "these", "t": "Pronomen", "es": "estos / estas", "day": 29, "s": "{These} are my books.", "ses": "Estos son mis libros."}, {"w": "day", "t": "Nomen", "es": "el día", "day": 29}, {"w": "most", "t": "Adverb", "es": "la mayoría / más", "day": 30, "s": "The {most} beautiful star.", "ses": "La estrella más hermosa."}, {"w": "us", "t": "Pronomen", "es": "nos / nosotros", "day": 30, "s": "Come with {us}!", "ses": "¡Ven con nosotros!"}, {"w": "very", "t": "Adverb", "es": "muy", "day": 30, "s": "I am {very} happy!", "ses": "¡Estoy muy feliz!"}, {"w": "thing", "t": "Nomen", "es": "la cosa", "day": 30}, {"w": "man", "t": "Nomen", "es": "el hombre", "day": 30}, {"w": "find", "t": "Verb", "es": "encontrar", "day": 31}, {"w": "here", "t": "Adverb", "es": "aquí", "day": 31, "s": "The ball is {here}.", "ses": "La pelota está aquí."}, {"w": "many", "t": "Adjektiv", "es": "muchos", "day": 31}, {"w": "tell", "t": "Verb", "es": "contar / decir", "day": 31}, {"w": "woman", "t": "Nomen", "es": "la mujer", "day": 31}, {"w": "life", "t": "Nomen", "es": "la vida", "day": 32}, {"w": "child", "t": "Nomen", "es": "el niño / la niña", "day": 32}, {"w": "world", "t": "Nomen", "es": "el mundo", "day": 32}, {"w": "still", "t": "Adverb", "es": "todavía", "day": 32, "s": "I am {still} in bed.", "ses": "Todavía estoy en la cama."}, {"w": "try", "t": "Verb", "es": "intentar / probar", "day": 32}, {"w": "last", "t": "Adjektiv", "es": "último", "day": 33}, {"w": "ask", "t": "Verb", "es": "preguntar / pedir", "day": 33}, {"w": "need", "t": "Verb", "es": "necesitar", "day": 33}, {"w": "too", "t": "Adverb", "es": "también / demasiado", "day": 33, "s": "The cup is {too} hot.", "ses": "La taza está demasiado caliente."}, {"w": "feel", "t": "Verb", "es": "sentir", "day": 33}, {"w": "state", "t": "Nomen", "es": "el estado", "day": 34}, {"w": "never", "t": "Adverb", "es": "nunca", "day": 34, "s": "Fish {never} fly.", "ses": "Los peces nunca vuelan."}, {"w": "become", "t": "Verb", "es": "convertirse en", "day": 34}, {"w": "between", "t": "Präposition", "es": "entre", "day": 34, "s": "The cat is {between} the boxes.", "ses": "La gata está entre las cajas."}, {"w": "high", "t": "Adjektiv", "es": "alto", "day": 34}, {"w": "really", "t": "Adverb", "es": "realmente", "day": 35, "s": "The star is {really} big.", "ses": "La estrella es realmente grande."}, {"w": "something", "t": "Pronomen", "es": "algo", "day": 35, "s": "{Something} is in the box.", "ses": "Hay algo en la caja."}, {"w": "leave", "t": "Verb", "es": "salir / dejar", "day": 35}, {"w": "put", "t": "Verb", "es": "poner", "day": 35}, {"w": "old", "t": "Adjektiv", "es": "viejo", "day": 35}, {"w": "while", "t": "Konjunktion", "es": "mientras", "day": 36, "s": "I read {while} I eat.", "ses": "Leo mientras como."}, {"w": "mean", "t": "Verb", "es": "significar", "day": 36}, {"w": "keep", "t": "Verb", "es": "guardar / mantener", "day": 36}, {"w": "student", "t": "Nomen", "es": "el / la estudiante", "day": 36}, {"w": "why", "t": "Adverb", "es": "por qué", "day": 36, "s": "{Why} is the dog happy?", "ses": "¿Por qué está feliz el perro?"}, {"w": "let", "t": "Verb", "es": "dejar / permitir", "day": 37}, {"w": "great", "t": "Adjektiv", "es": "genial / grande", "day": 37}, {"w": "same", "t": "Adjektiv", "es": "mismo", "day": 37}, {"w": "group", "t": "Nomen", "es": "el grupo", "day": 37}, {"w": "begin", "t": "Verb", "es": "empezar", "day": 37}, {"w": "seem", "t": "Verb", "es": "parecer", "day": 38}, {"w": "country", "t": "Nomen", "es": "el país", "day": 38}, {"w": "help", "t": "Verb", "es": "ayudar", "day": 38}, {"w": "talk", "t": "Verb", "es": "hablar", "day": 38}, {"w": "where", "t": "Adverb", "es": "dónde", "day": 38, "s": "{Where} is the ball?", "ses": "¿Dónde está la pelota?"}, {"w": "turn", "t": "Verb", "es": "girar", "day": 39}, {"w": "problem", "t": "Nomen", "es": "el problema", "day": 39}, {"w": "every", "t": "Adjektiv", "es": "cada", "day": 39, "s": "I read {every} day.", "ses": "Leo cada día."}, {"w": "start", "t": "Verb", "es": "comenzar", "day": 39}, {"w": "might", "t": "Verb", "es": "podría (quizás)", "day": 39, "s": "It {might} be cold.", "ses": "Puede que haga frío."}, {"w": "show", "t": "Verb", "es": "mostrar", "day": 40}, {"w": "part", "t": "Nomen", "es": "la parte", "day": 40}, {"w": "against", "t": "Präposition", "es": "contra", "day": 40, "s": "The cat plays {against} the dog.", "ses": "La gata juega contra el perro."}, {"w": "place", "t": "Nomen", "es": "el lugar", "day": 40}, {"w": "such", "t": "Adjektiv", "es": "tal", "day": 40, "s": "{Such} a beautiful day!", "ses": "¡Qué día tan hermoso!"}, {"w": "again", "t": "Adverb", "es": "otra vez", "day": 41, "s": "Throw the ball {again}!", "ses": "¡Lanza la pelota otra vez!"}, {"w": "few", "t": "Adjektiv", "es": "pocos", "day": 41}, {"w": "case", "t": "Nomen", "es": "el caso", "day": 41}, {"w": "week", "t": "Nomen", "es": "la semana", "day": 41}, {"w": "company", "t": "Nomen", "es": "la empresa", "day": 41}, {"w": "system", "t": "Nomen", "es": "el sistema", "day": 42}, {"w": "each", "t": "Pronomen", "es": "cada uno", "day": 42, "s": "{Each} cat has a fish.", "ses": "Cada gato tiene un pescado."}, {"w": "right", "t": "Adjektiv", "es": "correcto / derecho", "day": 42}, {"w": "program", "t": "Nomen", "es": "el programa", "day": 42}, {"w": "hear", "t": "Verb", "es": "oír", "day": 42}, {"w": "question", "t": "Nomen", "es": "la pregunta", "day": 43}, {"w": "during", "t": "Präposition", "es": "durante", "day": 43, "s": "I read {during} the night.", "ses": "Leo durante la noche."}, {"w": "government", "t": "Nomen", "es": "el gobierno", "day": 43}, {"w": "number", "t": "Nomen", "es": "el número", "day": 43}, {"w": "off", "t": "Adverb", "es": "apagado / fuera", "day": 43, "s": "The light is {off}.", "ses": "La luz está apagada."}, {"w": "always", "t": "Adverb", "es": "siempre", "day": 44, "s": "I am {always} happy.", "ses": "Siempre estoy feliz."}, {"w": "move", "t": "Verb", "es": "mover", "day": 44}, {"w": "live", "t": "Verb", "es": "vivir", "day": 44}, {"w": "point", "t": "Nomen", "es": "el punto", "day": 44}, {"w": "believe", "t": "Verb", "es": "creer", "day": 44}, {"w": "hold", "t": "Verb", "es": "sostener", "day": 45}, {"w": "today", "t": "Adverb", "es": "hoy", "day": 45, "s": "{Today} I play.", "ses": "Hoy juego."}, {"w": "bring", "t": "Verb", "es": "traer", "day": 45}, {"w": "happen", "t": "Verb", "es": "pasar / ocurrir", "day": 45}, {"w": "next", "t": "Adjektiv", "es": "siguiente / próximo", "day": 45}, {"w": "without", "t": "Präposition", "es": "sin", "day": 46, "s": "A house {without} a door.", "ses": "Una casa sin puerta."}, {"w": "before", "t": "Präposition", "es": "antes de", "day": 46, "s": "I read {before} bed.", "ses": "Leo antes de ir a la cama."}, {"w": "large", "t": "Adjektiv", "es": "grande / amplio", "day": 46}, {"w": "must", "t": "Verb", "es": "deber", "day": 46, "s": "I {must} go to school.", "ses": "Debo ir a la escuela."}, {"w": "home", "t": "Nomen", "es": "el hogar / la casa", "day": 46}, {"w": "under", "t": "Präposition", "es": "debajo de", "day": 47, "s": "The cat is {under} the table.", "ses": "La gata está debajo de la mesa."}, {"w": "room", "t": "Nomen", "es": "la habitación", "day": 47}, {"w": "area", "t": "Nomen", "es": "el área / la zona", "day": 47}, {"w": "national", "t": "Adjektiv", "es": "nacional", "day": 47}, {"w": "money", "t": "Nomen", "es": "el dinero", "day": 47}, {"w": "story", "t": "Nomen", "es": "la historia / el cuento", "day": 48}, {"w": "young", "t": "Adjektiv", "es": "joven", "day": 48}, {"w": "fact", "t": "Nomen", "es": "el hecho", "day": 48}, {"w": "month", "t": "Nomen", "es": "el mes", "day": 48}, {"w": "different", "t": "Adjektiv", "es": "diferente", "day": 48}, {"w": "lot", "t": "Nomen", "es": "mucho / un montón", "day": 49}, {"w": "study", "t": "Verb", "es": "estudiar", "day": 49}, {"w": "job", "t": "Nomen", "es": "el trabajo / el empleo", "day": 49}, {"w": "word", "t": "Nomen", "es": "la palabra", "day": 49}, {"w": "though", "t": "Konjunktion", "es": "aunque", "day": 49, "s": "I play, {though} it is cold.", "ses": "Juego, aunque hace frío."}, {"w": "business", "t": "Nomen", "es": "el negocio", "day": 50}, {"w": "issue", "t": "Nomen", "es": "el asunto / el problema", "day": 50}, {"w": "side", "t": "Nomen", "es": "el lado", "day": 50}, {"w": "kind", "t": "Nomen", "es": "el tipo / la clase", "day": 50}, {"w": "far", "t": "Adverb", "es": "lejos", "day": 50, "s": "The house is {far}.", "ses": "La casa está lejos."}];
+S.long=`${park(170)}${cloud(40,26,.7)}
+ <g class="walkbob"><path class="wiggle" d="M178,134 q14,-6 12,-22" fill="none" stroke="#e8b06a" stroke-width="7" stroke-linecap="round"/>
+ <rect x="50" y="124" width="132" height="34" rx="17" fill="#e8b06a"/><rect x="60" y="150" width="10" height="24" rx="5" fill="#d99a52"/><rect x="76" y="150" width="10" height="24" rx="5" fill="#e8b06a"/><rect x="150" y="150" width="10" height="24" rx="5" fill="#d99a52"/><rect x="166" y="150" width="10" height="24" rx="5" fill="#e8b06a"/>
+ <ellipse cx="22" cy="122" rx="8" ry="15" fill="#b9773a" transform="rotate(16 22 122)"/><circle cx="40" cy="126" r="22" fill="#e8b06a"/><ellipse cx="30" cy="134" rx="12" ry="9" fill="#fff3dc"/><ellipse cx="24" cy="130" rx="4.500" ry="3.500" fill="${INK}"/><circle cx="42" cy="120" r="3" fill="${INK}"/><ellipse cx="58" cy="120" rx="8" ry="15" fill="#b9773a" transform="rotate(-16 58 120)"/></g>
+ <path d="M20,90 h164 M20,90 l8,-6 M20,90 l8,6 M184,90 l-8,-6 M184,90 l-8,6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(112,84,.4,cat({eyes:'wide',mouth:'o',tail:false}))}`;
+
+S.both=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}
+ <path d="M30,70 q0,-14 14,-14 h112 q14,0 14,14" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,56 v-18" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>
+ ${arrow(100,38,62,72,RED,4,'glow')}${arrow(100,38,138,72,RED,4,'glow')}
+ ${sh(62,190,30)}${at(62,188,.88,cat({eyes:'happy',mouth:'open'}),'hop')}
+ ${sh(138,190,30)}${at(138,188,.88,K('orange',{eyes:'happy',mouth:'open'}),'hop')}
+ ${heart(100,110,.9,RED,0)}`;
+
+S.little=`${bg('#e3fbf5')}<circle cx="120" cy="120" r="60" fill="#fff" opacity=".7"/>${floor(184,'#bff0de')}
+ <g transform="translate(120,176) scale(2.2)">${P.cup(SKY).replace('#7a4a21','#bfe9ff')}</g>
+ ${at(118,128,.3,K('cream',{eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true,tail:false}),'peek')}
+ <circle cx="118" cy="104" r="34" fill="none" stroke="${VIO}" stroke-width="5"/><path d="M142,128 l22,22" stroke="${VIO}" stroke-width="8" stroke-linecap="round"/>
+ ${at(34,194,.7,cat({eyes:'spark',mouth:'o',headCls:'tilt'}))}`;
+
+S.yes=`${bg('#e3fbf5')}<circle cx="100" cy="96" r="80" fill="#f0fdf8"/>${floor(184,'#bff0de')}${sh(92,190,36)}
+ <g class="beat"><circle cx="156" cy="50" r="30" fill="${MINT}"/><path d="M142,51 l10,12 18,-24" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>
+ ${at(92,186,1.02,cat({eyes:'happy',mouth:'big',armL:30,armR:-125,armsFront:true,headCls:'hop'}))}
+ ${spark(30,50,7,SUN,0)}${spark(46,120,5,SUN,.6)}`;
+
+S.since=`${park(170)}
+ <rect x="16" y="20" width="168" height="12" rx="6" fill="#fff" opacity=".7"/><rect class="grow" x="16" y="20" width="130" height="12" rx="6" fill="${RED}"/>
+ <g transform="translate(24,26) scale(.6)">${sun(0,0,12)}</g><g class="beat"><circle cx="146" cy="26" r="9" fill="${RED}"/></g>
+ <rect x="50" y="150" width="100" height="8" rx="4" fill="#b07a45"/><rect x="56" y="158" width="6" height="26" fill="#8a5a30"/><rect x="138" y="158" width="6" height="26" fill="#8a5a30"/><rect x="50" y="126" width="100" height="8" rx="4" fill="#b07a45"/>
+ ${at(86,152,.7,cat({eyes:'closed',mouth:'wavy',headCls:'tilt'}))}
+ <g class="ring">${at(150,124,.5,P.clock(28,150))}</g>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="104" y="80" font-size="14">z</text></g>`;
+
+S.provide=`${room('#fff1c9','#e4b77a')}
+ ${at(150,190,.46,K('orange',{eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}${at(180,192,.4,K('grey',{eyes:'happy'}))}${at(120,192,.4,K('cream',{eyes:'happy'}))}
+ ${sh(54,192,32)}${at(54,190,.9,cat({eyes:'happy',armR:-92,armsFront:true,prop:`<g transform="translate(6,8)"><path d="M-16,-4 h32 q0,16 -16,16 q-16,0 -16,-16 Z" fill="${SKY}"/><ellipse cx="0" cy="-4" rx="16" ry="4" fill="#ffd98a"/><g transform="translate(0,-8) scale(.9)">${P.fish}</g></g>`}))}
+ ${arrow(98,130,120,146,RED,5,'glow')}${heart(150,110,.8,RED,0)}`;
+
+const fliege=`<path d="M0,-46 l-9,-5 v10 Z M0,-46 l9,-5 v10 Z" fill="${RED}"/><circle cx="0" cy="-46" r="2.500" fill="#b52f29"/>`;
+S.service=`${room('#ece6ff','#d6ccf5')}
+ ${at(150,186,1,P.table(76))}<path d="M112,130 h76 v12 l-9.500,7 -9.500,-7 -9.500,7 -9.500,-7 -9.500,7 -9.500,-7 -9.500,7 -9.500,-7 Z" fill="#fff"/>
+ <g class="ring"><path d="M150,118 a12,12 0 0 1 24,0 Z" fill="${SUN}" transform="translate(-12,10)"/><rect x="136" y="128" width="28" height="4" rx="2" fill="#e0a83a"/></g>
+ ${sh(60,192,32)}${at(60,190,.92,cat({eyes:'happy',mid:fliege,armL:-110,armR:-30,armsFront:true}))}
+ <g class="float"><ellipse cx="34" cy="100" rx="30" ry="6" fill="#dfe6f2" stroke="#9aa8c0" stroke-width="1.600"/><path d="M14,98 a20,18 0 0 1 40,0 Z" fill="#cfd8e6"/><circle cx="34" cy="78" r="4" fill="#9aa8c0"/></g>`;
+
+S.around=`${park(176)}${cloud(30,24,.7)}
+ ${at(100,150,1,P.house())}
+ <ellipse cx="100" cy="140" rx="84" ry="46" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 9" class="glow"/>
+ <g class="spin" style="animation-duration:5s;transform-box:view-box;transform-origin:100px 140px"><g transform="translate(100,196) scale(.42)">${cat({feet:'run',eyes:'happy',mouth:'open'})}</g></g>`;
+
+S.important=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,36)}
+ ${at(100,186,.98,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}
+ <g class="float"><rect x="64" y="20" width="72" height="48" rx="5" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M64,20 l36,28 36,-28" fill="none" stroke="#cbc2e6" stroke-width="2"/><circle cx="100" cy="52" r="11" fill="${RED}"/>${star5(100,52,6,'#fff')}</g>
+ <g class="beat"><path d="M164,30 v26" stroke="${RED}" stroke-width="9" stroke-linecap="round"/><circle cx="164" cy="72" r="6" fill="${RED}"/></g>
+ <g class="beat"><path d="M36,30 v26" stroke="${RED}" stroke-width="9" stroke-linecap="round"/><circle cx="36" cy="72" r="6" fill="${RED}"/></g>`;
+
+const bart=`<path d="M-12,-60 q6,-5 12,0 q6,-5 12,0 q-2,7 -12,3 q-10,4 -12,-3 Z" fill="#6a6f8c"/>`;
+S.father=`${bg('#e3fbf5')}<circle cx="100" cy="104" r="84" fill="#f0fdf8"/>${floor(186,'#bff0de')}${sh(100,192,44)}
+ ${at(100,190,1.08,K('grey',{eyes:'happy',mid:tie,hat:bart,armL:140,armR:-140,armsFront:true}))}
+ ${at(100,82,.5,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true,tail:false}),'hop')}
+ ${heart(40,60,1,RED,0)}${heart(164,70,.8,RED,.8)}`;
+
+S.away=`${park()}${cloud(40,30,.8)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g class="road"><path d="M100,150 h50" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>${arrow(150,150,172,150,RED,5)}
+ <circle class="puff" cx="126" cy="176" r="6" fill="#fff"/><circle class="puff" style="animation-delay:.8s" cx="116" cy="172" r="5" fill="#fff"/>
+ <g transform="translate(166,186) scale(-.44,.44)"><g class="runbob">${P.dog()}</g></g>
+ ${sh(50,192,30)}${at(50,190,.88,cat({mouth:'wavy',armR:-125,armRcls:'wave',armsFront:true}))}`;
+
+S.until=`${bg('#cdeeff')}<path d="M110,0 h90 v200 h-90 Z" fill="#2d2a6e"/><path d="M110,0 q-24,100 0,200" fill="#2d2a6e"/>
+ <g transform="translate(40,34) scale(.9)">${sun(0,0,12)}</g><circle cx="166" cy="36" r="14" fill="#ffe89a"/><circle cx="172" cy="32" r="12" fill="#2d2a6e"/>${spark(140,60,4,'#ffe89a',0)}${spark(184,80,3.500,'#ffe89a',.7)}
+ <rect x="16" y="84" width="168" height="10" rx="5" fill="#fff" opacity=".5"/><rect class="grow" x="16" y="84" width="104" height="10" rx="5" fill="${RED}"/><path d="M120,76 v26" stroke="${RED}" stroke-width="6" stroke-linecap="round"/>
+ ${floor(180,'#8fe0a8')}<path d="M110,180 h90 v20 h-90 Z" fill="#373278"/>
+ ${at(56,190,.76,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(86,190)"><g class="roll" style="animation-duration:1.4s">${P.ball(RED)}</g></g>`;
+
+const blitz=(x,y,s,c)=>`<path transform="translate(${x},${y}) scale(${s})" d="M4,-20 l-14,22 h9 l-4,18 16,-24 h-9 Z" fill="${c}"/>`;
+S.power=`${bg('#fff3cf')}<circle cx="100" cy="104" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,38)}
+ <g class="beat">${blitz(36,60,1.6,SUN)}</g><g class="beat" style="animation-delay:.3s">${blitz(164,56,1.6,SUN)}</g>
+ <rect x="150" y="120" width="34" height="56" rx="6" fill="#fff" stroke="${INK}" stroke-width="3"/><rect x="160" y="114" width="14" height="8" rx="2" fill="${INK}"/><rect class="glow" x="155" y="126" width="24" height="44" rx="3" fill="${MINT}"/>
+ ${at(92,186,1.04,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true,mid:blitz(0,-28,.7,SUN)}),'pulse')}`;
+
+S.hour=`${bg('#e3fbf5')}<circle cx="110" cy="92" r="80" fill="#f0fdf8"/>
+ <g transform="translate(110,92)"><circle r="64" fill="#fff" stroke="${INK}" stroke-width="7"/><path d="M0,0 L0,-56 A56,56 0 0 1 28,-48.500 Z" fill="${RED}" opacity=".5"/>${[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<path transform="rotate(${a})" d="M0,-58 v8" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`).join('')}<path d="M0,0 L0,-40" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><g class="spin" style="animation-duration:8s;transform-box:view-box;transform-origin:0 0"><path d="M0,0 v-50" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g><circle r="5" fill="${INK}"/></g>
+ ${floor(186,'#bff0de')}
+ <g transform="translate(28,180)"><path d="M-12,-40 h24 l-10,20 10,20 h-24 l10,-20 Z" fill="#bfe9ff" stroke="${INK}" stroke-width="2.500" stroke-linejoin="round"/><path d="M-6,-2 h12 l-6,-12 Z" fill="${SUN}"/><path class="drip" style="animation-duration:.8s" d="M0,-20 v6" stroke="${SUN}" stroke-width="2"/></g>
+ ${at(170,194,.5,cat({eyes:'happy',armR:-150,armsFront:true}))}`;
+
+S.game=`${room('#ece6ff','#d6ccf5')}
+ <rect x="50" y="16" width="130" height="88" rx="10" fill="${INK}"/><rect x="58" y="24" width="114" height="72" rx="6" fill="#2d2a6e"/>
+ <rect x="66" y="46" width="6" height="26" rx="2" fill="#fff" class="float"/><rect x="158" y="40" width="6" height="26" rx="2" fill="#fff" class="hop"/><g transform="translate(80,56)"><circle class="roll" style="animation-duration:1s" r="4" fill="${SUN}"/></g><path d="M115,28 v64" stroke="#55508a" stroke-width="2" stroke-dasharray="4 6"/>
+ ${sh(70,192,32)}${at(70,190,.9,cat({eyes:'happy',mouth:'tongue',armL:-34,armR:34,armsFront:true,mid:`<g transform="translate(0,-18)"><rect x="-20" y="-9" width="40" height="18" rx="9" fill="#9aa8c0"/><circle cx="10" cy="-2" r="3" fill="${RED}"/><circle cx="14" cy="3" r="3" fill="${MINT}"/><path d="M-12,0 h8 M-8,-4 v8" stroke="${INK}" stroke-width="2.500"/></g>`}))}
+ <g class="hop"><rect x="148" y="150" width="30" height="30" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><circle cx="156" cy="158" r="3" fill="${INK}"/><circle cx="170" cy="172" r="3" fill="${INK}"/><circle cx="163" cy="165" r="3" fill="${INK}"/></g>`;
+
+S.often=`${bg('#ece6ff')}
+ <rect x="10" y="20" width="180" height="62" rx="10" fill="#fff"/><rect x="10" y="20" width="180" height="16" rx="8" fill="${RED}"/>
+ ${[0,1,2,3,4,5,6].map(i=>`<rect x="${16+i*25.200}" y="42" width="21" height="34" rx="5" fill="#f4f1fb"/>${[0,1,3,4,6].includes(i)?`<g class="twinkle" style="animation-delay:${i*.2}s">${check(26.500+i*25.200,60,6,3.500)}</g>`:''}`).join('')}
+ ${floor(184,'#d6ccf5')}${sh(100,190,36)}
+ ${at(100,188,.94,cat({armL:8,armR:-8,headCls:'tilt',mid:openBook,hat:glasses}))}`;
+
+S.yet=`${bg('#3b3880')}<rect x="130" y="16" width="56" height="48" rx="6" fill="#2d2a6e" stroke="#55508a" stroke-width="4"/><circle cx="164" cy="34" r="9" fill="#ffe89a"/>${floor(172,'#2d2a6e')}
+ <g opacity=".8"><g transform="translate(150,186) scale(1.1)">${P.bed}</g></g>
+ <g class="beat"><circle cx="150" cy="110" r="16" fill="#fff"/>${cross(150,110,7,5)}</g>
+ <g class="ring">${at(100,60,.5,P.clock(28,330))}</g>
+ ${at(52,190,.84,cat(Object.assign({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'},NL)))}<g transform="translate(86,190)"><g class="roll" style="animation-duration:1.2s">${P.ball(RED)}</g></g>`;
+
+S.line=`${bg('#fff1c9')}${floor(150,'#c98a4b')}<rect y="150" width="200" height="8" fill="#e0a868"/>
+ <rect x="20" y="40" width="160" height="90" rx="6" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ <path class="draw" style="stroke-dasharray:140;animation-name:drawL" d="M34,86 h132" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/>
+ <style>@keyframes drawL{from{stroke-dashoffset:140}to{stroke-dashoffset:0}}</style>
+ <rect x="34" y="96" width="132" height="14" rx="3" fill="${SUN}"/>${[40,56,72,88,104,120,136,152].map((x,i)=>`<path d="M${x},96 v${i%2?5:8}" stroke="${INK}" stroke-width="1.600"/>`).join('')}
+ <path d="M34,60 h132" stroke="${VIO}" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/>
+ ${at(100,198,.6,cat({mouth:'tongue',armR:-150,armRcls:'bob',armsFront:true}))}`;
+
+const pult=(x,c)=>`<path d="M${x-22},186 l4,-46 h36 l4,46 Z" fill="#b07a45"/><rect x="${x-24}" y="132" width="48" height="10" rx="3" fill="#8a5a30"/><circle cx="${x}" cy="162" r="9" fill="${c}"/>${star5(x,162,5,'#fff')}`;
+S.political=`${bg('#ece6ff')}${floor(186,'#d6ccf5')}
+ <path d="M0,20 q100,30 200,0" fill="none" stroke="#b07a45" stroke-width="2"/>${[[30,28,SKY],[70,36,ORA],[100,38,SKY],[130,36,ORA],[170,28,SKY]].map(([x,y,c])=>`<path d="M${x-8},${y-4} h16 l-8,16 Z" fill="${c}"/>`).join('')}
+ ${at(50,150,.62,cat({mouth:'open',armR:-125,armRcls:'bob',armsFront:true,tail:false}))}${pult(50,SKY)}
+ ${at(150,150,.62,K('orange',{mouth:'open',armL:125,armLcls:'bob',armsFront:true,tail:false}))}${pult(150,ORA)}
+ <rect x="84" y="150" width="32" height="34" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="92" y="150" width="16" height="4" fill="${INK}"/><g class="drip" style="animation-duration:1.6s"><rect x="94" y="124" width="12" height="16" rx="2" fill="#fff" stroke="#cbc2e6" stroke-width="1.500"/></g>
+ ${speech(50,60,40,26,dots(50,60,SKY),50,84)}`;
+/* Tag 55–58: end, among, ever, stand, bad · lose, however, member, pay, law · meet, city, almost, include, continue · set, later, community, name, once */
+S.end=`${park(160)}${floor(168,'#e0875a')}<path d="M0,180 h200" stroke="#fff" stroke-width="2" opacity=".7"/>
+ <path d="M60,168 v-100 M150,168 v-100" stroke="#9aa8c0" stroke-width="5" stroke-linecap="round"/><rect x="56" y="56" width="98" height="26" rx="5" fill="${RED}"/>${T(105,76,'END',20,'#fff')}
+ <path class="flower" d="M60,130 q45,10 90,0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+ ${[[20,RED,0],[100,SUN,.9],[180,VIO,1.3],[60,SKY,.4],[140,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.5" fill="${c}"/>`).join('')}
+ <g transform="translate(104,192) rotate(8) scale(-.8,.8)"><g class="runbob">${cat({armL:140,armR:-140,armsFront:true,feet:'run',eyes:'happy',mouth:'big'})}</g></g>`;
+
+S.among=`${bg('#ffe9d6')}${floor(186,'#ffd9bd')}
+ ${at(30,170,.46,K('orange',{eyes:'happy'}))}${at(70,164,.46,K('grey',{eyes:'happy'}))}${at(130,164,.46,K('white',{eyes:'happy'}))}${at(170,170,.46,K('cream',{eyes:'happy'}))}
+ ${at(44,194,.5,K('white',{eyes:'happy',mouth:'open'}))}${at(156,194,.5,K('orange',{eyes:'happy',mouth:'open'}))}
+ ${at(100,192,.62,cat({eyes:'happy',mouth:'open',armL:125,armR:-125,armsFront:true}),'hop')}${ring(100,160,40,RED)}
+ ${heart(100,70,1.1,RED,0)}`;
+
+S.ever=`${bg('#fff3cf')}${burst(30,36,RED,0)}${burst(170,30,VIO,.5)}${burst(100,20,SKY,1)}${burst(176,110,MINT,1.4)}
+ ${floor(184,'#ffe08a')}
+ <rect x="110" y="136" width="70" height="48" rx="8" fill="#fff8e6"/><rect x="110" y="136" width="70" height="14" rx="7" fill="${RED}"/><path d="M118,150 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0" fill="${RED}"/>
+ <rect x="143" y="116" width="4" height="20" fill="${SKY}"/><path class="beat" d="M145,104 q-5,7 0,12 q5,-5 0,-12 Z" fill="${ORA}"/>
+ ${sh(58,190,32)}${at(58,188,.92,cat({eyes:'spark',mouth:'big',armL:130,armR:-130,armsFront:true,bow:false,hat:crown}),'hop')}`;
+
+S.stand=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="70" y="150" width="64" height="12" rx="6" fill="#c98a4b"/><rect x="76" y="162" width="9" height="24" fill="#8a5a30"/><rect x="119" y="162" width="9" height="24" fill="#8a5a30"/>
+ ${at(102,152,1,cat({eyes:'happy',armL:10,armR:-10}))}
+ <path d="M168,160 V40 M168,40 l-7,11 M168,40 l7,11" fill="none" stroke="${RED}" stroke-width="6" stroke-linecap="round" class="float"/>
+ <g opacity=".3">${at(34,190,.5,cat({tail:false,eyes:'closed'}))}</g>`;
+
+S.bad=`${bg('#e9efe0')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <g transform="translate(140,176)">${P.plate(36)}</g><g transform="translate(140,162) scale(2.4)"><path d="M-9,0 l-8,-6 v12 Z" fill="#7a9a5a"/><ellipse cx="0" cy="0" rx="10" ry="6.500" fill="#9bb86a"/><path d="M3,-3 l4,4 M7,-3 l-4,4" stroke="${INK}" stroke-width="1.200"/></g>
+ <path class="heatw" d="M124,130 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="#7a9a5a" stroke-width="4" stroke-linecap="round"/><path class="heatw" style="animation-delay:.6s" d="M152,126 q6,-8 0,-16 q-6,-8 0,-16" fill="none" stroke="#7a9a5a" stroke-width="4" stroke-linecap="round"/>
+ <g class="flutter"><circle cx="170" cy="110" r="2.500" fill="${INK}"/></g><g class="flutter" style="animation-delay:-2s"><circle cx="112" cy="120" r="2.500" fill="${INK}"/></g>
+ ${at(50,196,.86,cat({eyes:'closed',mouth:'wavy',armR:-150,armsFront:true,tail:false,headCls:'shiver'}))}
+ <g class="beat"><circle cx="40" cy="40" r="20" fill="#fff"/>${cross(40,40,9,6)}</g>`;
+
+S.lose=`${bg('#e6f1ff')}${floor(184,'#cfe3f7')}
+ <rect x="60" y="14" width="80" height="40" rx="6" fill="${INK}"/>${T(82,44,'0',26,'#fff')}${T(100,43,':',24,'#9aa8c0')}${T(118,44,'3',26,SUN)}
+ ${at(146,188,.7,K('orange',{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}<g transform="translate(146,74) scale(.5)"><path d="M-28,0 h56 v24 q0,30 -28,30 q-28,0 -28,-30 Z" fill="${SUN}"/><rect x="-6" y="52" width="12" height="20" fill="#e0a83a"/><rect x="-22" y="70" width="44" height="12" rx="4" fill="#e0a83a"/></g>
+ ${sh(56,190,30)}${at(56,188,.9,cat({eyes:'closed',mouth:'wavy',armL:8,armR:-8,headCls:'tilt'}))}
+ <path class="sweat" d="${tear(34,104)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.6s" d="${tear(80,108)}" fill="${SKY}"/>`;
+
+S.however=`${bg('#ffe2a8')}${sun(40,40,20)}${thermo(180,40,62,RED)}
+ <path d="M0,172 q50,-16 100,0 t100,0 v28 h-200 Z" fill="#f6c27a"/>
+ <g class="road"><path d="M-40,190 h320" stroke="#e4a85a" stroke-width="4" stroke-dasharray="14 26" stroke-linecap="round"/></g>
+ <circle class="puff" cx="50" cy="178" r="7" fill="#fff"/>
+ <g transform="translate(104,184) rotate(9) scale(-.96,.96)"><g class="runbob">${cat({armL:0,armR:0,armLcls:'swingA',armRcls:'swingB',feet:'run',eyes:'happy',mouth:'open'})}</g></g>
+ <path class="sweat" d="${tear(146,80)}" fill="${SKY}"/><path class="sweat" style="animation-delay:.5s" d="${tear(70,96)}" fill="${SKY}"/>`;
+
+const clubhut=(c)=>`<path d="M-22,-100 q22,-34 44,0 Z" fill="${c}"/><circle cx="0" cy="-122" r="5" fill="#fff"/>`;
+S.member=`${bg('#e3fbf5')}${floor(186,'#bff0de')}
+ <rect x="50" y="10" width="100" height="26" rx="8" fill="${SKY}"/>${T(100,29,'CLUB',16,'#fff')}
+ ${at(150,190,.56,K('orange',{eyes:'happy',hat:clubhut(SKY)}))}${at(184,192,.46,K('grey',{eyes:'happy',hat:clubhut(SKY)}))}
+ <g class="givemove" style="animation-direction:alternate-reverse"><rect x="80" y="100" width="40" height="26" rx="4" fill="#fff" stroke="${SKY}" stroke-width="3"/><circle cx="92" cy="113" r="6" fill="${CB}"/><path d="M102,108 h12 M102,116 h8" stroke="#cbc2e6" stroke-width="2.500" stroke-linecap="round"/></g>
+ ${sh(56,192,32)}${at(56,190,.92,cat({eyes:'spark',mouth:'open',armR:-96,armsFront:true}))}
+ ${spark(110,70,7,SUN,0)}`;
+
+S.pay=`${room('#fff1c9','#e4b77a')}
+ ${at(150,150,.6,K('orange',{eyes:'happy',mouth:'open',tail:false}))}
+ <rect x="100" y="136" width="100" height="50" fill="#c98a4b"/><rect x="96" y="128" width="104" height="10" rx="4" fill="#8a5a30"/>
+ <rect x="150" y="96" width="40" height="32" rx="4" fill="#9aa8c0"/><rect x="156" y="102" width="28" height="10" rx="2" fill="#bfe9ff"/><rect x="146" y="124" width="48" height="8" rx="3" fill="#7a8aa6"/>
+ <g class="givemove">${coin(96,116,8)}</g>
+ ${sh(52,192,32)}${at(52,190,.9,cat({eyes:'happy',armR:-96,armsFront:true}))}
+ <g transform="translate(120,128) scale(1.2)">${P.fish}</g>`;
+
+S.law=`${bg('#ece6ff')}<circle cx="100" cy="90" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}
+ <path d="M100,30 v96" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/><rect x="76" y="124" width="48" height="10" rx="4" fill="#8a5a30"/>
+ <g class="sway" style="transform-origin:100px 40px"><path d="M40,40 h120" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><path d="M40,40 l-14,34 h28 Z M160,40 l-14,34 h28 Z" fill="none" stroke="#b07a45" stroke-width="2"/><path d="M24,74 a16,10 0 0 0 32,0 Z" fill="${SUN}"/><path d="M144,74 a16,10 0 0 0 32,0 Z" fill="${SUN}"/></g>
+ <circle cx="100" cy="28" r="7" fill="${SUN}"/>
+ <g transform="translate(150,180)"><rect x="-22" y="-28" width="44" height="28" rx="3" fill="${RED}"/><rect x="-22" y="-28" width="8" height="28" fill="#b52f29"/>${T(4,-8,'§',18,'#fff')}</g>
+ ${at(44,194,.7,cat({eyes:'happy',hat:glasses,armR:-110,armsFront:true,prop:`<g class="wave"><path d="M0,2 v-22" stroke="#8a5a30" stroke-width="4" stroke-linecap="round"/><rect x="-10" y="-30" width="20" height="10" rx="3" fill="#b07a45"/></g>`}))}`;
+
+S.meet=`${park()}${cloud(100,24,.7)}
+ <path d="M0,200 Q60,170 100,186 Q140,170 200,200" fill="none" stroke="#f3d9a4" stroke-width="14"/>
+ ${sh(62,190,30)}${at(62,188,.88,cat({eyes:'happy',mouth:'open',armR:-80}))}
+ ${sh(140,190,30)}${flipAt(140,188,.88,K('orange',{eyes:'happy',mouth:'open',armR:-80}))}
+ <g class="beat"><ellipse cx="101" cy="150" rx="12" ry="9" fill="${SUN}"/></g>${spark(101,120,8,SUN,0)}${spark(86,104,5,RED,.4)}${spark(118,104,5,RED,.8)}`;
+
+S.city=`${bg('#cdeeff')}${cloud(40,26,.7)}${sun(170,28,10)}
+ ${[[10,70,34,SKY],[48,40,30,'#b9c4d8'],[82,84,36,ORA],[122,52,32,'#9aa8c0'],[158,74,36,VIO]].map(([x,y,w,c])=>`<rect x="${x}" y="${y}" width="${w}" height="${166-y}" rx="3" fill="${c}"/>${[0,1,2,3].map(r=>y+10+r*20<150?`<rect x="${x+6}" y="${y+10+r*20}" width="8" height="10" fill="#fff6c8"/><rect x="${x+w-14}" y="${y+10+r*20}" width="8" height="10" fill="#fff" opacity=".7"/>`:'').join('')}`).join('')}
+ ${floor(166,'#6b7a99')}<g class="road"><path d="M-40,184 h320" stroke="#fff" stroke-width="4" stroke-dasharray="18 22"/></g>
+ <g class="scroll" style="animation-duration:5s"><g transform="translate(230,180) scale(.5)">${P.car(RED)}</g></g>
+ ${at(36,196,.5,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+S.almost=`${bg('#d6f1ff')}${floor(176,'#9fd4f0')}
+ <path d="M70,60 h60 l-6,116 h-48 Z" fill="#f3fbff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M72.500,78 q6,-4 12,0 t12,0 t12,0 t12,0 t7,0 l-5,95 h-45 Z" fill="#5cc3ff" opacity=".9"/>
+ <path d="M134,60 h20 M134,78 h20" stroke="${RED}" stroke-width="3" stroke-linecap="round"/><path d="M146,62 v14" stroke="${RED}" stroke-width="3" class="glow"/>
+ <path class="drip" d="${tear(100,14)}" fill="${SKY}"/>
+ ${at(34,194,.66,cat({eyes:'wide',mouth:'o',armR:-110,armsFront:true}))}`;
+
+S.include=`${bg('#fff1c9')}${floor(184,'#ffe08a')}
+ <rect x="50" y="76" width="130" height="96" rx="12" fill="${SKY}"/><rect x="58" y="84" width="114" height="80" rx="8" fill="#fff"/><path d="M115,84 v80 M58,124 h57" stroke="${SKY}" stroke-width="3"/>
+ <g transform="translate(86,108) scale(1.6)">${P.fish}</g><circle cx="86" cy="146" r="11" fill="${RED}"/><g transform="translate(144,150) scale(1.1)">${P.cup(MINT)}</g>
+ <rect x="46" y="72" width="138" height="104" rx="14" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 7" class="glow"/>
+ <g class="hop"><g transform="translate(144,56)">${star5(0,0,10,SUN)}</g></g>${arrow(144,70,144,96,RED,4)}
+ ${at(26,194,.5,cat({eyes:'happy',armR:-100,armRcls:'bob'}))}`;
+
+S.continue=`${park()}${sun(30,28,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <path d="M60,186 v-50" stroke="#b07a45" stroke-width="4"/><rect x="48" y="118" width="24" height="24" rx="5" fill="#fff"/><rect x="54" y="124" width="4" height="12" fill="${INK}"/><rect x="62" y="124" width="4" height="12" fill="${INK}"/>
+ <g class="beat"><circle cx="150" cy="60" r="26" fill="${MINT}"/><path d="M140,48 l14,12 -14,12 Z M154,48 l14,12 -14,12 Z" fill="#fff"/></g>
+ <g class="road"><path d="M84,150 h90" stroke="${RED}" stroke-width="4" stroke-dasharray="8 12" stroke-linecap="round"/></g>
+ <g transform="translate(116,192) scale(-.7,.7)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`;
+
+S.set=`${room('#fff1c9','#e4b77a')}
+ ${at(110,186,1.3,P.table(130))}<path d="M26,112 h168 v10 h-168 Z" fill="#fff"/>
+ <g transform="translate(70,116)">${P.plate(22)}</g><g transform="translate(150,116)">${P.plate(22)}</g>
+ <path d="M44,116 v-12 M176,116 v-12" stroke="#b9c4d8" stroke-width="3" stroke-linecap="round"/>
+ <g class="hop"><g transform="translate(110,112) scale(.9)">${P.cup(RED)}</g></g>${arrow(110,50,110,76,RED,5)}
+ ${at(110,152,.5,cat({eyes:'happy',armL:150,armR:-150,armsFront:true,tail:false}))}`;
+
+S.later=`${bg('#ece6ff')}
+ ${panel(8,36,84,116)}${panel(108,36,84,116)}
+ ${at(50,140,.52,cat({armL:40,armR:-140,armRcls:'munch',armsFront:true,mouth:'open',mouthCls:'chew',prop:P.fish,tail:false}))}
+ <g opacity=".55">${at(146,140,.52,cat({armR:-72,eyes:'happy'}))}<g transform="translate(168,140) scale(.7)">${P.ball(RED)}</g></g>
+ <rect x="106" y="34" width="88" height="120" rx="14" fill="none" stroke="${RED}" stroke-width="4" class="glow"/>
+ <g class="ring">${at(100,196,.5,P.clock(28,60))}</g>${arcArrow(70,170,130,170,-16,RED,5)}`;
+
+S.community=`${park(150)}${sun(30,26,10)}
+ <g transform="translate(40,124) scale(.5)">${P.house()}</g><g transform="translate(100,112) scale(.5)">${P.house(SKY)}</g><g transform="translate(160,124) scale(.5)">${P.house(VIO,'#ffe2b8')}</g>
+ <ellipse cx="100" cy="168" rx="80" ry="24" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8"/>
+ ${at(44,186,.4,K('orange',{eyes:'happy',armL:70,armR:-70}))}${at(82,194,.44,cat({eyes:'happy',armL:70,armR:-70}))}${at(120,194,.44,K('white',{eyes:'happy',armL:70,armR:-70}))}${at(158,186,.4,K('grey',{eyes:'happy',armL:70,armR:-70}))}
+ ${heartS(100,150,1.3,RED,'beat')}`;
+
+S.name=`${bg('#e3fbf5')}
+ <g class="sway" style="transform-origin:100px 20px"><rect x="30" y="24" width="140" height="80" rx="10" fill="${RED}"/><rect x="38" y="54" width="124" height="42" rx="6" fill="#fff"/>${T(100,46,'HELLO',16,'#fff')}${T(100,86,'Canela',28,INK)}</g>
+ ${floor(184,'#bff0de')}${sh(100,192,32)}${at(100,190,.76,cat({eyes:'happy',mouth:'open',armL:150,armR:-150,armsFront:true}))}`;
+
+S.once=`${park(170)}${cloud(40,26,.7)}
+ <g class="beat"><circle cx="160" cy="44" r="26" fill="#fff"/><path d="M160,28 v32" stroke="${RED}" stroke-width="8" stroke-linecap="round"/></g>
+ ${sh(46,192,28)}${at(46,190,.86,cat({armL:30,armR:-120,armRcls:'throwarm',armsFront:true,eyes:'happy',mouth:'open'}))}
+ <g transform="translate(74,116)"><g class="throwball"><g transform="scale(.9)">${P.ball(RED)}</g></g></g>
+ <path d="M76,112 q54,-70 106,0" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>`;
+/* Tag 59–62: white, least, president, learn, real · change, team, minute, best, several · idea, kid, body, information, nothing · ago, lead, social, understand, whether */
+S.white=`${bg('#dff1ff')}<path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#fff"/>${cloud(40,40,1)}${cloud(160,60,.8)}
+ ${[[30,0,3],[80,1.5,2.4],[130,.7,3],[176,2.2,2.4]].map(([x,d,r])=>`<circle class="snow" style="animation-delay:-${d}s" cx="${x}" cy="0" r="${r}" fill="#fff"/>`).join('')}
+ <rect x="150" y="130" width="26" height="44" rx="5" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="154" y="122" width="18" height="10" rx="3" fill="${SKY}"/>
+ ${sh(92,190,38)}${at(92,188,1.02,K('white',{eyes:'happy',mouth:'open',armR:-125,armRcls:'wave',armsFront:true}))}${ring(92,128,70,RED)}
+ ${at(26,194,.4,cat({eyes:'happy'}))}`;
+
+S.least=`${bg('#fff1c9')}${floor(150,MINT)}<rect y="150" width="200" height="8" fill="#9be6d8"/>
+ ${[[36,'orange',4],[100,'grey',3],[164,null,1]].map(([x,n,k])=>`${n?at(x,140,.5,K(n,{eyes:'happy',tail:false})):at(x,140,.52,cat({mouth:'wavy',tail:false}))}<g transform="translate(${x},182)">${P.plate(26)}</g>${Array.from({length:k},(_,i)=>fishAt(x-12+i%2*20,174-Math.floor(i/2)*9,1,i*20-10)).join('')}`).join('')}
+ ${ring(164,176,30,RED)}${arrow(164,40,164,76,RED,6,'float')}`;
+
+S.president=`${bg('#ece6ff')}
+ <path d="M40,150 V30" stroke="#b07a45" stroke-width="4"/><g class="flower" style="transform-origin:40px 50px"><rect x="42" y="32" width="14" height="30" fill="#1f9c5a"/><rect x="56" y="32" width="14" height="30" fill="#fff"/><ellipse cx="63" cy="47" rx="4" ry="5" fill="#b07a45"/><rect x="70" y="32" width="14" height="30" fill="${RED}"/></g>
+ ${at(110,160,.9,cat({eyes:'happy',mid:`${tie}<path d="M-22,-48 L20,-8" stroke="${SUN}" stroke-width="7"/>`,armR:-125,armRcls:'wave',armsFront:true,tail:false}))}
+ <path d="M60,186 l6,-50 h88 l6,50 Z" fill="#b07a45"/><rect x="58" y="128" width="104" height="12" rx="4" fill="#8a5a30"/><circle cx="110" cy="162" r="13" fill="${SUN}"/>${star5(110,162,7,'#fff')}
+ ${floor(186,'#d6ccf5')}<path d="M96,128 v-14" stroke="${INK}" stroke-width="3"/><circle cx="96" cy="112" r="4" fill="${INK}"/>`;
+
+const doktorhut=`<path d="M-30,-104 L0,-116 L30,-104 L0,-92 Z" fill="${INK}"/><rect x="-16" y="-102" width="32" height="8" fill="${INK}"/><path d="M26,-104 v16" stroke="${SUN}" stroke-width="2.500"/><circle cx="26" cy="-86" r="3" fill="${SUN}"/>`;
+S.learn=`${bg('#fff1c9')}<circle cx="100" cy="104" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,36)}
+ ${letter(30,90,'A',RED,0)}${letter(160,84,'B',SKY,.7)}${letter(44,50,'C',MINT,1.4)}${letter(150,40,'1',VIO,2)}
+ ${at(100,186,1,cat({bow:false,hat:doktorhut,eyes:'happy',armL:8,armR:-8,mid:openBook}))}
+ ${spark(100,30,8,SUN,0)}`;
+
+S.real=`${bg('#e3fbf5')}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#e0a868"/>
+ <rect x="14" y="40" width="74" height="60" rx="4" fill="#fff" stroke="#b07a45" stroke-width="5"/><g opacity=".6" transform="translate(52,70) scale(2.2)"><path d="M-9,0 l-8,-6 v12 Z M0,-6.500 a10,6.500 0 1 0 .01,0" fill="none" stroke="${INK}" stroke-width=".8" stroke-dasharray="2 1.500"/></g>${cross(52,24,7,4)}
+ <g transform="translate(144,166)">${P.plate(40)}</g><g transform="translate(144,152)"><g class="wiggle"><g transform="scale(3)">${P.fish}</g></g></g>${check(144,100,12,6)}${ring(144,150,40,RED)}
+ ${at(62,196,.6,cat({eyes:'spark',mouth:'tongue',armR:-100,armRcls:'bob',tail:false}))}`;
+
+const hutK=(c)=>`<path d="M-26,-98 q0,-30 26,-30 q26,0 26,30 Z" fill="${c}"/><rect x="-32" y="-102" width="64" height="8" rx="4" fill="${c}"/>`;
+S.change=`${bg('#ece6ff')}<circle cx="100" cy="104" r="80" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(100,190,36)}
+ ${at(100,186,1,cat({bow:false,eyes:'happy',mouth:'open',hat:`<g class="glow">${hutK(RED)}</g><g class="glow" style="animation-delay:1.4s">${hutK(SKY)}</g>`}))}
+ <g class="spin" style="animation-duration:6s"><circle cx="100" cy="60" r="70" fill="none"/><path d="M44,40 q20,-30 56,-30" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,10 l-10,-7 M100,10 l-9,8" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M156,80 q-20,30 -56,30" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/><path d="M100,110 l10,7 M100,110 l9,-8" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/></g>`;
+
+const trikot=(c)=>`<path d="M-22,-46 h44 v34 h-44 Z" fill="${c}" opacity=".95"/>${star5(0,-28,6,'#fff')}`;
+S.team=`${park(172)}${cloud(40,24,.7)}
+ ${at(52,188,.66,K('orange',{eyes:'happy',mid:trikot(SKY),armR:-70}))}${at(148,188,.66,K('grey',{eyes:'happy',mid:trikot(SKY),armL:70}))}
+ ${at(100,192,.74,cat({eyes:'happy',mouth:'open',mid:trikot(SKY),armL:70,armR:-70}))}
+ <g class="beat"><circle cx="100" cy="128" r="10" fill="${SUN}"/></g>
+ <g transform="translate(100,60)"><g class="jump">${P.ball('#fff',INK)}</g></g>${spark(60,60,6,SUN,0)}${spark(140,60,6,SUN,.5)}`;
+
+S.minute=`${bg('#e3fbf5')}<circle cx="110" cy="100" r="78" fill="#f0fdf8"/>
+ <g transform="translate(110,104)"><rect x="-8" y="-84" width="16" height="14" rx="3" fill="${INK}"/><circle r="64" fill="#fff" stroke="${INK}" stroke-width="7"/>${Array.from({length:12},(_,i)=>`<path transform="rotate(${i*30})" d="M0,-56 v7" stroke="${INK}" stroke-width="2.500" stroke-linecap="round"/>`).join('')}<path d="M0,0 L0,-56 A56,56 0 0 1 5.900,-55.700 Z" fill="${RED}"/><g class="spin" style="animation-duration:4s;transform-box:view-box;transform-origin:0 0"><path d="M0,0 v-50" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g><circle r="5" fill="${INK}"/></g>
+ ${floor(186,'#bff0de')}${at(30,194,.56,cat({eyes:'wide',armR:-110,armsFront:true}))}`;
+
+S.best=`${bg('#fff3cf')}<circle cx="100" cy="100" r="82" fill="#ffe7a3"/>
+ <g class="twinkle">${star5(40,40,12,SUN)}</g><g class="twinkle" style="animation-delay:.4s">${star5(160,40,12,SUN)}</g><g class="twinkle" style="animation-delay:.8s">${star5(100,22,14,SUN)}</g>
+ ${floor(184,'#ffe08a')}${sh(100,190,38)}
+ ${at(100,186,1.04,cat({bow:false,eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true,hat:`<path d="M-24,-100 l6,-24 10,14 8,-20 8,20 10,-14 6,24 Z" fill="${SUN}" stroke="#e0a83a" stroke-width="2" stroke-linejoin="round"/><circle cx="0" cy="-106" r="3" fill="${RED}"/>`,mid:`<circle cx="0" cy="-28" r="11" fill="${SKY}"/>${star5(0,-28,6,'#fff')}<path d="M-6,-18 l-4,16 10,-6 10,6 -4,-16" fill="${SKY}"/>`}))}`;
+
+S.several=`${bg('#cdeeff')}${cloud(30,150,.8)}${cloud(170,170,.7)}
+ ${[[50,60,RED,0],[84,40,SUN,.3],[118,56,SKY,.6],[150,38,VIO,.9],[100,84,MINT,1.2]].map(([x,y,c,d])=>`<g class="float" style="animation-delay:${d}s"><path d="M${x},${y+18} Q${x+4},${y+50} 104,140" fill="none" stroke="${INK}" stroke-width="1.200"/><ellipse cx="${x}" cy="${y}" rx="15" ry="19" fill="${c}"/><ellipse cx="${x-5}" cy="${y-7}" rx="3.500" ry="5" fill="#fff" opacity=".5"/></g>`).join('')}
+ <ellipse cx="100" cy="58" rx="78" ry="54" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8" class="glow"/>
+ ${at(100,196,.6,cat({eyes:'happy',mouth:'open',armR:-150,armsFront:true}))}`;
+
+S.idea=`${bg('#fff3cf')}${floor(184,'#ffe08a')}
+ ${think(134,54,48,32,`<g transform="translate(134,84) scale(1.1)">${P.bulb}</g>`,-1)}
+ <rect x="110" y="120" width="74" height="56" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M147,128 l12,22 h-24 Z M135,150 v16 M159,150 v16 M141,170 l6,-8 6,8" fill="none" stroke="${SKY}" stroke-width="2.500" stroke-linejoin="round" class="draw"/>
+ ${sh(56,190,32)}${at(56,188,.92,cat({eyes:'spark',mouth:'open',armR:-150,armsFront:true}))}`;
+
+const mütze=`<path d="M-26,-138 q0,-14 26,-14 q26,0 26,14 Z" fill="${RED}"/><rect x="-4" y="-142" width="44" height="7" rx="3" fill="#b52f29"/>`;
+S.kid=`${park()}${cloud(40,30,.8)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="14"/>
+ <g class="road" style="animation-direction:reverse"><g transform="translate(118,176)"><g class="walkbob"><g transform="translate(0,-8) scale(.74)">${P.person({shirt:MINT,stripe:'#1f9c83',hair:'#3a2a4a',happy:true,hat:mütze})}</g></g><rect x="-26" y="-8" width="52" height="6" rx="3" fill="${VIO}"/><circle cx="-16" cy="2" r="5" fill="${INK}"/><circle cx="16" cy="2" r="5" fill="${INK}"/></g></g>
+ <path d="M40,150 h26 M34,164 h20" stroke="#fff" stroke-width="3" stroke-linecap="round" class="glow"/>
+ ${at(30,196,.46,cat({eyes:'wide',mouth:'o',armL:125,armR:-125,armsFront:true}))}`;
+
+const lbl=(x1,y1,x2,y2)=>`<path d="M${x1},${y1} L${x2},${y2}" stroke="${RED}" stroke-width="2.500" stroke-linecap="round"/><circle cx="${x1}" cy="${y1}" r="4" fill="${RED}" class="beat"/><circle cx="${x2}" cy="${y2}" r="7" fill="#fff" stroke="${RED}" stroke-width="2.500"/>`;
+S.body=`${bg('#e3fbf5')}<rect x="52" y="26" width="96" height="164" rx="40" fill="#f0fdf8" stroke="${RED}" stroke-width="3" stroke-dasharray="8 8"/>${floor(190,'#bff0de')}
+ ${at(100,186,1.06,cat({eyes:'happy',armL:40,armR:-40}))}
+ ${lbl(100,70,176,40)}${lbl(72,140,22,120)}${lbl(100,154,178,150)}${lbl(88,184,26,178)}`;
+
+S.information=`${bg('#cdeeff')}${cloud(30,24,.7)}${hills('#8fe0a8','#6fd08f',170)}
+ <path d="M130,186 v-80" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/>
+ <g class="beat"><circle cx="130" cy="72" r="40" fill="${SKY}"/><circle cx="130" cy="52" r="6" fill="#fff"/><rect x="124" y="64" width="12" height="32" rx="5" fill="#fff"/></g>
+ ${sh(52,192,30)}${at(52,190,.86,cat({eyes:'happy',hat:glasses,armL:-30,armR:30,armsFront:true,mid:`<g transform="translate(0,-28)"><path d="M-22,-12 l14,4 16,-4 14,4 v22 l-14,-4 -16,4 -14,-4 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M-14,-2 h8 M-14,4 h8 M6,-2 h8" stroke="${SKY}" stroke-width="2"/></g>`}))}`;
+
+S.nothing=`${bg('#ece6ff')}<circle cx="110" cy="96" r="70" fill="#f6f2ff"/>${floor(184,'#d6ccf5')}${sh(120,190,54)}
+ ${at(120,128,1,P.boxBack(100))}<rect x="70" y="118" width="100" height="12" fill="#5a3a18"/>${at(120,128,1,P.boxFront(100,58))}
+ <g class="flutter"><circle cx="110" cy="96" r="2.500" fill="${INK}"/></g>
+ <g class="beat"><circle cx="150" cy="56" r="20" fill="#fff"/><circle cx="150" cy="56" r="11" fill="none" stroke="${RED}" stroke-width="4"/><path d="M142,64 l16,-16" stroke="${RED}" stroke-width="4"/></g>
+ ${at(34,192,.72,cat({mouth:'wavy',headCls:'tilt',armR:-80}))}`;
+
+S.ago=`${room('#fff1c9','#e4b77a')}
+ <rect x="96" y="20" width="86" height="96" rx="6" fill="#f3d9a4" stroke="#b07a45" stroke-width="6"/><g transform="translate(139,104) scale(.42)">${cat({eyes:'happy',mouth:'open',tail:false,extra:`<circle cx="0" cy="-58" r="7" fill="${SKY}"/>`})}</g>
+ <g class="glow"><path d="M70,50 q-30,-10 -40,20" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round"/><path d="M30,70 l-4,-14 M30,70 l13,-5" stroke="${RED}" stroke-width="5" stroke-linecap="round"/></g>
+ <g class="float"><rect x="20" y="86" width="30" height="34" rx="4" fill="#fff"/><rect x="20" y="86" width="30" height="9" rx="4" fill="${RED}"/></g>
+ ${sh(70,192,32)}${at(70,190,.9,cat({eyes:'happy',armR:-128,armsFront:true}))}`;
+
+S.lead=`${park()}${sun(30,28,10)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g transform="translate(150,192) scale(-.74,.74)"><g class="walkbob">${cat({armL:0,armLcls:'slowA',armR:-150,armsFront:true,feet:'walk',eyes:'happy',mouth:'open',prop:`<path d="M0,4 v-44" stroke="#b07a45" stroke-width="3"/><path class="flower" d="M0,-40 l22,8 -22,8 Z" fill="${RED}"/>`})}</g></g>
+ ${[[96,'orange',0],[60,'grey',.15],[26,'cream',.3]].map(([x,n,d])=>`<g transform="translate(${x},192) scale(-.42,.42)"><g class="walkbob" style="animation-delay:${d}s">${K(n,{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`).join('')}
+ ${arrow(150,60,188,60,RED,6,'glow')}`;
+
+S.social=`${bg('#ffe9d6')}${floor(184,'#ffd9bd')}
+ <ellipse cx="100" cy="176" rx="60" ry="12" fill="${RED}" opacity=".4"/>
+ ${at(40,190,.6,K('orange',{eyes:'happy',mouth:'open'}))}${at(160,190,.6,K('grey',{eyes:'happy',mouth:'open'}))}${at(100,194,.66,cat({eyes:'happy',mouth:'open',armL:70,armR:-70}))}
+ ${speech(40,60,44,30,`<path d="${heartP}" transform="translate(40,62) scale(.8)" fill="${RED}"/>`,40,90)}<g class="glow">${speech(160,54,44,30,dots(160,54,VIO),160,84)}</g><g class="glow" style="animation-delay:.7s">${speech(100,34,44,30,`<g transform="translate(100,36) scale(.6)">${star5(0,0,14,SUN)}</g>`,100,66)}</g>`;
+
+const puzzle=(x,y,c,cls)=>`<g class="${cls||''}"><path transform="translate(${x},${y})" d="M0,0 h14 q-4,-10 5,-10 q9,0 5,10 h14 v14 q10,-4 10,5 q0,9 -10,5 v14 h-38 Z" fill="${c}"/></g>`;
+S.understand=`${bg('#e3fbf5')}<circle cx="100" cy="90" r="78" fill="#f0fdf8"/>${floor(184,'#bff0de')}
+ ${puzzle(60,40,SKY)}<g transform="translate(40,0)">${puzzle(60,40,SUN,'givemove').replace('class="givemove"','class="givemove" style="animation-direction:alternate-reverse"')}</g>
+ <g class="beat">${check(160,40,12,6)}</g>${spark(40,36,7,SUN,0)}
+ ${sh(100,192,32)}${at(100,190,.78,cat({eyes:'happy',mouth:'big',armL:140,armR:-140,armsFront:true}))}`;
+
+S.whether=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <circle cx="50" cy="60" r="36" fill="#fff"/><circle cx="150" cy="60" r="36" fill="#fff"/>
+ <g transform="translate(50,60) scale(.9)">${sun(0,0,13)}</g>
+ <path d="M150,40 v40 M130,60 h40 M136,46 l28,28 M164,46 l-28,28" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/>
+ ${T(100,74,'?',44,RED,'middle','beat')}
+ ${sh(100,192,32)}${at(100,190,.86,cat({mouth:'wavy',headCls:'tilt',armL:70,armR:-70}))}`;
+/* Tag 63–66: watch, together, follow, parent, stop · face, anything, create, public, already · speak, others, level, allow, add · office, spend, health, person, art */
+S.watch=`${bg('#2d2a6e')}${floor(176,'#1f1b4d')}
+ <rect x="80" y="20" width="110" height="80" rx="10" fill="${INK}"/><rect x="88" y="28" width="94" height="64" rx="6" fill="#bfe9ff"/><g transform="translate(110,70)"><g class="roll" style="animation-duration:1.4s">${P.ball(RED)}</g></g><path d="M88,80 h94" stroke="#8fe0a8" stroke-width="10"/>
+ <circle class="glow" cx="135" cy="60" r="70" fill="#bfe9ff" opacity=".15"/>
+ <rect x="20" y="130" width="120" height="50" rx="14" fill="${VIO}"/><rect x="14" y="140" width="18" height="44" rx="8" fill="#7b55d9"/><rect x="128" y="140" width="18" height="44" rx="8" fill="#7b55d9"/>
+ ${at(80,172,.8,cat(Object.assign({eyes:'wide',mouth:'open',mouthCls:'chew',armR:-140,armRcls:'munch',armsFront:true,tail:false,armL:40,propL:`<g transform="translate(0,8)"><path d="M-12,-14 h24 l-4,18 h-16 Z" fill="${RED}"/><circle cx="-5" cy="-16" r="5" fill="#fff8e6"/><circle cx="4" cy="-18" r="5" fill="#fff8e6"/></g>`},NL)))}`;
+
+S.together=`${park(170)}${sun(30,28,10)}${cloud(150,30,.8)}
+ ${at(46,190,.7,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}
+ ${at(104,190,.7,K('orange',{eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}))}
+ ${at(160,190,.6,P.dog({happy:true}))}
+ <g transform="translate(76,60)"><g class="jump">${P.ball(RED)}</g></g>
+ <ellipse cx="100" cy="150" rx="94" ry="52" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="9 8"/>${heart(130,70,.9,RED,0)}`;
+
+S.follow=`${park()}${cloud(40,26,.7)}
+ <path d="M0,186 h200" stroke="#f3d9a4" stroke-width="16"/>
+ <g transform="translate(160,192) scale(-.7,.7)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>
+ ${[[104,'cream',.1],[68,'orange',.2],[32,'grey',.3]].map(([x,n,d])=>`<g transform="translate(${x},192) scale(-.4,.4)"><g class="walkbob" style="animation-delay:${d}s">${K(n,{armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>${arrow(x+12,140,x+26,140,RED,3,'glow')}`).join('')}`;
+
+S.parent=`${bg('#ffe9d6')}<circle cx="100" cy="100" r="84" fill="#ffdcc0"/>${floor(186,'#ffd9bd')}
+ ${at(46,188,.86,K('white',{eyes:'happy',hat:earflower,armR:-50}))}${at(154,188,.86,K('grey',{eyes:'happy',mid:tie,armL:50}))}
+ ${at(100,190,.56,cat({eyes:'happy',mouth:'open',armL:110,armR:-110,tail:false}),'hop')}
+ <path d="M24,80 q0,-14 14,-14 h124 q14,0 14,14" fill="none" stroke="${VIO}" stroke-width="5" stroke-linecap="round"/>${heart(100,50,1.1,RED,0)}`;
+
+S.stop=`${park(170)}${floor(176,'#6b7a99')}
+ <path d="M150,180 v-70" stroke="#9aa8c0" stroke-width="6" stroke-linecap="round"/>
+ <g class="beat"><polygon points="134,36 166,36 188,58 188,90 166,112 134,112 112,90 112,58" fill="${RED}" stroke="#fff" stroke-width="4"/>${T(150,84,'STOP',22,'#fff')}</g>
+ ${sh(54,192,32)}${at(54,190,.92,cat({mouth:'open',armR:-96,armsFront:true}))}
+ <ellipse cx="96" cy="140" rx="14" ry="16" fill="${CB}" stroke="${CO}" stroke-width="1.600"/><ellipse cx="96" cy="144" rx="6" ry="5" fill="#ff8a7a"/>`;
+
+S.face=`${bg('#ece6ff')}<circle cx="100" cy="100" r="88" fill="#f6f2ff"/>
+ <clipPath id="fc"><rect width="200" height="176"/></clipPath><g clip-path="url(#fc)">${at(100,254,1.9,cat({tail:false,eyes:'happy',headCls:'tilt'}))}</g>
+ <ellipse cx="100" cy="112" rx="84" ry="74" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${floor(176,'#d6ccf5')}${arrow(184,20,160,48,RED,6,'float')}`;
+
+S.anything=`${bg('#fff1c9')}
+ ${at(100,150,.96,cat({eyes:'spark',mouth:'big',armL:70,armR:-70,prop:knife,propL:fork,tail:false}))}
+ ${floor(136,MINT)}<rect y="136" width="200" height="8" fill="#9be6d8"/>
+ <g transform="translate(100,186)">${P.plate(90)}</g>
+ ${fishAt(50,170,1.6,-10)}<circle cx="80" cy="166" r="11" fill="${RED}"/><path d="M96,176 a16,16 0 0 1 32,0 Z" fill="#ffcf5c" stroke="#e0a83a" stroke-width="1.600"/>
+ <path d="M134,176 h30 v-14 q-15,-10 -30,0 Z" fill="#fff8e6"/><path d="M134,162 q15,-10 30,0" fill="none" stroke="${RED}" stroke-width="4"/><circle cx="149" cy="154" r="4" fill="${RED}"/>
+ <circle cx="112" cy="160" r="8" fill="#4fc27f"/><path d="M60,182 q10,-8 20,0" stroke="${SUN}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+
+const barett=`<ellipse cx="6" cy="-104" rx="28" ry="10" fill="${RED}"/><circle cx="6" cy="-114" r="3" fill="#b52f29"/>`;
+S.create=`${room('#fff1c9','#e4b77a')}
+ <path d="M110,186 l14,-130 M176,186 l-14,-130 M143,186 v-40" stroke="#b07a45" stroke-width="5" stroke-linecap="round"/><rect x="104" y="36" width="78" height="84" rx="3" fill="#fff" stroke="#cbc2e6" stroke-width="2"/>
+ <circle cx="124" cy="58" r="10" fill="${SUN}"/><path class="grow" d="M108,104 q18,-28 36,-8 q14,-22 34,0 v12 h-70 Z" fill="${MINT}"/><path class="draw" d="M112,84 q20,-10 60,-4" fill="none" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/>
+ ${sh(56,192,32)}${at(56,190,.92,cat({bow:false,hat:barett,eyes:'happy',mouth:'tongue',armL:40,armR:-110,armRcls:'bob',armsFront:true,prop:`<path d="M0,4 l6,-30" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/><path d="M5,-24 l2,-10 4,9 Z" fill="${RED}"/>`,propL:`<ellipse cx="0" cy="6" rx="15" ry="10" fill="#e4b77a"/><circle cx="-6" cy="4" r="3" fill="${RED}"/><circle cx="2" cy="1" r="3" fill="${SKY}"/><circle cx="7" cy="8" r="3" fill="${SUN}"/>`}))}`;
+
+S.public=`${park(160)}${sun(30,26,10)}${cloud(150,26,.7)}
+ <ellipse cx="100" cy="176" rx="50" ry="12" fill="#9fd4f0"/><rect x="92" y="130" width="16" height="44" rx="4" fill="#cfd8e6"/><ellipse cx="100" cy="130" rx="24" ry="6" fill="#dfe6f2"/>
+ <path class="drip" d="M100,100 q-18,10 -22,34" fill="none" stroke="#5cc3ff" stroke-width="3" stroke-linecap="round"/><path class="drip" style="animation-delay:.5s" d="M100,100 q18,10 22,34" fill="none" stroke="#5cc3ff" stroke-width="3" stroke-linecap="round"/>
+ ${at(30,190,.46,P.person({shirt:SKY,stripe:'#2f6fd0',long:true,hair:'#3a2a4a',wave:false,happy:true}))}${at(172,190,.5,P.person({shirt:MINT,stripe:'#1f9c83',skin:'#c98a5a',hair:'#3a2a4a'}))}
+ ${at(60,196,.4,cat({eyes:'happy'}))}${at(142,196,.36,K('orange',{eyes:'happy'}))}
+ <rect x="76" y="20" width="48" height="22" rx="5" fill="${MINT}"/>${T(100,36,'PARK',12,'#fff')}<path d="M100,42 v20" stroke="#b07a45" stroke-width="3"/>`;
+
+S.already=`${bg('#ffe2a8')}<rect x="120" y="14" width="64" height="54" rx="8" fill="#ffd98a" stroke="#fff" stroke-width="5"/><g transform="translate(152,50) scale(.9)">${sun(0,0,12)}</g>${floor(170,'#f0c98a')}
+ ${at(104,186,1.6,P.bed)}${at(66,164,.6,cat({tail:false,eyes:'closed',armL:60,armR:-60}))}<path class="breathe" d="M74,150 q40,-22 108,0 v24 h-108 Z" fill="${SKY}"/>
+ <g class="ring">${at(28,140,.5,P.clock(28,180))}</g>
+ <g font-family="Baloo 2, Trebuchet MS, sans-serif" font-weight="800" fill="${VIO}"><text class="zz" x="88" y="110" font-size="14">z</text><text class="zz" style="animation-delay:1s" x="100" y="94" font-size="19">z</text></g>
+ ${at(178,194,.36,K('orange',{eyes:'wide',mouth:'o'}))}`;
+
+S.speak=`${bg('#3b2a4a')}<path d="M100,-10 L30,186 h140 Z" fill="#fff6c8" opacity=".25"/>${floor(176,'#8a5a30')}
+ <path d="M140,176 v-70" stroke="#9aa8c0" stroke-width="4"/><rect x="132" y="92" width="16" height="22" rx="8" fill="#5a4a6c" transform="rotate(-20 140 103)"/>
+ <path d="M150,84 q10,10 0,22 M162,76 q16,16 0,36" fill="none" stroke="${SUN}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${at(90,182,1,cat(Object.assign({mouth:'big',armL:60,armR:-90,armsFront:true},NL)))}
+ ${at(20,198,.3,K('orange',{tail:false}))}${at(180,198,.3,K('grey',{tail:false}))}`;
+
+S.others=`${park(170)}${cloud(40,26,.7)}
+ ${at(40,190,.74,cat({armR:-72,armRcls:'bob',eyes:'happy',mouth:'open'}))}<g transform="translate(68,190)"><g class="roll" style="animation-duration:1.2s">${P.ball(RED)}</g></g>
+ ${at(120,188,.5,K('orange',{tail:false}))}${at(150,188,.5,K('grey',{tail:false}))}${at(180,188,.5,K('white',{tail:false}))}
+ <rect x="100" y="126" width="98" height="70" rx="16" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="9 8" class="glow"/>${arrow(150,80,150,116,RED,6,'float')}`;
+
+S.level=`${bg('#e3fbf5')}
+ <rect x="20" y="150" width="50" height="40" fill="${SKY}"/><rect x="70" y="110" width="50" height="80" fill="${MINT}"/><rect x="120" y="70" width="60" height="120" fill="${SUN}"/>
+ ${T(45,178,'1',22,'#fff')}${T(95,160,'2',22,'#fff')}${T(150,140,'3',22,'#fff')}
+ ${at(95,112,.56,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}
+ <g class="twinkle">${star5(150,46,14,RED)}</g>
+ ${arcArrow(60,130,84,96,10,RED,4,'5 7')}${arcArrow(112,92,136,56,10,RED,4,'5 7')}`;
+
+S.allow=`${park(170)}${floor(176,'#f3d9a4')}
+ <rect x="100" y="110" width="14" height="70" rx="4" fill="#9aa8c0"/>
+ <g class="lid" style="transform-box:view-box;transform-origin:107px 124px"><rect x="107" y="118" width="88" height="12" rx="6" fill="#fff"/><rect x="125" y="118" width="16" height="12" fill="${RED}"/><rect x="157" y="118" width="16" height="12" fill="${RED}"/></g>
+ ${at(140,192,.56,K('orange',{eyes:'happy',armR:-125,armRcls:'wave',armsFront:true,hat:cap}))}
+ <g class="beat"><circle cx="150" cy="50" r="24" fill="${MINT}"/><path d="M139,51 l8,9 14,-18" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <g transform="translate(50,192) scale(-.74,.74)"><g class="walkbob">${cat({armL:0,armR:0,armLcls:'slowA',armRcls:'slowB',feet:'walk',eyes:'happy'})}</g></g>`;
+
+S.add=`${bg('#fff3cf')}
+ <circle cx="36" cy="60" r="28" fill="#fff"/><g transform="translate(36,60) scale(2)">${P.fish}</g>
+ <g class="beat"><path d="M84,46 v28 M70,60 h28" stroke="${VIO}" stroke-width="8" stroke-linecap="round"/></g>
+ <circle cx="130" cy="60" r="28" fill="#fff"/><g transform="translate(130,60) scale(2)">${P.fish}</g>
+ <path d="M162,52 h20 M162,68 h20" stroke="${VIO}" stroke-width="7" stroke-linecap="round"/>
+ ${floor(184,'#ffe08a')}
+ <g transform="translate(150,184)">${P.plate(40)}</g>${fishAt(138,170,1.6,8)}${fishAt(162,172,1.6,-10)}
+ ${at(60,192,.76,cat({eyes:'happy',mouth:'tongue',armR:-80}))}`;
+
+S.office=`${room('#e6f1ff','#cfe3f7')}
+ <rect x="130" y="16" width="52" height="44" rx="6" fill="#bfe9ff" stroke="#fff" stroke-width="5"/><g class="ring">${at(40,60,.5,P.clock(26,300))}</g>
+ ${at(84,176,.92,cat({eyes:'happy',mid:tie,armL:30,armR:-30,armsFront:true,tail:false}))}
+ <rect x="20" y="140" width="170" height="12" rx="4" fill="#c98a4b"/><rect x="30" y="152" width="10" height="36" fill="#8a5a30"/><rect x="170" y="152" width="10" height="36" fill="#8a5a30"/>
+ <rect x="56" y="100" width="56" height="38" rx="4" fill="${INK}"/><rect x="60" y="104" width="48" height="30" rx="2" fill="#bfe9ff"/><path d="M66,112 h30 M66,120 h22 M66,128 h34" stroke="#fff" stroke-width="2.500" stroke-linecap="round" class="glow"/>
+ <rect x="150" y="118" width="16" height="22" rx="4" fill="${ORA}"/><ellipse cx="154" cy="108" rx="5" ry="12" fill="#4fc27f" transform="rotate(-16 154 108)"/><ellipse cx="163" cy="108" rx="5" ry="12" fill="#4fc27f" transform="rotate(16 163 108)"/>`;
+
+S.spend=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="124" y="110" width="60" height="70" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M138,110 q16,-26 32,0" fill="none" stroke="${RED}" stroke-width="4"/>${star5(154,146,12,RED)}
+ <rect x="150" y="130" width="44" height="52" rx="4" fill="${SKY}"/><path d="M160,130 q12,-20 24,0" fill="none" stroke="#2f6fd0" stroke-width="4"/>
+ ${[[90,100,0],[104,80,.3],[84,70,.6]].map(([x,y,d])=>`<g class="rise" style="animation-delay:${d}s">${coin(x,y,7)}</g>`).join('')}
+ ${sh(54,192,32)}${at(54,190,.92,cat({eyes:'happy',mouth:'open',armR:-96,armsFront:true,prop:`<g transform="translate(0,8)"><rect x="-14" y="-10" width="28" height="18" rx="4" fill="#7a4a21"/><rect x="-14" y="-10" width="28" height="6" rx="3" fill="#5a3a18"/></g>`}))}`;
+
+S.health=`${bg('#e3fbf5')}<circle cx="100" cy="96" r="80" fill="#f0fdf8"/>${floor(184,'#bff0de')}${sh(100,190,36)}
+ <g class="beat"><g transform="translate(150,52) scale(3)"><path d="${heartP}" fill="${RED}"/></g><path d="M150,36 v20 M140,46 h20" stroke="#fff" stroke-width="5" stroke-linecap="round"/></g>
+ <circle cx="40" cy="60" r="16" fill="${RED}"/><path d="M40,46 q1,-6 5,-8" stroke="#7a4a21" stroke-width="2.500" fill="none" stroke-linecap="round"/><ellipse cx="48" cy="40" rx="6" ry="3" fill="#4fc27f" transform="rotate(-25 48 40)"/>
+ <path d="M10,110 h20 l6,-14 8,26 6,-12 h20" fill="none" stroke="${MINT}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+ ${at(100,186,1,cat({eyes:'happy',mouth:'open',armL:130,armR:-130,armsFront:true}),'hop')}`;
+
+S.person=`${park()}${cloud(40,26,.7)}
+ ${sh(110,190,28)}${at(110,188,1,P.person({shirt:'#b9c4d8',stripe:'#9aa8c0',pants:'#5a4a6c',hair:'#5a3a18',shoes:'#3a2a4a'}))}
+ <rect x="68" y="22" width="84" height="172" rx="36" fill="none" stroke="${RED}" stroke-width="4" stroke-dasharray="10 9" class="glow"/>
+ ${at(30,194,.5,cat({armR:-100,armRcls:'bob',eyes:'happy'}))}`;
+
+const rahmen=(x,y,w,h,inner)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#fff" stroke="#b07a45" stroke-width="5"/>${inner}`;
+S.art=`${room('#ece6ff','#d6ccf5')}
+ ${rahmen(14,24,52,44,`<circle cx="32" cy="40" r="7" fill="${SUN}"/><path d="M18,64 l14,-14 10,8 10,-14 10,20 Z" fill="${MINT}"/>`)}
+ ${rahmen(76,18,48,56,`<g transform="translate(100,70) scale(.34)">${K('orange',{tail:false})}</g>`)}
+ ${rahmen(134,24,52,44,`<path d="M140,60 q10,-30 20,-6 q10,-24 20,6" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round"/><circle cx="150" cy="38" r="5" fill="${SKY}"/><circle cx="172" cy="36" r="5" fill="${VIO}"/>`)}
+ <path d="M10,100 h180" stroke="#b5addf" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
+ ${spark(70,90,6,SUN,0)}${spark(130,92,6,SUN,.6)}
+ ${sh(100,192,34)}${at(100,190,.9,cat({bow:false,hat:barett,eyes:'spark',mouth:'o',armL:-46,armR:46,armsFront:true}))}`;
+/* Tag 67–70: sure, war, history, party, within · grow, result, morning, reason, low · win, research, girl, guy, early · moment, himself, air, teacher, force */
+S.sure=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ ${speech(150,46,50,36,T(150,58,'?',26,VIO),150,78)}${at(150,190,.6,K('orange',{headCls:'tilt'}))}
+ <g class="beat"><rect x="26" y="20" width="76" height="40" rx="8" fill="none" stroke="${MINT}" stroke-width="5" transform="rotate(-8 64 40)"/><g transform="rotate(-8 64 40)">${T(64,50,'OK',26,MINT)}</g></g>
+ ${sh(66,192,34)}${at(66,190,.96,cat({eyes:'happy',mouth:'big',armL:-40,armR:-125,armsFront:true}))}`;
+
+const kissen=(x,y,c,r)=>`<rect x="${x-16}" y="${y-11}" width="32" height="22" rx="7" fill="${c}" stroke="#fff" stroke-width="2" transform="rotate(${r} ${x} ${y})"/>`;
+S.war=`${room('#cfc8f5','#b5addf')}
+ ${[[30,40,0],[80,26,.5],[120,50,1],[170,34,1.5],[100,80,.8],[56,90,1.8],[150,96,.3]].map(([x,y,d])=>`<path class="snow" style="animation-delay:-${d}s;animation-duration:5s" d="M${x},0 q5,-6 0,-12 q-5,6 0,12 Z" fill="#fff"/>`).join('')}
+ ${at(54,190,.8,cat({eyes:'happy',mouth:'big',armR:-130,armRcls:'wave',armsFront:true,prop:kissen(0,-6,SKY,20)}))}
+ ${flipAt(146,190,.8,K('orange',{eyes:'happy',mouth:'big',armR:-130,armRcls:'wave',armsFront:true,prop:kissen(0,-6,SUN,20)}))}
+ <g class="beat">${spark(100,96,12,'#fff',0)}</g>
+ ${kissen(100,186,RED,-8)}`;
+
+S.history=`${bg('#ffe2a8')}${sun(160,36,14)}<path d="M0,170 q50,-14 100,0 t100,0 v30 h-200 Z" fill="#f6c27a"/>
+ <path d="M30,170 L90,70 L150,170 Z" fill="#e0a85a"/><path d="M90,70 L150,170 h-30 Z" fill="#c98a4b"/><path d="M44,150 h92 M58,128 h66 M72,104 h38" stroke="#b07a45" stroke-width="2"/>
+ <g class="float"><rect x="110" y="20" width="76" height="46" rx="4" fill="#f3d9a4" stroke="#b07a45" stroke-width="2"/><circle cx="110" cy="43" r="7" fill="#e4b77a" stroke="#b07a45" stroke-width="2"/><circle cx="186" cy="43" r="7" fill="#e4b77a" stroke="#b07a45" stroke-width="2"/><path d="M124,34 h48 M124,44 h48 M124,54 h30" stroke="#b07a45" stroke-width="2.500" stroke-linecap="round"/></g>
+ ${at(40,194,.66,cat({eyes:'wide',mouth:'o',bow:false,hat:detHat,armR:-110,armsFront:true}))}
+ <g class="ring">${at(170,186,.4,P.clock(28,210))}</g>`;
+
+const partyhut=(c)=>`<path d="M-14,-100 L4,-140 L20,-102 Z" fill="${c}"/><circle cx="4" cy="-140" r="5" fill="${SUN}"/>`;
+S.party=`${bg('#fff3cf')}
+ ${[[20,RED,0],[50,SUN,.9],[90,MINT,1.7],[130,SKY,.4],[160,VIO,1.3],[184,ORA,2.2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.500" fill="${c}"/>`).join('')}
+ <g class="float"><path d="M30,90 q6,30 0,60" fill="none" stroke="${INK}" stroke-width="1.200"/><ellipse cx="30" cy="70" rx="15" ry="19" fill="${RED}"/></g><g class="float" style="animation-delay:.6s"><path d="M172,84 q-6,30 0,60" fill="none" stroke="${INK}" stroke-width="1.200"/><ellipse cx="172" cy="64" rx="15" ry="19" fill="${SKY}"/></g>
+ ${floor(184,'#ffe08a')}
+ <rect x="76" y="140" width="48" height="40" rx="6" fill="#fff8e6"/><path d="M76,150 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0" fill="${RED}"/><rect x="98" y="122" width="4" height="18" fill="${SKY}"/><path class="beat" d="M100,110 q-5,7 0,12 q5,-5 0,-12 Z" fill="${ORA}"/>
+ ${at(44,190,.74,cat({bow:false,hat:partyhut(VIO),eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}),'dance')}
+ ${at(156,190,.74,K('orange',{hat:partyhut(MINT),eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}),'dance')}
+ ${note(100,60,VIO,0)}${note(124,40,RED,1)}`;
+
+S.within=`${bg('#8fe0a8')}
+ <ellipse cx="100" cy="112" rx="76" ry="62" fill="#b7efc8" stroke="#fff" stroke-width="5" stroke-dasharray="12 9"/>
+ ${at(100,150,.76,cat({eyes:'happy',mouth:'open',armL:70,armR:-70}))}
+ ${arrow(18,30,46,62,RED,5,'glow')}${arrow(182,30,154,62,RED,5,'glow')}
+ <g opacity=".6"><circle cx="24" cy="176" r="14" fill="#fff"/>${cross(24,176,6,4)}</g>${check(100,40,10,6)}`;
+
+S.grow=`${bg('#e3fbf5')}${sun(170,30,11)}${floor(170,'#c98a4b')}<rect y="170" width="200" height="8" fill="#8fe0a8"/>
+ <path d="M150,170 V40 M144,170 h12 M144,130 h12 M144,90 h12 M144,50 h12" stroke="#9aa8c0" stroke-width="3" stroke-linecap="round"/>
+ <g style="transform-box:fill-box;transform-origin:center bottom;animation:growY 4s ease-in-out infinite"><path d="M110,170 v-110" stroke="#3aa568" stroke-width="5" stroke-linecap="round"/><ellipse cx="98" cy="130" rx="12" ry="5" fill="#4fc27f" transform="rotate(-25 98 130)"/><ellipse cx="122" cy="110" rx="12" ry="5" fill="#4fc27f" transform="rotate(25 122 110)"/><ellipse cx="98" cy="90" rx="12" ry="5" fill="#4fc27f" transform="rotate(-25 98 90)"/><circle cx="110" cy="54" r="14" fill="${RED}"/><circle cx="110" cy="54" r="5" fill="${SUN}"/></g>
+ <style>@keyframes growY{0%{transform:scaleY(.2)}70%,100%{transform:scaleY(1)}}</style>
+ ${at(44,194,.76,cat({eyes:'happy',armR:-92,prop:`<g transform="translate(8,6)"><rect x="-10" y="-12" width="20" height="16" rx="3" fill="${SKY}"/><path d="M10,-8 l12,-6" stroke="${SKY}" stroke-width="4" stroke-linecap="round"/></g>`}))}
+ <path class="drip" d="${tear(86,116)}" fill="${SKY}"/>`;
+
+S.result=`${bg('#fff1c9')}<circle cx="100" cy="100" r="80" fill="#ffe7a3"/>${floor(184,'#ffe08a')}${sh(100,190,36)}
+ ${at(100,186,.98,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true}))}
+ <g class="float"><rect x="62" y="14" width="76" height="62" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><path d="M72,30 h34 M72,42 h28 M72,54 h34" stroke="#cbc2e6" stroke-width="3" stroke-linecap="round"/>${T(122,56,'A',30,RED)}${check(86,66,5,3)}</g>
+ <g class="twinkle">${star5(160,40,12,SUN)}</g><g class="twinkle" style="animation-delay:.5s">${star5(36,46,10,SUN)}</g>`;
+
+S.morning=`${bg('#ffd9a8')}<circle cx="100" cy="150" r="60" fill="#fff0c8"/>
+ <g class="float"><circle cx="100" cy="150" r="34" fill="${SUN}"/></g>
+ <path d="M0,150 q50,-20 100,0 t100,0 v50 h-200 Z" fill="#8fe0a8"/>${cloud(40,40,.8)}${cloud(160,60,.6)}
+ <g transform="translate(150,186) scale(.4)">${P.house()}</g>
+ <path d="M20,60 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round" class="float"/>
+ ${at(70,192,.86,cat({eyes:'closed',mouth:'big',armL:140,armR:-140,armsFront:true}))}
+ <g transform="translate(120,190) scale(.8)">${P.cup(RED)}</g><circle class="smoke" cx="118" cy="160" r="4" fill="#fff"/>`;
+
+S.reason=`${room('#ece6ff','#d6ccf5')}
+ <g transform="translate(150,176) rotate(70)"><path d="M-10,-30 h20 l4,30 h-28 Z" fill="${SKY}"/></g><path d="M130,180 q20,-6 40,4 q-12,10 -40,4 Z" fill="#5cc3ff" opacity=".7"/><path d="M168,150 l8,-12 M176,160 l12,-4" stroke="${SKY}" stroke-width="3" stroke-linecap="round"/>
+ <g transform="translate(70,60)"><g class="float">${P.ball(RED)}</g></g>
+ ${arcArrow(84,56,146,140,10,RED,5,'8 8')}
+ <g class="beat"><circle cx="70" cy="56" r="26" fill="none" stroke="${RED}" stroke-width="4"/></g>
+ ${T(120,40,'!',34,RED,'middle','beat')}
+ ${at(36,194,.7,cat({eyes:'wide',mouth:'o',armR:-128,armsFront:true}))}`;
+
+S.low=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <path d="M30,184 V70 M170,184 V70" stroke="#b07a45" stroke-width="6" stroke-linecap="round"/><rect x="26" y="122" width="148" height="8" rx="4" fill="${RED}" class="float"/>
+ <g transform="translate(100,186) rotate(0)"><g class="shiver"><g transform="scale(1,.62)">${cat({eyes:'happy',mouth:'tongue',armL:70,armR:-70})}</g></g></g>
+ <path d="M186,60 V110 M186,110 l-6,-9 M186,110 l6,-9" fill="none" stroke="${RED}" stroke-width="5" stroke-linecap="round" class="float"/>
+ ${note(40,40,VIO,0)}${note(150,36,SKY,1)}`;
+
+S.win=`${bg('#fff3cf')}
+ ${[[20,RED,0],[60,SUN,.9],[140,VIO,1.3],[180,SKY,.4],[100,MINT,2]].map(([x,c,d])=>`<rect class="conf" style="animation-delay:-${d}s" x="${x}" y="0" width="7" height="4" rx="1.500" fill="${c}"/>`).join('')}
+ ${floor(184,'#ffe08a')}${sh(100,190,40,'shadow')}
+ ${at(100,186,1,cat({eyes:'happy',mouth:'big',armL:150,armR:-150,armsFront:true,mid:`<circle cx="0" cy="-28" r="9" fill="${SUN}" stroke="#e0a83a" stroke-width="2"/><path d="M-12,-50 L0,-36 L12,-50" fill="none" stroke="${RED}" stroke-width="4"/>`}),'hop')}
+ <g class="hop"><g transform="translate(100,52) scale(.7)"><path d="M-28,0 h56 v24 q0,30 -28,30 q-28,0 -28,-30 Z" fill="${SUN}"/><path d="M-28,8 q-18,0 -14,18 q4,12 18,12 M28,8 q18,0 14,18 q-4,12 -18,12" fill="none" stroke="${SUN}" stroke-width="6"/></g></g>
+ ${burst(30,60,RED,0)}${burst(170,60,VIO,.6)}`;
+
+const kittel=`<path d="M-22,-46 h44 l4,44 h-52 Z" fill="#fff" stroke="#cbc2e6" stroke-width="1.600"/><path d="M0,-46 v44" stroke="#cbc2e6" stroke-width="1.600"/>`;
+S.research=`${room('#e6f1ff','#cfe3f7')}
+ ${at(70,176,.94,cat({hat:glasses,mid:kittel,eyes:'open',armL:30,armR:-60,armsFront:true,tail:false}))}
+ <rect x="10" y="140" width="180" height="12" rx="4" fill="#9aa8c0"/><rect x="20" y="152" width="10" height="36" fill="#7a8aa6"/><rect x="170" y="152" width="10" height="36" fill="#7a8aa6"/>
+ <path d="M120,138 h30 M135,138 v-14 l-10,-22 l8,-4 l12,26" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="124" cy="98" r="6" fill="${INK}"/>
+ <path d="M164,100 h14 v10 l8,26 h-30 l8,-26 Z" fill="#bfe9ff" stroke="#fff" stroke-width="2"/><path d="M158,128 h26 l2,8 h-30 Z" fill="${MINT}"/>
+ <circle class="bubble" cx="168" cy="120" r="3" fill="${MINT}"/><circle class="bubble" style="animation-delay:1s" cx="174" cy="116" r="2.500" fill="${MINT}"/>
+ ${spark(150,60,8,SUN,0)}${T(30,50,'?',26,VIO,'middle','beat')}`;
+
+const schleifeH=`<path d="M0,-146 l-12,-7 v14 Z M0,-146 l12,-7 v14 Z" fill="${RED}"/>`;
+S.girl=`${park()}${sun(30,30,10)}${cloud(160,30,.8)}
+ ${sh(112,190,28)}${at(112,188,.94,P.person({shirt:SUN,stripe:ORA,hair:'#7a4a21',long:true,skirt:true,pants:SKY,hat:schleifeH,happy:true}))}
+ ${flower(170,188,RED,0)}${flower(184,192,VIO,.5)}
+ ${at(38,192,.5,cat({armR:-125,armRcls:'wave',armsFront:true,mouth:'open'}))}`;
+
+S.guy=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <rect x="0" y="60" width="200" height="60" fill="#d9f5ec"/><path d="M10,120 v-40 h20 v40 M50,120 v-50 h26 v50 M150,120 v-44 h30 v44" fill="#bff0de"/>
+ ${sh(120,190,28)}${at(120,188,.98,P.person({shirt:VIO,stripe:'#7b55d9',pants:'#3a2a4a',hair:'#3a2a4a',skin:'#e0a070',hat:mütze,happy:true}))}
+ ${at(40,192,.6,cat({eyes:'happy',armR:-110,armsFront:true}))}${spark(78,110,7,SUN,0)}`;
+
+S.early=`${bg('#ffd9a8')}<g class="float"><circle cx="40" cy="150" r="26" fill="${SUN}"/></g><path d="M0,160 q50,-14 100,0 t100,0 v40 h-200 Z" fill="#8fe0a8"/>
+ ${at(140,176,.9,P.school)}<rect x="126" y="150" width="28" height="26" fill="#5a4a6c" opacity=".5"/>
+ <g class="ring">${at(60,70,.6,P.clock(34,210))}</g>
+ ${at(84,194,.6,cat({eyes:'happy',mid:backpack,armR:-125,armRcls:'wave',armsFront:true}))}
+ <g opacity=".4"><path d="M10,196 h20" stroke="${INK}" stroke-width="3" stroke-dasharray="3 5"/></g>${star5(100,150,7,RED)}`;
+
+S.moment=`${bg('#ece6ff')}${floor(184,'#d6ccf5')}
+ <g class="twinkle"><rect width="200" height="200" fill="#fff" opacity=".5"/></g>
+ <rect x="40" y="26" width="120" height="130" rx="4" fill="#fff" stroke="#cbc2e6" stroke-width="2"/><rect x="50" y="36" width="100" height="96" fill="#cdeeff"/>
+ <clipPath id="mo"><rect x="50" y="36" width="100" height="96"/></clipPath><g clip-path="url(#mo)"><path d="M50,112 q50,-14 100,0 v20 h-100 Z" fill="#8fe0a8"/>${at(100,104,.56,cat({eyes:'happy',mouth:'big',armL:130,armR:-130,armsFront:true}))}</g>
+ <g transform="translate(160,184)"><rect x="-22" y="-24" width="44" height="26" rx="5" fill="${INK}"/><circle cx="0" cy="-11" r="8" fill="#bfe9ff"/><rect x="8" y="-30" width="10" height="6" fill="${INK}"/></g>${spark(150,150,9,SUN,0)}`;
+
+S.himself=`${park(170)}${tree(150,170,1.4)}
+ ${at(84,188,.8,P.person({wave:false,happy:true,shirt:SKY,stripe:'#2f6fd0'}))}
+ <g transform="translate(84,146) scale(1.1)"><path d="M-22,-12 Q-11,-17 0,-11 Q11,-17 22,-12 V10 Q11,5 0,11 Q-11,5 -22,10 Z" fill="#fff" stroke="${RED}" stroke-width="2.500"/><path d="M0,-11 V11" stroke="${RED}" stroke-width="2"/></g>
+ <g class="glow"><path d="M40,90 q-26,-50 30,-60 q40,-6 50,20" fill="none" stroke="${RED}" stroke-width="4" stroke-linecap="round" stroke-dasharray="7 8"/><path d="M120,50 l-12,-4 M120,50 l-2,-13" stroke="${RED}" stroke-width="4" stroke-linecap="round"/></g>
+ <g opacity=".35">${at(24,194,.4,cat({}))}</g>`;
+
+S.air=`${bg('#cdeeff')}${cloud(150,36,.9)}
+ <g class="scroll" style="animation-duration:5s;animation-direction:reverse" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M-180,60 h70 q14,0 14,-10 q0,-10 -10,-8 M-160,100 h100 q16,0 16,12 M-190,140 h60 q12,0 12,-9"/><path d="M20,60 h70 q14,0 14,-10 q0,-10 -10,-8 M40,100 h100 q16,0 16,12 M10,140 h60 q12,0 12,-9"/></g>
+ <g class="flutter"><path d="M150,110 q8,-10 16,0 q-8,10 -16,0 Z" fill="${ORA}"/></g><g class="flutter" style="animation-delay:-2s"><path d="M40,60 q8,-10 16,0 q-8,10 -16,0 Z" fill="${SUN}"/></g>
+ <path d="M0,186 q50,-12 100,0 t100,0 v14 h-200 Z" fill="#8fe0a8"/>
+ <g class="float"><path d="M118,120 L160,40" stroke="${INK}" stroke-width="1.200"/><path d="M160,40 l14,-18 14,18 -14,22 Z" fill="${RED}"/><path d="M174,62 q-6,10 4,18" fill="none" stroke="${RED}" stroke-width="2.500"/></g>
+ ${at(84,190,.9,cat({eyes:'happy',armR:-128,armsFront:true,extra:`<path class="flower" d="M-22,-48 q-30,-6 -44,6 q22,2 44,6 Z" fill="${RED}"/>`}))}`;
+
+S.teacher=`${bg('#fff1c9')}
+ <rect x="20" y="16" width="120" height="80" rx="6" fill="#3aa568" stroke="#b07a45" stroke-width="5"/>${T(60,60,'A',28,'#fff')}<g transform="translate(104,56) scale(1.6)">${P.fish.replace(/#ff8a3c|#ffa53c/g,'#fff')}</g>
+ ${floor(184,'#ffe08a')}
+ ${sh(150,190,34)}${at(150,188,.94,K('white',{hat:glasses.replace(/#fff/g,INK),mouth:'open',armL:130,armsFront:true,propL:`<path d="M0,4 l-10,-34" stroke="#b07a45" stroke-width="3" stroke-linecap="round"/>`}))}
+ ${at(34,194,.46,cat({eyes:'happy',mid:backpack,tail:false}))}${at(70,196,.4,K('orange',{eyes:'happy',tail:false}))}`;
+
+S.force=`${bg('#e3fbf5')}${floor(184,'#bff0de')}
+ <g transform="translate(56,120)"><path d="M-30,-30 h30 a30,30 0 0 1 0,60 h-30 v-20 h30 a10,10 0 0 0 0,-20 h-30 Z" fill="${RED}"/><rect x="-30" y="-30" width="12" height="20" fill="#dfe6f2"/><rect x="-30" y="10" width="12" height="20" fill="#dfe6f2"/></g>
+ <path d="M96,100 q10,20 0,40 M110,92 q14,28 0,56" fill="none" stroke="${VIO}" stroke-width="4" stroke-linecap="round" class="glow"/>
+ ${[[176,90,0],[160,124,.3],[180,150,.6]].map(([x,y,d])=>`<g class="givemove" style="animation-direction:alternate-reverse;animation-delay:${d}s"><circle cx="${x-30}" cy="${y}" r="7" fill="#9aa8c0"/><circle cx="${x-32}" cy="${y-2}" r="2" fill="#fff"/></g>`).join('')}
+ ${arrow(170,60,120,60,RED,7,'glow')}
+ ${at(56,196,.5,cat({eyes:'wide',mouth:'o',armL:150,armR:-150,armsFront:true}))}`;
+
+const WORDS=[{"w": "house", "t": "Nomen", "es": "la casa", "day": 1}, {"w": "eat", "t": "Verb", "es": "comer", "day": 1}, {"w": "happy", "t": "Adjektiv", "es": "feliz", "day": 1}, {"w": "water", "t": "Nomen", "es": "el agua", "day": 1}, {"w": "dog", "t": "Nomen", "es": "el perro", "day": 1}, {"w": "book", "t": "Nomen", "es": "el libro", "day": 2}, {"w": "read", "t": "Verb", "es": "leer", "day": 2}, {"w": "big", "t": "Adjektiv", "es": "grande", "day": 2}, {"w": "small", "t": "Adjektiv", "es": "pequeño", "day": 2}, {"w": "hand", "t": "Nomen", "es": "la mano", "day": 2}, {"w": "car", "t": "Nomen", "es": "el coche / el carro", "day": 3}, {"w": "run", "t": "Verb", "es": "correr", "day": 3}, {"w": "hot", "t": "Adjektiv", "es": "caliente", "day": 3}, {"w": "cold", "t": "Adjektiv", "es": "frío", "day": 3}, {"w": "door", "t": "Nomen", "es": "la puerta", "day": 3}, {"w": "bed", "t": "Nomen", "es": "la cama", "day": 4}, {"w": "sit", "t": "Verb", "es": "sentarse", "day": 4}, {"w": "eye", "t": "Nomen", "es": "el ojo", "day": 4}, {"w": "food", "t": "Nomen", "es": "la comida", "day": 4}, {"w": "blue", "t": "Adjektiv", "es": "azul", "day": 4}, {"w": "table", "t": "Nomen", "es": "la mesa", "day": 5}, {"w": "chair", "t": "Nomen", "es": "la silla", "day": 5}, {"w": "play", "t": "Verb", "es": "jugar", "day": 5}, {"w": "ball", "t": "Nomen", "es": "la pelota", "day": 5}, {"w": "green", "t": "Adjektiv", "es": "verde", "day": 5}, {"w": "fish", "t": "Nomen", "es": "el pez / el pescado", "day": 6}, {"w": "cup", "t": "Nomen", "es": "la taza", "day": 6}, {"w": "give", "t": "Verb", "es": "dar", "day": 6}, {"w": "love", "t": "Verb", "es": "amar / querer", "day": 6}, {"w": "heart", "t": "Nomen", "es": "el corazón", "day": 6}, {"w": "friend", "t": "Nomen", "es": "el amigo / la amiga", "day": 7}, {"w": "family", "t": "Nomen", "es": "la familia", "day": 7}, {"w": "laugh", "t": "Verb", "es": "reír", "day": 7}, {"w": "mother", "t": "Nomen", "es": "la madre", "day": 7}, {"w": "boy", "t": "Nomen", "es": "el niño / el chico", "day": 7}, {"w": "school", "t": "Nomen", "es": "la escuela", "day": 8}, {"w": "write", "t": "Verb", "es": "escribir", "day": 8}, {"w": "walk", "t": "Verb", "es": "caminar", "day": 8}, {"w": "box", "t": "Nomen", "es": "la caja", "day": 8}, {"w": "dark", "t": "Adjektiv", "es": "oscuro", "day": 8}, {"w": "night", "t": "Nomen", "es": "la noche", "day": 9}, {"w": "star", "t": "Nomen", "es": "la estrella", "day": 9}, {"w": "fly", "t": "Verb", "es": "volar", "day": 9}, {"w": "phone", "t": "Nomen", "es": "el teléfono", "day": 9}, {"w": "music", "t": "Nomen", "es": "la música", "day": 9}, {"w": "open", "t": "Verb", "es": "abrir", "day": 10}, {"w": "throw", "t": "Verb", "es": "lanzar / tirar", "day": 10}, {"w": "head", "t": "Nomen", "es": "la cabeza", "day": 10}, {"w": "foot", "t": "Nomen", "es": "el pie", "day": 10}, {"w": "beautiful", "t": "Adjektiv", "es": "hermoso / bonito", "day": 10}, {"w": "the", "t": "Artikel", "es": "el / la", "day": 11, "s": "{The} cat is black.", "ses": "La gata es negra."}, {"w": "be", "t": "Verb", "es": "ser / estar", "day": 11, "s": "I {am} Canela.", "ses": "Yo soy Canela."}, {"w": "to", "t": "Präposition", "es": "a / hacia", "day": 11, "s": "I walk {to} the house.", "ses": "Camino a la casa."}, {"w": "of", "t": "Präposition", "es": "de", "day": 11, "s": "A cup {of} water.", "ses": "Una taza de agua."}, {"w": "and", "t": "Konjunktion", "es": "y", "day": 11, "s": "The cat {and} the dog.", "ses": "La gata y el perro."}, {"w": "a", "t": "Artikel", "es": "un / una", "day": 12, "s": "{A} ball.", "ses": "Una pelota."}, {"w": "in", "t": "Präposition", "es": "en", "day": 12, "s": "The cat is {in} the box.", "ses": "La gata está en la caja."}, {"w": "that", "t": "Pronomen", "es": "que / ese", "day": 12, "s": "{That} is a star.", "ses": "Eso es una estrella."}, {"w": "have", "t": "Verb", "es": "tener / haber", "day": 12, "s": "I {have} a book.", "ses": "Tengo un libro."}, {"w": "I", "t": "Pronomen", "es": "yo", "day": 12, "s": "{I} am a cat.", "ses": "Yo soy una gata."}, {"w": "it", "t": "Pronomen", "es": "eso / lo", "day": 13, "s": "{It} is a ball.", "ses": "Es una pelota."}, {"w": "for", "t": "Präposition", "es": "para / por", "day": 13, "s": "This is {for} you.", "ses": "Esto es para ti."}, {"w": "not", "t": "Adverb", "es": "no", "day": 13, "s": "It is {not} hot.", "ses": "No hace calor."}, {"w": "on", "t": "Präposition", "es": "sobre / en", "day": 13, "s": "The cat is {on} the table.", "ses": "La gata está sobre la mesa."}, {"w": "with", "t": "Präposition", "es": "con", "day": 13, "s": "I play {with} the dog.", "ses": "Juego con el perro."}, {"w": "he", "t": "Pronomen", "es": "él", "day": 14, "s": "{He} is a boy.", "ses": "Él es un niño."}, {"w": "as", "t": "Konjunktion", "es": "como", "day": 14, "s": "Big {as} a house.", "ses": "Grande como una casa."}, {"w": "you", "t": "Pronomen", "es": "tú / usted", "day": 14, "s": "{You} are beautiful.", "ses": "Tú eres hermosa."}, {"w": "do", "t": "Verb", "es": "hacer", "day": 14, "s": "{Do} you like fish?", "ses": "¿Te gusta el pescado?"}, {"w": "at", "t": "Präposition", "es": "en / a", "day": 14, "s": "The cat is {at} school.", "ses": "La gata está en la escuela."}, {"w": "this", "t": "Pronomen", "es": "este / esta", "day": 15, "s": "{This} is my cup.", "ses": "Esta es mi taza."}, {"w": "but", "t": "Konjunktion", "es": "pero", "day": 15, "s": "The dog is big, {but} the cat is small.", "ses": "El perro es grande, pero la gata es pequeña."}, {"w": "his", "t": "Pronomen", "es": "su (de él)", "day": 15, "s": "{His} ball.", "ses": "Su pelota (de él)."}, {"w": "by", "t": "Präposition", "es": "por", "day": 15, "s": "The cat is {by} the door.", "ses": "La gata está junto a la puerta."}, {"w": "from", "t": "Präposition", "es": "de / desde", "day": 15, "s": "I walk {from} school.", "ses": "Camino desde la escuela."}, {"w": "they", "t": "Pronomen", "es": "ellos / ellas", "day": 16, "s": "{They} play.", "ses": "Ellos juegan."}, {"w": "we", "t": "Pronomen", "es": "nosotros", "day": 16, "s": "{We} are friends.", "ses": "Nosotros somos amigos."}, {"w": "say", "t": "Verb", "es": "decir", "day": 16}, {"w": "her", "t": "Pronomen", "es": "su (de ella) / la", "day": 16, "s": "{Her} book.", "ses": "Su libro (de ella)."}, {"w": "she", "t": "Pronomen", "es": "ella", "day": 16, "s": "{She} is my mother.", "ses": "Ella es mi madre."}, {"w": "or", "t": "Konjunktion", "es": "o", "day": 17, "s": "The ball {or} the book?", "ses": "¿La pelota o el libro?"}, {"w": "an", "t": "Artikel", "es": "un / una", "day": 17, "s": "{An} eye.", "ses": "Un ojo."}, {"w": "will", "t": "Verb", "es": "(futuro)", "day": 17, "s": "I {will} eat.", "ses": "Voy a comer."}, {"w": "my", "t": "Pronomen", "es": "mi", "day": 17, "s": "This is {my} bed.", "ses": "Esta es mi cama."}, {"w": "all", "t": "Pronomen", "es": "todo / todos", "day": 17, "s": "{All} the cats.", "ses": "Todos los gatos."}, {"w": "would", "t": "Verb", "es": "(condicional)", "day": 18, "s": "I {would} like a fish.", "ses": "Me gustaría un pescado."}, {"w": "there", "t": "Adverb", "es": "allí / ahí", "day": 18, "s": "The ball is {there}.", "ses": "La pelota está allí."}, {"w": "their", "t": "Pronomen", "es": "su (de ellos)", "day": 18, "s": "{Their} house.", "ses": "Su casa (de ellos)."}, {"w": "what", "t": "Pronomen", "es": "qué", "day": 18, "s": "{What} is in the box?", "ses": "¿Qué hay en la caja?"}, {"w": "so", "t": "Adverb", "es": "así / tan", "day": 18, "s": "{So} big!", "ses": "¡Tan grande!"}, {"w": "up", "t": "Adverb", "es": "arriba", "day": 19, "s": "The cat goes {up}.", "ses": "La gata sube."}, {"w": "out", "t": "Adverb", "es": "fuera", "day": 19, "s": "The cat is {out} of the box.", "ses": "La gata está fuera de la caja."}, {"w": "if", "t": "Konjunktion", "es": "si", "day": 19, "s": "{If} I run, I am hot.", "ses": "Si corro, tengo calor."}, {"w": "about", "t": "Präposition", "es": "sobre / acerca de", "day": 19, "s": "A book {about} fish.", "ses": "Un libro sobre peces."}, {"w": "who", "t": "Pronomen", "es": "quién", "day": 19, "s": "{Who} is at the door?", "ses": "¿Quién está en la puerta?"}, {"w": "get", "t": "Verb", "es": "conseguir / obtener", "day": 20}, {"w": "which", "t": "Pronomen", "es": "cuál", "day": 20, "s": "{Which} cup?", "ses": "¿Cuál taza?"}, {"w": "go", "t": "Verb", "es": "ir", "day": 20}, {"w": "me", "t": "Pronomen", "es": "me / mí", "day": 20, "s": "Give {me} the ball!", "ses": "¡Dame la pelota!"}, {"w": "when", "t": "Adverb", "es": "cuándo / cuando", "day": 20, "s": "{When} do we eat?", "ses": "¿Cuándo comemos?"}, {"w": "make", "t": "Verb", "es": "hacer / fabricar", "day": 21}, {"w": "can", "t": "Verb", "es": "poder", "day": 21, "s": "I {can} fly!", "ses": "¡Puedo volar!"}, {"w": "like", "t": "Verb", "es": "gustar", "day": 21}, {"w": "time", "t": "Nomen", "es": "el tiempo", "day": 21}, {"w": "no", "t": "Sonstiges", "es": "no", "day": 21, "s": "{No}!", "ses": "¡No!"}, {"w": "just", "t": "Adverb", "es": "solo / justo", "day": 22, "s": "{Just} a small fish.", "ses": "Solo un pescado pequeño."}, {"w": "him", "t": "Pronomen", "es": "lo / le (a él)", "day": 22, "s": "I give {him} the ball.", "ses": "Le doy la pelota (a él)."}, {"w": "know", "t": "Verb", "es": "saber / conocer", "day": 22}, {"w": "take", "t": "Verb", "es": "tomar / llevar", "day": 22}, {"w": "people", "t": "Nomen", "es": "la gente", "day": 22}, {"w": "into", "t": "Präposition", "es": "dentro de / en", "day": 23, "s": "The cat runs {into} the house.", "ses": "La gata entra corriendo en la casa."}, {"w": "year", "t": "Nomen", "es": "el año", "day": 23}, {"w": "your", "t": "Pronomen", "es": "tu / su", "day": 23, "s": "This is {your} book.", "ses": "Este es tu libro."}, {"w": "good", "t": "Adjektiv", "es": "bueno", "day": 23}, {"w": "some", "t": "Pronomen", "es": "algunos / algo de", "day": 23, "s": "I eat {some} fish.", "ses": "Como algo de pescado."}, {"w": "could", "t": "Verb", "es": "podría / podía", "day": 24, "s": "{Could} you open the door?", "ses": "¿Podrías abrir la puerta?"}, {"w": "them", "t": "Pronomen", "es": "los / les", "day": 24, "s": "I see {them}.", "ses": "Los veo."}, {"w": "see", "t": "Verb", "es": "ver", "day": 24}, {"w": "other", "t": "Adjektiv", "es": "otro", "day": 24, "s": "The {other} cup.", "ses": "La otra taza."}, {"w": "than", "t": "Konjunktion", "es": "que (comparación)", "day": 24, "s": "The house is bigger {than} the car.", "ses": "La casa es más grande que el coche."}, {"w": "then", "t": "Adverb", "es": "entonces / luego", "day": 25, "s": "I read, {then} I play.", "ses": "Leo, luego juego."}, {"w": "now", "t": "Adverb", "es": "ahora", "day": 25, "s": "I eat {now}.", "ses": "Como ahora."}, {"w": "look", "t": "Verb", "es": "mirar", "day": 25}, {"w": "only", "t": "Adverb", "es": "solo / solamente", "day": 25, "s": "{Only} the cat is black.", "ses": "Solo la gata es negra."}, {"w": "come", "t": "Verb", "es": "venir", "day": 25}, {"w": "its", "t": "Pronomen", "es": "su (de eso)", "day": 26, "s": "The dog and {its} ball.", "ses": "El perro y su pelota."}, {"w": "over", "t": "Präposition", "es": "sobre / encima de", "day": 26, "s": "The cat jumps {over} the box.", "ses": "La gata salta por encima de la caja."}, {"w": "think", "t": "Verb", "es": "pensar", "day": 26}, {"w": "also", "t": "Adverb", "es": "también", "day": 26, "s": "The dog is {also} happy.", "ses": "El perro también está feliz."}, {"w": "back", "t": "Adverb", "es": "atrás / de vuelta", "day": 26, "s": "I am {back}!", "ses": "¡Ya regresé!"}, {"w": "after", "t": "Präposition", "es": "después de", "day": 27, "s": "{After} school, I play.", "ses": "Después de la escuela, juego."}, {"w": "use", "t": "Verb", "es": "usar", "day": 27}, {"w": "how", "t": "Adverb", "es": "cómo", "day": 27, "s": "{How} big is the fish?", "ses": "¿Qué tan grande es el pez?"}, {"w": "our", "t": "Pronomen", "es": "nuestro", "day": 27, "s": "{Our} house.", "ses": "Nuestra casa."}, {"w": "work", "t": "Verb", "es": "trabajar", "day": 27}, {"w": "first", "t": "Adjektiv", "es": "primero", "day": 28}, {"w": "well", "t": "Adverb", "es": "bien", "day": 28, "s": "I play music {well}.", "ses": "Toco música bien."}, {"w": "way", "t": "Nomen", "es": "el camino / la manera", "day": 28}, {"w": "even", "t": "Adverb", "es": "incluso", "day": 28, "s": "{Even} the small cat can throw.", "ses": "Incluso la gata pequeña puede lanzar."}, {"w": "new", "t": "Adjektiv", "es": "nuevo", "day": 28}, {"w": "want", "t": "Verb", "es": "querer", "day": 29}, {"w": "because", "t": "Konjunktion", "es": "porque", "day": 29, "s": "I am happy {because} I have a friend.", "ses": "Estoy feliz porque tengo una amiga."}, {"w": "any", "t": "Pronomen", "es": "cualquier / algún", "day": 29, "s": "Is there {any} food?", "ses": "¿Hay algo de comida?"}, {"w": "these", "t": "Pronomen", "es": "estos / estas", "day": 29, "s": "{These} are my books.", "ses": "Estos son mis libros."}, {"w": "day", "t": "Nomen", "es": "el día", "day": 29}, {"w": "most", "t": "Adverb", "es": "la mayoría / más", "day": 30, "s": "The {most} beautiful star.", "ses": "La estrella más hermosa."}, {"w": "us", "t": "Pronomen", "es": "nos / nosotros", "day": 30, "s": "Come with {us}!", "ses": "¡Ven con nosotros!"}, {"w": "very", "t": "Adverb", "es": "muy", "day": 30, "s": "I am {very} happy!", "ses": "¡Estoy muy feliz!"}, {"w": "thing", "t": "Nomen", "es": "la cosa", "day": 30}, {"w": "man", "t": "Nomen", "es": "el hombre", "day": 30}, {"w": "find", "t": "Verb", "es": "encontrar", "day": 31}, {"w": "here", "t": "Adverb", "es": "aquí", "day": 31, "s": "The ball is {here}.", "ses": "La pelota está aquí."}, {"w": "many", "t": "Adjektiv", "es": "muchos", "day": 31}, {"w": "tell", "t": "Verb", "es": "contar / decir", "day": 31}, {"w": "woman", "t": "Nomen", "es": "la mujer", "day": 31}, {"w": "life", "t": "Nomen", "es": "la vida", "day": 32}, {"w": "child", "t": "Nomen", "es": "el niño / la niña", "day": 32}, {"w": "world", "t": "Nomen", "es": "el mundo", "day": 32}, {"w": "still", "t": "Adverb", "es": "todavía", "day": 32, "s": "I am {still} in bed.", "ses": "Todavía estoy en la cama."}, {"w": "try", "t": "Verb", "es": "intentar / probar", "day": 32}, {"w": "last", "t": "Adjektiv", "es": "último", "day": 33}, {"w": "ask", "t": "Verb", "es": "preguntar / pedir", "day": 33}, {"w": "need", "t": "Verb", "es": "necesitar", "day": 33}, {"w": "too", "t": "Adverb", "es": "también / demasiado", "day": 33, "s": "The cup is {too} hot.", "ses": "La taza está demasiado caliente."}, {"w": "feel", "t": "Verb", "es": "sentir", "day": 33}, {"w": "state", "t": "Nomen", "es": "el estado", "day": 34}, {"w": "never", "t": "Adverb", "es": "nunca", "day": 34, "s": "Fish {never} fly.", "ses": "Los peces nunca vuelan."}, {"w": "become", "t": "Verb", "es": "convertirse en", "day": 34}, {"w": "between", "t": "Präposition", "es": "entre", "day": 34, "s": "The cat is {between} the boxes.", "ses": "La gata está entre las cajas."}, {"w": "high", "t": "Adjektiv", "es": "alto", "day": 34}, {"w": "really", "t": "Adverb", "es": "realmente", "day": 35, "s": "The star is {really} big.", "ses": "La estrella es realmente grande."}, {"w": "something", "t": "Pronomen", "es": "algo", "day": 35, "s": "{Something} is in the box.", "ses": "Hay algo en la caja."}, {"w": "leave", "t": "Verb", "es": "salir / dejar", "day": 35}, {"w": "put", "t": "Verb", "es": "poner", "day": 35}, {"w": "old", "t": "Adjektiv", "es": "viejo", "day": 35}, {"w": "while", "t": "Konjunktion", "es": "mientras", "day": 36, "s": "I read {while} I eat.", "ses": "Leo mientras como."}, {"w": "mean", "t": "Verb", "es": "significar", "day": 36}, {"w": "keep", "t": "Verb", "es": "guardar / mantener", "day": 36}, {"w": "student", "t": "Nomen", "es": "el / la estudiante", "day": 36}, {"w": "why", "t": "Adverb", "es": "por qué", "day": 36, "s": "{Why} is the dog happy?", "ses": "¿Por qué está feliz el perro?"}, {"w": "let", "t": "Verb", "es": "dejar / permitir", "day": 37}, {"w": "great", "t": "Adjektiv", "es": "genial / grande", "day": 37}, {"w": "same", "t": "Adjektiv", "es": "mismo", "day": 37}, {"w": "group", "t": "Nomen", "es": "el grupo", "day": 37}, {"w": "begin", "t": "Verb", "es": "empezar", "day": 37}, {"w": "seem", "t": "Verb", "es": "parecer", "day": 38}, {"w": "country", "t": "Nomen", "es": "el país", "day": 38}, {"w": "help", "t": "Verb", "es": "ayudar", "day": 38}, {"w": "talk", "t": "Verb", "es": "hablar", "day": 38}, {"w": "where", "t": "Adverb", "es": "dónde", "day": 38, "s": "{Where} is the ball?", "ses": "¿Dónde está la pelota?"}, {"w": "turn", "t": "Verb", "es": "girar", "day": 39}, {"w": "problem", "t": "Nomen", "es": "el problema", "day": 39}, {"w": "every", "t": "Adjektiv", "es": "cada", "day": 39, "s": "I read {every} day.", "ses": "Leo cada día."}, {"w": "start", "t": "Verb", "es": "comenzar", "day": 39}, {"w": "might", "t": "Verb", "es": "podría (quizás)", "day": 39, "s": "It {might} be cold.", "ses": "Puede que haga frío."}, {"w": "show", "t": "Verb", "es": "mostrar", "day": 40}, {"w": "part", "t": "Nomen", "es": "la parte", "day": 40}, {"w": "against", "t": "Präposition", "es": "contra", "day": 40, "s": "The cat plays {against} the dog.", "ses": "La gata juega contra el perro."}, {"w": "place", "t": "Nomen", "es": "el lugar", "day": 40}, {"w": "such", "t": "Adjektiv", "es": "tal", "day": 40, "s": "{Such} a beautiful day!", "ses": "¡Qué día tan hermoso!"}, {"w": "again", "t": "Adverb", "es": "otra vez", "day": 41, "s": "Throw the ball {again}!", "ses": "¡Lanza la pelota otra vez!"}, {"w": "few", "t": "Adjektiv", "es": "pocos", "day": 41}, {"w": "case", "t": "Nomen", "es": "el caso", "day": 41}, {"w": "week", "t": "Nomen", "es": "la semana", "day": 41}, {"w": "company", "t": "Nomen", "es": "la empresa", "day": 41}, {"w": "system", "t": "Nomen", "es": "el sistema", "day": 42}, {"w": "each", "t": "Pronomen", "es": "cada uno", "day": 42, "s": "{Each} cat has a fish.", "ses": "Cada gato tiene un pescado."}, {"w": "right", "t": "Adjektiv", "es": "correcto / derecho", "day": 42}, {"w": "program", "t": "Nomen", "es": "el programa", "day": 42}, {"w": "hear", "t": "Verb", "es": "oír", "day": 42}, {"w": "question", "t": "Nomen", "es": "la pregunta", "day": 43}, {"w": "during", "t": "Präposition", "es": "durante", "day": 43, "s": "I read {during} the night.", "ses": "Leo durante la noche."}, {"w": "government", "t": "Nomen", "es": "el gobierno", "day": 43}, {"w": "number", "t": "Nomen", "es": "el número", "day": 43}, {"w": "off", "t": "Adverb", "es": "apagado / fuera", "day": 43, "s": "The light is {off}.", "ses": "La luz está apagada."}, {"w": "always", "t": "Adverb", "es": "siempre", "day": 44, "s": "I am {always} happy.", "ses": "Siempre estoy feliz."}, {"w": "move", "t": "Verb", "es": "mover", "day": 44}, {"w": "live", "t": "Verb", "es": "vivir", "day": 44}, {"w": "point", "t": "Nomen", "es": "el punto", "day": 44}, {"w": "believe", "t": "Verb", "es": "creer", "day": 44}, {"w": "hold", "t": "Verb", "es": "sostener", "day": 45}, {"w": "today", "t": "Adverb", "es": "hoy", "day": 45, "s": "{Today} I play.", "ses": "Hoy juego."}, {"w": "bring", "t": "Verb", "es": "traer", "day": 45}, {"w": "happen", "t": "Verb", "es": "pasar / ocurrir", "day": 45}, {"w": "next", "t": "Adjektiv", "es": "siguiente / próximo", "day": 45}, {"w": "without", "t": "Präposition", "es": "sin", "day": 46, "s": "A house {without} a door.", "ses": "Una casa sin puerta."}, {"w": "before", "t": "Präposition", "es": "antes de", "day": 46, "s": "I read {before} bed.", "ses": "Leo antes de ir a la cama."}, {"w": "large", "t": "Adjektiv", "es": "grande / amplio", "day": 46}, {"w": "must", "t": "Verb", "es": "deber", "day": 46, "s": "I {must} go to school.", "ses": "Debo ir a la escuela."}, {"w": "home", "t": "Nomen", "es": "el hogar / la casa", "day": 46}, {"w": "under", "t": "Präposition", "es": "debajo de", "day": 47, "s": "The cat is {under} the table.", "ses": "La gata está debajo de la mesa."}, {"w": "room", "t": "Nomen", "es": "la habitación", "day": 47}, {"w": "area", "t": "Nomen", "es": "el área / la zona", "day": 47}, {"w": "national", "t": "Adjektiv", "es": "nacional", "day": 47}, {"w": "money", "t": "Nomen", "es": "el dinero", "day": 47}, {"w": "story", "t": "Nomen", "es": "la historia / el cuento", "day": 48}, {"w": "young", "t": "Adjektiv", "es": "joven", "day": 48}, {"w": "fact", "t": "Nomen", "es": "el hecho", "day": 48}, {"w": "month", "t": "Nomen", "es": "el mes", "day": 48}, {"w": "different", "t": "Adjektiv", "es": "diferente", "day": 48}, {"w": "lot", "t": "Nomen", "es": "mucho / un montón", "day": 49}, {"w": "study", "t": "Verb", "es": "estudiar", "day": 49}, {"w": "job", "t": "Nomen", "es": "el trabajo / el empleo", "day": 49}, {"w": "word", "t": "Nomen", "es": "la palabra", "day": 49}, {"w": "though", "t": "Konjunktion", "es": "aunque", "day": 49, "s": "I play, {though} it is cold.", "ses": "Juego, aunque hace frío."}, {"w": "business", "t": "Nomen", "es": "el negocio", "day": 50}, {"w": "issue", "t": "Nomen", "es": "el asunto / el problema", "day": 50}, {"w": "side", "t": "Nomen", "es": "el lado", "day": 50}, {"w": "kind", "t": "Nomen", "es": "el tipo / la clase", "day": 50}, {"w": "far", "t": "Adverb", "es": "lejos", "day": 50, "s": "The house is {far}.", "ses": "La casa está lejos."}, {"w": "black", "t": "Adjektiv", "es": "negro", "day": 51}, {"w": "long", "t": "Adjektiv", "es": "largo", "day": 51}, {"w": "both", "t": "Pronomen", "es": "ambos", "day": 51, "s": "{Both} cats are happy.", "ses": "Ambos gatos están felices."}, {"w": "little", "t": "Adjektiv", "es": "pequeño / poco", "day": 51}, {"w": "yes", "t": "Sonstiges", "es": "sí", "day": 51, "s": "{Yes}!", "ses": "¡Sí!"}, {"w": "since", "t": "Präposition", "es": "desde", "day": 52, "s": "I wait {since} the morning.", "ses": "Espero desde la mañana."}, {"w": "provide", "t": "Verb", "es": "proporcionar", "day": 52}, {"w": "service", "t": "Nomen", "es": "el servicio", "day": 52}, {"w": "around", "t": "Präposition", "es": "alrededor de", "day": 52, "s": "The cat runs {around} the house.", "ses": "La gata corre alrededor de la casa."}, {"w": "important", "t": "Adjektiv", "es": "importante", "day": 52}, {"w": "father", "t": "Nomen", "es": "el padre", "day": 53}, {"w": "away", "t": "Adverb", "es": "lejos / fuera", "day": 53, "s": "The dog runs {away}.", "ses": "El perro se va corriendo."}, {"w": "until", "t": "Präposition", "es": "hasta", "day": 53, "s": "I play {until} night.", "ses": "Juego hasta la noche."}, {"w": "power", "t": "Nomen", "es": "el poder / la energía", "day": 53}, {"w": "hour", "t": "Nomen", "es": "la hora", "day": 53}, {"w": "game", "t": "Nomen", "es": "el juego", "day": 54}, {"w": "often", "t": "Adverb", "es": "a menudo", "day": 54, "s": "I {often} read.", "ses": "Leo a menudo."}, {"w": "yet", "t": "Adverb", "es": "todavía / aún", "day": 54, "s": "I am not in bed {yet}.", "ses": "Todavía no estoy en la cama."}, {"w": "line", "t": "Nomen", "es": "la línea", "day": 54}, {"w": "political", "t": "Adjektiv", "es": "político", "day": 54}, {"w": "end", "t": "Nomen", "es": "el final", "day": 55}, {"w": "among", "t": "Präposition", "es": "entre (varios)", "day": 55, "s": "The cat is {among} friends.", "ses": "La gata está entre amigos."}, {"w": "ever", "t": "Adverb", "es": "alguna vez", "day": 55, "s": "The best day {ever}!", "ses": "¡El mejor día de todos!"}, {"w": "stand", "t": "Verb", "es": "estar de pie", "day": 55}, {"w": "bad", "t": "Adjektiv", "es": "malo", "day": 55}, {"w": "lose", "t": "Verb", "es": "perder", "day": 56}, {"w": "however", "t": "Adverb", "es": "sin embargo", "day": 56, "s": "It is hot. {However}, I run.", "ses": "Hace calor. Sin embargo, corro."}, {"w": "member", "t": "Nomen", "es": "el miembro", "day": 56}, {"w": "pay", "t": "Verb", "es": "pagar", "day": 56}, {"w": "law", "t": "Nomen", "es": "la ley", "day": 56}, {"w": "meet", "t": "Verb", "es": "conocer / reunirse", "day": 57}, {"w": "city", "t": "Nomen", "es": "la ciudad", "day": 57}, {"w": "almost", "t": "Adverb", "es": "casi", "day": 57, "s": "The cup is {almost} full.", "ses": "La taza está casi llena."}, {"w": "include", "t": "Verb", "es": "incluir", "day": 57}, {"w": "continue", "t": "Verb", "es": "continuar", "day": 57}, {"w": "set", "t": "Verb", "es": "poner / establecer", "day": 58}, {"w": "later", "t": "Adverb", "es": "más tarde", "day": 58, "s": "I eat now. I play {later}.", "ses": "Como ahora. Juego más tarde."}, {"w": "community", "t": "Nomen", "es": "la comunidad", "day": 58}, {"w": "name", "t": "Nomen", "es": "el nombre", "day": 58}, {"w": "once", "t": "Adverb", "es": "una vez", "day": 58, "s": "I throw the ball {once}.", "ses": "Lanzo la pelota una vez."}, {"w": "white", "t": "Adjektiv", "es": "blanco", "day": 59}, {"w": "least", "t": "Adverb", "es": "lo menos", "day": 59, "s": "This cat has the {least} fish.", "ses": "Esta gata tiene menos pescado."}, {"w": "president", "t": "Nomen", "es": "el presidente", "day": 59}, {"w": "learn", "t": "Verb", "es": "aprender", "day": 59}, {"w": "real", "t": "Adjektiv", "es": "real / verdadero", "day": 59}, {"w": "change", "t": "Verb", "es": "cambiar", "day": 60}, {"w": "team", "t": "Nomen", "es": "el equipo", "day": 60}, {"w": "minute", "t": "Nomen", "es": "el minuto", "day": 60}, {"w": "best", "t": "Adjektiv", "es": "el mejor", "day": 60}, {"w": "several", "t": "Adjektiv", "es": "varios", "day": 60}, {"w": "idea", "t": "Nomen", "es": "la idea", "day": 61}, {"w": "kid", "t": "Nomen", "es": "el niño / el chico", "day": 61}, {"w": "body", "t": "Nomen", "es": "el cuerpo", "day": 61}, {"w": "information", "t": "Nomen", "es": "la información", "day": 61}, {"w": "nothing", "t": "Pronomen", "es": "nada", "day": 61, "s": "{Nothing} is in the box.", "ses": "No hay nada en la caja."}, {"w": "ago", "t": "Adverb", "es": "hace (tiempo)", "day": 62, "s": "A year {ago}, I was small.", "ses": "Hace un año, yo era pequeña."}, {"w": "lead", "t": "Verb", "es": "guiar / dirigir", "day": 62}, {"w": "social", "t": "Adjektiv", "es": "social", "day": 62}, {"w": "understand", "t": "Verb", "es": "entender", "day": 62}, {"w": "whether", "t": "Konjunktion", "es": "si (o no)", "day": 62, "s": "I do not know {whether} it is hot or cold.", "ses": "No sé si hace calor o frío."}, {"w": "watch", "t": "Verb", "es": "mirar / observar", "day": 63}, {"w": "together", "t": "Adverb", "es": "juntos", "day": 63, "s": "We play {together}.", "ses": "Jugamos juntos."}, {"w": "follow", "t": "Verb", "es": "seguir", "day": 63}, {"w": "parent", "t": "Nomen", "es": "el padre / la madre", "day": 63}, {"w": "stop", "t": "Verb", "es": "parar", "day": 63}, {"w": "face", "t": "Nomen", "es": "la cara", "day": 64}, {"w": "anything", "t": "Pronomen", "es": "cualquier cosa / algo", "day": 64, "s": "I can eat {anything}!", "ses": "¡Puedo comer cualquier cosa!"}, {"w": "create", "t": "Verb", "es": "crear", "day": 64}, {"w": "public", "t": "Adjektiv", "es": "público", "day": 64}, {"w": "already", "t": "Adverb", "es": "ya", "day": 64, "s": "I am {already} in bed.", "ses": "Ya estoy en la cama."}, {"w": "speak", "t": "Verb", "es": "hablar", "day": 65}, {"w": "others", "t": "Pronomen", "es": "otros", "day": 65, "s": "One cat plays. The {others} sit.", "ses": "Una gata juega. Los otros están sentados."}, {"w": "level", "t": "Nomen", "es": "el nivel", "day": 65}, {"w": "allow", "t": "Verb", "es": "permitir", "day": 65}, {"w": "add", "t": "Verb", "es": "añadir / sumar", "day": 65}, {"w": "office", "t": "Nomen", "es": "la oficina", "day": 66}, {"w": "spend", "t": "Verb", "es": "gastar / pasar (tiempo)", "day": 66}, {"w": "health", "t": "Nomen", "es": "la salud", "day": 66}, {"w": "person", "t": "Nomen", "es": "la persona", "day": 66}, {"w": "art", "t": "Nomen", "es": "el arte", "day": 66}, {"w": "sure", "t": "Adjektiv", "es": "seguro", "day": 67}, {"w": "war", "t": "Nomen", "es": "la guerra", "day": 67}, {"w": "history", "t": "Nomen", "es": "la historia", "day": 67}, {"w": "party", "t": "Nomen", "es": "la fiesta", "day": 67}, {"w": "within", "t": "Präposition", "es": "dentro de", "day": 67, "s": "Stay {within} the line.", "ses": "Quédate dentro de la línea."}, {"w": "grow", "t": "Verb", "es": "crecer", "day": 68}, {"w": "result", "t": "Nomen", "es": "el resultado", "day": 68}, {"w": "morning", "t": "Nomen", "es": "la mañana", "day": 68}, {"w": "reason", "t": "Nomen", "es": "la razón", "day": 68}, {"w": "low", "t": "Adjektiv", "es": "bajo", "day": 68}, {"w": "win", "t": "Verb", "es": "ganar", "day": 69}, {"w": "research", "t": "Nomen", "es": "la investigación", "day": 69}, {"w": "girl", "t": "Nomen", "es": "la niña / la chica", "day": 69}, {"w": "guy", "t": "Nomen", "es": "el chico / el tipo", "day": 69}, {"w": "early", "t": "Adjektiv", "es": "temprano", "day": 69}, {"w": "moment", "t": "Nomen", "es": "el momento", "day": 70}, {"w": "himself", "t": "Pronomen", "es": "él mismo", "day": 70, "s": "He reads by {himself}.", "ses": "Él lee solo."}, {"w": "air", "t": "Nomen", "es": "el aire", "day": 70}, {"w": "teacher", "t": "Nomen", "es": "el maestro / la maestra", "day": 70}, {"w": "force", "t": "Nomen", "es": "la fuerza", "day": 70}];
 const KC={"Nomen": "#4f9dff", "Verb": "#f2453d", "Adjektiv": "#9b6bff", "Artikel": "#2fc7a8", "Pronomen": "#2fc7a8", "Pr\u00e4position": "#2fc7a8", "Konjunktion": "#2fc7a8", "Adverb": "#2fc7a8", "Sonstiges": "#2fc7a8"};
 const only=location.hash?location.hash.slice(1).split('-').map(Number):null;
 let h='';for(let d=1;d<=160;d++){if(only&&!only.includes(d))continue;const ws=WORDS.filter(w=>w.day===d);if(!ws.length)continue;
