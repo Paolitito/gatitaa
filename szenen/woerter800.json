@@ -2361,7 +2361,9 @@
 "w": "enough",
 "t": "Adverb",
 "es": "suficiente",
-"day": 71
+"day": 71,
+"s": "I have {enough} food.",
+"ses": "Tengo suficiente comida."
 },
 {
 "w": "education",
@@ -2373,13 +2375,17 @@
 "w": "across",
 "t": "Präposition",
 "es": "a través de",
-"day": 71
+"day": 71,
+"s": "I walk {across} the street.",
+"ses": "Cruzo la calle caminando."
 },
 {
 "w": "although",
 "t": "Konjunktion",
 "es": "aunque",
-"day": 71
+"day": 71,
+"s": "{Although} it is night, I play.",
+"ses": "Aunque es de noche, juego."
 },
 {
 "w": "remember",
@@ -2397,13 +2403,17 @@
 "w": "maybe",
 "t": "Adverb",
 "es": "quizás / tal vez",
-"day": 72
+"day": 72,
+"s": "{Maybe} it is a fish.",
+"ses": "Quizás es un pez."
 },
 {
 "w": "toward",
 "t": "Präposition",
 "es": "hacia",
-"day": 72
+"day": 72,
+"s": "The dog runs {toward} me.",
+"ses": "El perro corre hacia mí."
 },
 {
 "w": "able",
@@ -2427,7 +2437,9 @@
 "w": "everything",
 "t": "Pronomen",
 "es": "todo",
-"day": 73
+"day": 73,
+"s": "I eat {everything}.",
+"ses": "Me como todo."
 },
 {
 "w": "process",
@@ -2439,7 +2451,9 @@
 "w": "including",
 "t": "Präposition",
 "es": "incluyendo",
-"day": 73
+"day": 73,
+"s": "All cats, {including} me.",
+"ses": "Todos los gatos, incluyéndome a mí."
 },
 {
 "w": "consider",
@@ -2457,7 +2471,9 @@
 "w": "actually",
 "t": "Adverb",
 "es": "en realidad",
-"day": 74
+"day": 74,
+"s": "It is {actually} a small dog.",
+"ses": "En realidad es un perro pequeño."
 },
 {
 "w": "buy",
@@ -2469,7 +2485,9 @@
 "w": "probably",
 "t": "Adverb",
 "es": "probablemente",
-"day": 74
+"day": 74,
+"s": "It is {probably} a cat.",
+"ses": "Probablemente es un gato."
 },
 {
 "w": "human",
@@ -2541,7 +2559,9 @@
 "w": "oh",
 "t": "Sonstiges",
 "es": "oh",
-"day": 77
+"day": 77,
+"s": "{Oh}! A gift!",
+"ses": "¡Oh! ¡Un regalo!"
 },
 {
 "w": "nation",
@@ -2589,7 +2609,9 @@
 "w": "someone",
 "t": "Pronomen",
 "es": "alguien",
-"day": 78
+"day": 78,
+"s": "{Someone} is at the door.",
+"ses": "Alguien está en la puerta."
 },
 {
 "w": "experience",
@@ -2601,7 +2623,9 @@
 "w": "behind",
 "t": "Präposition",
 "es": "detrás de",
-"day": 79
+"day": 79,
+"s": "The cat is {behind} the box.",
+"ses": "La gata está detrás de la caja."
 },
 {
 "w": "reach",
@@ -2637,7 +2661,9 @@
 "w": "yeah",
 "t": "Sonstiges",
 "es": "sí (informal)",
-"day": 80
+"day": 80,
+"s": "{Yeah}! We win!",
+"ses": "¡Sí! ¡Ganamos!"
 },
 {
 "w": "suggest",
@@ -2673,7 +2699,9 @@
 "w": "perhaps",
 "t": "Adverb",
 "es": "quizás",
-"day": 81
+"day": 81,
+"s": "{Perhaps} it is in the box.",
+"ses": "Quizás está en la caja."
 },
 {
 "w": "late",
@@ -2697,7 +2725,9 @@
 "w": "else",
 "t": "Adverb",
 "es": "más / otro",
-"day": 82
+"day": 82,
+"s": "What {else} is in the box?",
+"ses": "¿Qué más hay en la caja?"
 },
 {
 "w": "pass",
@@ -2727,7 +2757,9 @@
 "w": "sometimes",
 "t": "Adverb",
 "es": "a veces",
-"day": 83
+"day": 83,
+"s": "{Sometimes} I read at night.",
+"ses": "A veces leo de noche."
 },
 {
 "w": "require",
@@ -2739,7 +2771,9 @@
 "w": "along",
 "t": "Präposition",
 "es": "a lo largo de",
-"day": 83
+"day": 83,
+"s": "I walk {along} the street.",
+"ses": "Camino a lo largo de la calle."
 },
 {
 "w": "development",
@@ -2751,7 +2785,9 @@
 "w": "themselves",
 "t": "Pronomen",
 "es": "ellos mismos",
-"day": 84
+"day": 84,
+"s": "They play by {themselves}.",
+"ses": "Juegan solos."
 },
 {
 "w": "report",
@@ -2859,7 +2895,9 @@
 "w": "finally",
 "t": "Adverb",
 "es": "por fin",
-"day": 87
+"day": 87,
+"s": "{Finally}, I am home!",
+"ses": "¡Por fin estoy en casa!"
 },
 {
 "w": "pull",
@@ -2895,13 +2933,17 @@
 "w": "less",
 "t": "Adverb",
 "es": "menos",
-"day": 89
+"day": 89,
+"s": "I have {less} fish.",
+"ses": "Tengo menos pescado."
 },
 {
 "w": "according",
 "t": "Präposition",
 "es": "según",
-"day": 89
+"day": 89,
+"s": "{According} to the map, it is here.",
+"ses": "Según el mapa, está aquí."
 },
 {
 "w": "decision",

@@ -114,7 +114,7 @@
 .grow{transform-box:fill-box;transform-origin:left center;animation:grow 3s ease-in-out infinite}
 @keyframes grow{0%{transform:scaleX(.05)}70%,100%{transform:scaleX(1)}}
 .glow{animation:glow 1.4s ease-in-out infinite alternate}
-@keyframes glow{from{opacity:.35}to{opacity:1}}
+@keyframes glow{from{opacity:.62}to{opacity:1}}
 .flap{transform-box:fill-box;transform-origin:center;animation:flap .25s ease-in-out infinite alternate}
 @keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(.35)}}
 .flutter{animation:flutter 5s ease-in-out infinite}
