@@ -1,18 +1,29 @@
 import json,sys,glob
 words=json.load(open('pilot50.json',encoding='utf-8'))
-from meta100 import SENT
-nxt=json.load(open('next100.json',encoding='utf-8'))
-for i,r in enumerate(nxt):
+import importlib,re
+SENT={}
+for m in sorted(glob.glob('meta*.py')):
+    mod=importlib.import_module(m[:-3])
+    for k in dir(mod):
+        if k.startswith('SENT'): SENT.update(getattr(mod,k))
+src=''.join(open(f,encoding='utf-8').read() for f in glob.glob('s[0-9]*.js'))
+have=set(re.findall(r'^S\.([A-Za-z]+)=',src,re.M))
+rest=json.load(open('next100.json',encoding='utf-8'))+json.load(open('rest650.json',encoding='utf-8'))
+for i,r in enumerate(rest):
     d={'w':r[0],'t':r[1],'es':r[2],'day':11+i//5}
     if r[0] in SENT: d['s'],d['ses']=SENT[r[0]]
     words.append(d)
-json.dump(words,open('woerter150.json','w',encoding='utf-8'),ensure_ascii=False,indent=0)
+done=[w for w in words if w['w'] in have]
+print('szenen',len(done),'von',len(words))
+json.dump(words,open('woerter800.json','w',encoding='utf-8'),ensure_ascii=False,indent=0)
+words=done
+NDONE=len(done)
 css=open('anim.css',encoding='utf-8').read()
 js=open('base.js',encoding='utf-8').read()+open('kit.js',encoding='utf-8').read()+''.join(open(f,encoding='utf-8').read() for f in sorted(glob.glob('s[0-9]*.js'),key=lambda f:int(f[1:-3])))
 K={'Nomen':'#4f9dff','Verb':'#f2453d','Adjektiv':'#9b6bff','Artikel':'#2fc7a8','Pronomen':'#2fc7a8','Präposition':'#2fc7a8','Konjunktion':'#2fc7a8','Adverb':'#2fc7a8','Sonstiges':'#2fc7a8'}
 html='''<!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Canela Wörter 1–150</title>
+<title>Canela Wörter</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{/* Layout: zehn Tage untereinander, je fünf Karten im Raster */
@@ -36,14 +47,14 @@ section{display:flex;flex-direction:column;gap:10px}
 .missing{aspect-ratio:1;display:grid;place-items:center;background:#eee;color:#999}
 '''+css+'''
 </style></head><body><main>
-<header><h1>Die ersten 150 Wörter</h1><p>30 Tage mit je fünf Wörtern. Tag 1 bis 10 sind die Bild-Wörter, ab Tag 11 geht es nach Häufigkeit. Grammatik-Wörter haben einen kleinen Satz, in dem das Wort markiert ist.</p></header>
+<header><h1>'''+str(NDONE)+''' von 800 Wörtern</h1><p>Jeder Tag hat fünf Wörter. Tag 1 bis 10 sind die Bild-Wörter, ab Tag 11 geht es nach Häufigkeit. Grammatik-Wörter haben einen kleinen Satz, in dem das Wort markiert ist.</p></header>
 <div id="days"></div>
 </main><script>
 '''+js+'''
 const WORDS='''+json.dumps(words,ensure_ascii=False)+''';
 const KC='''+json.dumps(K)+''';
 const only=location.hash?location.hash.slice(1).split('-').map(Number):null;
-let h='';for(let d=1;d<=30;d++){if(only&&!only.includes(d))continue;const ws=WORDS.filter(w=>w.day===d);
+let h='';for(let d=1;d<=160;d++){if(only&&!only.includes(d))continue;const ws=WORDS.filter(w=>w.day===d);if(!ws.length)continue;
 h+=`<section><h2>Tag ${d}</h2><div class="grid">`+ws.map(w=>`<article class="card" style="--k:${KC[w.t]}">${S[w.w]?`<svg viewBox="0 0 200 200" role="img" aria-label="${w.w}">${S[w.w]}</svg>`:'<div class="missing">fehlt</div>'}<div class="meta"><span class="badge">${w.t}</span><span class="word">${w.w}</span><span class="es">${w.es}</span>${w.s?`<span class="sent">${w.s.replace(/\\{(.+?)\\}/,'<b>$1</b>')}</span><span class="ses">${w.ses}</span>`:''}</div></article>`).join('')+`</div></section>`;}
 document.getElementById('days').innerHTML=h;
 </script></body></html>'''
