@@ -4953,7 +4953,9 @@
 "w": "suddenly",
 "t": "Adverb",
 "es": "de repente",
-"day": 154
+"day": 154,
+"s": "{Suddenly}, it rains.",
+"ses": "De repente, llueve."
 },
 {
 "w": "discover",
@@ -5001,7 +5003,9 @@
 "w": "inside",
 "t": "Adverb",
 "es": "adentro",
-"day": 155
+"day": 155,
+"s": "The cat is {inside}.",
+"ses": "La gata está adentro."
 },
 {
 "w": "conference",
@@ -5085,7 +5089,9 @@
 "w": "throughout",
 "t": "Präposition",
 "es": "a lo largo de / por todo",
-"day": 158
+"day": 158,
+"s": "Flowers grow {throughout} the garden.",
+"ses": "Las flores crecen por todo el jardín."
 },
 {
 "w": "challenge",
@@ -5145,7 +5151,9 @@
 "w": "instead",
 "t": "Adverb",
 "es": "en lugar de eso",
-"day": 160
+"day": 160,
+"s": "No milk? I drink water {instead}.",
+"ses": "¿No hay leche? En lugar de eso, tomo agua."
 },
 {
 "w": "improve",
