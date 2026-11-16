@@ -3141,7 +3141,9 @@
 "w": "especially",
 "t": "Adverb",
 "es": "especialmente",
-"day": 95
+"day": 95,
+"s": "I love cats, {especially} you.",
+"ses": "Amo a los gatos, especialmente a ti."
 },
 {
 "w": "record",
@@ -3213,7 +3215,9 @@
 "w": "whose",
 "t": "Pronomen",
 "es": "de quién / cuyo",
-"day": 98
+"day": 98,
+"s": "{Whose} ball is this?",
+"ses": "¿De quién es esta pelota?"
 },
 {
 "w": "matter",
@@ -3225,7 +3229,9 @@
 "w": "everyone",
 "t": "Pronomen",
 "es": "todos",
-"day": 98
+"day": 98,
+"s": "{Everyone} is here.",
+"ses": "Todos están aquí."
 },
 {
 "w": "center",
@@ -3345,13 +3351,17 @@
 "w": "itself",
 "t": "Pronomen",
 "es": "sí mismo",
-"day": 102
+"day": 102,
+"s": "The cat washes {itself}.",
+"ses": "La gata se lava a sí misma."
 },
 {
 "w": "either",
 "t": "Pronomen",
 "es": "cualquiera (de dos)",
-"day": 102
+"day": 102,
+"s": "You can take {either} one.",
+"ses": "Puedes tomar cualquiera de los dos."
 },
 {
 "w": "data",
@@ -3369,7 +3379,9 @@
 "w": "quite",
 "t": "Adverb",
 "es": "bastante",
-"day": 103
+"day": 103,
+"s": "The box is {quite} big.",
+"ses": "La caja es bastante grande."
 },
 {
 "w": "picture",
@@ -3513,7 +3525,9 @@
 "w": "per",
 "t": "Präposition",
 "es": "por",
-"day": 108
+"day": 108,
+"s": "One fish {per} cat.",
+"ses": "Un pez por gato."
 },
 {
 "w": "subject",
@@ -3573,7 +3587,9 @@
 "w": "quickly",
 "t": "Adverb",
 "es": "rápidamente",
-"day": 110
+"day": 110,
+"s": "She runs {quickly}.",
+"ses": "Ella corre rápidamente."
 },
 {
 "w": "past",
